@@ -305,7 +305,7 @@ package mdi.containers
 		/**
 		 * Mouse move while mouse is down on a resize handle
 		 */
-		private function onResizeButtonDrag(event:Event):void
+		private function onResizeButtonDrag(event:MouseEvent):void
 		{
 			if(!collapsed)
 			{

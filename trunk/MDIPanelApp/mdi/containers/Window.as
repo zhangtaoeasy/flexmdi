@@ -53,23 +53,23 @@ package mdi.containers
 		public const cursorSizeAll:int  = 8;
 		
 		
-		[Embed(source="cursors/sizeNS.gif")]
+		[Embed(source="/mdi/assets/img/resizeCursorV.gif")]
 		public static var sizeNSCursorSymbol:Class;
 
-		[Embed(source="cursors/sizeNESW.gif")]
+		[Embed(source="/mdi/assets/img/resizeCursorTRBL.gif")]
 		public static var sizeNESWCursorSymbol:Class;
 			
-		[Embed(source="cursors/sizeWE.gif")]
+		[Embed(source="/mdi/assets/img/resizeCursorH.gif")]
 		public static var sizeWECursorSymbol:Class;
 
-		[Embed(source="cursors/sizeNWSE.gif")]
+		[Embed(source="/mdi/assets/img/resizeCursorTLBR.gif")]
 		public static var sizeNWSECursorSymbol:Class;
 									
-		[Embed(source="cursors/sizeAll.gif")]
+		[Embed(source="/mdi/assets/img/resizeCursorVH.gif")]
 		public static var sizeAllCursorSymbol:Class;
 		
 		
-		[Embed(source="buttons/closeButton.png")]
+		[Embed(source="/mdi/assets/img/closeButton.png")]
 		public static var closeBtn:Class;
 		
 		private var downX:int;

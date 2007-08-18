@@ -1,350 +1,413 @@
 package mdi.containers
 {
-	import flash.display.DisplayObject;
+	import flash.events.Event;
 	import flash.events.MouseEvent;
-	import flash.geom.Point;
 	import flash.geom.Rectangle;
 	
 	import mx.containers.Panel;
 	import mx.controls.Button;
-	import mx.core.Application;
-	import mx.core.EdgeMetrics;
 	import mx.core.UIComponent;
 	import mx.effects.Resize;
-	import mx.events.DragEvent;
 	import mx.events.EffectEvent;
+	import mx.events.FlexEvent;
 	import mx.managers.CursorManager;
-	
-	import windows.managers.WindowManager;
-	import mx.containers.ControlBar;
-	
-	
-	[Event("startResize")]
-	
-	[Event("stopResize")]
-	
-	
+
 	public class MDIPanel extends Panel
 	{
-		[Bindable] public var showControls:Boolean = true;
-		[Bindable] public var enableResize:Boolean = true;
-				
-		//[Embed(source="/MDIPanelAssets.swf", symbol="resizeArrow")]
-		[Embed(source="panelClasses/resizeCursor.png")]
-		private static var resizeCursor:Class;
+		public var collapsed:Boolean = false;
+		public var collapseDuration:Number;
+		public var controls:Array;
+		public var controlsHolder:UIComponent;
 		
-		private var	pTitleBar:UIComponent;
-		private var oW:Number;
-		private var oH:Number;
-		private var oX:Number;
-		private var oY:Number;
-		private var maximizeButton:Button	= new Button();
-					
-		private var closeButton:Button		= new Button();
-		//private var resizeButton:Button	= new Button();
-		private var minimizeButton:Button = new Button();
-		private var upMotion:Resize			= new Resize();
-		private var downMotion:Resize		= new Resize();
-		private var oPoint:Point 			= new Point();
-		private var resizeCur:Number		= 0;
+		private static var DEFAULT_EDGE_HANDLE_SIZE:Number = 4;
+		private static var DEFAULT_CORNER_HANDLE_SIZE:Number = 10;
+		private static var DEFAULT_COLLAPSE_DURATION:Number = 300;
 		
-		private var rightEdgeButton:Button = new Button();
+		private var resizeHandleTop:Button;
+		private var resizeHandleRight:Button;
+		private var resizeHandleBottom:Button;
+		private var resizeHandleLeft:Button;
 		
-		public var OnClickMinimize : Function;
+		private var resizeHandleTL:Button;
+		private var resizeHandleTR:Button;
+		private var resizeHandleBR:Button;
+		private var resizeHandleBL:Button;
 		
+		private var uncollapsedHeight:Number;
+		private var collapseEffect:Resize;
 		
+		private var currentDragHandle:Button;
+		private var dragStartMouseX:Number;
+		private var dragStartMouseY:Number;
+		private var dragStartWidth:Number;
+		private var dragStartHeight:Number;
+		private var dragAmountX:Number;
+		private var dragAmountY:Number;
 		
+		[Embed(source="/mdi/assets/img/resizeCursorV.gif")]
+		private var resizeCursorV:Class;
+		[Embed(source="/mdi/assets/img/resizeCursorH.gif")]
+		private var resizeCursorH:Class;
+		[Embed(source="/mdi/assets/img/resizeCursorTLBR.gif")]
+		private var resizeCursorTLBR:Class;
+		[Embed(source="/mdi/assets/img/resizeCursorTRBL.gif")]
+		private var resizeCursorTRBL:Class;
 		
-				
 		public function MDIPanel()
 		{
+			super();
+			controls = new Array();
+			doubleClickEnabled = true;
+			minWidth = 140;
+			minHeight = 70;
+		}
+		
+		override protected function createChildren():void
+		{
+			super.createChildren();
+			
+			// edges
+			if(!resizeHandleTop)
+			{
+				resizeHandleTop = new Button();
+				resizeHandleTop.x = MDIPanel.DEFAULT_CORNER_HANDLE_SIZE * .5;
+				resizeHandleTop.y = -(MDIPanel.DEFAULT_EDGE_HANDLE_SIZE * .5);
+				resizeHandleTop.height = MDIPanel.DEFAULT_EDGE_HANDLE_SIZE;
+				resizeHandleTop.alpha = 0;
+				rawChildren.addChild(resizeHandleTop);
+			}
+			
+			if(!resizeHandleRight)
+			{
+				resizeHandleRight = new Button();
+				resizeHandleRight.y = MDIPanel.DEFAULT_CORNER_HANDLE_SIZE * .5;
+				resizeHandleRight.width = MDIPanel.DEFAULT_EDGE_HANDLE_SIZE;
+				resizeHandleRight.alpha = 0;
+				rawChildren.addChild(resizeHandleRight);
+			}
+			
+			if(!resizeHandleBottom)
+			{
+				resizeHandleBottom = new Button();
+				resizeHandleBottom.x = MDIPanel.DEFAULT_CORNER_HANDLE_SIZE * .5;
+				resizeHandleBottom.height = MDIPanel.DEFAULT_EDGE_HANDLE_SIZE;
+				resizeHandleBottom.alpha = 0;
+				rawChildren.addChild(resizeHandleBottom);
+			}
+			
+			if(!resizeHandleLeft)
+			{
+				resizeHandleLeft = new Button();
+				resizeHandleLeft.x = -(MDIPanel.DEFAULT_EDGE_HANDLE_SIZE * .5);
+				resizeHandleLeft.y = MDIPanel.DEFAULT_CORNER_HANDLE_SIZE * .5;
+				resizeHandleLeft.width = MDIPanel.DEFAULT_EDGE_HANDLE_SIZE;
+				resizeHandleLeft.alpha = 0;
+				rawChildren.addChild(resizeHandleLeft);
+			}
+			
+			// corners
+			if(!resizeHandleTL)
+			{
+				resizeHandleTL = new Button();
+				resizeHandleTL.x = resizeHandleTL.y = -(MDIPanel.DEFAULT_CORNER_HANDLE_SIZE * .3);
+				resizeHandleTL.width = resizeHandleTL.height = MDIPanel.DEFAULT_CORNER_HANDLE_SIZE;
+				resizeHandleTL.alpha = 0;
+				rawChildren.addChild(resizeHandleTL);
+			}
+			
+			if(!resizeHandleTR)
+			{
+				resizeHandleTR = new Button();
+				resizeHandleTR.width = resizeHandleTR.height = MDIPanel.DEFAULT_CORNER_HANDLE_SIZE;
+				resizeHandleTR.alpha = 0;
+				rawChildren.addChild(resizeHandleTR);
+			}
+			
+			if(!resizeHandleBR)
+			{
+				resizeHandleBR = new Button();
+				resizeHandleBR.width = resizeHandleBR.height = MDIPanel.DEFAULT_CORNER_HANDLE_SIZE;
+				resizeHandleBR.alpha = 0;
+				rawChildren.addChild(resizeHandleBR);
+			}
+			
+			if(!resizeHandleBL)
+			{
+				resizeHandleBL = new Button();
+				resizeHandleBL.width = resizeHandleBL.height = MDIPanel.DEFAULT_CORNER_HANDLE_SIZE;
+				resizeHandleBL.alpha = 0;
+				rawChildren.addChild(resizeHandleBL);
+			}
+			
+			// controls
+			controlsHolder = new UIComponent();
+			rawChildren.addChild(controlsHolder);
+			
+			for(var i:int = 0; i < controls.length; i++)
+			{
+				var control:UIComponent = controls[i];
+				
+				control.x = this.width - ((controls.length - i) * 20);
+				control.y = (titleBar.height - control.height) / 2;
+				control.buttonMode = true;
+				controlsHolder.addChild(control);
+			}
+			
+			addListeners();
 		}
 		
 		override protected function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number):void
 		{
 			super.updateDisplayList(unscaledWidth, unscaledHeight);
-			closeButton.x = this.width - 15;
-			maximizeButton.x = this.width - 35;
-			minimizeButton.x = this.width - 55;
-		}
-
-		override protected function createChildren():void 
-		{
-			super.createChildren();
-			this.pTitleBar = super.titleBar;
-			//this.setStyle("headerColors", [0xC3D1D9, 0xD2DCE2]);
-			//this.setStyle("borderColor", 0xD2DCE2);
-			this.doubleClickEnabled = true;
 			
-			if (enableResize) 
+			// edges
+			resizeHandleTop.width = this.width - MDIPanel.DEFAULT_CORNER_HANDLE_SIZE;
+			
+			resizeHandleRight.x = this.width - MDIPanel.DEFAULT_EDGE_HANDLE_SIZE * .5;
+			resizeHandleRight.height = this.height - MDIPanel.DEFAULT_CORNER_HANDLE_SIZE;
+			
+			resizeHandleBottom.y = this.height - MDIPanel.DEFAULT_EDGE_HANDLE_SIZE * .5;
+			resizeHandleBottom.width = this.width - MDIPanel.DEFAULT_CORNER_HANDLE_SIZE;
+			
+			resizeHandleLeft.height = this.height - MDIPanel.DEFAULT_CORNER_HANDLE_SIZE;
+			
+			// corners			
+			resizeHandleTR.x = this.width - MDIPanel.DEFAULT_CORNER_HANDLE_SIZE * .7;
+			resizeHandleTR.y = -(MDIPanel.DEFAULT_CORNER_HANDLE_SIZE * .3);
+			
+			resizeHandleBR.x = this.width - MDIPanel.DEFAULT_CORNER_HANDLE_SIZE * .7;
+			resizeHandleBR.y = this.height - MDIPanel.DEFAULT_CORNER_HANDLE_SIZE * .7;
+			
+			resizeHandleBL.x = -(MDIPanel.DEFAULT_CORNER_HANDLE_SIZE * .3);
+			resizeHandleBL.y = this.height - MDIPanel.DEFAULT_CORNER_HANDLE_SIZE * .7;
+			
+			for(var i:int = 0; i < controlsHolder.numChildren; i++)
 			{
-				//this.resizeButton.width     = 12;
-				//this.resizeButton.height    = 12;
-				//this.resizeButton.styleName = "resizeHndlr";
-				//this.rawChildren.addChild(resizeButton);
-				this.initPos();
+				var control:UIComponent = controlsHolder.getChildAt(i) as UIComponent;
 				
-				
-				//rawChildren.addChild(rightEdgeButton);
+				control.x = this.width - ((controlsHolder.numChildren - i) * 20);
+				control.y = (titleBar.height - control.height) / 2;
 			}
-			
-			if (showControls) 
-			{	
-				this.minimizeButton.width     	= 10;
-				this.minimizeButton.height    	= 10;
-				this.minimizeButton.styleName 	= "minimizeBtn";
-				this.minimizeButton.label = "-";
-				
-				this.maximizeButton.width     	= 10;
-				this.maximizeButton.height    	= 10;
-				this.maximizeButton.styleName 	= "increaseBtn";
-				this.maximizeButton.label = "o";
-				
-				this.closeButton.width     		= 10;
-				this.closeButton.height    		= 10;
-				this.closeButton.styleName 		= "closeBtn";
-				this.closeButton.label = "x";
-				
-				this.pTitleBar.addChild(this.minimizeButton);
-				this.pTitleBar.addChild(this.maximizeButton);
-				this.pTitleBar.addChild(this.closeButton);
-			}
-			
-			this.positionChildren();	
-			this.addListeners();
 		}
 		
-		public function initPos():void 
+		private function onCloseBtn(event:MouseEvent):void
 		{
-			this.oW = this.width;
-			this.oH = this.height;
-			this.oX = this.x;
-			this.oY = this.y;
+			parent.removeChild(this);
 		}
-	
-		public function positionChildren():void 
+		
+		private function addListeners():void
 		{
-			if (showControls) 
-			{	
-				this.minimizeButton.buttonMode = true;
-				this.minimizeButton.useHandCursor = true;
-				this.minimizeButton.x = this.unscaledWidth - this.minimizeButton.width - 42;
-				this.minimizeButton.y = 8;
-				
-				
-				this.maximizeButton.buttonMode    = true;
-				this.maximizeButton.useHandCursor = true;
-				this.maximizeButton.x = this.unscaledWidth - this.maximizeButton.width - 24;
-				this.maximizeButton.y = 8;
-				
-				this.closeButton.buttonMode	   = true;
-				this.closeButton.useHandCursor = true;
-				this.closeButton.x = this.unscaledWidth - this.closeButton.width - 8;
-				this.closeButton.y = 8;
-			}
+			// rollover and rollout
+			resizeHandleTop.addEventListener(MouseEvent.ROLL_OVER, onResizeButtonRollOver, false, 0, true);
+			resizeHandleTop.addEventListener(MouseEvent.ROLL_OUT, onResizeButtonRollOut, false, 0, true);
+			resizeHandleRight.addEventListener(MouseEvent.ROLL_OVER, onResizeButtonRollOver, false, 0, true);
+			resizeHandleRight.addEventListener(MouseEvent.ROLL_OUT, onResizeButtonRollOut, false, 0, true);
+			resizeHandleBottom.addEventListener(MouseEvent.ROLL_OVER, onResizeButtonRollOver, false, 0, true);
+			resizeHandleBottom.addEventListener(MouseEvent.ROLL_OUT, onResizeButtonRollOut, false, 0, true);
+			resizeHandleLeft.addEventListener(MouseEvent.ROLL_OVER, onResizeButtonRollOver, false, 0, true);
+			resizeHandleLeft.addEventListener(MouseEvent.ROLL_OUT, onResizeButtonRollOut, false, 0, true);
 			
-			if (enableResize) 
+			resizeHandleTL.addEventListener(MouseEvent.ROLL_OVER, onResizeButtonRollOver, false, 0, true);
+			resizeHandleTL.addEventListener(MouseEvent.ROLL_OUT, onResizeButtonRollOut, false, 0, true);
+			resizeHandleTR.addEventListener(MouseEvent.ROLL_OVER, onResizeButtonRollOver, false, 0, true);
+			resizeHandleTR.addEventListener(MouseEvent.ROLL_OUT, onResizeButtonRollOut, false, 0, true);
+			resizeHandleBR.addEventListener(MouseEvent.ROLL_OVER, onResizeButtonRollOver, false, 0, true);
+			resizeHandleBR.addEventListener(MouseEvent.ROLL_OUT, onResizeButtonRollOut, false, 0, true);
+			resizeHandleBL.addEventListener(MouseEvent.ROLL_OVER, onResizeButtonRollOver, false, 0, true);
+			resizeHandleBL.addEventListener(MouseEvent.ROLL_OUT, onResizeButtonRollOut, false, 0, true);
+			
+			// dragging
+			resizeHandleTop.addEventListener(MouseEvent.MOUSE_DOWN, onResizeButtonPress, false, 0, true);
+			resizeHandleRight.addEventListener(MouseEvent.MOUSE_DOWN, onResizeButtonPress, false, 0, true);
+			resizeHandleBottom.addEventListener(MouseEvent.MOUSE_DOWN, onResizeButtonPress, false, 0, true);
+			resizeHandleLeft.addEventListener(MouseEvent.MOUSE_DOWN, onResizeButtonPress, false, 0, true);
+			
+			resizeHandleTL.addEventListener(MouseEvent.MOUSE_DOWN, onResizeButtonPress, false, 0, true);
+			resizeHandleTR.addEventListener(MouseEvent.MOUSE_DOWN, onResizeButtonPress, false, 0, true);
+			resizeHandleBR.addEventListener(MouseEvent.MOUSE_DOWN, onResizeButtonPress, false, 0, true);
+			resizeHandleBL.addEventListener(MouseEvent.MOUSE_DOWN, onResizeButtonPress, false, 0, true);
+			
+			// clicking
+			titleBar.addEventListener(MouseEvent.MOUSE_DOWN, onTitleBarPress, false, 0, true);
+			titleBar.addEventListener(MouseEvent.MOUSE_UP, onTitleBarRelease, false, 0, true);
+			titleBar.addEventListener(MouseEvent.DOUBLE_CLICK, onTitleBarDoubleClick, false, 0, true);
+		}
+		
+		public function addControl(uic:UIComponent, index:int = -1):void
+		{
+			uic.buttonMode = true;
+			if(index > -1)
 			{
-				//this.resizeButton.y = this.unscaledHeight - resizeButton.height - 1;
-				//this.resizeButton.x = this.unscaledWidth - resizeButton.width - 1;
+				controlsHolder.addChildAt(uic, index);
 			}
-		}
-		
-		private function MinimizeClickHandler(event:MouseEvent):void
-		{
-			if (OnClickMinimize != null)
+			else
 			{
-				OnClickMinimize(this);
+				controlsHolder.addChild(uic);
 			}
+			invalidateDisplayList();
 		}
 		
-		public function addListeners():void
+		/**
+		 * Title bar dragging and collapsing
+		 */
+		private function onTitleBarPress(event:MouseEvent):void
 		{
-			this.addEventListener(MouseEvent.CLICK, panelClickHandler);
-			this.pTitleBar.addEventListener(MouseEvent.MOUSE_DOWN, titleBarDownHandler);
-			this.pTitleBar.addEventListener(MouseEvent.DOUBLE_CLICK, titleBarDoubleClickHandler);
-			
-			if (showControls) 
-			{
-				this.closeButton.addEventListener(MouseEvent.CLICK, closeClickHandler);
-				this.maximizeButton.addEventListener(MouseEvent.CLICK, normalMaxClickHandler);
-				this.minimizeButton.addEventListener(MouseEvent.CLICK, MinimizeClickHandler);
-			}
-			
-			if (enableResize) 
-			{
-				//this.resizeButton.addEventListener(MouseEvent.MOUSE_OVER, resizeOverHandler);
-				//this.resizeButton.addEventListener(MouseEvent.MOUSE_OUT, resizeOutHandler);
-				//this.resizeButton.addEventListener(MouseEvent.MOUSE_DOWN, resizeDownHandler);
-				
-				//this.rightEdgeButton.addEventListener(MouseEvent.MOUSE_OVER, resizeOverHandler);
-				//this.rightEdgeButton.addEventListener(MouseEvent.MOUSE_OUT, resizeOutHandler);
-				//this.rightEdgeButton.addEventListener(MouseEvent.MOUSE_DOWN, resizeDownHandler);
-			}
+			this.startDrag(false, new Rectangle(parent.x, parent.y, parent.width, parent.height));
 		}
 		
-		public function panelClickHandler(event:MouseEvent):void 
+		private function onTitleBarRelease(event:MouseEvent):void
 		{
-			this.pTitleBar.removeEventListener(MouseEvent.MOUSE_MOVE, titleBarMoveHandler);
-			this.parent.setChildIndex(this, this.parent.numChildren - 1);
-			this.panelFocusCheckHandler();
-		}
-		
-		public function titleBarDownHandler(event:MouseEvent):void {
-			this.pTitleBar.addEventListener(MouseEvent.MOUSE_MOVE, titleBarMoveHandler);
-		}
-			
-		public function titleBarMoveHandler(event:MouseEvent):void 
-		{
-			if (this.width < screen.width) {
-				Application.application.parent.addEventListener(MouseEvent.MOUSE_UP, titleBarDragDropHandler);
-				this.alpha = 0.5;
-				
-				this.pTitleBar.addEventListener(DragEvent.DRAG_DROP,titleBarDragDropHandler);
-				this.parent.setChildIndex(this, this.parent.numChildren - 1);
-				//this.panelFocusCheckHandler();
-				
-				this.startDrag(false, new Rectangle(0, 0, screen.width - this.width, screen.height - this.height));
-			}
-		}
-		
-		public function titleBarDragDropHandler(event:MouseEvent):void 
-		{
-			this.pTitleBar.removeEventListener(MouseEvent.MOUSE_MOVE, titleBarMoveHandler);
-			this.alpha = 1.0;
 			this.stopDrag();
 		}
 		
-		public function panelFocusCheckHandler():void
-		{	
-			//this.setStyle("backgroundAlpha",1);
-			/* for (var i:int = 0; i < this.parent.numChildren; i++) {
-				var child:UIComponent = UIComponent(this.parent.getChildAt(i));
-				if (this.parent.getChildIndex(child) < this.parent.numChildren - 1) 
-				{
-					//child.setStyle("headerColors", [0xC3D1D9, 0xD2DCE2]);
-					//child.setStyle("borderColor", 0xD2DCE2);
-				} 
-				else if (this.parent.getChildIndex(child) == this.parent.numChildren - 1) 
-				{
-					//child.setStyle("headerColors", [0xC3D1D9, 0x5A788A]);
-					//child.setStyle("borderColor", 0x5A788A);
-				}
-			} */
+		private function onTitleBarDoubleClick(event:MouseEvent):void
+		{
+			collapseEffect = new Resize(this);
+			if(this.height > titleBar.height)
+			{
+				uncollapsedHeight = this.height;
+				collapseEffect.heightTo = titleBar.height;
+			}
+			else
+			{
+				collapseEffect.heightTo = uncollapsedHeight;
+			}
+			collapseEffect.duration = (!isNaN(collapseDuration)) ? collapseDuration : DEFAULT_COLLAPSE_DURATION;
+			collapseEffect.addEventListener(EffectEvent.EFFECT_END, onCollapseFinish);
+			collapseEffect.play();
 		}
 		
-		public function titleBarDoubleClickHandler(event:MouseEvent):void 
+		private function onCollapseFinish(e:EffectEvent):void
 		{
-			this.pTitleBar.removeEventListener(MouseEvent.MOUSE_MOVE, titleBarMoveHandler);
-			Application.application.parent.removeEventListener(MouseEvent.MOUSE_UP, resizeUpHandler);
-			
-			this.upMotion.target = this;
-			this.upMotion.duration = 300;
-			this.upMotion.heightFrom = oH;
-			this.upMotion.heightTo = 28;
-			this.upMotion.end();
-			
-			this.downMotion.target = this;
-			this.downMotion.duration = 300;
-			this.downMotion.heightFrom = 28;
-			this.downMotion.heightTo = oH;
-			this.downMotion.end();
-			
-			if (this.width < screen.width) 
-			{
-				if (this.height == oH) {
-					this.upMotion.play();
-					//this.resizeButton.visible = false;
-				}
-				else 
-				{
-					this.downMotion.play();
-					this.downMotion.addEventListener(EffectEvent.EFFECT_END, endEffectEventHandler);
-				}
-			}
+			collapsed = this.height == titleBar.height;
+			collapseEffect.removeEventListener(EffectEvent.EFFECT_END, onCollapseFinish);
 		}
-
-		public function normalMaxClickHandler(event:MouseEvent):void 
+		
+		/**
+		 * Mouse down on any resize handle
+		 */
+		private function onResizeButtonPress(event:MouseEvent):void
 		{
-			if (this.maximizeButton.styleName == "increaseBtn") 
+			if(!collapsed)
 			{
-				if (this.height > 28) 
-				{
-					this.initPos();
-					this.x = 0;
-					this.y = 0;
-					this.width = screen.width;
-					this.height = screen.height;
-					this.maximizeButton.styleName = "decreaseBtn";
-					this.positionChildren();
-				}
-			} 
-			else 
-			{
-				this.x = this.oX;
-				this.y = this.oY;
-				this.width = this.oW;
-				this.height = this.oH;
-				this.maximizeButton.styleName = "increaseBtn";
-				this.positionChildren();
+				currentDragHandle = event.target as Button;
+				setCursor(currentDragHandle);
+				dragStartMouseX = stage.mouseX;
+				dragStartMouseY = stage.mouseY;
+				dragStartWidth = this.width;
+				dragStartHeight = this.height;
+				
+				stage.addEventListener(MouseEvent.MOUSE_MOVE, onResizeButtonDrag, false, 0, true);
+				stage.addEventListener(MouseEvent.MOUSE_UP, onResizeButtonRelease, false, 0, true);
 			}
 		}
 		
-		public function closeClickHandler(event:MouseEvent):void 
+		/**
+		 * Mouse move while mouse is down on a resize handle
+		 */
+		private function onResizeButtonDrag(event:Event):void
 		{
-			this.close();
+			if(!collapsed)
+			{
+				dragAmountX = stage.mouseX - dragStartMouseX;
+				dragAmountY = stage.mouseY - dragStartMouseY;
+				
+				if(currentDragHandle == resizeHandleTop)
+				{
+					this.y = this.parent.mouseY;
+					this.height = Math.max(dragStartHeight - dragAmountY, minHeight);
+				}
+				else if(currentDragHandle == resizeHandleRight)
+				{
+					this.width = Math.max(this.mouseX, minWidth);
+				}
+				else if(currentDragHandle == resizeHandleBottom)
+				{
+					this.height = Math.max(this.mouseY, minHeight);
+				}
+				else if(currentDragHandle == resizeHandleLeft)
+				{
+					this.x = this.parent.mouseX;
+					this.width = Math.max(dragStartWidth - dragAmountX, minWidth);
+				}
+				else if(currentDragHandle == resizeHandleTL)
+				{
+					this.x = this.parent.mouseX;
+					this.y = this.parent.mouseY;
+					this.width = Math.max(dragStartWidth - dragAmountX, minWidth);
+					this.height = Math.max(dragStartHeight - dragAmountY, minHeight);				
+				}
+				else if(currentDragHandle == resizeHandleTR)
+				{
+					this.y = this.parent.mouseY;
+					this.width = Math.max(this.mouseX, minWidth);
+					this.height = Math.max(dragStartHeight - dragAmountY, minHeight);
+				}
+				else if(currentDragHandle == resizeHandleBR)
+				{
+					this.width = Math.max(this.mouseX, minWidth);
+					this.height = Math.max(this.mouseY, minHeight);
+				}
+				else if(currentDragHandle == resizeHandleBL)
+				{
+					this.x = this.parent.mouseX;
+					this.width = Math.max(dragStartWidth - dragAmountX, minWidth);
+					this.height = Math.max(this.mouseY, minHeight);
+				}
+			}
 		}
 		
-		public function close():void
+		private function onResizeButtonRelease(event:MouseEvent):void
 		{
-			this.removeEventListener(MouseEvent.CLICK, panelClickHandler);
-			WindowManager.remove(this);
+			if(!collapsed)
+			{
+				currentDragHandle = null;
+				stage.removeEventListener(MouseEvent.MOUSE_MOVE, onResizeButtonDrag);
+				stage.removeEventListener(MouseEvent.MOUSE_UP, onResizeButtonRelease);
+				CursorManager.removeCursor(CursorManager.currentCursorID);
+			}
 		}
 		
-		
-		public function resizeOverHandler(event:MouseEvent):void 
+		private function setCursor(target:Button):void
 		{
-			this.resizeCur = CursorManager.setCursor(resizeCursor);
+			var cursorClass:Class;
+			
+			if(target == resizeHandleTop || target == resizeHandleBottom)
+			{
+				cursorClass = resizeCursorV;
+			}
+			else if(target == resizeHandleRight || target == resizeHandleLeft)
+			{
+				cursorClass = resizeCursorH;
+			}
+			else if(target == resizeHandleTL || target == resizeHandleBR)
+			{
+				cursorClass = resizeCursorTLBR;
+			}
+			else if(target == resizeHandleTR || target == resizeHandleBL)
+			{
+				cursorClass = resizeCursorTRBL;
+			}
+			
+			CursorManager.setCursor(cursorClass, 2, -10, -10);
 		}
 		
-		public function resizeOutHandler(event:MouseEvent):void 
+		private function onResizeButtonRollOver(event:MouseEvent):void
+		{
+			if(!collapsed)
+			{
+				setCursor(event.target as Button);
+			}
+		}
+		
+		private function onResizeButtonRollOut(event:MouseEvent):void
 		{
 			CursorManager.removeCursor(CursorManager.currentCursorID);
 		}
 		
-		public function resizeDownHandler(event:MouseEvent):void 
+		public function set collapsible(value:Boolean):void
 		{
-			Application.application.parent.addEventListener(MouseEvent.MOUSE_MOVE, resizeMoveHandler);
-			Application.application.parent.addEventListener(MouseEvent.MOUSE_UP, resizeUpHandler);
-			
-			this.panelClickHandler(event);
-			
-			this.resizeCur = CursorManager.setCursor(resizeCursor);
-			
-			this.oPoint.x = mouseX;
-			
-			this.oPoint.y = mouseY;
-			
-			this.oPoint = this.localToGlobal(oPoint);		
-		}
-		
-		public function resizeMoveHandler(event:MouseEvent):void 
-		{
-			this.width = this.mouseX;
-			this.height = this.mouseY;
-			this.positionChildren();
-		}
-		
-		public function resizeUpHandler(event:MouseEvent):void 
-		{
-			Application.application.parent.removeEventListener(MouseEvent.MOUSE_MOVE, resizeMoveHandler);
-			
-			Application.application.parent.removeEventListener(MouseEvent.MOUSE_UP, resizeUpHandler);
-			
-			CursorManager.removeCursor(CursorManager.currentCursorID);
-			
-			this.initPos();
+			doubleClickEnabled = value;
 		}
 	}
-	
 }

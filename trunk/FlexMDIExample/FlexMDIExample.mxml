@@ -1,10 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" xmlns:containers="mdi.containers.*">
+<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" 
+				xmlns:containers="mdi.containers.*" 
+				layout="horizontal" >
+	
 	<mx:Style source="/mdi/assets/css/styles.css" />
+	
 	<mx:Script>
 		<![CDATA[
 			import mdi.containers.Window;
 			import mdi.managers.WindowManager;
+			import mdi.containers.MDIPanel;
 
 			public function addMDIPanel():void
 			{
@@ -16,6 +21,16 @@
 				WindowManager.add(win); 
 			}
 			
+			public function addWindow():void
+			{
+				var win:Window = new Window();
+				win.height = 400;
+				win.width = 300;
+				win.title = "title";
+				
+				WindowManager.add(win); 
+			}
+			/*
 			private function addControl():void
 			{
 				var b:Button = new Button();
@@ -23,27 +38,36 @@
 				b.styleName = "increaseBtn";
 				rp.addControl(b, 1);
 			}
+			*/
 		]]>
 	</mx:Script>
 	<mx:VBox>
-		<mx:Button click="addMDIPanel()" label="Add Window" />
+		<mx:Button click="addMDIPanel()" label="Add MDI Panel" />
+		<mx:Button click="addWindow()" label="Add Window" />
 		<mx:Button click="WindowManager.cascade()" label="Cascade" />
 		<mx:Button click="WindowManager.tile()" label="Tile" />
 		<mx:Button click="WindowManager.tile(true)" label="Tile + Fill Space" />
-		<mx:Button label="Add Maximize Button" click="addControl()" />
+		<!-- <mx:Button label="Add Maximize Button" click="addControl()" /> -->
 	</mx:VBox>
 	
-	<containers:MDIPanel id="rp"
-		x="200" y="100"
-		width="400" height="400" minWidth="200" minHeight="200"
-		title="Resizable Panel">
-		<containers:controls>
-			<mx:Button id="minBtn"
-				width="10" height="10"
-				styleName="minimizeBtn" />
-			<mx:Button id="closeBtn"
-				width="10" height="10"
-				styleName="closeBtn" />
-		</containers:controls>
-	</containers:MDIPanel>	
+	<mx:VBox width="800" height="500" backgroundColor="#EEEEEE">
+		
+		<containers:MDIPanel id="rp"
+			x="200" y="100"
+			width="400" height="400" minWidth="200" minHeight="200"
+			title="Resizable Panel">
+			<containers:controls>
+				<mx:Button id="minBtn"
+					width="10" height="10"
+					styleName="minimizeBtn" />
+				<mx:Button id="maxBtn"
+					width="10" height="10"
+					styleName="increaseBtn" />
+				<mx:Button id="closeBtn"
+					width="10" height="10"
+					styleName="closeBtn" />
+			</containers:controls>
+		</containers:MDIPanel>	
+	</mx:VBox>
+	
 </mx:Application>

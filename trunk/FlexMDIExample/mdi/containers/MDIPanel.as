@@ -342,14 +342,14 @@ package mdi.containers
 				}
 				else if(currentResizeHandle == resizeHandleTL)
 				{
-					this.x = this.parent.mouseX;
-					this.y = this.parent.mouseY;
+					this.x = Math.min(this.parent.mouseX, dragMaxX);
+					this.y = Math.min(this.parent.mouseY, dragMaxY);
 					this.width = Math.max(dragStartPanelWidth - dragAmountX, minWidth);
 					this.height = Math.max(dragStartPanelHeight - dragAmountY, minHeight);				
 				}
 				else if(currentResizeHandle == resizeHandleTR)
 				{
-					this.y = this.parent.mouseY;
+					this.y = Math.min(this.parent.mouseY, dragMaxY);
 					this.width = Math.max(this.mouseX, minWidth);
 					this.height = Math.max(dragStartPanelHeight - dragAmountY, minHeight);
 				}
@@ -360,7 +360,7 @@ package mdi.containers
 				}
 				else if(currentResizeHandle == resizeHandleBL)
 				{
-					this.x = this.parent.mouseX;
+					this.x = Math.min(this.parent.mouseX, dragMaxX);
 					this.width = Math.max(dragStartPanelWidth - dragAmountX, minWidth);
 					this.height = Math.max(this.mouseY, minHeight);
 				}
@@ -405,6 +405,7 @@ package mdi.containers
 				cursorClass = resizeCursorTRBL;
 			}
 			
+			CursorManager.removeCursor(CursorManager.currentCursorID);
 			CursorManager.setCursor(cursorClass, 2, -10, -10);
 		}
 		

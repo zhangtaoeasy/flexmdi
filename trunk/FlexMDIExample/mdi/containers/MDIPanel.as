@@ -39,10 +39,14 @@ package mdi.containers
 		private var currentDragHandle:Button;
 		private var dragStartMouseX:Number;
 		private var dragStartMouseY:Number;
-		private var dragStartWidth:Number;
-		private var dragStartHeight:Number;
+		private var dragStartPanelX:Number;
+		private var dragStartPanelY:Number;
+		private var dragStartPanelWidth:Number;
+		private var dragStartPanelHeight:Number;
 		private var dragAmountX:Number;
 		private var dragAmountY:Number;
+		private var dragMaxX:Number;
+		private var dragMaxY:Number;
 		
 		[Embed(source="/mdi/assets/img/resizeCursorV.gif")]
 		private var resizeCursorV:Class;
@@ -294,18 +298,24 @@ package mdi.containers
 				setCursor(currentDragHandle);
 				dragStartMouseX = stage.mouseX;
 				dragStartMouseY = stage.mouseY;
-				dragStartWidth = this.width;
-				dragStartHeight = this.height;
+				dragStartPanelX = this.x;
+				dragStartPanelY = this.y;
+				dragStartPanelWidth = this.width;
+				dragStartPanelHeight = this.height;
 				
-				stage.addEventListener(MouseEvent.MOUSE_MOVE, onResizeButtonDrag, false, 0, true);
-				stage.addEventListener(MouseEvent.MOUSE_UP, onResizeButtonRelease, false, 0, true);
+				dragMaxX = dragStartPanelX + (dragStartPanelWidth - minWidth);
+				dragMaxY = dragStartPanelY + (dragStartPanelHeight - minHeight);
+				
+				systemManager.addEventListener(Event.ENTER_FRAME, onResizeButtonDrag, false, 0, true);
+				systemManager.addEventListener(MouseEvent.MOUSE_UP, onResizeButtonRelease, false, 0, true);
+				systemManager.stage.addEventListener(Event.MOUSE_LEAVE, onMouseLeaveStage, false, 0, true);
 			}
 		}
 		
 		/**
 		 * Mouse move while mouse is down on a resize handle
 		 */
-		private function onResizeButtonDrag(event:MouseEvent):void
+		private function onResizeButtonDrag(event:Event):void
 		{
 			if(!collapsed)
 			{
@@ -314,8 +324,8 @@ package mdi.containers
 				
 				if(currentDragHandle == resizeHandleTop)
 				{
-					this.y = this.parent.mouseY;
-					this.height = Math.max(dragStartHeight - dragAmountY, minHeight);
+					this.y = Math.min(this.parent.mouseY, dragMaxY);
+					this.height = Math.max(dragStartPanelHeight - dragAmountY, minHeight);
 				}
 				else if(currentDragHandle == resizeHandleRight)
 				{
@@ -327,21 +337,21 @@ package mdi.containers
 				}
 				else if(currentDragHandle == resizeHandleLeft)
 				{
-					this.x = this.parent.mouseX;
-					this.width = Math.max(dragStartWidth - dragAmountX, minWidth);
+					this.x = Math.min(this.parent.mouseX, dragMaxX);
+					this.width = Math.max(dragStartPanelWidth - dragAmountX, minWidth);
 				}
 				else if(currentDragHandle == resizeHandleTL)
 				{
 					this.x = this.parent.mouseX;
 					this.y = this.parent.mouseY;
-					this.width = Math.max(dragStartWidth - dragAmountX, minWidth);
-					this.height = Math.max(dragStartHeight - dragAmountY, minHeight);				
+					this.width = Math.max(dragStartPanelWidth - dragAmountX, minWidth);
+					this.height = Math.max(dragStartPanelHeight - dragAmountY, minHeight);				
 				}
 				else if(currentDragHandle == resizeHandleTR)
 				{
 					this.y = this.parent.mouseY;
 					this.width = Math.max(this.mouseX, minWidth);
-					this.height = Math.max(dragStartHeight - dragAmountY, minHeight);
+					this.height = Math.max(dragStartPanelHeight - dragAmountY, minHeight);
 				}
 				else if(currentDragHandle == resizeHandleBR)
 				{
@@ -351,21 +361,27 @@ package mdi.containers
 				else if(currentDragHandle == resizeHandleBL)
 				{
 					this.x = this.parent.mouseX;
-					this.width = Math.max(dragStartWidth - dragAmountX, minWidth);
+					this.width = Math.max(dragStartPanelWidth - dragAmountX, minWidth);
 					this.height = Math.max(this.mouseY, minHeight);
 				}
 			}
 		}
 		
-		private function onResizeButtonRelease(event:MouseEvent):void
+		private function onResizeButtonRelease(event:MouseEvent = null):void
 		{
 			if(!collapsed)
 			{
 				currentDragHandle = null;
-				stage.removeEventListener(MouseEvent.MOUSE_MOVE, onResizeButtonDrag);
-				stage.removeEventListener(MouseEvent.MOUSE_UP, onResizeButtonRelease);
+				systemManager.removeEventListener(Event.ENTER_FRAME, onResizeButtonDrag);
+				systemManager.removeEventListener(MouseEvent.MOUSE_UP, onResizeButtonRelease);
+				systemManager.stage.removeEventListener(Event.MOUSE_LEAVE, onMouseLeaveStage);
 				CursorManager.removeCursor(CursorManager.currentCursorID);
 			}
+		}
+		
+		private function onMouseLeaveStage(event:Event):void
+		{
+			onResizeButtonRelease();
 		}
 		
 		private function setCursor(target:Button):void

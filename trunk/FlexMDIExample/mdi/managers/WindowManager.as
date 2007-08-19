@@ -3,6 +3,8 @@ package mdi.managers
 
 	import flash.display.DisplayObject;
 	
+	import mdi.containers.MDIPanel;
+	
 	import mx.controls.Alert;
 	import mx.core.Application;
 	import mx.core.IFlexDisplayObject;
@@ -10,7 +12,6 @@ package mdi.managers
 	import mx.effects.WipeDown;
 	import mx.managers.PopUpManager;
 	import mx.utils.ArrayUtil;
-	import mdi.containers.Window;	
 
 	public class WindowManager extends PopUpManager 
 	{
@@ -101,13 +102,13 @@ package mdi.managers
 			
 			for(var i:int = 0; i < windowList.length; i++)
 			{
-				var win:Window = windowList[i];
+				var win:MDIPanel = windowList[i];
 				win.width = targetWidth;
 				win.height = targetHeight;
 				
 				if(i > 0)
 				{
-					var prevWin:Window = windowList[i - 1];
+					var prevWin:MDIPanel = windowList[i - 1];
 				}				
 				
 				if(i % numCols == 0 && i > 0)
@@ -130,7 +131,7 @@ package mdi.managers
 				var orphanWidth:Number = availWidth / numOrphans;
 				for(var j:int = numWindows - numOrphans; j < numWindows; j++)
 				{
-					var orphan:Window = windowList[j];
+					var orphan:MDIPanel = windowList[j];
 					orphan.width = orphanWidth;
 					orphan.x = (j - (numWindows - numOrphans)) * orphanWidth;
 				}

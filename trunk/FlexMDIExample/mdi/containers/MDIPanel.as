@@ -336,6 +336,7 @@ package mdi.containers
 			{
 				restorePanel();
 				showControls = true;
+				collapsed = false;
 			}
 		}
 		

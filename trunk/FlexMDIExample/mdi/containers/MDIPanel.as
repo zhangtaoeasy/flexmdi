@@ -36,7 +36,7 @@ package mdi.containers
 		private var uncollapsedHeight:Number;
 		private var collapseEffect:Resize;
 		
-		private var currentDragHandle:Button;
+		private var currentResizeHandle:Button;
 		private var dragStartMouseX:Number;
 		private var dragStartMouseY:Number;
 		private var dragStartPanelX:Number;
@@ -294,8 +294,8 @@ package mdi.containers
 		{
 			if(!collapsed)
 			{
-				currentDragHandle = event.target as Button;
-				setCursor(currentDragHandle);
+				currentResizeHandle = event.target as Button;
+				setCursor(currentResizeHandle);
 				dragStartMouseX = stage.mouseX;
 				dragStartMouseY = stage.mouseY;
 				dragStartPanelX = this.x;
@@ -322,43 +322,43 @@ package mdi.containers
 				dragAmountX = stage.mouseX - dragStartMouseX;
 				dragAmountY = stage.mouseY - dragStartMouseY;
 				
-				if(currentDragHandle == resizeHandleTop)
+				if(currentResizeHandle == resizeHandleTop)
 				{
 					this.y = Math.min(this.parent.mouseY, dragMaxY);
 					this.height = Math.max(dragStartPanelHeight - dragAmountY, minHeight);
 				}
-				else if(currentDragHandle == resizeHandleRight)
+				else if(currentResizeHandle == resizeHandleRight)
 				{
 					this.width = Math.max(this.mouseX, minWidth);
 				}
-				else if(currentDragHandle == resizeHandleBottom)
+				else if(currentResizeHandle == resizeHandleBottom)
 				{
 					this.height = Math.max(this.mouseY, minHeight);
 				}
-				else if(currentDragHandle == resizeHandleLeft)
+				else if(currentResizeHandle == resizeHandleLeft)
 				{
 					this.x = Math.min(this.parent.mouseX, dragMaxX);
 					this.width = Math.max(dragStartPanelWidth - dragAmountX, minWidth);
 				}
-				else if(currentDragHandle == resizeHandleTL)
+				else if(currentResizeHandle == resizeHandleTL)
 				{
 					this.x = this.parent.mouseX;
 					this.y = this.parent.mouseY;
 					this.width = Math.max(dragStartPanelWidth - dragAmountX, minWidth);
 					this.height = Math.max(dragStartPanelHeight - dragAmountY, minHeight);				
 				}
-				else if(currentDragHandle == resizeHandleTR)
+				else if(currentResizeHandle == resizeHandleTR)
 				{
 					this.y = this.parent.mouseY;
 					this.width = Math.max(this.mouseX, minWidth);
 					this.height = Math.max(dragStartPanelHeight - dragAmountY, minHeight);
 				}
-				else if(currentDragHandle == resizeHandleBR)
+				else if(currentResizeHandle == resizeHandleBR)
 				{
 					this.width = Math.max(this.mouseX, minWidth);
 					this.height = Math.max(this.mouseY, minHeight);
 				}
-				else if(currentDragHandle == resizeHandleBL)
+				else if(currentResizeHandle == resizeHandleBL)
 				{
 					this.x = this.parent.mouseX;
 					this.width = Math.max(dragStartPanelWidth - dragAmountX, minWidth);
@@ -371,7 +371,7 @@ package mdi.containers
 		{
 			if(!collapsed)
 			{
-				currentDragHandle = null;
+				currentResizeHandle = null;
 				systemManager.removeEventListener(Event.ENTER_FRAME, onResizeButtonDrag);
 				systemManager.removeEventListener(MouseEvent.MOUSE_UP, onResizeButtonRelease);
 				systemManager.stage.removeEventListener(Event.MOUSE_LEAVE, onMouseLeaveStage);
@@ -410,7 +410,7 @@ package mdi.containers
 		
 		private function onResizeButtonRollOver(event:MouseEvent):void
 		{
-			if(!collapsed)
+			if(!collapsed && !event.buttonDown)
 			{
 				setCursor(event.target as Button);
 			}
@@ -418,7 +418,10 @@ package mdi.containers
 		
 		private function onResizeButtonRollOut(event:MouseEvent):void
 		{
-			CursorManager.removeCursor(CursorManager.currentCursorID);
+			if(!event.buttonDown)
+			{
+				CursorManager.removeCursor(CursorManager.currentCursorID);
+			}
 		}
 		
 		public function set collapsible(value:Boolean):void

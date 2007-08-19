@@ -322,7 +322,7 @@ package mdi.containers
 		 */
 		private function onTitleBarPress(event:MouseEvent):void
 		{
-			this.startDrag(false, new Rectangle(parent.x, parent.y, parent.width, parent.height));
+			this.startDrag(false, new Rectangle(0, 0, parent.width - this.width, parent.height - this.height - 5));
 		}
 		
 		private function onTitleBarRelease(event:MouseEvent):void
@@ -372,8 +372,8 @@ package mdi.containers
 			{
 				currentResizeHandle = event.target as Button;
 				setCursor(currentResizeHandle);
-				dragStartMouseX = stage.mouseX;
-				dragStartMouseY = stage.mouseY;
+				dragStartMouseX = parent.mouseX;
+				dragStartMouseY = parent.mouseY;
 				dragStartPanelX = this.x;
 				dragStartPanelY = this.y;
 				dragStartPanelWidth = this.width;
@@ -382,9 +382,9 @@ package mdi.containers
 				dragMaxX = dragStartPanelX + (dragStartPanelWidth - minWidth);
 				dragMaxY = dragStartPanelY + (dragStartPanelHeight - minHeight);
 				
-				systemManager.addEventListener(Event.ENTER_FRAME, onResizeButtonDrag, false, 0, true);
+				systemManager.addEventListener(MouseEvent.MOUSE_MOVE, onResizeButtonDrag, false, 0, true);
 				systemManager.addEventListener(MouseEvent.MOUSE_UP, onResizeButtonRelease, false, 0, true);
-				systemManager.stage.addEventListener(Event.MOUSE_LEAVE, onMouseLeaveStage, false, 0, true);
+				//systemManager.stage.addEventListener(Event.MOUSE_LEAVE, onMouseLeaveStage, false, 0, true);
 			}
 		}
 		
@@ -395,46 +395,46 @@ package mdi.containers
 		{
 			if(!collapsed)
 			{
-				dragAmountX = stage.mouseX - dragStartMouseX;
-				dragAmountY = stage.mouseY - dragStartMouseY;
+				dragAmountX = parent.mouseX - dragStartMouseX;
+				dragAmountY = parent.mouseY - dragStartMouseY;
 				
-				if(currentResizeHandle == resizeHandleTop)
+				if(currentResizeHandle == resizeHandleTop && parent.mouseY > 0)
 				{
-					this.y = Math.min(this.parent.mouseY, dragMaxY);
+					this.y = parent.mouseY;//Math.min(this.parent.mouseY, dragMaxY);
 					this.height = Math.max(dragStartPanelHeight - dragAmountY, minHeight);
 				}
-				else if(currentResizeHandle == resizeHandleRight)
+				else if(currentResizeHandle == resizeHandleRight && parent.mouseX < parent.width)
 				{
 					this.width = Math.max(this.mouseX, minWidth);
 				}
-				else if(currentResizeHandle == resizeHandleBottom)
+				else if(currentResizeHandle == resizeHandleBottom && parent.mouseY < parent.height)
 				{
-					this.height = Math.max(this.mouseY, minHeight);
+					this.height = Math.max(parent.mouseY - this.y, minHeight);
 				}
-				else if(currentResizeHandle == resizeHandleLeft)
+				else if(currentResizeHandle == resizeHandleLeft && parent.mouseX > 0)
 				{
-					this.x = Math.min(this.parent.mouseX, dragMaxX);
+					this.x = parent.mouseX;//Math.min(this.parent.mouseX, dragMaxX);
 					this.width = Math.max(dragStartPanelWidth - dragAmountX, minWidth);
 				}
-				else if(currentResizeHandle == resizeHandleTL)
+				else if(currentResizeHandle == resizeHandleTL && parent.mouseX > 0 && parent.mouseY > 0)
 				{
 					this.x = Math.min(this.parent.mouseX, dragMaxX);
 					this.y = Math.min(this.parent.mouseY, dragMaxY);
 					this.width = Math.max(dragStartPanelWidth - dragAmountX, minWidth);
 					this.height = Math.max(dragStartPanelHeight - dragAmountY, minHeight);				
 				}
-				else if(currentResizeHandle == resizeHandleTR)
+				else if(currentResizeHandle == resizeHandleTR && parent.mouseX < parent.width && parent.mouseY > 0)
 				{
 					this.y = Math.min(this.parent.mouseY, dragMaxY);
 					this.width = Math.max(this.mouseX, minWidth);
 					this.height = Math.max(dragStartPanelHeight - dragAmountY, minHeight);
 				}
-				else if(currentResizeHandle == resizeHandleBR)
+				else if(currentResizeHandle == resizeHandleBR && parent.mouseX < parent.width && parent.mouseY < parent.height)
 				{
 					this.width = Math.max(this.mouseX, minWidth);
 					this.height = Math.max(this.mouseY, minHeight);
 				}
-				else if(currentResizeHandle == resizeHandleBL)
+				else if(currentResizeHandle == resizeHandleBL && parent.mouseX > 0 && parent.mouseY < parent.height)
 				{
 					this.x = Math.min(this.parent.mouseX, dragMaxX);
 					this.width = Math.max(dragStartPanelWidth - dragAmountX, minWidth);
@@ -448,9 +448,9 @@ package mdi.containers
 			if(!collapsed)
 			{
 				currentResizeHandle = null;
-				systemManager.removeEventListener(Event.ENTER_FRAME, onResizeButtonDrag);
+				systemManager.removeEventListener(MouseEvent.MOUSE_MOVE, onResizeButtonDrag);
 				systemManager.removeEventListener(MouseEvent.MOUSE_UP, onResizeButtonRelease);
-				systemManager.stage.removeEventListener(Event.MOUSE_LEAVE, onMouseLeaveStage);
+				//systemManager.stage.removeEventListener(Event.MOUSE_LEAVE, onMouseLeaveStage);
 				CursorManager.removeCursor(CursorManager.currentCursorID);
 			}
 		}

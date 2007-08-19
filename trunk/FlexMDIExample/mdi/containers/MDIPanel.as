@@ -244,7 +244,8 @@ package mdi.containers
 			// clicking
 			titleBar.addEventListener(MouseEvent.MOUSE_DOWN, onTitleBarPress, false, 0, true);
 			titleBar.addEventListener(MouseEvent.MOUSE_UP, onTitleBarRelease, false, 0, true);
-			titleBar.addEventListener(MouseEvent.DOUBLE_CLICK, onTitleBarDoubleClick, false, 0, true);
+			titleBar.addEventListener(MouseEvent.DOUBLE_CLICK, onMaximizeRestoreBtnClick, false, 0, true);
+			titleBar.addEventListener(MouseEvent.CLICK, onTitleBarClick, false, 0, true);
 			
 			minimizeBtn.addEventListener(MouseEvent.CLICK, onMinimizeBtnClick);
 			maximizeRestoreBtn.addEventListener(MouseEvent.CLICK, onMaximizeRestoreBtnClick);
@@ -253,34 +254,30 @@ package mdi.containers
 		
 		private function onMinimizeBtnClick(event:MouseEvent):void
 		{
+			savePanel();
+			
 			this.height = titleBar.height;
+			collapsed = true;
+			showControls = false;
 			dispatchEvent(new MDIPanelControlEvent(this, MDIPanelControlEvent.MINIMIZE));
 		}
 		
 		private function onMaximizeRestoreBtnClick(event:MouseEvent):void
 		{
-			var clickedBtn:Button = event.target as Button;
-			
-			if(clickedBtn.styleName == "increaseBtn")
+			if(maximizeRestoreBtn.styleName == "increaseBtn")
 			{
-				dragStartPanelX = this.x;
-				dragStartPanelY = this.y;
-				dragStartPanelWidth = this.width;
-				dragStartPanelHeight = this.height;
+				savePanel();
 				
 				this.x = this.y = 0;
 				this.width = this.parent.width;
 				this.height = this.parent.height;
-				clickedBtn.styleName = "decreaseBtn";
+				maximizeRestoreBtn.styleName = "decreaseBtn";
 			}
 			else
 			{
-				this.x = dragStartPanelX;
-				this.y = dragStartPanelY;
-				this.width = dragStartPanelWidth;
-				this.height = dragStartPanelHeight;
+				restorePanel();
 				
-				clickedBtn.styleName = "increaseBtn";
+				maximizeRestoreBtn.styleName = "increaseBtn";
 			}
 		}
 		
@@ -288,6 +285,22 @@ package mdi.containers
 		{
 			this.parent.removeChild(this);
 			dispatchEvent(new MDIPanelControlEvent(this, MDIPanelControlEvent.CLOSE));
+		}
+		
+		private function savePanel():void
+		{
+			dragStartPanelX = this.x;
+			dragStartPanelY = this.y;
+			dragStartPanelWidth = this.width;
+			dragStartPanelHeight = this.height;
+		}
+		
+		private function restorePanel():void
+		{
+			this.x = dragStartPanelX;
+			this.y = dragStartPanelY;
+			this.width = dragStartPanelWidth;
+			this.height = dragStartPanelHeight;
 		}
 		
 		public function addControl(uic:UIComponent, index:int = -1):void
@@ -315,6 +328,15 @@ package mdi.containers
 		private function onTitleBarRelease(event:MouseEvent):void
 		{
 			this.stopDrag();
+		}
+		
+		private function onTitleBarClick(event:MouseEvent):void
+		{
+			if(collapsed)
+			{
+				restorePanel();
+				showControls = true;
+			}
 		}
 		
 		private function onTitleBarDoubleClick(event:MouseEvent):void
@@ -481,6 +503,11 @@ package mdi.containers
 		public function set collapsible(value:Boolean):void
 		{
 			doubleClickEnabled = value;
+		}
+		
+		public function set showControls(value:Boolean):void
+		{
+			controlsHolder.visible = value;
 		}
 	}
 }

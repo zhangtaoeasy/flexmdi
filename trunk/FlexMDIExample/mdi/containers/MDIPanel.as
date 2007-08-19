@@ -11,6 +11,7 @@ package mdi.containers
 	import mx.events.EffectEvent;
 	import mx.events.FlexEvent;
 	import mx.managers.CursorManager;
+	import mdi.events.MDIPanelControlEvent;
 
 	public class MDIPanel extends Panel
 	{
@@ -18,6 +19,10 @@ package mdi.containers
 		public var collapseDuration:Number;
 		public var controls:Array;
 		public var controlsHolder:UIComponent;
+		
+		public var minimizeBtn:Button;
+		public var maximizeRestoreBtn:Button;
+		public var closeBtn:Button;
 		
 		private static var DEFAULT_EDGE_HANDLE_SIZE:Number = 4;
 		private static var DEFAULT_CORNER_HANDLE_SIZE:Number = 10;
@@ -157,6 +162,11 @@ package mdi.containers
 				controlsHolder.addChild(control);
 			}
 			
+			// assign panel controls
+			minimizeBtn = controls[0];
+			maximizeRestoreBtn = controls[1];
+			closeBtn = controls[2];
+			
 			addListeners();
 		}
 		
@@ -235,6 +245,49 @@ package mdi.containers
 			titleBar.addEventListener(MouseEvent.MOUSE_DOWN, onTitleBarPress, false, 0, true);
 			titleBar.addEventListener(MouseEvent.MOUSE_UP, onTitleBarRelease, false, 0, true);
 			titleBar.addEventListener(MouseEvent.DOUBLE_CLICK, onTitleBarDoubleClick, false, 0, true);
+			
+			minimizeBtn.addEventListener(MouseEvent.CLICK, onMinimizeBtnClick);
+			maximizeRestoreBtn.addEventListener(MouseEvent.CLICK, onMaximizeRestoreBtnClick);
+			closeBtn.addEventListener(MouseEvent.CLICK, onCloseBtnClick);
+		}
+		
+		private function onMinimizeBtnClick(event:MouseEvent):void
+		{
+			this.height = titleBar.height;
+			dispatchEvent(new MDIPanelControlEvent(this, MDIPanelControlEvent.MINIMIZE));
+		}
+		
+		private function onMaximizeRestoreBtnClick(event:MouseEvent):void
+		{
+			var clickedBtn:Button = event.target as Button;
+			
+			if(clickedBtn.styleName == "increaseBtn")
+			{
+				dragStartPanelX = this.x;
+				dragStartPanelY = this.y;
+				dragStartPanelWidth = this.width;
+				dragStartPanelHeight = this.height;
+				
+				this.x = this.y = 0;
+				this.width = this.parent.width;
+				this.height = this.parent.height;
+				clickedBtn.styleName = "decreaseBtn";
+			}
+			else
+			{
+				this.x = dragStartPanelX;
+				this.y = dragStartPanelY;
+				this.width = dragStartPanelWidth;
+				this.height = dragStartPanelHeight;
+				
+				clickedBtn.styleName = "increaseBtn";
+			}
+		}
+		
+		private function onCloseBtnClick(event:MouseEvent):void
+		{
+			this.parent.removeChild(this);
+			dispatchEvent(new MDIPanelControlEvent(this, MDIPanelControlEvent.CLOSE));
 		}
 		
 		public function addControl(uic:UIComponent, index:int = -1):void

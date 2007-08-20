@@ -382,9 +382,9 @@ package mdi.containers
 				dragMaxX = dragStartPanelX + (dragStartPanelWidth - minWidth);
 				dragMaxY = dragStartPanelY + (dragStartPanelHeight - minHeight);
 				
-				systemManager.addEventListener(MouseEvent.MOUSE_MOVE, onResizeButtonDrag, false, 0, true);
+				systemManager.addEventListener(Event.ENTER_FRAME, onResizeButtonDrag, false, 0, true);
 				systemManager.addEventListener(MouseEvent.MOUSE_UP, onResizeButtonRelease, false, 0, true);
-				//systemManager.stage.addEventListener(Event.MOUSE_LEAVE, onMouseLeaveStage, false, 0, true);
+				systemManager.stage.addEventListener(Event.MOUSE_LEAVE, onMouseLeaveStage, false, 0, true);
 			}
 		}
 		
@@ -400,7 +400,7 @@ package mdi.containers
 				
 				if(currentResizeHandle == resizeHandleTop && parent.mouseY > 0)
 				{
-					this.y = parent.mouseY;//Math.min(this.parent.mouseY, dragMaxY);
+					this.y = Math.min(this.parent.mouseY, dragMaxY);
 					this.height = Math.max(dragStartPanelHeight - dragAmountY, minHeight);
 				}
 				else if(currentResizeHandle == resizeHandleRight && parent.mouseX < parent.width)
@@ -413,7 +413,7 @@ package mdi.containers
 				}
 				else if(currentResizeHandle == resizeHandleLeft && parent.mouseX > 0)
 				{
-					this.x = parent.mouseX;//Math.min(this.parent.mouseX, dragMaxX);
+					this.x = Math.min(this.parent.mouseX, dragMaxX);
 					this.width = Math.max(dragStartPanelWidth - dragAmountX, minWidth);
 				}
 				else if(currentResizeHandle == resizeHandleTL && parent.mouseX > 0 && parent.mouseY > 0)
@@ -448,9 +448,9 @@ package mdi.containers
 			if(!collapsed)
 			{
 				currentResizeHandle = null;
-				systemManager.removeEventListener(MouseEvent.MOUSE_MOVE, onResizeButtonDrag);
+				systemManager.removeEventListener(Event.ENTER_FRAME, onResizeButtonDrag);
 				systemManager.removeEventListener(MouseEvent.MOUSE_UP, onResizeButtonRelease);
-				//systemManager.stage.removeEventListener(Event.MOUSE_LEAVE, onMouseLeaveStage);
+				systemManager.stage.removeEventListener(Event.MOUSE_LEAVE, onMouseLeaveStage);
 				CursorManager.removeCursor(CursorManager.currentCursorID);
 			}
 		}

@@ -12,6 +12,7 @@ package mdi.containers
 	import mx.events.FlexEvent;
 	import mx.managers.CursorManager;
 	import mdi.events.MDIPanelControlEvent;
+	import mdi.managers.ContainerWindowManager;
 
 	public class MDIPanel extends Panel
 	{
@@ -62,13 +63,15 @@ package mdi.containers
 		[Embed(source="/mdi/assets/img/resizeCursorTRBL.gif")]
 		private var resizeCursorTRBL:Class;
 		
+		public var windowManager:ContainerWindowManager;
+		
 		public function MDIPanel()
 		{
 			super();
 			controls = new Array();
 			doubleClickEnabled = true;
-			minWidth = 140;
-			minHeight = 70;
+			minWidth = 200;
+			minHeight = 200;
 		}
 		
 		override protected function createChildren():void
@@ -152,6 +155,28 @@ package mdi.containers
 			controlsHolder = new UIComponent();
 			rawChildren.addChild(controlsHolder);
 			
+			if(controls.length == 0)
+			{
+				var button1:Button = new Button();
+				button1.width = 10;
+				button1.height = 10;
+				button1.styleName ="minimizeBtn";
+				controls.push(button1);
+				
+				var button2:Button = new Button();
+				button2.width = 10;
+				button2.height = 10;
+				button2.styleName ="increaseBtn";
+				controls.push(button2);
+				
+				var button3:Button = new Button();
+				button3.width = 10;
+				button3.height = 10;
+				button3.styleName ="closeBtn";
+				controls.push(button3);
+				
+			}
+			
 			for(var i:int = 0; i < controls.length; i++)
 			{
 				var control:UIComponent = controls[i];
@@ -169,6 +194,8 @@ package mdi.containers
 			
 			addListeners();
 		}
+		
+		
 		
 		override protected function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number):void
 		{
@@ -204,10 +231,6 @@ package mdi.containers
 			}
 		}
 		
-		private function onCloseBtn(event:MouseEvent):void
-		{
-			parent.removeChild(this);
-		}
 		
 		private function addListeners():void
 		{
@@ -245,21 +268,37 @@ package mdi.containers
 			titleBar.addEventListener(MouseEvent.MOUSE_DOWN, onTitleBarPress, false, 0, true);
 			titleBar.addEventListener(MouseEvent.MOUSE_UP, onTitleBarRelease, false, 0, true);
 			titleBar.addEventListener(MouseEvent.DOUBLE_CLICK, onMaximizeRestoreBtnClick, false, 0, true);
-			titleBar.addEventListener(MouseEvent.CLICK, onTitleBarClick, false, 0, true);
+			//titleBar.addEventListener(MouseEvent.CLICK, onTitleBarClick, false, 0, true);
 			
 			minimizeBtn.addEventListener(MouseEvent.CLICK, onMinimizeBtnClick);
 			maximizeRestoreBtn.addEventListener(MouseEvent.CLICK, onMaximizeRestoreBtnClick);
 			closeBtn.addEventListener(MouseEvent.CLICK, onCloseBtnClick);
+			
+			this.addEventListener(MouseEvent.MOUSE_DOWN, setWindowFocus);
+		}
+		
+		private function setWindowFocus(event:Event):void
+		{
+			parent.setChildIndex(this, parent.numChildren - 1);
 		}
 		
 		private function onMinimizeBtnClick(event:MouseEvent):void
 		{
-			savePanel();
-			
-			this.height = titleBar.height;
-			collapsed = true;
-			showControls = false;
-			dispatchEvent(new MDIPanelControlEvent(this, MDIPanelControlEvent.MINIMIZE));
+			if(collapsed)
+			{
+				restorePanel();
+				//showControls = true;
+				collapsed = false;
+			}
+			else
+			{
+				savePanel();
+				
+				this.height = titleBar.height;
+				collapsed = true;
+				//showControls = false;
+				dispatchEvent(new MDIPanelControlEvent(this, MDIPanelControlEvent.MINIMIZE));
+			}
 		}
 		
 		private function onMaximizeRestoreBtnClick(event:MouseEvent):void
@@ -283,8 +322,9 @@ package mdi.containers
 		
 		private function onCloseBtnClick(event:MouseEvent):void
 		{
-			this.parent.removeChild(this);
-			dispatchEvent(new MDIPanelControlEvent(this, MDIPanelControlEvent.CLOSE));
+			windowManager.remove(this);
+			//this.parent.removeChild(this);
+			//dispatchEvent(new MDIPanelControlEvent(this, MDIPanelControlEvent.CLOSE));
 		}
 		
 		private function savePanel():void
@@ -329,7 +369,7 @@ package mdi.containers
 		{
 			this.stopDrag();
 		}
-		
+		/*
 		private function onTitleBarClick(event:MouseEvent):void
 		{
 			if(collapsed)
@@ -339,7 +379,7 @@ package mdi.containers
 				collapsed = false;
 			}
 		}
-		
+		*/
 		private function onTitleBarDoubleClick(event:MouseEvent):void
 		{
 			collapseEffect = new Resize(this);

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" 
 				xmlns:containers="mdi.containers.*" 
-				layout="horizontal" >
+				layout="absolute" >
 	
 	<mx:Style source="/mdi/assets/css/styles.css" />
 	
@@ -21,15 +21,6 @@
 				WindowManager.add(win); 
 			}
 			
-			public function addWindow():void
-			{
-				var win:Window = new Window();
-				win.height = 400;
-				win.width = 300;
-				win.title = "title";
-				
-				WindowManager.add(win); 
-			}
 			/*
 			private function addControl():void
 			{
@@ -43,15 +34,13 @@
 	</mx:Script>
 	<mx:VBox>
 		<mx:Button click="addMDIPanel()" label="Add MDI Panel" />
-		<mx:Button click="addWindow()" label="Add Window" />
 		<mx:Button click="WindowManager.cascade()" label="Cascade" />
 		<mx:Button click="WindowManager.tile()" label="Tile" />
 		<mx:Button click="WindowManager.tile(true)" label="Tile + Fill Space" />
 		<!-- <mx:Button label="Add Maximize Button" click="addControl()" /> -->
 	</mx:VBox>
 	
-	<mx:VBox width="800" height="500" backgroundColor="#EEEEEE">
-		
+	<!-- <mx:Canvas width="800" height="500" backgroundColor="#EEEEEE"> -->
 		<containers:MDIPanel id="rp"
 			x="200" y="100"
 			width="400" height="400" minWidth="200" minHeight="200"
@@ -68,6 +57,6 @@
 					styleName="closeBtn" />
 			</containers:controls>
 		</containers:MDIPanel>	
-	</mx:VBox>
+	<!-- </mx:Canvas> -->
 	
 </mx:Application>

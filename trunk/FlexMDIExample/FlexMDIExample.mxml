@@ -45,17 +45,6 @@
 			x="200" y="100"
 			width="400" height="400" minWidth="200" minHeight="200"
 			title="Resizable Panel">
-			<containers:controls>
-				<mx:Button id="minBtn"
-					width="10" height="10"
-					styleName="minimizeBtn" />
-				<mx:Button id="maxBtn"
-					width="10" height="10"
-					styleName="increaseBtn" />
-				<mx:Button id="closeBtn"
-					width="10" height="10"
-					styleName="closeBtn" />
-			</containers:controls>
 		</containers:MDIPanel>	
 	<!-- </mx:Canvas> -->
 	

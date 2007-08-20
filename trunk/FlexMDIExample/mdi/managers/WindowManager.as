@@ -4,6 +4,7 @@ package mdi.managers
 	import flash.display.DisplayObject;
 	
 	import mdi.containers.MDIPanel;
+	import mx.containers.Panel;
 	
 	import mx.controls.Alert;
 	import mx.core.Application;
@@ -13,7 +14,7 @@ package mdi.managers
 	import mx.managers.PopUpManager;
 	import mx.utils.ArrayUtil;
 
-	public class WindowManager extends PopUpManager 
+	public class WindowManager
 	{
 		public static var windowList:Array = new Array();
 		
@@ -21,7 +22,6 @@ package mdi.managers
 		
 		public static function add(window:*, parent:*=null, modal:Boolean = false, childList:String = null):void
 		{	
-	
 			// track windows
 			WindowManager.windowList.push(window);
 			
@@ -42,9 +42,6 @@ package mdi.managers
 			// center popup if modal
 			if (modal) { PopUpManager.centerPopUp(window); }
 			else { WindowManager.position(window); }
-			
-			
-			
 		}
 		public static function addCenter(window:*, parent:*=null, modal:Boolean = false, childList:String = null):void
 		{
@@ -102,13 +99,13 @@ package mdi.managers
 			
 			for(var i:int = 0; i < windowList.length; i++)
 			{
-				var win:MDIPanel = windowList[i];
+				var win:Panel = windowList[i];
 				win.width = targetWidth;
 				win.height = targetHeight;
 				
 				if(i > 0)
 				{
-					var prevWin:MDIPanel = windowList[i - 1];
+					var prevWin:Panel = windowList[i - 1];
 				}				
 				
 				if(i % numCols == 0 && i > 0)
@@ -131,7 +128,7 @@ package mdi.managers
 				var orphanWidth:Number = availWidth / numOrphans;
 				for(var j:int = numWindows - numOrphans; j < numWindows; j++)
 				{
-					var orphan:MDIPanel = windowList[j];
+					var orphan:Panel = windowList[j];
 					orphan.width = orphanWidth;
 					orphan.x = (j - (numWindows - numOrphans)) * orphanWidth;
 				}

@@ -63,27 +63,56 @@ package mdi.managers
 			}
 		}
 		
+		
+		/**
+		 * Pushes a window onto the managed window stack 
+		 * 
+		 *  @param win Window to push onto managed windows stack 
+		 * */
+		public static function pushWindowOnStack(win:*):void
+		{	
+			if(win != null)
+				WindowManager.windowList.push(win);
+		}
+		
+		/**
+		 *  Removes a window instance from the managed window stack 
+		 *  @param win:IFlexDisplayObject Window to remove 
+		 */
 		public static function remove(win:IFlexDisplayObject):void
 		{
 			var index:int = ArrayUtil.getItemIndex(win, windowList);
 			WindowManager.windowList.splice(index, 1);
 			PopUpManager.removePopUp(win);
 		}
-		public static function absPos(window:*,x:int,y:int):void
+		
+		/**
+		 *  Positions a window in an absolute position 
+		 * 
+		 *  @param win:IFlexDisplayObject Window to position
+		 * 
+		 *  @param x:int The x position of the window
+		 * 
+		 *  @param y:int The y position of the window 
+		 */
+		public static function absPos(window:IFlexDisplayObject,x:int,y:int):void
 		{
-			var win : IFlexDisplayObject = window as IFlexDisplayObject;
 			win.x = x;
-			win.y = y;
-			
-		}
-		public static function absRightPos(window:*,x:int,y:int):void
-		{
-			var win : IFlexDisplayObject = window as IFlexDisplayObject;
-			win.x = x - win.width;
-			win.y = y;
-			
+			win.y = y;		
 		}
 		
+		
+		/**
+		 *  Tiles the window across the screen
+		 *  
+		 *  <p>By default, windows will be tiled to all the same size and use only the space they can accomodate.
+		 *  If you set fillSpace = true, tile will use all the space available to tile the windows with
+		 *  the windows being arranged by varying heights and widths. 
+     	 *  </p>
+		 * 
+		 *  @param fillSpace:Boolean Variable to determine whether to use the entire screen
+		 *  to tile or  
+		 */
 		public static function tile(fillSpace:Boolean = false):void
 		{
 			var numWindows:int = windowList.length;
@@ -135,6 +164,14 @@ package mdi.managers
 			}
 		}
 		
+		
+		/**
+		 *  Positions a window on the screen 
+		 *  
+		 * 	<p>This is primarly used as the default space on the screen to position the window.</p>
+		 * 
+		 *  @param window:IFlexDisplayObject Window to position
+		 */
 		public static function position(window:IFlexDisplayObject):void
 		{	
 			var win : IFlexDisplayObject = window as IFlexDisplayObject;
@@ -168,16 +205,29 @@ package mdi.managers
 				win.height=h;
 		}
 		
+		
+		/**
+		 *  Maximizes a window to use all available space
+		 * 
+		 *  @param window:IFlexDisplayObject Window to maximize
+		 */
 		public static function maximize(window:IFlexDisplayObject):void
 		{					
 			var win : IFlexDisplayObject = window as IFlexDisplayObject;
 			win.x=10;
 			win.y=40;
 			win.width = Application.application.width - 20;
-			win.height = Application.application.height - 60;	
+			win.height = Application.application.height - 60;
+			
+			//make sure window is on top.
+			PopUpManager.bringToFront(win);	
 		}
 		
-		
+		/**
+		 *  Cascades all managed windows from top left to bottom right 
+		 * 
+		 *  @param window:IFlexDisplayObject Window to maximize
+		 */	
 		public static function cascade():void
 		{
 			for(var i:int=0; i < WindowManager.windowList.length; i++)

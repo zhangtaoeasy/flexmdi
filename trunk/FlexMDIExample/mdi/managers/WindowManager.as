@@ -97,8 +97,8 @@ package mdi.managers
 		 */
 		public static function absPos(window:IFlexDisplayObject,x:int,y:int):void
 		{
-			win.x = x;
-			win.y = y;		
+			window.x = x;
+			window.y = y;		
 		}
 		
 		
@@ -165,6 +165,10 @@ package mdi.managers
 		}
 		
 		
+		
+		
+		
+		
 		/**
 		 *  Positions a window on the screen 
 		 *  
@@ -206,6 +210,11 @@ package mdi.managers
 		}
 		
 		
+		
+		
+		
+		
+		
 		/**
 		 *  Maximizes a window to use all available space
 		 * 
@@ -222,6 +231,11 @@ package mdi.managers
 			//make sure window is on top.
 			PopUpManager.bringToFront(win);	
 		}
+		
+		
+		
+		
+		
 		
 		/**
 		 *  Cascades all managed windows from top left to bottom right 

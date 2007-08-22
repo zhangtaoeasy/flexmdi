@@ -280,8 +280,11 @@ package mdi.containers
 		
 		private function setMDIWindowFocus(event:Event):void
 		{
-			this.parent.setChildIndex(this, parent.numChildren - 1);
-			dispatchEvent(new MDIWindowEvent(MDIWindowEvent.FOCUS, this));
+			if(parent.getChildIndex(this) != parent.numChildren - 1)
+			{
+				dispatchEvent(new MDIWindowEvent(MDIWindowEvent.FOCUS, this));
+			}
+			parent.setChildIndex(this, parent.numChildren - 1);
 		}
 		
 		private function onMinimizeBtnClick(event:MouseEvent):void

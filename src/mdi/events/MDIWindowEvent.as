@@ -6,11 +6,12 @@ package mdi.events
 
 	public class MDIWindowEvent extends Event
 	{
+		public static const FOCUS_IN:String = "mdiFocusIn";
+		public static const FOCUS_OUT:String = "mdiFocusOut";
 		public static const MOVE:String = "mdiMove";
 		public static const RESIZE_START:String = "mdiResizeStart";
 		public static const RESIZE:String = "mdiResize";
 		public static const RESIZE_END:String = "mdiResizeEnd";
-		public static const FOCUS:String = "mdiFocus";
 		
 		public static const MINIMIZE:String = "mdiMinimize";
 		public static const RESTORE:String = "mdiRestore";

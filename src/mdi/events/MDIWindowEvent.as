@@ -19,15 +19,15 @@ package mdi.events
 		
 		public var window:MDIWindow;
 		
-		public function MDIWindowEvent(type:String, window:MDIWindow)
+		public function MDIWindowEvent(type:String, window:MDIWindow, bubbles:Boolean = false, cancelable:Boolean = false)
 		{
-			super(type, true, true);
+			super( type, bubbles, cancelable );
 			this.window = window;
 		}
 		
 		override public function clone():Event
 		{
-			return new MDIWindowEvent(type, window);
+			return new MDIWindowEvent(type, window, bubbles, cancelable);
 		}
 	}
 }

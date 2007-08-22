@@ -1,6 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <componentPackage>
-    
-    <component id="Window" class="mdi.containers.Window" />
-    
+	<component id="MDIWindow" class="mdi.containers.MDIWindow" />
 </componentPackage>

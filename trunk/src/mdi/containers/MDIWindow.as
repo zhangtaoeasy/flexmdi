@@ -12,13 +12,13 @@ package mdi.containers
 	import mx.events.FlexEvent;
 	import mx.managers.CursorManager;
 	
-	import mdi.events.WindowEvent;
-	import mdi.managers.WindowManager;
+	import mdi.events.MDIWindowEvent;
+	import mdi.managers.MDIManager;
 	import mx.core.Container;
 	import mx.effects.Effect;
 
 
-	public class Window extends Panel
+	public class MDIWindow extends Panel
 	{
 		public var collapsed:Boolean = false;
 		public var collapseDuration:Number;
@@ -67,12 +67,12 @@ package mdi.containers
 		[Embed(source="/mdi/assets/img/resizeCursorTRBL.gif")]
 		private var resizeCursorTRBL:Class;
 		
-		public var windowManager:WindowManager;
+		public var windowManager:MDIManager;
 
 		public var showEffect:Effect;
 	
 		
-		public function Window()
+		public function MDIWindow()
 		{
 			super();
 			controls = new Array();
@@ -89,9 +89,9 @@ package mdi.containers
 			if(!resizeHandleTop)
 			{
 				resizeHandleTop = new Button();
-				resizeHandleTop.x = Window.DEFAULT_CORNER_HANDLE_SIZE * .5;
-				resizeHandleTop.y = -(Window.DEFAULT_EDGE_HANDLE_SIZE * .5);
-				resizeHandleTop.height = Window.DEFAULT_EDGE_HANDLE_SIZE;
+				resizeHandleTop.x = MDIWindow.DEFAULT_CORNER_HANDLE_SIZE * .5;
+				resizeHandleTop.y = -(MDIWindow.DEFAULT_EDGE_HANDLE_SIZE * .5);
+				resizeHandleTop.height = MDIWindow.DEFAULT_EDGE_HANDLE_SIZE;
 				resizeHandleTop.alpha = 0;
 				rawChildren.addChild(resizeHandleTop);
 			}
@@ -99,8 +99,8 @@ package mdi.containers
 			if(!resizeHandleRight)
 			{
 				resizeHandleRight = new Button();
-				resizeHandleRight.y = Window.DEFAULT_CORNER_HANDLE_SIZE * .5;
-				resizeHandleRight.width = Window.DEFAULT_EDGE_HANDLE_SIZE;
+				resizeHandleRight.y = MDIWindow.DEFAULT_CORNER_HANDLE_SIZE * .5;
+				resizeHandleRight.width = MDIWindow.DEFAULT_EDGE_HANDLE_SIZE;
 				resizeHandleRight.alpha = 0;
 				rawChildren.addChild(resizeHandleRight);
 			}
@@ -108,8 +108,8 @@ package mdi.containers
 			if(!resizeHandleBottom)
 			{
 				resizeHandleBottom = new Button();
-				resizeHandleBottom.x = Window.DEFAULT_CORNER_HANDLE_SIZE * .5;
-				resizeHandleBottom.height = Window.DEFAULT_EDGE_HANDLE_SIZE;
+				resizeHandleBottom.x = MDIWindow.DEFAULT_CORNER_HANDLE_SIZE * .5;
+				resizeHandleBottom.height = MDIWindow.DEFAULT_EDGE_HANDLE_SIZE;
 				resizeHandleBottom.alpha = 0;
 				rawChildren.addChild(resizeHandleBottom);
 			}
@@ -117,9 +117,9 @@ package mdi.containers
 			if(!resizeHandleLeft)
 			{
 				resizeHandleLeft = new Button();
-				resizeHandleLeft.x = -(Window.DEFAULT_EDGE_HANDLE_SIZE * .5);
-				resizeHandleLeft.y = Window.DEFAULT_CORNER_HANDLE_SIZE * .5;
-				resizeHandleLeft.width = Window.DEFAULT_EDGE_HANDLE_SIZE;
+				resizeHandleLeft.x = -(MDIWindow.DEFAULT_EDGE_HANDLE_SIZE * .5);
+				resizeHandleLeft.y = MDIWindow.DEFAULT_CORNER_HANDLE_SIZE * .5;
+				resizeHandleLeft.width = MDIWindow.DEFAULT_EDGE_HANDLE_SIZE;
 				resizeHandleLeft.alpha = 0;
 				rawChildren.addChild(resizeHandleLeft);
 			}
@@ -128,8 +128,8 @@ package mdi.containers
 			if(!resizeHandleTL)
 			{
 				resizeHandleTL = new Button();
-				resizeHandleTL.x = resizeHandleTL.y = -(Window.DEFAULT_CORNER_HANDLE_SIZE * .3);
-				resizeHandleTL.width = resizeHandleTL.height = Window.DEFAULT_CORNER_HANDLE_SIZE;
+				resizeHandleTL.x = resizeHandleTL.y = -(MDIWindow.DEFAULT_CORNER_HANDLE_SIZE * .3);
+				resizeHandleTL.width = resizeHandleTL.height = MDIWindow.DEFAULT_CORNER_HANDLE_SIZE;
 				resizeHandleTL.alpha = 0;
 				rawChildren.addChild(resizeHandleTL);
 			}
@@ -137,7 +137,7 @@ package mdi.containers
 			if(!resizeHandleTR)
 			{
 				resizeHandleTR = new Button();
-				resizeHandleTR.width = resizeHandleTR.height = Window.DEFAULT_CORNER_HANDLE_SIZE;
+				resizeHandleTR.width = resizeHandleTR.height = MDIWindow.DEFAULT_CORNER_HANDLE_SIZE;
 				resizeHandleTR.alpha = 0;
 				rawChildren.addChild(resizeHandleTR);
 			}
@@ -145,7 +145,7 @@ package mdi.containers
 			if(!resizeHandleBR)
 			{
 				resizeHandleBR = new Button();
-				resizeHandleBR.width = resizeHandleBR.height = Window.DEFAULT_CORNER_HANDLE_SIZE;
+				resizeHandleBR.width = resizeHandleBR.height = MDIWindow.DEFAULT_CORNER_HANDLE_SIZE;
 				resizeHandleBR.alpha = 0;
 				rawChildren.addChild(resizeHandleBR);
 			}
@@ -153,7 +153,7 @@ package mdi.containers
 			if(!resizeHandleBL)
 			{
 				resizeHandleBL = new Button();
-				resizeHandleBL.width = resizeHandleBL.height = Window.DEFAULT_CORNER_HANDLE_SIZE;
+				resizeHandleBL.width = resizeHandleBL.height = MDIWindow.DEFAULT_CORNER_HANDLE_SIZE;
 				resizeHandleBL.alpha = 0;
 				rawChildren.addChild(resizeHandleBL);
 			}
@@ -209,25 +209,25 @@ package mdi.containers
 			super.updateDisplayList(unscaledWidth, unscaledHeight);
 			
 			// edges
-			resizeHandleTop.width = this.width - Window.DEFAULT_CORNER_HANDLE_SIZE;
+			resizeHandleTop.width = this.width - MDIWindow.DEFAULT_CORNER_HANDLE_SIZE;
 			
-			resizeHandleRight.x = this.width - Window.DEFAULT_EDGE_HANDLE_SIZE * .5;
-			resizeHandleRight.height = this.height - Window.DEFAULT_CORNER_HANDLE_SIZE;
+			resizeHandleRight.x = this.width - MDIWindow.DEFAULT_EDGE_HANDLE_SIZE * .5;
+			resizeHandleRight.height = this.height - MDIWindow.DEFAULT_CORNER_HANDLE_SIZE;
 			
-			resizeHandleBottom.y = this.height - Window.DEFAULT_EDGE_HANDLE_SIZE * .5;
-			resizeHandleBottom.width = this.width - Window.DEFAULT_CORNER_HANDLE_SIZE;
+			resizeHandleBottom.y = this.height - MDIWindow.DEFAULT_EDGE_HANDLE_SIZE * .5;
+			resizeHandleBottom.width = this.width - MDIWindow.DEFAULT_CORNER_HANDLE_SIZE;
 			
-			resizeHandleLeft.height = this.height - Window.DEFAULT_CORNER_HANDLE_SIZE;
+			resizeHandleLeft.height = this.height - MDIWindow.DEFAULT_CORNER_HANDLE_SIZE;
 			
 			// corners			
-			resizeHandleTR.x = this.width - Window.DEFAULT_CORNER_HANDLE_SIZE * .7;
-			resizeHandleTR.y = -(Window.DEFAULT_CORNER_HANDLE_SIZE * .3);
+			resizeHandleTR.x = this.width - MDIWindow.DEFAULT_CORNER_HANDLE_SIZE * .7;
+			resizeHandleTR.y = -(MDIWindow.DEFAULT_CORNER_HANDLE_SIZE * .3);
 			
-			resizeHandleBR.x = this.width - Window.DEFAULT_CORNER_HANDLE_SIZE * .7;
-			resizeHandleBR.y = this.height - Window.DEFAULT_CORNER_HANDLE_SIZE * .7;
+			resizeHandleBR.x = this.width - MDIWindow.DEFAULT_CORNER_HANDLE_SIZE * .7;
+			resizeHandleBR.y = this.height - MDIWindow.DEFAULT_CORNER_HANDLE_SIZE * .7;
 			
-			resizeHandleBL.x = -(Window.DEFAULT_CORNER_HANDLE_SIZE * .3);
-			resizeHandleBL.y = this.height - Window.DEFAULT_CORNER_HANDLE_SIZE * .7;
+			resizeHandleBL.x = -(MDIWindow.DEFAULT_CORNER_HANDLE_SIZE * .3);
+			resizeHandleBL.y = this.height - MDIWindow.DEFAULT_CORNER_HANDLE_SIZE * .7;
 			
 			for(var i:int = 0; i < controlsHolder.numChildren; i++)
 			{
@@ -281,10 +281,10 @@ package mdi.containers
 			maximizeRestoreBtn.addEventListener(MouseEvent.CLICK, onMaximizeRestoreBtnClick);
 			closeBtn.addEventListener(MouseEvent.CLICK, onCloseBtnClick);
 			
-			this.addEventListener(MouseEvent.MOUSE_DOWN, setWindowFocus);
+			this.addEventListener(MouseEvent.MOUSE_DOWN, setMDIWindowFocus);
 		}
 		
-		private function setWindowFocus(event:Event):void
+		private function setMDIWindowFocus(event:Event):void
 		{
 			this.parent.setChildIndex(this, parent.numChildren - 1);
 		}
@@ -296,7 +296,7 @@ package mdi.containers
 			this.height = titleBar.height;
 			collapsed = true;
 			showControls = false;
-			dispatchEvent(new WindowEvent(this, WindowEvent.MINIMIZE));
+			dispatchEvent(new MDIWindowEvent(this, MDIWindowEvent.MINIMIZE));
 		}
 		
 		private function onMaximizeRestoreBtnClick(event:MouseEvent):void
@@ -322,7 +322,7 @@ package mdi.containers
 		{
 			//windowManager.remove(this);
 			//this.parent.removeChild(this);
-			dispatchEvent(new WindowEvent(this, WindowEvent.CLOSE));
+			dispatchEvent(new MDIWindowEvent(this, MDIWindowEvent.CLOSE));
 		}
 		
 		private function savePanel():void

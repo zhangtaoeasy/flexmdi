@@ -6,17 +6,28 @@ package mdi.events
 
 	public class MDIWindowEvent extends Event
 	{
-		public static var MINIMIZE:String = "minimize";
-		public static var RESTORE:String = "restore";
-		public static var MAXIMIZE:String = "maximize";
-		public static var CLOSE:String = "close";
+		public static const MOVE:String = "move";
+		public static const RESIZE_START:String = "resizeStart";
+		public static const RESIZE:String = "resize";
+		public static const RESIZE_END:String = "resizeEnd";
+		public static const FOCUS:String = "focus";
+		
+		public static const MINIMIZE:String = "minimize";
+		public static const RESTORE:String = "restore";
+		public static const MAXIMIZE:String = "maximize";
+		public static const CLOSE:String = "close";
 		
 		public var window:MDIWindow;
 		
-		public function MDIWindowEvent(window:MDIWindow, type:String)
+		public function MDIWindowEvent(type:String, window:MDIWindow)
 		{
-			this.window = window;
 			super(type, true, true);
+			this.window = window;
+		}
+		
+		override public function clone():Event
+		{
+			return new MDIWindowEvent(type, window);
 		}
 	}
 }

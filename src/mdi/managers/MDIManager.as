@@ -54,9 +54,18 @@ package mdi.managers
 		public function add(window:MDIWindow):void
 		{	
 			this.windowList.push(window);
+				
 
-			window.addEventListener(MDIWindowEvent.CLOSE,windowCloseEventHandler);
-			window.addEventListener(MDIWindowEvent.MINIMIZE,windowMinimizeHandler);
+				
+			//window.addEventListener(MDIWindowEvent.MOVE, this.windowMoveEventHandler );
+			window.addEventListener(MDIWindowEvent.RESIZE, this.windowResizeEventHandler);
+			window.addEventListener(MDIWindowEvent.FOCUS, this.windowFocusEventHandler);
+			window.addEventListener(MDIWindowEvent.MINIMIZE,this.windowMinimizeHandler);
+			window.addEventListener(MDIWindowEvent.RESTORE,this.windowRestoreEventHandler);
+			window.addEventListener(MDIWindowEvent.MAXIMIZE,this.windowMaximizeEventHandler);
+			window.addEventListener(MDIWindowEvent.CLOSE,this.windowCloseEventHandler);
+			window.addEventListener(MDIWindowEvent.RESIZE_END,this.windowResizeEndEventHandler);
+			window.addEventListener(MDIWindowEvent.RESIZE_START,this.windowResizeStartEventHandler);
 			
 			this.addContextMenu(window);
 			
@@ -135,10 +144,40 @@ package mdi.managers
 			
 		}
 		
+		/* private function windowMoveEventHandler(event:MDIWindowEvent):void
+		{
+			//implement move
+		} */
+		private function windowResizeEventHandler(event:MDIWindowEvent):void
+		{
+			//implement resize
+		}
+		private function windowFocusEventHandler(event:MDIWindowEvent):void
+		{
+			// implement focus functionality
+		}
+		private function windowResizeStartEventHandler(event:MDIWindowEvent):void
+		{
+			// implement minimize functionality
+		}
+		private function windowResizeEndEventHandler(event:MDIWindowEvent):void
+		{
+			// implement minimize functionality
+		}
 		private function windowMinimizeHandler(event:MDIWindowEvent):void
 		{
 			// implement minimize functionality
 		}
+		private function windowRestoreEventHandler(event:MDIWindowEvent):void
+		{
+			// implement minimize functionality
+		}
+		private function windowMaximizeEventHandler(event:MDIWindowEvent):void
+		{
+			// implement minimize functionality
+		}
+		
+		
 		
 		private function windowCloseEventHandler(event:MDIWindowEvent):void
 		{
@@ -147,6 +186,9 @@ package mdi.managers
 				this.remove(event.window);
 			}
 		}
+
+
+		
 		
 		
 		public function addCenter(window:MDIWindow):void

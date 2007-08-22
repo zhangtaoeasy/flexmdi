@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" layout="horizontal">
+	
+	
+	<mx:Script>
+		<![CDATA[
+			import mx.utils.ObjectUtil;
+			
+			import mdi.containers.MDIWindow;
+			import mdi.events.MDIWindowEvent;
+			import mdi.managers.MDIManager;
+			
+			public function addWindow():void
+			{
+				var win:MDIWindow = new MDIWindow();
+				win.height = 400;
+				win.width = 300;
+				win.title = "Global Window";
+				
+				win.addEventListener(MDIWindowEvent.RESIZE, this.windowResizeEventHandler);
+				win.addEventListener(MDIWindowEvent.FOCUS, this.windowFocusEventHandler);
+				win.addEventListener(MDIWindowEvent.MINIMIZE,this.windowMinimizeHandler);
+				win.addEventListener(MDIWindowEvent.RESTORE,this.windowRestoreEventHandler);
+				win.addEventListener(MDIWindowEvent.MAXIMIZE,this.windowMaximizeEventHandler);
+				win.addEventListener(MDIWindowEvent.CLOSE,this.windowCloseEventHandler);
+				win.addEventListener(MDIWindowEvent.RESIZE_END,this.windowResizeEndEventHandler);
+				win.addEventListener(MDIWindowEvent.RESIZE_START,this.windowResizeStartEventHandler);
+				
+				
+				MDIManager.global.add(win); 
+			}
+			
+			private function windowResizeEventHandler(event:MDIWindowEvent):void
+			{
+				this.output.text += ObjectUtil.toString(event.type) + " ";
+			}
+			private function windowFocusEventHandler(event:MDIWindowEvent):void
+			{
+				this.output.text += ObjectUtil.toString(event.type) + " ";
+			}
+			private function windowResizeStartEventHandler(event:MDIWindowEvent):void
+			{
+				this.output.text += ObjectUtil.toString(event.type) + " ";
+			}
+			private function windowResizeEndEventHandler(event:MDIWindowEvent):void
+			{
+				this.output.text +=  ObjectUtil.toString(event.type) + " ";
+			}
+			private function windowMinimizeHandler(event:MDIWindowEvent):void
+			{
+				this.output.text +=  ObjectUtil.toString(event.type) + " ";
+			}
+			private function windowRestoreEventHandler(event:MDIWindowEvent):void
+			{
+				this.output.text +=  ObjectUtil.toString(event.type) + " ";
+			}
+			private function windowMaximizeEventHandler(event:MDIWindowEvent):void
+			{
+				this.output.text +=  ObjectUtil.toString(event.type) + " ";
+			}
+			private function windowCloseEventHandler(event:MDIWindowEvent):void
+			{
+				this.output.text +=  ObjectUtil.toString(event.type) + " ";
+			}
+			
+		]]>
+	</mx:Script>
+	
+	
+	<mx:VBox width="50%">
+		
+		<mx:Button label="Add Window" click="addWindow()" />
+		
+		
+		<mx:Text width="100%" height="100%">
+     		<mx:htmlText>
+     			<![CDATA[
+     				To see the events add a window and perform common operations on it to see event sfire.<br />
+     				MDI Windows can fire the following events</br>
+     				<ul>
+     					<li>FOCUS</li>
+     					<li>RESTORE</li>
+     					<li>CLOSE</li>
+     					<li>MAXIMIZE</li>
+     					<li>MINIMIZE</li>
+     					<li>RESIZE</li>
+     					<li>RESIZE_END</li>
+     					<li>RESIZE_START</li>
+     					
+     				</ul>
+     				
+     			]]>
+     	</mx:htmlText>
+  		</mx:Text>
+		
+		
+	</mx:VBox>
+	<mx:TextArea id="output" width="50%" height="100%" />
+	
+	
+</mx:Application>

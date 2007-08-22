@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" layout="vertical" width="100%" height="100%" 
+	creationComplete="OnCreationComplete()" viewSourceURL="srcview/index.html">
+	
+	<mx:Script>
+		<![CDATA[
+			import mx.effects.Effect;
+			
+			import mdi.managers.MDIManager;
+			import mdi.containers.MDIWindow;
+			
+			public var windowManager : MDIManager;
+			
+			public function OnCreationComplete():void
+			{
+				windowManager = new MDIManager(this.localVbox);				
+			}
+			
+
+			public function addGlobalWindow():void
+			{
+				var win:MDIWindow = new MDIWindow();
+				win.height = 400;
+				win.width = 300;
+				win.title = "Global Window";
+				
+				MDIManager.global.add(win); 
+			}
+			
+			public function addGlobalCenter():void
+			{
+				var win:MDIWindow = new MDIWindow();
+				win.height = 400;
+				win.width = 300;
+				win.title = "Global Window";
+				
+				MDIManager.global.addCenter(win); 
+			}
+			
+			public function addLocalWindow():void
+			{
+				var win:MDIWindow = new MDIWindow();
+				win.height = 300;
+				win.width = 200;
+				win.title = "Local Window";
+				
+				windowManager.add(win); 
+			}
+			public function addLocalCenter():void
+			{
+				var win:MDIWindow = new MDIWindow();
+				win.height = 300;
+				win.width = 200;
+				win.title = "Local Window";
+				
+				windowManager.addCenter(win); 
+			}
+
+	
+			public function addEffect(effect:Effect):void
+			{
+				var win:MDIWindow = new MDIWindow();
+				win.height = 400;
+				win.width = 300;
+				win.title = "Global Effects Window";
+				win.showEffect = effect;
+				MDIManager.global.add(win); 
+			}
+			
+		]]>
+	</mx:Script>
+	
+	
+	<mx:Fade id="fadeIn" duration="500" alphaFrom="0.0" alphaTo="1.0"/>
+	<mx:WipeDown id="wipeDown" duration="500"/>
+	<mx:WipeLeft id="wipeLeft" duration="500"/>
+	<mx:WipeRight id="wipeRight" duration="500"/>
+    <mx:Blur id="blurIn" duration="500" 
+        blurXFrom="10.0" blurXTo="0.0" 
+        blurYFrom="10.0" blurYTo="0.0"/>
+	
+	 <mx:Parallel id="dropIn">
+        <mx:Move xTo="{this.width/2 - 50}" yTo="{this.height/2 - 100}"/>
+        <mx:Resize widthTo="400" heightTo="300"/>
+    </mx:Parallel>
+	
+	<mx:Parallel id="vista">
+		<mx:Blur duration="500" 
+        blurXFrom="10.0" blurXTo="0.0" 
+        blurYFrom="10.0" blurYTo="0.0"/> 
+		<mx:Resize widthTo="400" heightTo="300"/>
+	</mx:Parallel>
+	  
+	  
+	   <mx:Sequence id="animate" >
+        <mx:AnimateProperty property="scaleX" fromValue="1" toValue="1.5" duration="500" />
+        <mx:AnimateProperty property="scaleX" fromValue="1.5" toValue="1" duration="500" />	
+    </mx:Sequence>
+	  
+	<mx:VBox>
+		<mx:HBox width="100%">
+			<mx:Label text="Global Instance" />
+			<mx:Button click="addGlobalWindow()" label="Add Window" />
+			<mx:Button click="addGlobalCenter()" label="Add Center" />
+			<mx:Button click="MDIManager.global.cascade()" label="Cascade" />
+			<mx:Button click="MDIManager.global.tile()" label="Tile" />
+			<mx:Button click="MDIManager.global.tile(true)" label="Tile + Fill Space" />
+			<mx:Button click="MDIManager.global.removeAll()" label="Remove All" />
+			<mx:Spacer width="100%" />
+		</mx:HBox>
+		<mx:HBox width="100%">
+			<mx:Label text="Local Instance" />
+			<mx:Button click="addLocalWindow()" label="Add Window" />
+			<mx:Button click="addLocalCenter()" label="Add Center" />
+			<mx:Button click="windowManager.cascade()" label="Cascade" />
+			<mx:Button click="windowManager.tile()" label="Tile" />
+			<mx:Button click="windowManager.tile(true)" label="Tile + Fill Space" />
+			<mx:Button click="windowManager.removeAll()" label="Remove All" />
+			<mx:Spacer width="100%" />
+		</mx:HBox>
+		<mx:HBox width="100%">
+			<mx:Label text="Effects Instance" />
+			<mx:Button click="addEffect(this.fadeIn)" label="Fade In" />
+			<mx:Button click="addEffect(this.wipeDown)" label="Wipe Down" />
+			<mx:Button click="addEffect(this.wipeLeft)" label="Wipe Left" />
+			<mx:Button click="addEffect(this.wipeRight)" label="Wipe Right" />
+			<mx:Button click="addEffect(this.blurIn)" label="Blur In" />
+			<mx:Button click="addEffect(this.dropIn)" label="Drop In (Parallel)" />
+			<mx:Button click="addEffect(this.vista)" label="Vista (Parallel)" />
+			<mx:Button click="addEffect(this.animate)" label="Animate (Sequence)" />
+			<mx:Spacer width="100%" />
+		</mx:HBox>
+	</mx:VBox>
+	
+	<mx:VBox id="localVbox" width="70%" height="90%" backgroundColor="#eeeeee" backgroundAlpha=".8">
+		
+		
+	</mx:VBox>
+	
+</mx:Application>

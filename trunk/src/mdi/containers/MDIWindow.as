@@ -282,7 +282,7 @@ package mdi.containers
 		{
 			if(parent.getChildIndex(this) != parent.numChildren - 1)
 			{
-				dispatchEvent(new MDIWindowEvent(MDIWindowEvent.FOCUS, this));
+				dispatchEvent(new MDIWindowEvent(MDIWindowEvent.FOCUS_IN, this));
 			}
 			parent.setChildIndex(this, parent.numChildren - 1);
 		}

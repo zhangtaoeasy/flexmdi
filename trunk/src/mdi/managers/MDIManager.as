@@ -55,11 +55,9 @@ package mdi.managers
 		{	
 			this.windowList.push(window);
 				
-
-				
 			//window.addEventListener(MDIWindowEvent.MOVE, this.windowMoveEventHandler );
 			window.addEventListener(MDIWindowEvent.RESIZE, this.windowResizeEventHandler);
-			window.addEventListener(MDIWindowEvent.FOCUS, this.windowFocusEventHandler);
+			window.addEventListener(MDIWindowEvent.FOCUS_IN, this.windowFocusEventHandler);
 			window.addEventListener(MDIWindowEvent.MINIMIZE,this.windowMinimizeHandler);
 			window.addEventListener(MDIWindowEvent.RESTORE,this.windowRestoreEventHandler);
 			window.addEventListener(MDIWindowEvent.MAXIMIZE,this.windowMaximizeEventHandler);

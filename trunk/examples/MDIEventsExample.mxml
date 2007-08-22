@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" layout="horizontal">
-	
-	
+	<mx:Style source="/assets/css/styles.css" />
 	<mx:Script>
 		<![CDATA[
 			import mx.utils.ObjectUtil;
@@ -18,7 +17,7 @@
 				win.title = "Global Window";
 				
 				win.addEventListener(MDIWindowEvent.RESIZE, this.windowResizeEventHandler);
-				win.addEventListener(MDIWindowEvent.FOCUS, this.windowFocusEventHandler);
+				win.addEventListener(MDIWindowEvent.FOCUS_IN, this.windowFocusEventHandler);
 				win.addEventListener(MDIWindowEvent.MINIMIZE,this.windowMinimizeHandler);
 				win.addEventListener(MDIWindowEvent.RESTORE,this.windowRestoreEventHandler);
 				win.addEventListener(MDIWindowEvent.MAXIMIZE,this.windowMaximizeEventHandler);

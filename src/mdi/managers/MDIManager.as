@@ -2,42 +2,41 @@ package mdi.managers
 {	
 
 	import flash.display.DisplayObject;
+	import flash.events.ContextMenuEvent;
 	import flash.geom.Point;
+	import flash.ui.ContextMenu;
+	import flash.ui.ContextMenuItem;
+	
+	import mdi.containers.MDIWindow;
+	import mdi.events.MDIWindowEvent;
 	
 	import mx.containers.Panel;
 	import mx.controls.Alert;
 	import mx.core.Application;
+	import mx.core.Container;
 	import mx.core.IFlexDisplayObject;
 	import mx.core.UIComponent;
+	import mx.effects.Effect;
 	import mx.effects.WipeDown;
 	import mx.managers.PopUpManager;
+	import mx.managers.PopUpManagerChildList;
 	import mx.utils.ArrayUtil;
 	
-
-	import mdi.containers.Window;
-	import mdi.events.WindowEvent;
-	import mx.core.Container;
-	import mx.managers.PopUpManagerChildList;
-	import flash.ui.ContextMenu;
-	import flash.events.ContextMenuEvent;
-	import flash.ui.ContextMenuItem;
-	import mx.effects.Effect;
 	
-	
-	public class WindowManager
+	public class MDIManager
 	{	
 		
-		private static var globalWindowManager : WindowManager;
-		public static function get global():WindowManager
+		private static var globalMDIManager : MDIManager;
+		public static function get global():MDIManager
 		{
-			if( WindowManager.globalWindowManager == null)
-				globalWindowManager = new WindowManager(Application.application as DisplayObject);
-			return WindowManager.globalWindowManager;
+			if( MDIManager.globalMDIManager == null)
+				globalMDIManager = new MDIManager(Application.application as DisplayObject);
+			return MDIManager.globalMDIManager;
 		}
 		
 		
 		private var _parent : DisplayObject;
-		public function WindowManager(parent:DisplayObject,showEffect:Effect=null):void
+		public function MDIManager(parent:DisplayObject,showEffect:Effect=null):void
 		{
 			_parent = parent;
 		}
@@ -52,12 +51,12 @@ package mdi.managers
      	*/
 		private var windowList:Array = new Array();
 
-		public function add(window:Window):void
+		public function add(window:MDIWindow):void
 		{	
 			this.windowList.push(window);
 
-			window.addEventListener(WindowEvent.CLOSE,windowCloseEventHandler);
-			window.addEventListener(WindowEvent.MINIMIZE,windowMinimizeHandler);
+			window.addEventListener(MDIWindowEvent.CLOSE,windowCloseEventHandler);
+			window.addEventListener(MDIWindowEvent.MINIMIZE,windowMinimizeHandler);
 			
 			this.addContextMenu(window);
 			
@@ -74,7 +73,7 @@ package mdi.managers
 			
 		}
 		
-		public function addContextMenu(window:Window,contextMenu:ContextMenu=null):void
+		public function addContextMenu(window:MDIWindow,contextMenu:ContextMenu=null):void
 		{
 			
 			// add default context menu 
@@ -127,7 +126,7 @@ package mdi.managers
 				break;
 				
 				case("Close"):
-					this.remove(event.contextMenuOwner as Window);
+					this.remove(event.contextMenuOwner as MDIWindow);
 				break;
 				
 			}
@@ -136,12 +135,12 @@ package mdi.managers
 			
 		}
 		
-		private function windowMinimizeHandler(event:WindowEvent):void
+		private function windowMinimizeHandler(event:MDIWindowEvent):void
 		{
 			// implement minimize functionality
 		}
 		
-		private function windowCloseEventHandler(event:WindowEvent):void
+		private function windowCloseEventHandler(event:MDIWindowEvent):void
 		{
 			if(this.windowList.indexOf( event.window) > -1)
 			{
@@ -150,7 +149,7 @@ package mdi.managers
 		}
 		
 		
-		public function addCenter(window:Window):void
+		public function addCenter(window:MDIWindow):void
 		{
 			
 			this.add(window);
@@ -164,7 +163,7 @@ package mdi.managers
 		 * 
 		 *  @param win Window to bring to front
 		 * */
-		public function bringToFront(window:Window):void
+		public function bringToFront(window:MDIWindow):void
 		{
 			PopUpManager.bringToFront(window);
 		}
@@ -175,7 +174,7 @@ package mdi.managers
 		 * 
 		 *  @param win Window to center
 		 * */
-		public function center(window:Window):void
+		public function center(window:MDIWindow):void
 		{
 			PopUpManager.centerPopUp(window);
 			PopUpManager.bringToFront(window);
@@ -188,7 +187,7 @@ package mdi.managers
 		public function removeAll():void
 		{	
 		
-			for each(var window:Window in windowList)
+			for each(var window:MDIWindow in windowList)
 			{
 				//remove(win);
 				PopUpManager.removePopUp(window);
@@ -201,7 +200,7 @@ package mdi.managers
 		 *  Removes a window instance from the managed window stack 
 		 *  @param win:IFlexDisplayObject Window to remove 
 		 */
-		public function remove(window:Window):void
+		public function remove(window:MDIWindow):void
 		{	
 			
 			var index:int = ArrayUtil.getItemIndex(window, windowList);
@@ -217,7 +216,7 @@ package mdi.managers
 		 * 
 		 *  @param win Window to push onto managed windows stack 
 		 * */
-		public function pushWindowOnStack(win:Window):void
+		public function pushWindowOnStack(win:MDIWindow):void
 		{	
 			if(win != null)
 				windowList.push(win);
@@ -232,7 +231,7 @@ package mdi.managers
 		 * 
 		 *  @param y:int The y position of the window 
 		 */
-		public function absPos(window:Window,x:int,y:int):void
+		public function absPos(window:MDIWindow,x:int,y:int):void
 		{
 			window.x = x;
 			window.y = y;		
@@ -268,13 +267,13 @@ package mdi.managers
 						
 			for(var i:int = 0; i < this.windowList.length; i++)
 			{
-				var win:Window = this.windowList[i];
+				var win:MDIWindow = this.windowList[i];
 				win.width = targetWidth;
 				win.height = targetHeight;
 				
 				if(i > 0)
 				{
-					var prevWin:Window = this.windowList[i - 1];
+					var prevWin:MDIWindow = this.windowList[i - 1];
 				}				
 				
 				if(i % numCols == 0 && i > 0)
@@ -297,7 +296,7 @@ package mdi.managers
 				var orphanWidth:Number = availWidth / numOrphans;
 				for(var j:int = numWindows - numOrphans; j < numWindows; j++)
 				{
-					var orphan:Window = this.windowList[j];
+					var orphan:MDIWindow = this.windowList[j];
 					orphan.width = orphanWidth;
 					orphan.x = this._parent.x + (j - (numWindows - numOrphans)) * orphanWidth;
 				}
@@ -316,7 +315,7 @@ package mdi.managers
 		 * 
 		 *  @param window:IFlexDisplayObject Window to position
 		 */
-		public function position(window:Window):void
+		public function position(window:MDIWindow):void
 		{	
 			
 			
@@ -336,7 +335,7 @@ package mdi.managers
 		}
 		
 		// set a min. width/height
-		public function resize(window:Window):void
+		public function resize(window:MDIWindow):void
 		{	
 		
 			var w:int = this._parent.width * .6;
@@ -358,7 +357,7 @@ package mdi.managers
 		 * 
 		 *  @param window:IFlexDisplayObject Window to maximize
 		 */
-		public function maximize(window:Window):void
+		public function maximize(window:MDIWindow):void
 		{					
 			
 			window.x=10;
@@ -384,7 +383,7 @@ package mdi.managers
 		{
 			for(var i:int=0; i < this.windowList.length; i++)
 			{
-				var win : Window = this.windowList[i] as Window;
+				var win : MDIWindow = this.windowList[i] as MDIWindow;
 				PopUpManager.bringToFront(win);
 				win.x = this._parent.x + i * 40;
 				win.y = this._parent.y + i * 40;

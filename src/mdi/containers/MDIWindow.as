@@ -4,18 +4,18 @@ package mdi.containers
 	import flash.events.MouseEvent;
 	import flash.geom.Rectangle;
 	
+	import mdi.events.MDIWindowEvent;
+	import mdi.managers.MDIManager;
+	
 	import mx.containers.Panel;
 	import mx.controls.Button;
+	import mx.core.Container;
 	import mx.core.UIComponent;
+	import mx.effects.Effect;
 	import mx.effects.Resize;
 	import mx.events.EffectEvent;
 	import mx.events.FlexEvent;
 	import mx.managers.CursorManager;
-	
-	import mdi.events.MDIWindowEvent;
-	import mdi.managers.MDIManager;
-	import mx.core.Container;
-	import mx.effects.Effect;
 
 
 	public class MDIWindow extends Panel
@@ -158,31 +158,31 @@ package mdi.containers
 				rawChildren.addChild(resizeHandleBL);
 			}
 			
-			// controls
-			controlsHolder = new UIComponent();
-			rawChildren.addChild(controlsHolder);
-			
+			// controls			
 			if(controls.length == 0)
 			{
-				var button1:Button = new Button();
-				button1.width = 10;
-				button1.height = 10;
-				button1.styleName ="minimizeBtn";
-				controls.push(button1);
+				minimizeBtn = new Button();
+				minimizeBtn.width = 10;
+				minimizeBtn.height = 10;
+				minimizeBtn.styleName ="minimizeBtn";
+				controls.push(minimizeBtn);
 				
-				var button2:Button = new Button();
-				button2.width = 10;
-				button2.height = 10;
-				button2.styleName ="increaseBtn";
-				controls.push(button2);
+				maximizeRestoreBtn = new Button();
+				maximizeRestoreBtn.width = 10;
+				maximizeRestoreBtn.height = 10;
+				maximizeRestoreBtn.styleName ="increaseBtn";
+				controls.push(maximizeRestoreBtn);
 				
-				var button3:Button = new Button();
-				button3.width = 10;
-				button3.height = 10;
-				button3.styleName ="closeBtn";
-				controls.push(button3);
+				closeBtn = new Button();
+				closeBtn.width = 10;
+				closeBtn.height = 10;
+				closeBtn.styleName ="closeBtn";
+				controls.push(closeBtn);
 				
 			}
+			
+			controlsHolder = new UIComponent();
+			rawChildren.addChild(controlsHolder);
 			
 			for(var i:int = 0; i < controls.length; i++)
 			{
@@ -194,14 +194,8 @@ package mdi.containers
 				controlsHolder.addChild(control);
 			}
 			
-			// assign panel controls
-			minimizeBtn = controls[0];
-			maximizeRestoreBtn = controls[1];
-			closeBtn = controls[2];
-			
 			addListeners();
-		}
-		
+		}		
 		
 		
 		override protected function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number):void
@@ -287,6 +281,7 @@ package mdi.containers
 		private function setMDIWindowFocus(event:Event):void
 		{
 			this.parent.setChildIndex(this, parent.numChildren - 1);
+			dispatchEvent(new MDIWindowEvent(MDIWindowEvent.FOCUS, this));
 		}
 		
 		private function onMinimizeBtnClick(event:MouseEvent):void
@@ -296,7 +291,7 @@ package mdi.containers
 			this.height = titleBar.height;
 			collapsed = true;
 			showControls = false;
-			dispatchEvent(new MDIWindowEvent(this, MDIWindowEvent.MINIMIZE));
+			dispatchEvent(new MDIWindowEvent(MDIWindowEvent.MINIMIZE, this));
 		}
 		
 		private function onMaximizeRestoreBtnClick(event:MouseEvent):void
@@ -309,12 +304,14 @@ package mdi.containers
 				this.width = this.parent.width;
 				this.height = this.parent.height;
 				maximizeRestoreBtn.styleName = "decreaseBtn";
+				dispatchEvent(new MDIWindowEvent(MDIWindowEvent.MAXIMIZE, this));
 			}
 			else
 			{
 				restorePanel();
 				
 				maximizeRestoreBtn.styleName = "increaseBtn";
+				dispatchEvent(new MDIWindowEvent(MDIWindowEvent.RESTORE, this));
 			}
 		}
 		
@@ -322,7 +319,7 @@ package mdi.containers
 		{
 			//windowManager.remove(this);
 			//this.parent.removeChild(this);
-			dispatchEvent(new MDIWindowEvent(this, MDIWindowEvent.CLOSE));
+			dispatchEvent(new MDIWindowEvent(MDIWindowEvent.CLOSE, this));
 		}
 		
 		private function savePanel():void
@@ -375,9 +372,11 @@ package mdi.containers
 				restorePanel();
 				showControls = true;
 				collapsed = false;
+				dispatchEvent(new MDIWindowEvent(MDIWindowEvent.RESTORE, this));
 			}
 		}
 		
+		// this is no longer used
 		private function onTitleBarDoubleClick(event:MouseEvent):void
 		{
 			collapseEffect = new Resize(this);
@@ -423,6 +422,7 @@ package mdi.containers
 				systemManager.addEventListener(Event.ENTER_FRAME, onResizeButtonDrag, false, 0, true);
 				systemManager.addEventListener(MouseEvent.MOUSE_UP, onResizeButtonRelease, false, 0, true);
 				systemManager.stage.addEventListener(Event.MOUSE_LEAVE, onMouseLeaveStage, false, 0, true);
+				dispatchEvent(new MDIWindowEvent(MDIWindowEvent.RESIZE_START, this));
 			}
 		}
 		
@@ -478,6 +478,7 @@ package mdi.containers
 					this.width = Math.max(dragStartPanelWidth - dragAmountX, minWidth);
 					this.height = Math.max(this.mouseY, minHeight);
 				}
+				dispatchEvent(new MDIWindowEvent(MDIWindowEvent.RESIZE, this));
 			}
 		}
 		
@@ -490,6 +491,7 @@ package mdi.containers
 				systemManager.removeEventListener(MouseEvent.MOUSE_UP, onResizeButtonRelease);
 				systemManager.stage.removeEventListener(Event.MOUSE_LEAVE, onMouseLeaveStage);
 				CursorManager.removeCursor(CursorManager.currentCursorID);
+				dispatchEvent(new MDIWindowEvent(MDIWindowEvent.RESIZE_END, this));
 			}
 		}
 		

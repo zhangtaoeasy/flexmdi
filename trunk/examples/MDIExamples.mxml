@@ -6,6 +6,7 @@
 	<mx:Style source="/assets/css/styles.css" />
 	<mx:Script>
 		<![CDATA[
+			import mdi.events.MDIWindowEvent;
 			import mx.effects.Parallel;
 			import mx.effects.Resize;
 			import mx.effects.Move;

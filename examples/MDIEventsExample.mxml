@@ -81,7 +81,8 @@
      				To see the events add a window and perform common operations on it to see event sfire.<br />
      				MDI Windows can fire the following events</br>
      				<ul>
-     					<li>FOCUS</li>
+     					<li>FOCUS_IN</li>
+     					<li>FOCUS_OUT</li>
      					<li>RESTORE</li>
      					<li>CLOSE</li>
      					<li>MAXIMIZE</li>

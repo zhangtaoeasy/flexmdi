@@ -9,25 +9,88 @@ package mdi.containers
 	
 	import mx.containers.Panel;
 	import mx.controls.Button;
-	import mx.core.Container;
 	import mx.core.UIComponent;
 	import mx.effects.Effect;
 	import mx.effects.Resize;
 	import mx.events.EffectEvent;
 	import mx.events.FlexEvent;
 	import mx.managers.CursorManager;
+	
+	//--------------------------------------
+	//  Events
+	//--------------------------------------
+	
+	/**
+	 *  Dispatched when the minimize button is clicked.
+	 *
+	 *  @eventType mdi.events.MDIWindowEvent.MINIMIZE
+	 */
+	[Event(name="mdiMinimize", type="mdi.events.MDIWindowEvent")]
+	
+	/**
+	 *  If the window is minimized, this event is dispatched when the titleBar is clicked. 
+	 * 	If the window is maxmimized, this event is dispatched upon clicking the restore button
+	 *  or double clicking the titleBar.
+	 *
+	 *  @eventType mdi.events.MDIWindowEvent.RESTORE
+	 */
+	[Event(name="mdiRestore", type="mdi.events.MDIWindowEvent")]
+	
+	/**
+	 *  Dispatched when the maximize button is clicked or when the window is in a
+	 *  normal state (not minimized or maximized) and the titleBar is double clicked.
+	 *
+	 *  @eventType mdi.events.MDIWindowEvent.MAXIMIZE
+	 */
+	[Event(name="mdiMaximize", type="mdi.events.MDIWindowEvent")]
+	
+	/**
+	 *  Dispatched when the minimize button is clicked.
+	 *
+	 *  @eventType mdi.events.MDIWindowEvent.CLOSE
+	 */
+	[Event(name="mdiClose", type="mdi.events.MDIWindowEvent")]
+	
+	/*
+	// this is no longer used
+		private function onTitleBarDoubleClick(event:MouseEvent):void
+		{
+			collapseEffect = new Resize(this);
+			if(this.height > titleBar.height)
+			{
+				unminimizedHeight = this.height;
+				collapseEffect.heightTo = titleBar.height;
+			}
+			else
+			{
+				collapseEffect.heightTo = unminimizedHeight;
+			}
+			collapseEffect.duration = (!isNaN(collapseDuration)) ? collapseDuration : DEFAULT_COLLAPSE_DURATION;
+			collapseEffect.addEventListener(EffectEvent.EFFECT_END, onCollapseFinish);
+			collapseEffect.play();
+		}
+		
+		private function onCollapseFinish(e:EffectEvent):void
+		{
+			minimized = this.height == titleBar.height;
+			collapseEffect.removeEventListener(EffectEvent.EFFECT_END, onCollapseFinish);
+		}
+		/**/
 
 
 	public class MDIWindow extends Panel
 	{
-		public var collapsed:Boolean = false;
+		public var minimized:Boolean = false;
 		public var collapseDuration:Number;
 		public var controls:Array;
-		public var controlsHolder:UIComponent;
+		private var controlsHolder:UIComponent;
 		
 		public var minimizeBtn:Button;
 		public var maximizeRestoreBtn:Button;
 		public var closeBtn:Button;
+		
+		public var defaultMinimizeEffect:Resize;
+		public var minimizeEffect:Effect;
 		
 		private static var DEFAULT_EDGE_HANDLE_SIZE:Number = 4;
 		private static var DEFAULT_CORNER_HANDLE_SIZE:Number = 10;
@@ -43,7 +106,7 @@ package mdi.containers
 		private var resizeHandleBR:Button;
 		private var resizeHandleBL:Button;
 		
-		private var uncollapsedHeight:Number;
+		private var unminimizedHeight:Number;
 		private var collapseEffect:Resize;
 		
 		private var currentResizeHandle:Button;
@@ -271,11 +334,29 @@ package mdi.containers
 			titleBar.addEventListener(MouseEvent.DOUBLE_CLICK, onMaximizeRestoreBtnClick, false, 0, true);
 			titleBar.addEventListener(MouseEvent.CLICK, onTitleBarClick, false, 0, true);
 			
-			minimizeBtn.addEventListener(MouseEvent.CLICK, onMinimizeBtnClick);
-			maximizeRestoreBtn.addEventListener(MouseEvent.CLICK, onMaximizeRestoreBtnClick);
-			closeBtn.addEventListener(MouseEvent.CLICK, onCloseBtnClick);
+			if(minimizeBtn)
+			{
+				minimizeBtn.addEventListener(MouseEvent.CLICK, onMinimizeBtnClick);
+			}
+			if(maximizeRestoreBtn)
+			{
+				maximizeRestoreBtn.addEventListener(MouseEvent.CLICK, onMaximizeRestoreBtnClick);
+			}
+			if(closeBtn)
+			{
+				closeBtn.addEventListener(MouseEvent.CLICK, onCloseBtnClick);
+			}
 			
 			this.addEventListener(MouseEvent.MOUSE_DOWN, setMDIWindowFocus);
+			this.addEventListener(FlexEvent.CREATION_COMPLETE, onCreationComplete);
+		}
+		
+		private function onCreationComplete(event:FlexEvent):void
+		{
+			// effects
+			defaultMinimizeEffect = new Resize(this);
+			defaultMinimizeEffect.heightTo = this.titleBar.height;
+			defaultMinimizeEffect.duration = 0;
 		}
 		
 		private function setMDIWindowFocus(event:Event):void
@@ -290,11 +371,17 @@ package mdi.containers
 		private function onMinimizeBtnClick(event:MouseEvent):void
 		{
 			savePanel();
-			
-			this.height = titleBar.height;
-			collapsed = true;
+			minimized = true;
 			showControls = false;
-			dispatchEvent(new MDIWindowEvent(MDIWindowEvent.MINIMIZE, this));
+			
+			if(!windowManager)
+			{
+				defaultMinimizeEffect.play();
+			}
+			else
+			{
+				dispatchEvent(new MDIWindowEvent(MDIWindowEvent.MINIMIZE, this));
+			}
 		}
 		
 		private function onMaximizeRestoreBtnClick(event:MouseEvent):void
@@ -368,11 +455,11 @@ package mdi.containers
 		
 		private function onTitleBarClick(event:MouseEvent):void
 		{
-			if(collapsed)
+			if(minimized)
 			{
 				restorePanel();
 				showControls = true;
-				collapsed = false;
+				minimized = false;
 				dispatchEvent(new MDIWindowEvent(MDIWindowEvent.RESTORE, this));
 			}
 		}
@@ -382,7 +469,7 @@ package mdi.containers
 		 */
 		private function onResizeButtonPress(event:MouseEvent):void
 		{
-			if(!collapsed)
+			if(!minimized)
 			{
 				currentResizeHandle = event.target as Button;
 				setCursor(currentResizeHandle);
@@ -408,7 +495,7 @@ package mdi.containers
 		 */
 		private function onResizeButtonDrag(event:Event):void
 		{
-			if(!collapsed)
+			if(!minimized)
 			{
 				dragAmountX = parent.mouseX - dragStartMouseX;
 				dragAmountY = parent.mouseY - dragStartMouseY;
@@ -461,7 +548,7 @@ package mdi.containers
 		
 		private function onResizeButtonRelease(event:MouseEvent = null):void
 		{
-			if(!collapsed)
+			if(!minimized)
 			{
 				currentResizeHandle = null;
 				systemManager.removeEventListener(Event.ENTER_FRAME, onResizeButtonDrag);
@@ -504,7 +591,7 @@ package mdi.containers
 		
 		private function onResizeButtonRollOver(event:MouseEvent):void
 		{
-			if(!collapsed && !event.buttonDown)
+			if(!minimized && !event.buttonDown)
 			{
 				setCursor(event.target as Button);
 			}

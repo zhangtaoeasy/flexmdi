@@ -4,6 +4,7 @@
 	
 	<mx:Script>
 		<![CDATA[
+			import mdi.events.MDIWindowEvent;
 			import mx.effects.Effect;
 			
 			import mdi.managers.MDIManager;
@@ -13,9 +14,8 @@
 			
 			public function OnCreationComplete():void
 			{
-				windowManager = new MDIManager(this.localVbox);				
+				windowManager = new MDIManager(this.localVbox);		
 			}
-			
 
 			public function addGlobalWindow():void
 			{

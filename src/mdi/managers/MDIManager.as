@@ -24,7 +24,7 @@ package mdi.managers
 	
 	
 	public class MDIManager
-	{	
+	{
 		
 		private static var globalMDIManager : MDIManager;
 		public static function get global():MDIManager
@@ -166,23 +166,18 @@ package mdi.managers
 		}
 		private function windowMinimizeHandler(event:MDIWindowEvent):void
 		{
-			var win:MDIWindow = event.window;
-			if(win.minimizeEffect != null)
+			var arr:Array = new Array(event.window, this, MDIManager.global);
+			
+			for(var i:int = 0; i < arr.length; i++)
 			{
-				win.minimizeEffect.play([win]);
+				if(arr[i].minimizeEffect != null)
+				{
+					arr[i].minimizeEffect.play([event.window]);
+					return;
+				}
 			}
-			else if(this.minimizeEffect != null)
-			{
-				this.minimizeEffect.play([win]);
-			}
-			else if(MDIManager.global.minimizeEffect != null)
-			{
-				MDIManager.global.minimizeEffect.play([win]);
-			}
-			else
-			{
-				win.defaultMinimizeEffect.play();
-			}
+			
+			event.window.defaultMinimizeEffect.play();
 		}
 		private function windowRestoreEventHandler(event:MDIWindowEvent):void
 		{

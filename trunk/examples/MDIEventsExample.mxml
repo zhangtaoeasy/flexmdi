@@ -24,11 +24,15 @@
 				win.addEventListener(MDIWindowEvent.CLOSE,this.windowCloseEventHandler);
 				win.addEventListener(MDIWindowEvent.RESIZE_END,this.windowResizeEndEventHandler);
 				win.addEventListener(MDIWindowEvent.RESIZE_START,this.windowResizeStartEventHandler);
-				
+				win.addEventListener(MDIWindowEvent.MOVE, this.windowMoveEventHandler);
 				
 				MDIManager.global.add(win); 
 			}
 			
+			private function windowMoveEventHandler(event:MDIWindowEvent):void
+			{
+				this.output.text += ObjectUtil.toString(event.type) + " ";
+			}
 			private function windowResizeEventHandler(event:MDIWindowEvent):void
 			{
 				this.output.text += ObjectUtil.toString(event.type) + " ";

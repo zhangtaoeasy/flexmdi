@@ -43,6 +43,7 @@ package mdi.managers
 		
 		
 		public var showEffect : Effect;
+		public var minimizeEffect:Effect;
 		
 		
 		/**
@@ -52,7 +53,8 @@ package mdi.managers
 		private var windowList:Array = new Array();
 
 		public function add(window:MDIWindow):void
-		{	
+		{
+			window.windowManager = this;
 			this.windowList.push(window);
 				
 			window.addEventListener(MDIWindowEvent.MOVE, this.windowMoveEventHandler );
@@ -164,7 +166,23 @@ package mdi.managers
 		}
 		private function windowMinimizeHandler(event:MDIWindowEvent):void
 		{
-			// implement minimize functionality
+			var win:MDIWindow = event.window;
+			if(win.minimizeEffect != null)
+			{
+				win.minimizeEffect.play([win]);
+			}
+			else if(this.minimizeEffect != null)
+			{
+				this.minimizeEffect.play([win]);
+			}
+			else if(MDIManager.global.minimizeEffect != null)
+			{
+				MDIManager.global.minimizeEffect.play([win]);
+			}
+			else
+			{
+				win.defaultMinimizeEffect.play();
+			}
 		}
 		private function windowRestoreEventHandler(event:MDIWindowEvent):void
 		{

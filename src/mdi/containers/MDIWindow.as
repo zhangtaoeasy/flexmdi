@@ -320,8 +320,6 @@ package mdi.containers
 		
 		private function onCloseBtnClick(event:MouseEvent):void
 		{
-			//windowManager.remove(this);
-			//this.parent.removeChild(this);
 			dispatchEvent(new MDIWindowEvent(MDIWindowEvent.CLOSE, this));
 		}
 		
@@ -363,7 +361,7 @@ package mdi.containers
 			this.startDrag(false, new Rectangle(0, 0, parent.width - this.width, parent.height - this.height - 5));
 		}
 		
-		private function onTitleBarRelease(event:MouseEvent):void
+		private function onTitleBarRelease(event:Event):void
 		{
 			this.stopDrag();
 		}
@@ -377,30 +375,6 @@ package mdi.containers
 				collapsed = false;
 				dispatchEvent(new MDIWindowEvent(MDIWindowEvent.RESTORE, this));
 			}
-		}
-		
-		// this is no longer used
-		private function onTitleBarDoubleClick(event:MouseEvent):void
-		{
-			collapseEffect = new Resize(this);
-			if(this.height > titleBar.height)
-			{
-				uncollapsedHeight = this.height;
-				collapseEffect.heightTo = titleBar.height;
-			}
-			else
-			{
-				collapseEffect.heightTo = uncollapsedHeight;
-			}
-			collapseEffect.duration = (!isNaN(collapseDuration)) ? collapseDuration : DEFAULT_COLLAPSE_DURATION;
-			collapseEffect.addEventListener(EffectEvent.EFFECT_END, onCollapseFinish);
-			collapseEffect.play();
-		}
-		
-		private function onCollapseFinish(e:EffectEvent):void
-		{
-			collapsed = this.height == titleBar.height;
-			collapseEffect.removeEventListener(EffectEvent.EFFECT_END, onCollapseFinish);
 		}
 		
 		/**

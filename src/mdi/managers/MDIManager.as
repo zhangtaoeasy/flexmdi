@@ -55,7 +55,7 @@ package mdi.managers
 		{	
 			this.windowList.push(window);
 				
-			//window.addEventListener(MDIWindowEvent.MOVE, this.windowMoveEventHandler );
+			window.addEventListener(MDIWindowEvent.MOVE, this.windowMoveEventHandler );
 			window.addEventListener(MDIWindowEvent.RESIZE, this.windowResizeEventHandler);
 			window.addEventListener(MDIWindowEvent.FOCUS_IN, this.windowFocusEventHandler);
 			window.addEventListener(MDIWindowEvent.MINIMIZE,this.windowMinimizeHandler);
@@ -142,10 +142,10 @@ package mdi.managers
 			
 		}
 		
-		/* private function windowMoveEventHandler(event:MDIWindowEvent):void
+		private function windowMoveEventHandler(event:MDIWindowEvent):void
 		{
 			//implement move
-		} */
+		}
 		private function windowResizeEventHandler(event:MDIWindowEvent):void
 		{
 			//implement resize

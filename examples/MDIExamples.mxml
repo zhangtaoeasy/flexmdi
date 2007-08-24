@@ -6,6 +6,7 @@
 	<mx:Style source="/assets/css/styles.css" />
 	<mx:Script>
 		<![CDATA[
+			import mx.controls.Alert;
 			import mdi.events.MDIWindowEvent;
 			import mx.effects.Parallel;
 			import mx.effects.Resize;
@@ -18,6 +19,7 @@
 				var win:MDIWindow = new MDIWindow();
 				win.width = win.height = 300;
 				win.title = "I am managed";
+				mgr.externallyHandledEvents.push(MDIWindowEvent.MINIMIZE);
 				mgr.addCenter(win);
 				
 				// this overrides default window behavior
@@ -36,13 +38,21 @@
 				// global mgr effect (overrides default win behavior)
 				//MDIManager.global.minimizeEffect = moveEffect;
 				// mgr instance effect (overrides default win and global mgr behavior)
-				//mgr.minimizeEffect = pe;
+				mgr.minimizeEffect = pe;
 				// win instance effect (overrides default win, global mgr behavior and instance mgr behavior)
 				//win.minimizeEffect = resizeEffect;
+				
+				win.preventedDefaultActions.addItem(MDIWindowEvent.CLOSE);
+				win.addEventListener(MDIWindowEvent.CLOSE, onClose);
+			}
+			
+			private function onClose(event:MDIWindowEvent):void
+			{
+				Alert.show("You sure you wanna do that, sucka?");
 			}
 		]]>
 	</mx:Script>
-	<containers:MDIWindow id="win" title="No manager for me" />
+	<containers:MDIWindow id="myWindow" title="No manager for me" />
 	<mx:Canvas id="canv" x="250" y="20" width="500" height="500" backgroundColor="#CCCCCC">
 		
 	</mx:Canvas>

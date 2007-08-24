@@ -7,14 +7,18 @@ package mdi.containers
 	import mdi.events.MDIWindowEvent;
 	import mdi.managers.MDIManager;
 	
+	import mx.collections.ArrayCollection;
 	import mx.containers.Panel;
 	import mx.controls.Button;
 	import mx.core.UIComponent;
+	import mx.effects.Dissolve;
 	import mx.effects.Effect;
 	import mx.effects.Resize;
 	import mx.events.EffectEvent;
 	import mx.events.FlexEvent;
 	import mx.managers.CursorManager;
+	import mx.effects.Fade;
+	import mx.effects.SetPropertyAction;
 	
 	//--------------------------------------
 	//  Events
@@ -51,33 +55,6 @@ package mdi.containers
 	 */
 	[Event(name="mdiClose", type="mdi.events.MDIWindowEvent")]
 	
-	/*
-	// this is no longer used
-		private function onTitleBarDoubleClick(event:MouseEvent):void
-		{
-			collapseEffect = new Resize(this);
-			if(this.height > titleBar.height)
-			{
-				unminimizedHeight = this.height;
-				collapseEffect.heightTo = titleBar.height;
-			}
-			else
-			{
-				collapseEffect.heightTo = unminimizedHeight;
-			}
-			collapseEffect.duration = (!isNaN(collapseDuration)) ? collapseDuration : DEFAULT_COLLAPSE_DURATION;
-			collapseEffect.addEventListener(EffectEvent.EFFECT_END, onCollapseFinish);
-			collapseEffect.play();
-		}
-		
-		private function onCollapseFinish(e:EffectEvent):void
-		{
-			minimized = this.height == titleBar.height;
-			collapseEffect.removeEventListener(EffectEvent.EFFECT_END, onCollapseFinish);
-		}
-		/**/
-
-
 	public class MDIWindow extends Panel
 	{
 		public var minimized:Boolean = false;
@@ -89,8 +66,11 @@ package mdi.containers
 		public var maximizeRestoreBtn:Button;
 		public var closeBtn:Button;
 		
+		public var preventedDefaultActions:ArrayCollection;
 		public var defaultMinimizeEffect:Resize;
 		public var minimizeEffect:Effect;
+		public var defaultCloseEffect:SetPropertyAction;
+		public var closeEffect:Effect;
 		
 		private static var DEFAULT_EDGE_HANDLE_SIZE:Number = 4;
 		private static var DEFAULT_CORNER_HANDLE_SIZE:Number = 10;
@@ -139,6 +119,7 @@ package mdi.containers
 		{
 			super();
 			controls = new Array();
+			preventedDefaultActions = new ArrayCollection();
 			doubleClickEnabled = true;
 			minWidth = 200;
 			minHeight = 200;
@@ -357,6 +338,10 @@ package mdi.containers
 			defaultMinimizeEffect = new Resize(this);
 			defaultMinimizeEffect.heightTo = this.titleBar.height;
 			defaultMinimizeEffect.duration = 0;
+			
+			defaultCloseEffect = new SetPropertyAction(this);
+			defaultCloseEffect.name = "visible";
+			defaultCloseEffect.value = false;
 		}
 		
 		private function setMDIWindowFocus(event:Event):void
@@ -371,15 +356,20 @@ package mdi.containers
 		private function onMinimizeBtnClick(event:MouseEvent):void
 		{
 			savePanel();
-			minimized = true;
-			showControls = false;
 			
-			if(!windowManager)
+			if(preventedDefaultActions.contains(MDIWindowEvent.MINIMIZE))
 			{
-				defaultMinimizeEffect.play();
+				dispatchEvent(new MDIWindowEvent(MDIWindowEvent.MINIMIZE, this));
 			}
 			else
 			{
+				minimized = true;
+				showControls = false;
+				
+				if(!windowManager)
+				{
+					defaultMinimizeEffect.play();
+				}
 				dispatchEvent(new MDIWindowEvent(MDIWindowEvent.MINIMIZE, this));
 			}
 		}
@@ -407,7 +397,18 @@ package mdi.containers
 		
 		private function onCloseBtnClick(event:MouseEvent):void
 		{
-			dispatchEvent(new MDIWindowEvent(MDIWindowEvent.CLOSE, this));
+			if(preventedDefaultActions.contains(MDIWindowEvent.CLOSE))
+			{
+				dispatchEvent(new MDIWindowEvent(MDIWindowEvent.CLOSE, this));
+			}
+			else
+			{
+				if(!windowManager)
+				{
+					defaultCloseEffect.play();
+				}
+				dispatchEvent(new MDIWindowEvent(MDIWindowEvent.CLOSE, this));
+			}
 		}
 		
 		private function savePanel():void

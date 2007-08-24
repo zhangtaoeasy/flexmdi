@@ -3,6 +3,7 @@ package mdi.managers
 
 	import flash.display.DisplayObject;
 	import flash.events.ContextMenuEvent;
+	import flash.events.EventDispatcher;
 	import flash.geom.Point;
 	import flash.ui.ContextMenu;
 	import flash.ui.ContextMenuItem;
@@ -23,13 +24,13 @@ package mdi.managers
 	import mx.utils.ArrayUtil;
 	
 	
-	public class MDIManager
+	public class MDIManager extends EventDispatcher
 	{
 		
 		private static var globalMDIManager : MDIManager;
 		public static function get global():MDIManager
 		{
-			if( MDIManager.globalMDIManager == null)
+			if(MDIManager.globalMDIManager == null)
 				globalMDIManager = new MDIManager(Application.application as DisplayObject);
 			return MDIManager.globalMDIManager;
 		}
@@ -39,12 +40,13 @@ package mdi.managers
 		public function MDIManager(parent:DisplayObject,showEffect:Effect=null):void
 		{
 			_parent = parent;
+			externallyHandledEvents = new Array();
 		}
 		
 		
 		public var showEffect : Effect;
 		public var minimizeEffect:Effect;
-		
+		public var externallyHandledEvents:Array;
 		
 		/**
      	*  @private
@@ -67,9 +69,7 @@ package mdi.managers
 			window.addEventListener(MDIWindowEvent.RESIZE_END,this.windowResizeEndEventHandler);
 			window.addEventListener(MDIWindowEvent.RESIZE_START,this.windowResizeStartEventHandler);
 			
-			this.addContextMenu(window);
-			
-			
+			this.addContextMenu(window);			
 			
 			PopUpManager.addPopUp(window,this._parent,false,PopUpManagerChildList.PARENT);
 			position(window); 
@@ -166,18 +166,25 @@ package mdi.managers
 		}
 		private function windowMinimizeHandler(event:MDIWindowEvent):void
 		{
-			var arr:Array = new Array(event.window, this, MDIManager.global);
-			
-			for(var i:int = 0; i < arr.length; i++)
+			if(externallyHandledEvents.indexOf(event.type) == -1)
 			{
-				if(arr[i].minimizeEffect != null)
+				var arr:Array = new Array(event.window, this, MDIManager.global);
+				
+				for(var i:int = 0; i < arr.length; i++)
 				{
-					arr[i].minimizeEffect.play([event.window]);
-					return;
+					if(arr[i].minimizeEffect != null)
+					{
+						arr[i].minimizeEffect.play([event.window]);
+						return;
+					}
 				}
+				
+				event.window.defaultMinimizeEffect.play();
 			}
-			
-			event.window.defaultMinimizeEffect.play();
+			else
+			{
+				dispatchEvent(event);
+			}
 		}
 		private function windowRestoreEventHandler(event:MDIWindowEvent):void
 		{
@@ -187,14 +194,33 @@ package mdi.managers
 		{
 			// implement minimize functionality
 		}
-		
-		
-		
 		private function windowCloseEventHandler(event:MDIWindowEvent):void
 		{
+			/*
 			if(this.windowList.indexOf( event.window) > -1)
 			{
 				this.remove(event.window);
+			}
+			/**/
+			
+			if(externallyHandledEvents.indexOf(event.type) == -1 && !event.window.preventedDefaultActions.contains(event.type))
+			{
+				var arr:Array = new Array(event.window, this, MDIManager.global);
+				
+				for(var i:int = 0; i < arr.length; i++)
+				{
+					if(arr[i].defaultCloseEffect != null)
+					{
+						arr[i].defaultCloseEffect.play([event.window]);
+						return;
+					}
+				}
+				
+				event.window.defaultCloseEffect.play();
+			}
+			else
+			{
+				dispatchEvent(event);
 			}
 		}
 

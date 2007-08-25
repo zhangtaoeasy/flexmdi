@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml"  horizontalGap="0" width="100%" height="100%"  
+    horizontalAlign="left" paddingLeft="0" paddingTop="0" 
+    paddingBottom="0" paddingRight="0" layout="horizontal" 
+	backgroundColor="#343434" xmlns:explorer="explorer.*">
+	
+	<mx:Style source="/assets/css/explorer.css" />
+	
+	
+	
+	<mx:VBox backgroundColor="#565656" width="20%" height="100%"  horizontalAlign="right" styleName="padded">
+		
+		<mx:Text condenseWhite="true" width="100%">
+			<mx:htmlText><![CDATA[ <b>Multiple Document Interface Explorer</b> ]]></mx:htmlText>
+		</mx:Text>
+
+		<mx:LinkBar dataProvider="{this.viewstack}" width="100%" direction="vertical" />
+			
+	</mx:VBox>
+	
+	<mx:VRule height="100%" />
+	
+	<mx:ViewStack id="viewstack" width="80%" height="100%" horizontalGap="20">
+
+		<explorer:GlobalMgrExplorer label="Global Instance" width="100%" height="100%" styleName="padded"  />
+		<explorer:LocalMgrExplorer label="Local Instance" width="100%" height="100%" styleName="padded"  />
+		<explorer:WindowEventWatcher label="Window Events" width="100%" height="100%" styleName="padded" />
+		<explorer:EffectsExplorer label="Effects" width="100%" height="100%" styleName="padded" />
+	</mx:ViewStack>
+		
+
+</mx:Application>

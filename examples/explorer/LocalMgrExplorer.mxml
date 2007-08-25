@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml" creationComplete="onCreationComplete()">
+	
+	
+	<mx:Script>
+		<![CDATA[
+			import mdi.managers.MDIManager;
+			import mdi.containers.MDIWindow;
+			
+			public var mgr : MDIManager
+			
+			public function onCreationComplete():void
+			{	
+				// pass in the parent that you wish to contain windows to 
+				// when using a local instance of the MDIManager 
+				this.mgr = new MDIManager(this.vbox);
+			}
+			
+			public function addWindow():void
+			{
+				var win : MDIWindow = new MDIWindow();
+				win.title = "Managed by Local Instance";
+				win.width = 200;
+				win.height = 200;
+				
+				this.mgr.add(win);
+			}
+			
+		]]>
+	</mx:Script>
+	
+	<mx:Text condenseWhite="true" width="100%">
+		<mx:htmlText><![CDATA[ <b>Local Window Manager Instance</b> ]]></mx:htmlText>
+	</mx:Text>
+	
+	
+	<mx:Button click="addWindow()" label="Add New Window" />
+	
+	<mx:VBox id="vbox" width="600" height="600" backgroundColor="#eeeeee" clipContent="true">
+		
+		
+		
+	</mx:VBox>
+	
+	
+</mx:VBox>

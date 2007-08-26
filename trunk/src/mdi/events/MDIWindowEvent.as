@@ -28,7 +28,8 @@ package mdi.events
 	import mdi.containers.MDIWindow;
 
 	public class MDIWindowEvent extends Event
-	{
+	{	
+		public static const SHOW:String = "mdiSHOW";
 		public static const FOCUS_IN:String = "mdiFocusIn";
 		public static const FOCUS_OUT:String = "mdiFocusOut";
 		public static const MOVE:String = "mdiMove";

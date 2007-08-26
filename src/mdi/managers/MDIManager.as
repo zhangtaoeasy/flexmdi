@@ -441,7 +441,7 @@ package mdi.managers
 		 *  @param fillAvailableSpace:Boolean Variable to determine whether to use the fill the entire available screen
 		 * 
 		 */
-		public function tile(fillAvailableSpace:Boolean = false,gap:int = 0):void
+		public function tile(fillSpace:Boolean = false,gap:int = 0):void
 		{
 			
 		//gets list of open windows to ignore tiling of minimized window instances

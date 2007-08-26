@@ -34,13 +34,20 @@
 	</mx:Text>
 	
 	
-	<mx:Button click="addWindow()" label="Add New Window" />
+	<mx:HBox>
+		<mx:Button click="addWindow()" label="Add New Window" />
+		<mx:Button click="mgr.tile(false, Number(gapValue.text))" label="Tile" />
+		<mx:FormItem label="Tile Gap">
+			<mx:TextInput id="gapValue" width="30" color="#000000" />
+		</mx:FormItem>
+	</mx:HBox>
 	
-	<mx:VBox id="vbox" width="600" height="600" backgroundColor="#eeeeee" clipContent="true">
+	
+	<mx:Canvas id="vbox" width="600" height="600" backgroundColor="#eeeeee" clipContent="true">
 		
 		
 		
-	</mx:VBox>
+	</mx:Canvas>
 	
 	
 </mx:VBox>

@@ -458,10 +458,8 @@ package mdi.managers
 		 *  @param fillAvailableSpace:Boolean Variable to determine whether to use the fill the entire available screen
 		 * 
 		 */
-		public function tile(fillAvailableSpace:Boolean = false):void
+		public function tile(fillSpace:Boolean = false, gap:int = 0):void
 		{
-			
-			
 			var numWindows:int = this.windowList.length;
 			var sqrt:int = Math.round(Math.sqrt(numWindows));
 			var numCols:int = Math.ceil(numWindows / sqrt);
@@ -470,9 +468,8 @@ package mdi.managers
 			var row:int = 0;
 			var availWidth:Number = this.container.width;
 			var availHeight:Number = this.container.height;
-			var targetWidth:Number = availWidth / numCols;
-			var targetHeight:Number = availHeight / numRows;
-			
+			var targetWidth:Number = availWidth / numCols - ((gap * (numCols - 1)) / numCols);
+			var targetHeight:Number = availHeight / numRows - ((gap * (numRows - 1)) / numRows);
 						
 			for(var i:int = 0; i < this.windowList.length; i++)
 			{
@@ -494,20 +491,31 @@ package mdi.managers
 				{
 					col++;
 				}
-				//positin window within container
+				//positin window within parent
 				win.x = (col * targetWidth);
 				win.y = (row * targetHeight);
+				
+				//pushing out by gap
+				if(col > 0) 
+					win.x += gap * col;
+				if(row > 0) 
+					win.y += gap * row;
 			}
 			
-			if(col < numCols && fillAvailableSpace)
+			if(col < numCols && fillSpace)
 			{
 				var numOrphans:int = numWindows % numCols;
 				var orphanWidth:Number = availWidth / numOrphans;
+				var orphanCount:int = 0
 				for(var j:int = numWindows - numOrphans; j < numWindows; j++)
 				{
 					var orphan:MDIWindow = this.windowList[j];
 					orphan.width = orphanWidth;
+					//orphan.x = this._parent.x + (j - (numWindows - numOrphans)) * orphanWidth;
 					orphan.x = (j - (numWindows - numOrphans)) * orphanWidth;
+					if(orphanCount > 0) 
+						orphan.x += gap * orphanCount;
+					orphanCount++;
 				}
 			}
 		}

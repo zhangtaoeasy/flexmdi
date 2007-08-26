@@ -14,6 +14,23 @@ VRule {
 	strokeWidth: 1;
 	strokeColor: #FFFFFF;	
 }
+
+Panel {
+	headerHeight: 26;
+	roundedBottomCorners: true;
+	borderThicknessTop: 0;
+	borderThicknessBottom: 3;
+	borderThicknessLeft: 3;
+	borderThicknessRight: 3;
+	borderAlpha: 1.0;
+	titleStyleName: "mypanelTitle";
+}
+.mypanelTitle {
+	fontFamily: Arial;
+	fontSize: 10;
+	fontWeight: bold;
+}
+
 .closeBtn {
 	upSkin:        Embed('/assets/img/closeButton.png');
 	overSkin:      Embed('/assets/img/closeButton.png');

@@ -1,4 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" width="400" height="300">
+<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml" creationComplete="onCreationComplete()"  >
 	
-</mx:Canvas>
+	<mx:Script>
+		<![CDATA[
+			import mdi.managers.MDIManager;
+			import mdi.containers.MDIWindow;
+			import mdi.effects.effectsLib.MDIVistaEffectsDescriptor;
+	
+			
+			public function onCreationComplete():void
+			{
+				MDIManager.global.effects = new MDIVistaEffectsDescriptor();
+			}
+			
+			public function addWindow():void
+			{
+
+				var win : MDIWindow = new MDIWindow();
+				win.title = "Managed by Global Instance";
+				win.width = 400;
+				win.height = 300;
+	
+				// the global manager is accessed by using MDIManager.global 
+				MDIManager.global.add(win);
+			}
+		]]>
+	</mx:Script>
+	
+	<mx:Text condenseWhite="true" width="100%">
+		<mx:htmlText><![CDATA[ <b>Using Effects with</b> ]]></mx:htmlText>
+	</mx:Text>
+	
+	
+	<mx:Button click="addWindow()" label="Add New Window" />
+	
+	
+	
+</mx:VBox>

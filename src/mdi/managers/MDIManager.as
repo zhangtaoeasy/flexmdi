@@ -34,6 +34,8 @@ package mdi.managers
 	
 	import mdi.containers.MDIWindow;
 	import mdi.events.MDIWindowEvent;
+	import mdi.effects.IMDIEffectsDescriptor;
+	import mdi.effects.MDIBaseEffects;
 	
 	import mx.containers.Panel;
 	import mx.controls.Alert;
@@ -62,23 +64,21 @@ package mdi.managers
 		}
 		
 		private var isGlobal : Boolean = false;
+
 		
-		public var externallyHandledEvents:Array;
 		
-		public var showEffect : Effect;
-		
-		public var minimizeEffect:Effect;
+		public var effects : IMDIEffectsDescriptor = new MDIBaseEffects();
 		
 		/**
      	*   Contstructor()
      	*/
-		
-		public function MDIManager(container:UIComponent,showEffect:Effect=null):void
+		public function MDIManager(container:UIComponent,effects:IMDIEffectsDescriptor=null):void
 		{
 			this.container = container;
-			externallyHandledEvents = new Array();
+			if( effects != null)
+				this.effects = effectsDescriptor;
+				
 		}
-		
 		
 		
 		private var _container : UIComponent;
@@ -91,10 +91,7 @@ package mdi.managers
 			this._container = value;
 		}
 		
-		
-		
-		
-		
+
 		/**
      	*  @private
      	*  the managed window stack
@@ -111,9 +108,11 @@ package mdi.managers
 			
 			this.addContextMenu(window);
 
-			 if(this.isGlobal)
+			
+			if(this.isGlobal)
 			{
-				PopUpManager.addPopUp(window,Application.application as DisplayObject);
+				PopUpManager.addPopUp( window,Application.application);
+				
 			}
 			else
 			{
@@ -124,14 +123,12 @@ package mdi.managers
 					this.position(window);
 					this.bringToFront(window);
 				}
-			}			
-			
-			
-			if(window.showEffect != null)
-			{	
-				window.showEffect.target = window;
-				window.showEffect.play();
-			}
+			} 
+						
+	
+			this.position(window); 
+		
+			this.effects.playShowEffects(window,this);
 
 		}
 		
@@ -215,15 +212,20 @@ package mdi.managers
 		
 		private function windowMoveEventHandler(event:MDIWindowEvent):void
 		{
-			//implement move
+			this.effects.playMoveEffects(event.window,this);
 		}
+
 		private function windowResizeEventHandler(event:MDIWindowEvent):void
 		{
-			//implement resize
+			this.effects.playResizeEffects(event.window,this);
 		}
-		private function windowFocusEventHandler(event:MDIWindowEvent):void
+		private function windowFocusInEventHandler(event:MDIWindowEvent):void
 		{
-			// implement focus functionality
+			this.effects.playFocusInEffects(event.window,this);
+		}
+		private function windowFocusOutEventHandler(event:MDIWindowEvent):void
+		{
+			this.effects.playFocusOutEffects(event.window,this);
 		}
 		private function windowResizeStartEventHandler(event:MDIWindowEvent):void
 		{
@@ -231,11 +233,11 @@ package mdi.managers
 		}
 		private function windowResizeEndEventHandler(event:MDIWindowEvent):void
 		{
-			// implement minimize functionality
+			// implement minimize funrighctionality
 		}
 		private function windowMinimizeHandler(event:MDIWindowEvent):void
 		{
-			if(externallyHandledEvents.indexOf(event.type) == -1)
+			/* if(externallyHandledEvents.indexOf(event.type) == -1)
 			{
 				var arr:Array = new Array(event.window, this, MDIManager.global);
 				
@@ -252,7 +254,7 @@ package mdi.managers
 			else
 			{
 				dispatchEvent(event);
-			}
+			} */
 		}
 		
 		
@@ -265,16 +267,16 @@ package mdi.managers
 			// implement minimize functionality
 		}
 		
-		
-		
+
 		private function windowCloseEventHandler(event:MDIWindowEvent):void
 		{
+
 			/* if(this.windowList.indexOf( event.window) > -1)
 			{
 				this.remove(event.window);
 			} */
 			
-			if(externallyHandledEvents.indexOf(event.type) == -1 && !event.window.preventedDefaultActions.contains(event.type))
+			/* if(externallyHandledEvents.indexOf(event.type) == -1 && !event.window.preventedDefaultActions.contains(event.type))
 			{
 				var arr:Array = new Array(event.window, this, MDIManager.global);
 				
@@ -292,7 +294,7 @@ package mdi.managers
 			else
 			{
 				dispatchEvent(event);
-			}
+			} */
 			
 		}
 
@@ -365,10 +367,11 @@ package mdi.managers
 		
 		public function addListeners(window:MDIWindow):void
 		{
-						
+					
 			window.addEventListener(MDIWindowEvent.MOVE, this.windowMoveEventHandler );
 			window.addEventListener(MDIWindowEvent.RESIZE, this.windowResizeEventHandler);
-			window.addEventListener(MDIWindowEvent.FOCUS_IN, this.windowFocusEventHandler);
+			window.addEventListener(MDIWindowEvent.FOCUS_IN, this.windowFocusInEventHandler);
+			window.addEventListener(MDIWindowEvent.FOCUS_OUT, this.windowFocusOutEventHandler);
 			window.addEventListener(MDIWindowEvent.MINIMIZE,this.windowMinimizeHandler);
 			window.addEventListener(MDIWindowEvent.RESTORE,this.windowRestoreEventHandler);
 			window.addEventListener(MDIWindowEvent.MAXIMIZE,this.windowMaximizeEventHandler);
@@ -385,7 +388,8 @@ package mdi.managers
 		{
 			window.removeEventListener(MDIWindowEvent.MOVE, this.windowMoveEventHandler );
 			window.removeEventListener(MDIWindowEvent.RESIZE, this.windowResizeEventHandler);
-			window.removeEventListener(MDIWindowEvent.FOCUS_IN, this.windowFocusEventHandler);
+			window.removeEventListener(MDIWindowEvent.FOCUS_IN, this.windowFocusInEventHandler);
+			window.removeEventListener(MDIWindowEvent.FOCUS_OUT, this.windowFocusOutEventHandler);
 			window.removeEventListener(MDIWindowEvent.MINIMIZE,this.windowMinimizeHandler);
 			window.removeEventListener(MDIWindowEvent.RESTORE,this.windowRestoreEventHandler);
 			window.removeEventListener(MDIWindowEvent.MAXIMIZE,this.windowMaximizeEventHandler);
@@ -427,7 +431,7 @@ package mdi.managers
 		 * */
 		public function manage(window:MDIWindow):void
 		{	
-			if(window != null)
+			if(win != null)
 				windowList.push(window);
 		}
 		
@@ -458,9 +462,10 @@ package mdi.managers
 		 *  @param fillAvailableSpace:Boolean Variable to determine whether to use the fill the entire available screen
 		 * 
 		 */
-		public function tile(fillSpace:Boolean = false, gap:int = 0):void
+		public function tile(fillAvailableSpace:Boolean = false,gap:int = 0):void
 		{
-			//gets list of open windows to ignore tiling of minimized window instances
+			
+		//gets list of open windows to ignore tiling of minimized window instances
 			var openWinList:Array = [];
 			for(var winIndex:int = 0; winIndex < windowList.length; winIndex++)
 			{
@@ -526,7 +531,12 @@ package mdi.managers
 			}
 		}
 		
-
+		
+		
+		
+		
+		
+		
 		
 		// set a min. width/height
 		public function resize(window:MDIWindow):void

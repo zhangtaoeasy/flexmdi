@@ -35,14 +35,8 @@ package mdi.containers
 	import mx.containers.Panel;
 	import mx.controls.Button;
 	import mx.core.UIComponent;
-	import mx.effects.Dissolve;
-	import mx.effects.Effect;
-	import mx.effects.Resize;
-	import mx.events.EffectEvent;
 	import mx.events.FlexEvent;
 	import mx.managers.CursorManager;
-	import mx.effects.Fade;
-	import mx.effects.SetPropertyAction;
 	
 	//--------------------------------------
 	//  Events
@@ -91,10 +85,6 @@ package mdi.containers
 		public var closeBtn:Button;
 		
 		public var preventedDefaultActions:ArrayCollection;
-		public var defaultMinimizeEffect:Resize;
-		public var minimizeEffect:Effect;
-		public var defaultCloseEffect:SetPropertyAction;
-		public var closeEffect:Effect;
 		
 		private static var DEFAULT_EDGE_HANDLE_SIZE:Number = 4;
 		private static var DEFAULT_CORNER_HANDLE_SIZE:Number = 10;
@@ -111,7 +101,6 @@ package mdi.containers
 		private var resizeHandleBL:Button;
 		
 		private var unminimizedHeight:Number;
-		private var collapseEffect:Resize;
 		
 		private var currentResizeHandle:Button;
 		private var dragStartMouseX:Number;
@@ -135,8 +124,6 @@ package mdi.containers
 		private var resizeCursorTRBL:Class;
 		
 		public var windowManager:MDIManager;
-
-		public var showEffect:Effect;
 	
 		
 		public function MDIWindow()
@@ -161,6 +148,7 @@ package mdi.containers
 				resizeHandleTop.y = -(MDIWindow.DEFAULT_EDGE_HANDLE_SIZE * .5);
 				resizeHandleTop.height = MDIWindow.DEFAULT_EDGE_HANDLE_SIZE;
 				resizeHandleTop.alpha = 0;
+				resizeHandleTop.focusEnabled = false;
 				rawChildren.addChild(resizeHandleTop);
 			}
 			
@@ -170,6 +158,7 @@ package mdi.containers
 				resizeHandleRight.y = MDIWindow.DEFAULT_CORNER_HANDLE_SIZE * .5;
 				resizeHandleRight.width = MDIWindow.DEFAULT_EDGE_HANDLE_SIZE;
 				resizeHandleRight.alpha = 0;
+				resizeHandleRight.focusEnabled = false;
 				rawChildren.addChild(resizeHandleRight);
 			}
 			
@@ -179,6 +168,7 @@ package mdi.containers
 				resizeHandleBottom.x = MDIWindow.DEFAULT_CORNER_HANDLE_SIZE * .5;
 				resizeHandleBottom.height = MDIWindow.DEFAULT_EDGE_HANDLE_SIZE;
 				resizeHandleBottom.alpha = 0;
+				resizeHandleBottom.focusEnabled = false;
 				rawChildren.addChild(resizeHandleBottom);
 			}
 			
@@ -189,6 +179,7 @@ package mdi.containers
 				resizeHandleLeft.y = MDIWindow.DEFAULT_CORNER_HANDLE_SIZE * .5;
 				resizeHandleLeft.width = MDIWindow.DEFAULT_EDGE_HANDLE_SIZE;
 				resizeHandleLeft.alpha = 0;
+				resizeHandleLeft.focusEnabled = false;
 				rawChildren.addChild(resizeHandleLeft);
 			}
 			
@@ -199,6 +190,7 @@ package mdi.containers
 				resizeHandleTL.x = resizeHandleTL.y = -(MDIWindow.DEFAULT_CORNER_HANDLE_SIZE * .3);
 				resizeHandleTL.width = resizeHandleTL.height = MDIWindow.DEFAULT_CORNER_HANDLE_SIZE;
 				resizeHandleTL.alpha = 0;
+				resizeHandleTL.focusEnabled = false;
 				rawChildren.addChild(resizeHandleTL);
 			}
 			
@@ -207,6 +199,7 @@ package mdi.containers
 				resizeHandleTR = new Button();
 				resizeHandleTR.width = resizeHandleTR.height = MDIWindow.DEFAULT_CORNER_HANDLE_SIZE;
 				resizeHandleTR.alpha = 0;
+				resizeHandleTR.focusEnabled = false;
 				rawChildren.addChild(resizeHandleTR);
 			}
 			
@@ -215,6 +208,7 @@ package mdi.containers
 				resizeHandleBR = new Button();
 				resizeHandleBR.width = resizeHandleBR.height = MDIWindow.DEFAULT_CORNER_HANDLE_SIZE;
 				resizeHandleBR.alpha = 0;
+				resizeHandleBR.focusEnabled = false;
 				rawChildren.addChild(resizeHandleBR);
 			}
 			
@@ -223,6 +217,7 @@ package mdi.containers
 				resizeHandleBL = new Button();
 				resizeHandleBL.width = resizeHandleBL.height = MDIWindow.DEFAULT_CORNER_HANDLE_SIZE;
 				resizeHandleBL.alpha = 0;
+				resizeHandleBL.focusEnabled = false;
 				rawChildren.addChild(resizeHandleBL);
 			}
 			
@@ -245,8 +240,7 @@ package mdi.containers
 				closeBtn.width = 10;
 				closeBtn.height = 10;
 				closeBtn.styleName ="closeBtn";
-				controls.push(closeBtn);
-				
+				controls.push(closeBtn);				
 			}
 			
 			controlsHolder = new UIComponent();
@@ -341,31 +335,18 @@ package mdi.containers
 			
 			if(minimizeBtn)
 			{
-				minimizeBtn.addEventListener(MouseEvent.CLICK, onMinimizeBtnClick);
+				minimizeBtn.addEventListener(MouseEvent.CLICK, minimize, false, 0, true);
 			}
 			if(maximizeRestoreBtn)
 			{
-				maximizeRestoreBtn.addEventListener(MouseEvent.CLICK, onMaximizeRestoreBtnClick);
+				maximizeRestoreBtn.addEventListener(MouseEvent.CLICK, onMaximizeRestoreBtnClick, false, 0, true);
 			}
 			if(closeBtn)
 			{
-				closeBtn.addEventListener(MouseEvent.CLICK, onCloseBtnClick);
+				closeBtn.addEventListener(MouseEvent.CLICK, close, false, 0, true);
 			}
 			
 			this.addEventListener(MouseEvent.MOUSE_DOWN, setMDIWindowFocus);
-			this.addEventListener(FlexEvent.CREATION_COMPLETE, onCreationComplete);
-		}
-		
-		private function onCreationComplete(event:FlexEvent):void
-		{
-			// effects
-			defaultMinimizeEffect = new Resize(this);
-			defaultMinimizeEffect.heightTo = this.titleBar.height;
-			defaultMinimizeEffect.duration = 0;
-			
-			defaultCloseEffect = new SetPropertyAction(this);
-			defaultCloseEffect.name = "visible";
-			defaultCloseEffect.value = false;
 		}
 		
 		private function setMDIWindowFocus(event:Event):void
@@ -377,25 +358,14 @@ package mdi.containers
 			parent.setChildIndex(this, parent.numChildren - 1);
 		}
 		
-		private function onMinimizeBtnClick(event:MouseEvent):void
+		private function minimize(event:MouseEvent):void
 		{
 			savePanel();
+			// these should get removed/moved to the mgr
+			minimized = true;
+			showControls = false;
 			
-			if(preventedDefaultActions.contains(MDIWindowEvent.MINIMIZE))
-			{
-				dispatchEvent(new MDIWindowEvent(MDIWindowEvent.MINIMIZE, this));
-			}
-			else
-			{
-				minimized = true;
-				showControls = false;
-				
-				if(!windowManager)
-				{
-					defaultMinimizeEffect.play();
-				}
-				dispatchEvent(new MDIWindowEvent(MDIWindowEvent.MINIMIZE, this));
-			}
+			dispatchEvent(new MDIWindowEvent(MDIWindowEvent.MINIMIZE, this));
 		}
 		
 		private function onMaximizeRestoreBtnClick(event:MouseEvent):void
@@ -419,20 +389,9 @@ package mdi.containers
 			}
 		}
 		
-		private function onCloseBtnClick(event:MouseEvent):void
+		private function close(event:MouseEvent):void
 		{
-			if(preventedDefaultActions.contains(MDIWindowEvent.CLOSE))
-			{
-				dispatchEvent(new MDIWindowEvent(MDIWindowEvent.CLOSE, this));
-			}
-			else
-			{
-				if(!windowManager)
-				{
-					defaultCloseEffect.play();
-				}
-				dispatchEvent(new MDIWindowEvent(MDIWindowEvent.CLOSE, this));
-			}
+			dispatchEvent(new MDIWindowEvent(MDIWindowEvent.CLOSE, this));
 		}
 		
 		private function savePanel():void

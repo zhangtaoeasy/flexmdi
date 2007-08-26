@@ -73,22 +73,22 @@ package mdi.managers
      	*   Contstructor()
      	*/
 		
-		public function MDIManager(parent:UIComponent,showEffect:Effect=null):void
+		public function MDIManager(container:UIComponent,showEffect:Effect=null):void
 		{
-			this.parent = parent;
+			this.container = container;
 			externallyHandledEvents = new Array();
 		}
 		
 		
 		
-		private var _parent : UIComponent;
-		public function get parent():UIComponent
+		private var _container : UIComponent;
+		public function get container():UIComponent
 		{
-			return _parent;
+			return _container;
 		}
-		public function set parent(value:UIComponent):void
+		public function set container(value:UIComponent):void
 		{
-			this._parent = value;
+			this._container = value;
 		}
 		
 		
@@ -113,16 +113,19 @@ package mdi.managers
 
 			 if(this.isGlobal)
 			{
-				PopUpManager.addPopUp( window,Application.application);
+				PopUpManager.addPopUp(window,Application.application as DisplayObject);
 			}
 			else
 			{
-				this.parent.addChild(window);
-			} 
+				// to accomodate mxml impl
+				if(window.parent == null)
+				{
+					this.container.addChild(window);
+					this.position(window);
+					this.bringToFront(window);
+				}
+			}			
 			
-			this.bringToFront(window);
-			
-			this.position(window); 
 			
 			if(window.showEffect != null)
 			{	
@@ -144,8 +147,8 @@ package mdi.managers
 			window.x = this.windowList.length * 30;
 			window.y = this.windowList.length * 30;
 
-			if( (window.x + window.width) > parent.width ) window.x = 40;
-			if( (window.y + window.height) > parent.height ) window.y = 40; 	
+			if( (window.x + window.width) > container.width ) window.x = 40;
+			if( (window.y + window.height) > container.height ) window.y = 40; 	
 		}
 		
 		public function addContextMenu(window:MDIWindow,contextMenu:ContextMenu=null):void
@@ -269,7 +272,7 @@ package mdi.managers
 			/* if(this.windowList.indexOf( event.window) > -1)
 			{
 				this.remove(event.window);
-			} */s
+			} */
 			
 			if(externallyHandledEvents.indexOf(event.type) == -1 && !event.window.preventedDefaultActions.contains(event.type))
 			{
@@ -315,7 +318,7 @@ package mdi.managers
 			}
 			else
 			{
-				this.parent.setChildIndex(window, this.parent.numChildren - 1);
+				this.container.setChildIndex(window, this.container.numChildren - 1);
 			}
 			
 		}
@@ -328,8 +331,8 @@ package mdi.managers
 		 * */
 		public function center(window:MDIWindow):void
 		{
-			window.x = this.parent.width / 2 - window.width;
-			window.y = this.parent.height / 2 - window.height;
+			window.x = this.container.width / 2 - window.width;
+			window.y = this.container.height / 2 - window.height;
 		}
 		
 		/**
@@ -346,7 +349,7 @@ package mdi.managers
 				}
 				else
 				{
-					parent.removeChild(window);
+					container.removeChild(window);
 				}
 				
 				this.removeListeners(window);
@@ -408,7 +411,7 @@ package mdi.managers
 			}
 			else
 			{
-				parent.removeChild(window);
+				container.removeChild(window);
 			}
 			
 			this.removeListeners(window);
@@ -424,7 +427,7 @@ package mdi.managers
 		 * */
 		public function manage(window:MDIWindow):void
 		{	
-			if(win != null)
+			if(window != null)
 				windowList.push(window);
 		}
 		
@@ -465,8 +468,8 @@ package mdi.managers
 			var numRows:int = Math.ceil(numWindows / numCols);
 			var col:int = 0;
 			var row:int = 0;
-			var availWidth:Number = this.parent.width;
-			var availHeight:Number = this.parent.height;
+			var availWidth:Number = this.container.width;
+			var availHeight:Number = this.container.height;
 			var targetWidth:Number = availWidth / numCols;
 			var targetHeight:Number = availHeight / numRows;
 			
@@ -491,9 +494,9 @@ package mdi.managers
 				{
 					col++;
 				}
-				//positin window within parent
-				win.x = this.parent.x + (col * targetWidth);
-				win.y = this.parent.y + (row * targetHeight);
+				//positin window within container
+				win.x = (col * targetWidth);
+				win.y = (row * targetHeight);
 			}
 			
 			if(col < numCols && fillAvailableSpace)
@@ -504,7 +507,7 @@ package mdi.managers
 				{
 					var orphan:MDIWindow = this.windowList[j];
 					orphan.width = orphanWidth;
-					orphan.x = this.parent.x + (j - (numWindows - numOrphans)) * orphanWidth;
+					orphan.x = (j - (numWindows - numOrphans)) * orphanWidth;
 				}
 			}
 		}
@@ -520,8 +523,8 @@ package mdi.managers
 		public function resize(window:MDIWindow):void
 		{	
 		
-			var w:int = this.parent.width * .6;
-			var h:int = this.parent.height * .6
+			var w:int = this.container.width * .6;
+			var h:int = this.container.height * .6
 			if( w > window.width )
 				window.width = w;
 			if( h > window.height )
@@ -544,8 +547,8 @@ package mdi.managers
 			
 			window.x=10;
 			window.y=40;
-			window.width = this.parent.width - 20;
-			window.height = this.parent.height - 60;
+			window.width = this.container.width - 20;
+			window.height = this.container.height - 60;
 	
 			this.bringToFront(window);
 		}
@@ -568,8 +571,8 @@ package mdi.managers
 				
 				this.bringToFront(window);
 		
-				window.x = this.parent.x + i * 40;
-				window.y = this.parent.y + i * 40;
+				window.x = i * 40;
+				window.y = i * 40;
 			}
 		}
 		

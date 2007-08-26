@@ -39,9 +39,9 @@ package mdi.effects
 		{
 			
 		}
-		public function playCloseEffects(window:MDIWindow,manager:MDIManager):void
+		public function playCloseEffects(window:MDIWindow,manager:MDIManager,callBack:Function):void
 		{
-			
+			callback(window);	
 		}
 		
 		public function playTileEffects(windows:Array,manager:MDIManager):void

@@ -111,7 +111,7 @@ package mdi.managers
 			
 			if(this.isGlobal)
 			{
-				PopUpManager.addPopUp( window,Application.application);
+				PopUpManager.addPopUp( window,Application.application as DisplayObject);
 				
 			}
 			else
@@ -410,7 +410,7 @@ package mdi.managers
 		 * */
 		public function manage(window:MDIWindow):void
 		{	
-			if(win != null)
+			if(window != null)
 				windowList.push(window);
 		}
 		
@@ -441,7 +441,7 @@ package mdi.managers
 		 *  @param fillAvailableSpace:Boolean Variable to determine whether to use the fill the entire available screen
 		 * 
 		 */
-		public function tile(fillSpace:Boolean = false,gap:int = 0):void
+		public function tile(fillAvailableSpace:Boolean = false,gap:int = 0):void
 		{
 			
 		//gets list of open windows to ignore tiling of minimized window instances
@@ -492,7 +492,7 @@ package mdi.managers
 					win.y += gap * row;
 			}
 			
-			if(col < numCols && fillSpace)
+			if(col < numCols && fillAvailableSpace)
 			{
 				var numOrphans:int = numWindows % numCols;
 				var orphanWidth:Number = availWidth / numOrphans - ((gap * (numOrphans - 1)) / numOrphans);

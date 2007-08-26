@@ -1,0 +1,46 @@
+/* CSS file */
+.padded {
+	paddingBottom: 30;
+	paddingLeft: 30;
+	paddingRight: 30;
+	paddingTop: 30;	
+}
+		
+Application, Text {
+	color: #FFFFFF;
+}
+		
+VRule {
+	strokeWidth: 1;
+	strokeColor: #FFFFFF;	
+}
+.closeBtn {
+	upSkin:        Embed('/assets/img/closeButton.png');
+	overSkin:      Embed('/assets/img/closeButton.png');
+	downSkin:      Embed('/assets/img/closeButton.png');
+	disabledSkin:  Embed('/assets/img/closeButton.png');
+}
+.increaseBtn {
+	upSkin:        Embed('/assets/img/increaseButton.png');
+	overSkin:      Embed('/assets/img/increaseButton.png');
+	downSkin:      Embed('/assets/img/increaseButton.png');
+	disabledSkin:  Embed('/assets/img/increaseButton.png');
+}
+.decreaseBtn {
+	upSkin:        Embed('/assets/img/decreaseButton.png');
+	overSkin:      Embed('/assets/img/decreaseButton.png');
+	downSkin:      Embed('/assets/img/decreaseButton.png');
+	disabledSkin:  Embed('/assets/img/decreaseButton.png');
+}
+.minimizeBtn {
+	upSkin:        Embed('/assets/img/minimizeButton.png');
+	overSkin:      Embed('/assets/img/minimizeButton.png');
+	downSkin:      Embed('/assets/img/minimizeButton.png');
+	disabledSkin:  Embed('/assets/img/minimizeButton.png');
+}
+.resizeHndlr {
+	upSkin:        Embed('/assets/img/resizeHandler.png');
+	overSkin:      Embed('/assets/img/resizeHandler.png');
+	downSkin:      Embed('/assets/img/resizeHandler.png');
+	disabledSkin:  Embed('/assets/img/resizeHandler.png');
+}

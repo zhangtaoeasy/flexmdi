@@ -460,7 +460,18 @@ package mdi.managers
 		 */
 		public function tile(fillSpace:Boolean = false, gap:int = 0):void
 		{
-			var numWindows:int = this.windowList.length;
+			//gets list of open windows to ignore tiling of minimized window instances
+			var openWinList:Array = [];
+			for(var winIndex:int = 0; winIndex < windowList.length; winIndex++)
+			{
+				if(!MDIWindow(windowList[winIndex]).minimized)
+				{
+					openWinList.push(windowList[winIndex]);
+				}
+			}
+			
+			var numWindows:int = openWinList.length;
+			
 			var sqrt:int = Math.round(Math.sqrt(numWindows));
 			var numCols:int = Math.ceil(numWindows / sqrt);
 			var numRows:int = Math.ceil(numWindows / numCols);
@@ -471,16 +482,11 @@ package mdi.managers
 			var targetWidth:Number = availWidth / numCols - ((gap * (numCols - 1)) / numCols);
 			var targetHeight:Number = availHeight / numRows - ((gap * (numRows - 1)) / numRows);
 						
-			for(var i:int = 0; i < this.windowList.length; i++)
+			for(var i:int = 0; i < openWinList.length; i++)
 			{
-				var win:MDIWindow = this.windowList[i];
+				var win:MDIWindow = openWinList[i];
 				win.width = targetWidth;
 				win.height = targetHeight;
-				
-				if(i > 0)
-				{
-					var prevWin:MDIWindow = this.windowList[i - 1];
-				}				
 				
 				if(i % numCols == 0 && i > 0)
 				{
@@ -505,13 +511,13 @@ package mdi.managers
 			if(col < numCols && fillSpace)
 			{
 				var numOrphans:int = numWindows % numCols;
-				var orphanWidth:Number = availWidth / numOrphans;
+				var orphanWidth:Number = availWidth / numOrphans - ((gap * (numOrphans - 1)) / numOrphans);
+				//var orphanWidth:Number = availWidth / numOrphans;
 				var orphanCount:int = 0
 				for(var j:int = numWindows - numOrphans; j < numWindows; j++)
 				{
-					var orphan:MDIWindow = this.windowList[j];
+					var orphan:MDIWindow = openWinList[j];
 					orphan.width = orphanWidth;
-					//orphan.x = this._parent.x + (j - (numWindows - numOrphans)) * orphanWidth;
 					orphan.x = (j - (numWindows - numOrphans)) * orphanWidth;
 					if(orphanCount > 0) 
 						orphan.x += gap * orphanCount;
@@ -520,12 +526,7 @@ package mdi.managers
 			}
 		}
 		
-		
-		
-		
-		
-		
-		
+
 		
 		// set a min. width/height
 		public function resize(window:MDIWindow):void
@@ -573,14 +574,17 @@ package mdi.managers
 		 */	
 		public function cascade():void
 		{
+			var openCount:int;
 			for(var i:int=0; i < this.windowList.length; i++)
 			{
 				var window : MDIWindow = this.windowList[i] as MDIWindow;
-				
-				this.bringToFront(window);
-		
-				window.x = i * 40;
-				window.y = i * 40;
+				if(!window.minimized)
+				{
+					this.bringToFront(window);
+					window.x = openCount * 40;
+					window.y = openCount * 40;
+					openCount++;
+				}
 			}
 		}
 		

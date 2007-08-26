@@ -12,7 +12,7 @@ package mdi.effects
 		function playResizeEffects(window:MDIWindow,manager:MDIManager):void
 		function playMinimizeEffects(window:MDIWindow,manager:MDIManager):void
 		function playMaximizeEffects(window:MDIWindow,manager:MDIManager):void
-		function playCloseEffects(window:MDIWindow,manager:MDIManager):void
+		function playCloseEffects(window:MDIWindow,manager:MDIManager,callBack:Function):void
 		
 		
 		//group events

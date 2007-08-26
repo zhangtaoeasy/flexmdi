@@ -471,11 +471,13 @@ package mdi.containers
 		private function onTitleBarPress(event:MouseEvent):void
 		{
 			this.startDrag(false, new Rectangle(0, 0, parent.width - this.width, parent.height - this.height - 5));
+			systemManager.addEventListener(MouseEvent.MOUSE_UP, onTitleBarRelease);
 		}
 		
 		private function onTitleBarRelease(event:Event):void
 		{
 			this.stopDrag();
+			systemManager.removeEventListener(MouseEvent.MOUSE_UP, onTitleBarRelease);
 		}
 		
 		private function onTitleBarClick(event:MouseEvent):void

@@ -34,13 +34,14 @@
 	</mx:Text>
 	
 	
-	<mx:HBox>
+	<mx:HBox verticalAlign="middle">
 		<mx:Button click="addWindow()" label="Add New Window" />
 		<mx:Button click="mgr.cascade()" label="Cascade" />
-		<mx:Button click="mgr.tile(false, Number(gapValue.text))" label="Tile" />
+		<mx:Button click="mgr.tile(tileFill.selected, Number(gapValue.text))" label="Tile" />
 		<mx:FormItem label="Tile Gap">
-			<mx:TextInput id="gapValue" width="30" color="#000000" />
+			<mx:TextInput id="gapValue" width="30" color="#000000" change="mgr.tile(tileFill.selected, Number(gapValue.text))" />
 		</mx:FormItem>
+		<mx:CheckBox label="Fill" id="tileFill" change="mgr.tile(tileFill.selected, Number(gapValue.text))" />
 	</mx:HBox>
 	
 	

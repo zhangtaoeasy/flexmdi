@@ -76,7 +76,7 @@ package mdi.managers
 		{
 			this.container = container;
 			if( effects != null)
-				this.effects = effectsDescriptor;
+				this.effects = effects;
 				
 		}
 		
@@ -270,32 +270,7 @@ package mdi.managers
 
 		private function windowCloseEventHandler(event:MDIWindowEvent):void
 		{
-
-			/* if(this.windowList.indexOf( event.window) > -1)
-			{
-				this.remove(event.window);
-			} */
-			
-			/* if(externallyHandledEvents.indexOf(event.type) == -1 && !event.window.preventedDefaultActions.contains(event.type))
-			{
-				var arr:Array = new Array(event.window, this, MDIManager.global);
-				
-				for(var i:int = 0; i < arr.length; i++)
-				{
-					if(arr[i].defaultCloseEffect != null)
-					{
-						arr[i].defaultCloseEffect.play([event.window]);
-						return;
-					}
-				}
-				
-				event.window.defaultCloseEffect.play();
-			}
-			else
-			{
-				dispatchEvent(event);
-			} */
-			
+			this.effects.playCloseEffects(event.window,this,this.remove);
 		}
 
 
@@ -379,11 +354,12 @@ package mdi.managers
 			window.addEventListener(MDIWindowEvent.RESIZE_END,this.windowResizeEndEventHandler);
 			window.addEventListener(MDIWindowEvent.RESIZE_START,this.windowResizeStartEventHandler); 
 		}
+
+
 		/**
 		 *  Removes listeners 
 		 *  @param window:MDIWindow 
 		 */
-		
 		public function removeListeners(window:MDIWindow):void
 		{
 			window.removeEventListener(MDIWindowEvent.MOVE, this.windowMoveEventHandler );
@@ -397,6 +373,9 @@ package mdi.managers
 			window.removeEventListener(MDIWindowEvent.RESIZE_END,this.windowResizeEndEventHandler);
 			window.removeEventListener(MDIWindowEvent.RESIZE_START,this.windowResizeStartEventHandler); 
 		}
+		
+		
+		
 		
 		/**
 		 *  Removes a window instance from the managed window stack 

@@ -369,6 +369,7 @@ package mdi.containers
 			if(windowState != MDIWindowState.MAXIMIZED)
 				savePanel();
 			_prevWindowState = windowState;
+			//titleBar is protected property, so we have to keep setting minimizeHeight
 			minimizeHeight = this.titleBar.height;
 			dispatchEvent(new MDIWindowEvent(MDIWindowEvent.MINIMIZE, this));
 			windowState = MDIWindowState.MINIMIZED;
@@ -377,6 +378,8 @@ package mdi.containers
 		
 		private function onMaximizeRestoreBtnClick(event:MouseEvent):void
 		{
+			//titleBar is protected property, so we have to keep setting minimizeHeight
+			minimizeHeight = this.titleBar.height;
 			if(maximizeRestoreBtn.styleName == "increaseBtn")
 			{
 				savePanel();

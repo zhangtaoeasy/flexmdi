@@ -91,9 +91,9 @@ package mdi.effects
 		}
 		
 		
-		public function playMaximizeEffects(window:MDIWindow,manager:MDIManager):void
+		public function playMaximizeEffects(window:MDIWindow,manager:MDIManager,bottomOffset:Number = 0):void
 		{
-			window.height = manager.container.height;
+			window.height = manager.container.height - bottomOffset;
 			window.width = manager.container.width;
 			window.x = 0;
 			window.y = 0;

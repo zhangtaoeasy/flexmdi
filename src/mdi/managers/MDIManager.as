@@ -49,6 +49,7 @@ package mdi.managers
 	import mx.core.IUIComponent;
 	import mx.managers.PopUpManager;
 	import mx.managers.PopUpManagerChildList;
+	import mx.collections.ArrayCollection;
 	
 	
 	public class MDIManager extends EventDispatcher
@@ -65,7 +66,9 @@ package mdi.managers
 		
 		private var isGlobal : Boolean = false;
 
-		
+		private var tiledWindows:ArrayCollection;
+		private var tileMinimize:Boolean = true;
+		private var tileMinimizeWidth:int = 200;
 		
 		public var effects : IMDIEffectsDescriptor = new MDIBaseEffects();
 		
@@ -77,7 +80,8 @@ package mdi.managers
 			this.container = container;
 			if( effects != null)
 				this.effects = effects;
-				
+			if(tileMinimize)
+				tiledWindows = new ArrayCollection();	
 		}
 		
 		
@@ -96,7 +100,7 @@ package mdi.managers
      	*  @private
      	*  the managed window stack
      	*/
-		private var windowList:Array = new Array();
+		public var windowList:Array = new Array();
 
 		public function add(window:MDIWindow):void
 		{
@@ -123,8 +127,7 @@ package mdi.managers
 					this.position(window);
 					this.bringToFront(window);
 				}
-			} 
-						
+			} 		
 	
 			this.position(window); 
 
@@ -150,7 +153,6 @@ package mdi.managers
 		
 		public function addContextMenu(window:MDIWindow,contextMenu:ContextMenu=null):void
 		{
-			
 			// add default context menu 
 			if(contextMenu == null)
 			{
@@ -203,11 +205,7 @@ package mdi.managers
 				case("Close"):
 					this.remove(event.contextMenuOwner as MDIWindow);
 				break;
-				
 			}
-			
-			
-			
 		}
 		
 		private function windowMoveEventHandler(event:MDIWindowEvent):void
@@ -219,33 +217,73 @@ package mdi.managers
 		{
 			this.effects.playResizeEffects(event.window,this);
 		}
+		
 		private function windowFocusInEventHandler(event:MDIWindowEvent):void
 		{
 			this.effects.playFocusInEffects(event.window,this);
 		}
+		
 		private function windowFocusOutEventHandler(event:MDIWindowEvent):void
 		{
 			this.effects.playFocusOutEffects(event.window,this);
 		}
+		
 		private function windowResizeStartEventHandler(event:MDIWindowEvent):void
 		{
 			// implement minimize functionality
 		}
+		
 		private function windowResizeEndEventHandler(event:MDIWindowEvent):void
 		{
 			// implement minimize funrighctionality
 		}
+		
 		private function windowMinimizeHandler(event:MDIWindowEvent):void
 		{
-			var minimizePoint:Point = new Point(5, this.container.height - event.window.minimizeSize - 5);
+			var maxTiles:int = this.container.width / this.tileMinimizeWidth;
+			var tileModPos:int = this.tiledWindows.length % maxTiles;
+			var xPos:int;
+			if(tileModPos == 0)
+				xPos = 5;
+			else
+				xPos = (tileModPos * event.window.minWidth) + ((tileModPos + 1) * 5);
+			var numRows:int = Math.floor(this.tiledWindows.length / maxTiles);
+			var yPos:int = this.container.height - (((numRows + 1) * event.window.minimizeHeight) + ((numRows + 1) * 5));
+			var minimizePoint:Point = new Point(xPos, yPos);
 			this.effects.playMinimizeEffects(event.window, this, minimizePoint);
+			this.tiledWindows.addItem(event.window);
 		}
-		
 		
 		private function windowRestoreEventHandler(event:MDIWindowEvent):void
 		{
+			for(var i:int = 0; i < tiledWindows.length; i++)
+			{
+				if(tiledWindows.getItemAt(i) == event.window)
+					tiledWindows.removeItemAt(i);
+			}
+			reTileWindows();
 			var restorePoint:Point = new Point(event.window.dragStartPanelX, event.window.dragStartPanelY);
 			this.effects.playRestoreEffects(event.window, this, restorePoint);
+		}
+		
+		private function reTileWindows():void
+		{
+			var maxTiles:int = this.container.width / this.tileMinimizeWidth;
+			for(var i:int = 0; i < tiledWindows.length; i++)
+			{
+				var currentWindow:MDIWindow = tiledWindows.getItemAt(i) as MDIWindow;
+				var tileModPos:int = i % maxTiles;
+				var xPos:int;
+				if(tileModPos == 0)
+					xPos = 5;
+				else
+					xPos = (tileModPos * currentWindow.minWidth) + ((tileModPos + 1) * 5);
+				var numRows:int = Math.floor(i / maxTiles);
+				var yPos:int = this.container.height - (((numRows + 1) * currentWindow.minimizeHeight) + ((numRows + 1) * 5));
+				var movePoint:Point = new Point(xPos, yPos);
+				this.effects.reTileMinWindowsEffects(currentWindow, this, movePoint);
+			}
+			
 		}
 		
 		private function windowMaximizeEventHandler(event:MDIWindowEvent):void
@@ -253,7 +291,6 @@ package mdi.managers
 			// implement minimize functionality
 		}
 		
-
 		private function windowCloseEventHandler(event:MDIWindowEvent):void
 		{
 			this.effects.playCloseEffects(event.window,this,this.remove);

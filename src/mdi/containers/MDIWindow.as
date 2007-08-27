@@ -75,8 +75,10 @@ package mdi.containers
 	
 	public class MDIWindow extends Panel
 	{
-		public var minimized:Boolean = false;
-		public var minimizeSize:int;
+		private var _windowState:int;
+		private var _prevWindowState:int;
+		
+		public var minimizeHeight:Number;
 		public var collapseDuration:Number;
 		public var controls:Array;
 		private var controlsHolder:UIComponent;
@@ -87,14 +89,10 @@ package mdi.containers
 		
 		public var preventedDefaultActions:ArrayCollection;
 		
-		public var dragStartPanelX:Number;
-		public var dragStartPanelY:Number;
-		public var dragStartPanelWidth:Number;
-		public var dragStartPanelHeight:Number;
-		
+		// resize handles and default values
 		private static var DEFAULT_EDGE_HANDLE_SIZE:Number = 4;
 		private static var DEFAULT_CORNER_HANDLE_SIZE:Number = 10;
-		private static var DEFAULT_COLLAPSE_DURATION:Number = 300;
+		private var currentResizeHandle:Button;
 		
 		private var resizeHandleTop:Button;
 		private var resizeHandleRight:Button;
@@ -106,9 +104,12 @@ package mdi.containers
 		private var resizeHandleBR:Button;
 		private var resizeHandleBL:Button;
 		
-		private var unminimizedHeight:Number;
 		
-		private var currentResizeHandle:Button;
+		public var dragStartPanelX:Number;
+		public var dragStartPanelY:Number;
+		public var dragStartPanelWidth:Number;
+		public var dragStartPanelHeight:Number;
+		
 		private var dragStartMouseX:Number;
 		private var dragStartMouseY:Number;
 		private var dragAmountX:Number;
@@ -136,7 +137,7 @@ package mdi.containers
 			doubleClickEnabled = true;
 			minWidth = 200;
 			minHeight = 200;
-			
+			windowState = MDIWindowState.NORMAL;
 		}
 		
 		override protected function createChildren():void
@@ -362,38 +363,35 @@ package mdi.containers
 			parent.setChildIndex(this, parent.numChildren - 1);
 		}
 		
-		private function minimize(event:MouseEvent):void
+		public function minimize(event:MouseEvent = null):void
 		{
-			minimizeSize = this.titleBar.height;
 			savePanel();
+			minimizeHeight = this.titleBar.height;
 			dispatchEvent(new MDIWindowEvent(MDIWindowEvent.MINIMIZE, this));
-			minimized = true;
+			windowState = MDIWindowState.MINIMIZED;
 			showControls = false;
-			
 		}
 		
 		private function onMaximizeRestoreBtnClick(event:MouseEvent):void
 		{
 			if(maximizeRestoreBtn.styleName == "increaseBtn")
 			{
-				savePanel();
-				
-				this.x = this.y = 0;
-				this.width = this.parent.width;
-				this.height = this.parent.height;
+				doMaximize();
+				windowState = MDIWindowState.MAXIMIZED;
 				maximizeRestoreBtn.styleName = "decreaseBtn";
 				dispatchEvent(new MDIWindowEvent(MDIWindowEvent.MAXIMIZE, this));
 			}
 			else
 			{
-				restorePanel();
+				//restorePanel();
 				
 				maximizeRestoreBtn.styleName = "increaseBtn";
+				windowState = MDIWindowState.NORMAL;
 				dispatchEvent(new MDIWindowEvent(MDIWindowEvent.RESTORE, this));
 			}
 		}
 		
-		private function close(event:MouseEvent):void
+		public function close(event:MouseEvent = null):void
 		{
 			dispatchEvent(new MDIWindowEvent(MDIWindowEvent.CLOSE, this));
 		}
@@ -412,6 +410,7 @@ package mdi.containers
 			this.y = dragStartPanelY;
 			this.width = dragStartPanelWidth;
 			this.height = dragStartPanelHeight;
+			trace(dragStartPanelWidth);
 		}
 		
 		public function addControl(uic:UIComponent, index:int = -1):void
@@ -447,11 +446,28 @@ package mdi.containers
 		{
 			if(minimized)
 			{
-				//restorePanel();
 				showControls = true;
-				minimized = false;
-				dispatchEvent(new MDIWindowEvent(MDIWindowEvent.RESTORE, this));
+				windowState = _prevWindowState;
+				
+				if(windowState == MDIWindowState.NORMAL)
+				{
+					//restorePanel();
+					dispatchEvent(new MDIWindowEvent(MDIWindowEvent.RESTORE, this));
+				}
+				else
+				{
+					doMaximize();
+					dispatchEvent(new MDIWindowEvent(MDIWindowEvent.MAXIMIZE, this));
+				}
 			}
+		}
+		
+		// this method should be removed once the manager is able to handle this
+		public function doMaximize():void
+		{
+			this.x = this.y = 0;
+			this.width = this.parent.width;
+			this.height = this.parent.height;
 		}
 		
 		/**
@@ -603,6 +619,22 @@ package mdi.containers
 		public function set showControls(value:Boolean):void
 		{
 			controlsHolder.visible = value;
+		}
+		
+		public function get windowState():int
+		{
+			return _windowState;
+		}
+		
+		public function set windowState(newState:int):void
+		{
+			_prevWindowState = _windowState;
+			_windowState = newState;
+		}
+		
+		public function get minimized():Boolean
+		{
+			return _windowState == MDIWindowState.MINIMIZED;
 		}
 	}
 }

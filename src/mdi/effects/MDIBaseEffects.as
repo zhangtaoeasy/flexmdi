@@ -3,6 +3,8 @@ package mdi.effects
 	import mdi.containers.MDIWindow;
 	import mdi.effects.IMDIEffectsDescriptor;
 	import mdi.managers.MDIManager;
+	import flash.geom.Point;
+	import mx.containers.Panel;
 	
 	public class MDIBaseEffects implements IMDIEffectsDescriptor
 	{
@@ -31,17 +33,36 @@ package mdi.effects
 		{
 			
 		}
-		public function playMinimizeEffects(window:MDIWindow,manager:MDIManager):void
+		public function playMinimizeEffects(window:MDIWindow, manager:MDIManager, moveTo:Point = null):void
 		{
-			
+			window.height = window.minimizeSize;
+			window.width = window.minWidth;
+			if(moveTo != null)
+			{
+				window.x = moveTo.x;
+				window.y = moveTo.y;
+			}
 		}
+		
+		public function playRestoreEffects(window:MDIWindow, manager:MDIManager, moveTo:Point = null):void
+		{
+			window.height = window.dragStartPanelHeight;
+			window.width = window.dragStartPanelWidth;
+			if(moveTo != null)
+			{
+				window.x = moveTo.x;
+				window.y = moveTo.y;
+			}
+		}
+		
+		
 		public function playMaximizeEffects(window:MDIWindow,manager:MDIManager):void
 		{
 			
 		}
 		public function playCloseEffects(window:MDIWindow,manager:MDIManager,callBack:Function):void
 		{
-			callback(window);	
+			//callback(window);	
 		}
 		
 		public function playTileEffects(windows:Array,manager:MDIManager):void

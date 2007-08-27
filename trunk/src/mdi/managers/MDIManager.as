@@ -521,19 +521,19 @@ package mdi.managers
 					col++;
 				}
 				//positin window within parent
-				//win.x = (col * targetWidth);
-				//win.y = (row * targetHeight);
-				
-				var moveTo : Point = new Point( (col * targetWidth), (row * targetHeight) ); 
-				
-				this.effects.playTileEffects( win,this,moveTo);
-				
+				var winX:Number = (col * targetWidth);
+				var winY:Number = (row * targetHeight);
 				
 				//pushing out by gap
 				if(col > 0) 
-					win.x += gap * col;
+					winX += gap * col;
 				if(row > 0) 
-					win.y += gap * row;
+					winY += gap * row;
+					
+				var moveTo : Point = new Point( winX, winY ); 
+				
+				this.effects.playTileEffects( win,this,moveTo);
+
 			}
 			
 			if(col < numCols && fillAvailableSpace)

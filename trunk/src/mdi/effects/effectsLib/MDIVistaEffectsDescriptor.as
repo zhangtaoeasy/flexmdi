@@ -37,7 +37,7 @@ package mdi.effects.effectsLib
 	import flash.geom.Point;
 	import mx.effects.Rotate;
 	import mx.effects.Move;
-	
+
 	public class MDIVistaEffectsDescriptor extends MDIBaseEffects implements IMDIEffectsDescriptor
 	{
 	
@@ -108,21 +108,19 @@ package mdi.effects.effectsLib
 		
 		private function cascadeEasingFunction(t:Number, b:Number, c:Number, d:Number):Number 
 		{
-  			var ts:Number=(t/=d)*t;
+			var ts:Number=(t/=d)*t;
   			var tc:Number=ts*t;
   			return b+c*(33*tc*ts + -106*ts*ts + 126*tc + -67*ts + 15*t);
 		}
 		
 		override public function playCascadeEffects(window:MDIWindow,manager:MDIManager,moveTo:Point):void
 		{
-
 			var move : Move = new Move(window);
 				move.xTo = moveTo.x;
 				move.yTo = moveTo.y;
 				move.easingFunction = this.cascadeEasingFunction;
 				move.duration = 500;
 				move.play();
-	
 		}
 		
 		override public function playTileEffects(window:MDIWindow,manager:MDIManager,moveTo:Point):void
@@ -183,7 +181,7 @@ package mdi.effects.effectsLib
 			parallel.play();
 		}
 		
-		override public function playMaximizeEffects(window:MDIWindow, manager:MDIManager):void
+		override public function playMaximizeEffects(window:MDIWindow, manager:MDIManager, bottomOffset:Number = 0):void
 		{
 			var parallel : Parallel = new Parallel(window);
 			
@@ -194,7 +192,7 @@ package mdi.effects.effectsLib
 			parallel.addChild(move);
 			
 			var resize:Resize = new Resize(window);
-			resize.heightTo = manager.container.height;
+			resize.heightTo = manager.container.height - bottomOffset;
 			resize.widthTo = manager.container.width;
 			resize.duration = 300;
 			parallel.addChild(resize);

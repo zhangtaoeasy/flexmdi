@@ -3,6 +3,7 @@
 	
 	<mx:Script>
 		<![CDATA[
+			import mdi.effects.effectsLib.MDIVistaEffectsDescriptor;
 			import mdi.managers.MDIManager;
 			import mdi.containers.MDIWindow;
 			
@@ -16,6 +17,7 @@
 				
 				// the global manager is accessed by using MDIManager.global 
 				MDIManager.global.add(win);
+				MDIManager.global.effects = new MDIVistaEffectsDescriptor();
 			}
 		]]>
 	</mx:Script>

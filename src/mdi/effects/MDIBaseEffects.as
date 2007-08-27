@@ -8,6 +8,7 @@ package mdi.effects
 
 	import flash.geom.Point;
 	import mx.containers.Panel;
+	import mx.effects.Move;
 
 	
 	public class MDIBaseEffects implements IMDIEffectsDescriptor
@@ -24,7 +25,7 @@ package mdi.effects
 			
 		}
 		
-		public function playShowEffects(window:MDIWindow,manager:MDIManager,destination:Point):void
+		public function playShowEffects(window:MDIWindow,manager:MDIManager):void
 		{
 			
 		}
@@ -75,9 +76,12 @@ package mdi.effects
 		{
 			
 		}
-		public function playCascadeEffects(windows:Array,manager:MDIManager):void
+		public function playCascadeEffects(window:MDIWindow,manager:MDIManager,moveTo:Point):void
 		{
-			
+			var move : Move = new Move(window);
+				move.xTo = moveTo.x;
+				move.yTo = moveTo.y;
+				move.play();
 		}
 		
 		

@@ -88,7 +88,7 @@ package mdi.effects
 		{
 			
 		}
-		public function playCloseEffects(window:MDIWindow,manager:MDIManager,callBack:Function):void
+		public function playCloseEffects(window:MDIWindow,manager:MDIManager,callback:Function):void
 		{
 
 			callback.call(window,window);	

@@ -20,7 +20,7 @@
 			public function addWindow():void
 			{
 				var win : MDIWindow = new MDIWindow();
-				win.title = "Managed by Local Instance";
+				win.title = "Mngd. by Local Instance (" + this.mgr.windowList.length + ")";
 				win.width = 200;
 				win.height = 200;
 				

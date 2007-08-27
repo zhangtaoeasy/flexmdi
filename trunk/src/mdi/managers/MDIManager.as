@@ -69,6 +69,7 @@ package mdi.managers
 		private var tiledWindows:ArrayCollection;
 		private var tileMinimize:Boolean = true;
 		private var tileMinimizeWidth:int = 200;
+		private var showMinimizedTiles:Boolean = true;
 		
 		public var effects : IMDIEffectsDescriptor = new MDIBaseEffects();
 		
@@ -238,65 +239,153 @@ package mdi.managers
 			// implement minimize funrighctionality
 		}
 		
-		private function windowMinimizeHandler(event:MDIWindowEvent):void
+		
+		
+		
+		/**
+		 * Gets the left placement of a tiled window
+		 * 
+		 *  @param tileIndex The index value of the current tile instance we're placing
+		 * 
+		 *  @param maxTiles The maximum number of tiles that can be placed horizontally across the container given the minimimum width of each tile
+		 * 
+		 *  @param minWinWidth The width of the window tile when minimized
+		 * 
+		 *  @param padding The padding accordance to place between minimized tile window instances
+		 * 
+		 * */
+		private function getLeftOffsetPosition(tileIndex:int, maxTiles:int, minWinWidth:Number, padding:Number):Number
 		{
-			var maxTiles:int = this.container.width / this.tileMinimizeWidth;
-			var tileModPos:int = this.tiledWindows.length % maxTiles;
-			var xPos:int;
+			var tileModPos:int = tileIndex % maxTiles;
 			if(tileModPos == 0)
-				xPos = 5;
+				return padding;
 			else
-				xPos = (tileModPos * event.window.minWidth) + ((tileModPos + 1) * 5);
-			var numRows:int = Math.floor(this.tiledWindows.length / maxTiles);
-			var yPos:int = this.container.height - (((numRows + 1) * event.window.minimizeHeight) + ((numRows + 1) * 5));
-			var minimizePoint:Point = new Point(xPos, yPos);
-			this.effects.playMinimizeEffects(event.window, this, minimizePoint);
-			this.tiledWindows.addItem(event.window);
+				return (tileModPos * minWinWidth) + ((tileModPos + 1) * padding);
 		}
 		
-		private function windowRestoreEventHandler(event:MDIWindowEvent):void
+		
+		/**
+		 * Gets the bottom placement of a tiled window
+		 * 
+		 *  @param maxTiles The maximum number of tiles that can be placed horizontally across the container given the minimimum width of each tile
+		 * 
+		 *  @param minWinHeight The height of the window tile instance when minimized -- probably the height of the titleBar instance of the Panel
+		 * 
+		 * 	@param padding The padding accordance to place between minimized tile window instances
+		 * 
+		 * */
+		private function getBottomTilePosition(maxTiles:int, minWindowHeight:Number, padding:Number):Number
 		{
-			for(var i:int = 0; i < tiledWindows.length; i++)
-			{
-				if(tiledWindows.getItemAt(i) == event.window)
-					tiledWindows.removeItemAt(i);
-			}
-			reTileWindows();
-			var restorePoint:Point = new Point(event.window.dragStartPanelX, event.window.dragStartPanelY);
-			this.effects.playRestoreEffects(event.window, this, restorePoint);
+			var numRows:int = Math.floor(this.tiledWindows.length / maxTiles);
+			return ((numRows + 1) * minWindowHeight) + ((numRows + 1) * padding);
 		}
 		
+		
+		/**
+		 * Gets the height accordance for tiled windows along bottom to be used in the maximizing of other windows -- leaves space at bottom of maximize height so tiled windows still show
+		 * 
+		 *  @param maxTiles The maximum number of tiles that can be placed horizontally across the container given the minimimum width of each tile
+		 * 
+		 *  @param minWinHeight The height of the window tile instance when minimized -- probably the height of the titleBar instance of the Panel
+		 * 
+		 * 	@param padding The padding accordance to place between minimized tile window instances
+		 * 
+		 * */
+		private function getBottomOffsetHeight(maxTiles:int, minWindowHeight:Number, padding:Number):Number
+		{
+			var numRows:int = Math.floor(this.tiledWindows.length / maxTiles);
+			//if we have some rows get their combined heights... if not, return 0 so maximized window takes up full height of container
+			if(numRows != 0)
+				return ((numRows + 1) * minWindowHeight) + ((numRows + 1) * padding);
+			else
+				return 0;
+		}
+		
+		/**
+		 * Retiles the remaining minimized tile instances if one of them gets restored or maximized
+		 * 
+		 * */
 		private function reTileWindows():void
 		{
 			var maxTiles:int = this.container.width / this.tileMinimizeWidth;
 			for(var i:int = 0; i < tiledWindows.length; i++)
 			{
 				var currentWindow:MDIWindow = tiledWindows.getItemAt(i) as MDIWindow;
-				var tileModPos:int = i % maxTiles;
-				var xPos:int;
-				if(tileModPos == 0)
-					xPos = 5;
-				else
-					xPos = (tileModPos * currentWindow.minWidth) + ((tileModPos + 1) * 5);
-				var numRows:int = Math.floor(i / maxTiles);
-				var yPos:int = this.container.height - (((numRows + 1) * currentWindow.minimizeHeight) + ((numRows + 1) * 5));
+				var xPos:Number = getLeftOffsetPosition(i, maxTiles, this.tileMinimizeWidth, 5);
+				var yPos:Number = this.container.height - getBottomTilePosition(maxTiles, currentWindow.minimizeHeight, 5);
 				var movePoint:Point = new Point(xPos, yPos);
 				this.effects.reTileMinWindowsEffects(currentWindow, this, movePoint);
-			}
-			
+			}	
 		}
 		
+		
+		/**
+		 * Minimizing of Window
+		 * 
+		 *  @param event MDIWindowEvent instance containing even type and window instance that is being handled
+		 * 
+		 * */
+		private function windowMinimizeHandler(event:MDIWindowEvent):void
+		{
+			var maxTiles:int = this.container.width / this.tileMinimizeWidth;
+			var xPos:Number = getLeftOffsetPosition(this.tiledWindows.length, maxTiles, this.tileMinimizeWidth, 5);
+			var yPos:Number = this.container.height - getBottomTilePosition(maxTiles, event.window.minimizeHeight, 5);
+			var minimizePoint:Point = new Point(xPos, yPos);
+			this.effects.playMinimizeEffects(event.window, this, minimizePoint);
+			this.tiledWindows.addItem(event.window);
+		}
+		
+		
+		/**
+		 * Restoring of Window
+		 * 
+		 *  @param event MDIWindowEvent instance containing even type and window instance that is being handled
+		 * 
+		 * */
+		private function windowRestoreEventHandler(event:MDIWindowEvent):void
+		{
+			for(var i:int = 0; i < tiledWindows.length; i++)
+			{
+				if(tiledWindows.getItemAt(i) == event.window)
+				{
+					tiledWindows.removeItemAt(i);
+					reTileWindows();
+				}
+			}
+			var restorePoint:Point = new Point(event.window.dragStartPanelX, event.window.dragStartPanelY);
+			this.effects.playRestoreEffects(event.window, this, restorePoint);
+		}
+		
+		/**
+		 * Maximizing of Window
+		 * 
+		 *  @param event MDIWindowEvent instance containing even type and window instance that is being handled
+		 * 
+		 * */
 		private function windowMaximizeEventHandler(event:MDIWindowEvent):void
 		{
 			for(var i:int = 0; i < tiledWindows.length; i++)
 			{
 				if(tiledWindows.getItemAt(i) == event.window)
+				{
 					tiledWindows.removeItemAt(i);
+					reTileWindows();
+				}
 			}
-			reTileWindows();
-			this.effects.playMaximizeEffects(event.window,this);
+			var maxTiles:int = this.container.width / this.tileMinimizeWidth;
+			if(showMinimizedTiles)
+				this.effects.playMaximizeEffects(event.window,this,getBottomOffsetHeight(maxTiles, event.window.minimizeHeight, 5) + 5);
+			else
+				this.effects.playMaximizeEffects(event.window,this);
 		}
 		
+		
+		/**
+		 * Closing of Window
+		 * 
+		 *  @param event MDIWindowEvent instance containing even type and window instance that is being handled
+		 * 
+		 * */
 		private function windowCloseEventHandler(event:MDIWindowEvent):void
 		{
 			this.effects.playCloseEffects(event.window,this,this.remove);
@@ -553,13 +642,6 @@ package mdi.managers
 				}
 			}
 		}
-		
-		
-		
-		
-		
-		
-		
 		
 		// set a min. width/height
 		public function resize(window:MDIWindow):void

@@ -138,6 +138,7 @@ package mdi.containers
 			minWidth = 200;
 			minHeight = 200;
 			windowState = MDIWindowState.NORMAL;
+			
 		}
 		
 		override protected function createChildren():void
@@ -365,10 +366,9 @@ package mdi.containers
 		
 		public function minimize(event:MouseEvent = null):void
 		{
-			if(windowState == MDIWindowState.NORMAL)
-			{
+			if(windowState != MDIWindowState.MAXIMIZED)
 				savePanel();
-			}
+			_prevWindowState = windowState;
 			minimizeHeight = this.titleBar.height;
 			dispatchEvent(new MDIWindowEvent(MDIWindowEvent.MINIMIZE, this));
 			windowState = MDIWindowState.MINIMIZED;
@@ -380,7 +380,6 @@ package mdi.containers
 			if(maximizeRestoreBtn.styleName == "increaseBtn")
 			{
 				savePanel();
-				doMaximize();
 				windowState = MDIWindowState.MAXIMIZED;
 				maximizeRestoreBtn.styleName = "decreaseBtn";
 				dispatchEvent(new MDIWindowEvent(MDIWindowEvent.MAXIMIZE, this));
@@ -404,14 +403,6 @@ package mdi.containers
 			dragStartPanelY = this.y;
 			dragStartPanelWidth = this.width;
 			dragStartPanelHeight = this.height;
-		}
-		
-		private function restorePanel():void
-		{
-			this.x = dragStartPanelX;
-			this.y = dragStartPanelY;
-			this.width = dragStartPanelWidth;
-			this.height = dragStartPanelHeight;
 		}
 		
 		public function addControl(uic:UIComponent, index:int = -1):void
@@ -448,27 +439,17 @@ package mdi.containers
 			if(minimized)
 			{
 				showControls = true;
-				windowState = _prevWindowState;
 				
+				windowState = _prevWindowState;
 				if(windowState == MDIWindowState.NORMAL)
 				{
-					//restorePanel();
 					dispatchEvent(new MDIWindowEvent(MDIWindowEvent.RESTORE, this));
 				}
 				else
 				{
-					doMaximize();
 					dispatchEvent(new MDIWindowEvent(MDIWindowEvent.MAXIMIZE, this));
 				}
 			}
-		}
-		
-		// this method should be removed once the manager is able to handle this
-		public function doMaximize():void
-		{
-			this.x = this.y = 0;
-			this.width = this.parent.width;
-			this.height = this.parent.height;
 		}
 		
 		/**

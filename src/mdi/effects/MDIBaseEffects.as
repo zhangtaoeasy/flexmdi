@@ -93,7 +93,10 @@ package mdi.effects
 		
 		public function playMaximizeEffects(window:MDIWindow,manager:MDIManager):void
 		{
-			
+			window.height = manager.container.height;
+			window.width = manager.container.width;
+			window.x = 0;
+			window.y = 0;
 		}
 		public function playCloseEffects(window:MDIWindow,manager:MDIManager,callback:Function):void
 		{

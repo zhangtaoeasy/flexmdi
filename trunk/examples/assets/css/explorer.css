@@ -29,6 +29,7 @@ Panel {
 	fontFamily: Arial;
 	fontSize: 10;
 	fontWeight: bold;
+	color: #000000;
 }
 
 .closeBtn {

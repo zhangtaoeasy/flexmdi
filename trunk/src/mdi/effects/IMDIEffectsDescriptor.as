@@ -19,7 +19,7 @@ package mdi.effects
 		
 		//group events
 		function playTileEffects(windows:Array,manager:MDIManager):void
-		function playCascadeEffects(windows:Array,manager:MDIManager):void
+		function playCascadeEffects(window:MDIWindow,manager:MDIManager,moveTo:Point):void
 		
 	
 		

@@ -127,7 +127,7 @@ package mdi.managers
 						
 	
 			this.position(window); 
-		
+
 			this.effects.playShowEffects(window,this);
 
 		}
@@ -392,7 +392,7 @@ package mdi.managers
 		/**
 		 * Pushes a window onto the managed window stack 
 		 * 
-		 *  @param win Window to push onto managed windows stack 
+		 *  @param win Window:MDIWindow to push onto managed windows stack 
 		 * */
 		public function manage(window:MDIWindow):void
 		{	
@@ -403,7 +403,7 @@ package mdi.managers
 		/**
 		 *  Positions a window in an absolute position 
 		 * 
-		 *  @param win:IFlexDisplayObject Window to position
+		 *  @param win:MDIWindow Window to position
 		 * 
 		 *  @param x:int The x position of the window
 		 * 
@@ -556,8 +556,11 @@ package mdi.managers
 				if(!window.minimized)
 				{
 					this.bringToFront(window);
-					window.x = openCount * 40;
-					window.y = openCount * 40;
+					
+					var moveTo : Point = new Point( openCount * 40,  openCount * 40);
+					
+					this.effects.playCascadeEffects( window, this, moveTo );
+			
 					openCount++;
 				}
 			}

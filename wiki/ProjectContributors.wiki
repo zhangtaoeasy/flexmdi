@@ -4,4 +4,4 @@
   * Ben Clinkinbeard
   * Brendan Meutzner
   * Brian Joseph
-
+  * Chris Fortier

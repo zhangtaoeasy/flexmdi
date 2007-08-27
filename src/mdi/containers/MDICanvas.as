@@ -28,10 +28,12 @@ package mdi.containers
 	import mx.containers.Canvas;
 	import mx.events.FlexEvent;
 	import mx.core.UIComponent;
+	import mdi.effects.MDIBaseEffects;
 
 	public class MDICanvas extends Canvas
 	{
 		public var mdiManager:MDIManager;
+		public var effectsLib:MDIBaseEffects = new MDIBaseEffects();
 		
 		public function MDICanvas()
 		{
@@ -42,6 +44,8 @@ package mdi.containers
 		
 		private function onCreationComplete(event:FlexEvent):void
 		{
+			mdiManager.effects = effectsLib;
+			
 			for each(var child:UIComponent in getChildren())
 			{
 				if(child is MDIWindow)

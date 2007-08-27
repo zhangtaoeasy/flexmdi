@@ -76,6 +76,7 @@ package mdi.containers
 	public class MDIWindow extends Panel
 	{
 		public var minimized:Boolean = false;
+		public var minimizeSize:int;
 		public var collapseDuration:Number;
 		public var controls:Array;
 		private var controlsHolder:UIComponent;
@@ -85,6 +86,11 @@ package mdi.containers
 		public var closeBtn:Button;
 		
 		public var preventedDefaultActions:ArrayCollection;
+		
+		public var dragStartPanelX:Number;
+		public var dragStartPanelY:Number;
+		public var dragStartPanelWidth:Number;
+		public var dragStartPanelHeight:Number;
 		
 		private static var DEFAULT_EDGE_HANDLE_SIZE:Number = 4;
 		private static var DEFAULT_CORNER_HANDLE_SIZE:Number = 10;
@@ -105,10 +111,6 @@ package mdi.containers
 		private var currentResizeHandle:Button;
 		private var dragStartMouseX:Number;
 		private var dragStartMouseY:Number;
-		private var dragStartPanelX:Number;
-		private var dragStartPanelY:Number;
-		private var dragStartPanelWidth:Number;
-		private var dragStartPanelHeight:Number;
 		private var dragAmountX:Number;
 		private var dragAmountY:Number;
 		private var dragMaxX:Number;
@@ -124,7 +126,7 @@ package mdi.containers
 		private var resizeCursorTRBL:Class;
 		
 		public var windowManager:MDIManager;
-	
+		
 		
 		public function MDIWindow()
 		{
@@ -134,6 +136,7 @@ package mdi.containers
 			doubleClickEnabled = true;
 			minWidth = 200;
 			minHeight = 200;
+			
 		}
 		
 		override protected function createChildren():void
@@ -333,6 +336,7 @@ package mdi.containers
 			titleBar.addEventListener(MouseEvent.DOUBLE_CLICK, onMaximizeRestoreBtnClick, false, 0, true);
 			titleBar.addEventListener(MouseEvent.CLICK, onTitleBarClick, false, 0, true);
 			
+			
 			if(minimizeBtn)
 			{
 				minimizeBtn.addEventListener(MouseEvent.CLICK, minimize, false, 0, true);
@@ -360,12 +364,12 @@ package mdi.containers
 		
 		private function minimize(event:MouseEvent):void
 		{
+			minimizeSize = this.titleBar.height;
 			savePanel();
-			// these should get removed/moved to the mgr
+			dispatchEvent(new MDIWindowEvent(MDIWindowEvent.MINIMIZE, this));
 			minimized = true;
 			showControls = false;
 			
-			dispatchEvent(new MDIWindowEvent(MDIWindowEvent.MINIMIZE, this));
 		}
 		
 		private function onMaximizeRestoreBtnClick(event:MouseEvent):void
@@ -443,7 +447,7 @@ package mdi.containers
 		{
 			if(minimized)
 			{
-				restorePanel();
+				//restorePanel();
 				showControls = true;
 				minimized = false;
 				dispatchEvent(new MDIWindowEvent(MDIWindowEvent.RESTORE, this));

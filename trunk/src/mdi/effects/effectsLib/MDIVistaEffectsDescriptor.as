@@ -183,6 +183,26 @@ package mdi.effects.effectsLib
 			parallel.play();
 		}
 		
+		override public function playMaximizeEffects(window:MDIWindow, manager:MDIManager):void
+		{
+			var parallel : Parallel = new Parallel(window);
+			
+			var move:Move = new Move(window);
+			move.xTo = 0;
+			move.yTo = 0;
+			move.duration = 300;
+			parallel.addChild(move);
+			
+			var resize:Resize = new Resize(window);
+			resize.heightTo = manager.container.height;
+			resize.widthTo = manager.container.width;
+			resize.duration = 300;
+			parallel.addChild(resize);
+			
+			parallel.end();
+			parallel.play();
+		}
+		
 		override public function reTileMinWindowsEffects(window:MDIWindow, manager:MDIManager, moveTo:Point):void
 		{
 			var move:Move = new Move(window);

@@ -415,6 +415,24 @@ package mdi.managers
 			window.y = y;		
 		}
 		
+		/**
+		 *  @private getOpenWindowList():Array
+		 * 
+		 *  gets a list of open windows for scenarios when only open windows need to be managed
+		 * 
+		 */
+		private function getOpenWindowList():Array
+		{	
+			var array : Array = [];
+			for(var winIndex:int = 0; winIndex < windowList.length; winIndex++)
+			{
+				if(!MDIWindow(windowList[winIndex]).minimized)
+				{
+					array.push(windowList[winIndex]);
+				}
+			}
+			return array;
+		}
 		
 		/**
 		 *  Tiles the window across the screen
@@ -430,16 +448,8 @@ package mdi.managers
 		public function tile(fillAvailableSpace:Boolean = false,gap:int = 0):void
 		{
 			
-		//gets list of open windows to ignore tiling of minimized window instances
-			var openWinList:Array = [];
-			for(var winIndex:int = 0; winIndex < windowList.length; winIndex++)
-			{
-				if(!MDIWindow(windowList[winIndex]).minimized)
-				{
-					openWinList.push(windowList[winIndex]);
-				}
-			}
-			
+			var openWinList:Array = getOpenWindowList();
+				
 			var numWindows:int = openWinList.length;
 			
 			var sqrt:int = Math.round(Math.sqrt(numWindows));
@@ -468,8 +478,13 @@ package mdi.managers
 					col++;
 				}
 				//positin window within parent
-				win.x = (col * targetWidth);
-				win.y = (row * targetHeight);
+				//win.x = (col * targetWidth);
+				//win.y = (row * targetHeight);
+				
+				var moveTo : Point = new Point( (col * targetWidth), (row * targetHeight) ); 
+				
+				this.effects.playTileEffects( win,this,moveTo);
+				
 				
 				//pushing out by gap
 				if(col > 0) 

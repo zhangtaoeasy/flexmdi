@@ -237,31 +237,17 @@ package mdi.managers
 		}
 		private function windowMinimizeHandler(event:MDIWindowEvent):void
 		{
-			/* if(externallyHandledEvents.indexOf(event.type) == -1)
-			{
-				var arr:Array = new Array(event.window, this, MDIManager.global);
-				
-				for(var i:int = 0; i < arr.length; i++)
-				{
-					if(arr[i].minimizeEffect != null)
-					{
-						arr[i].minimizeEffect.play([event.window]);
-						return;
-					}
-				}	
-				event.window.defaultMinimizeEffect.play();
-			}
-			else
-			{
-				dispatchEvent(event);
-			} */
+			var minimizePoint:Point = new Point(5, this.container.height - event.window.minimizeSize - 5);
+			this.effects.playMinimizeEffects(event.window, this, minimizePoint);
 		}
 		
 		
 		private function windowRestoreEventHandler(event:MDIWindowEvent):void
 		{
-			// implement minimize functionality
+			var restorePoint:Point = new Point(event.window.dragStartPanelX, event.window.dragStartPanelY);
+			this.effects.playRestoreEffects(event.window, this, restorePoint);
 		}
+		
 		private function windowMaximizeEventHandler(event:MDIWindowEvent):void
 		{
 			// implement minimize functionality

@@ -288,7 +288,13 @@ package mdi.managers
 		
 		private function windowMaximizeEventHandler(event:MDIWindowEvent):void
 		{
-			// implement minimize functionality
+			for(var i:int = 0; i < tiledWindows.length; i++)
+			{
+				if(tiledWindows.getItemAt(i) == event.window)
+					tiledWindows.removeItemAt(i);
+			}
+			reTileWindows();
+			this.effects.playMaximizeEffects(event.window,this);
 		}
 		
 		private function windowCloseEventHandler(event:MDIWindowEvent):void

@@ -10,7 +10,7 @@
 			public function addWindow():void
 			{
 				var win : MDIWindow = new MDIWindow();
-				win.title = "Managed by Global Instance";
+				win.title = "Mngd. by Global Instance (" + MDIManager.global.windowList.length + ")";
 				win.width = 400;
 				win.height = 300;
 				

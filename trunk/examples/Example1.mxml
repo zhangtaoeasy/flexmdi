@@ -63,7 +63,6 @@
 				win.height = 400;
 				win.width = 300;
 				win.title = "Global Effects Window";
-				win.showEffect = effect;
 				MDIManager.global.add(win); 
 			}
 			

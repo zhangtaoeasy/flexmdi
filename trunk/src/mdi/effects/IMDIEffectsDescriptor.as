@@ -42,6 +42,8 @@ package mdi.effects
 		function playMinimizeEffects(window:MDIWindow,manager:MDIManager,moveTo:Point=null):void
 	
 		function playRestoreEffects(window:MDIWindow,manager:MDIManager,moveTo:Point=null):void
+		
+		function reTileMinWindowsEffects(window:MDIWindow,manager:MDIManager,moveTo:Point):void
 	
 		function playMaximizeEffects(window:MDIWindow,manager:MDIManager):void
 	

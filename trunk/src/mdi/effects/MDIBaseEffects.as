@@ -32,6 +32,7 @@ package mdi.effects
 	import flash.geom.Point;
 	import mx.containers.Panel;
 	import mx.effects.Move;
+	
 
 	
 	public class MDIBaseEffects implements IMDIEffectsDescriptor
@@ -63,7 +64,7 @@ package mdi.effects
 		}
 		public function playMinimizeEffects(window:MDIWindow, manager:MDIManager, moveTo:Point = null):void
 		{
-			window.height = window.minimizeSize;
+			window.height = window.minimizeHeight;
 			window.width = window.minWidth;
 			if(moveTo != null)
 			{
@@ -81,6 +82,12 @@ package mdi.effects
 				window.x = moveTo.x;
 				window.y = moveTo.y;
 			}
+		}
+		
+		public function reTileMinWindowsEffects(window:MDIWindow, manager:MDIManager, moveTo:Point):void
+		{
+			window.x = moveTo.x;
+			window.y = moveTo.y;
 		}
 		
 		

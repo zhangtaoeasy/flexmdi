@@ -156,7 +156,7 @@ package mdi.effects.effectsLib
 			var resize:Resize = new Resize(window);
 			resize.heightTo = window.minimizeHeight;
 			resize.widthTo = window.minWidth;
-			resize.duration = 250;
+			resize.duration = 300;
 			parallel.addChild(resize);
 			
 			parallel.end();

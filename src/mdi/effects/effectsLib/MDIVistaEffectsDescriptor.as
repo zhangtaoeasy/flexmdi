@@ -143,6 +143,57 @@ package mdi.effects.effectsLib
 		}
 		
 		
+		override public function playMinimizeEffects(window:MDIWindow, manager:MDIManager, moveTo:Point=null):void
+		{
+			var parallel : Parallel = new Parallel(window);
+			
+			var move:Move = new Move(window);
+			move.xTo = moveTo.x;
+			move.yTo = moveTo.y;
+			move.duration = 300;
+			parallel.addChild(move);
+			
+			var resize:Resize = new Resize(window);
+			resize.heightTo = window.minimizeHeight;
+			resize.widthTo = window.minWidth;
+			resize.duration = 250;
+			parallel.addChild(resize);
+			
+			parallel.end();
+			parallel.play();
+		}
+		
+		override public function playRestoreEffects(window:MDIWindow, manager:MDIManager, moveTo:Point=null):void
+		{
+			var parallel : Parallel = new Parallel(window);
+			
+			var move:Move = new Move(window);
+			move.xTo = moveTo.x;
+			move.yTo = moveTo.y;
+			move.duration = 300;
+			parallel.addChild(move);
+			
+			var resize:Resize = new Resize(window);
+			resize.heightTo = window.dragStartPanelHeight;
+			resize.widthTo = window.dragStartPanelWidth;
+			resize.duration = 300;
+			parallel.addChild(resize);
+			
+			parallel.end();
+			parallel.play();
+		}
+		
+		override public function reTileMinWindowsEffects(window:MDIWindow, manager:MDIManager, moveTo:Point):void
+		{
+			var move:Move = new Move(window);
+			move.xTo = moveTo.x;
+			move.yTo = moveTo.y;
+			move.duration = 300;
+			move.end();
+			move.play();
+		}
+		
+		
 	
 		
 	}

@@ -6,6 +6,7 @@
 		<![CDATA[
 			import mdi.managers.MDIManager;
 			import mdi.containers.MDIWindow;
+			import mdi.effects.effectsLib.MDIVistaEffectsDescriptor;
 			
 			public var mgr : MDIManager
 			
@@ -13,7 +14,7 @@
 			{	
 				// pass in the parent that you wish to contain windows to 
 				// when using a local instance of the MDIManager 
-				this.mgr = new MDIManager(this.vbox);
+				this.mgr = new MDIManager(this.containerInst, new MDIVistaEffectsDescriptor() );
 			}
 			
 			public function addWindow():void
@@ -45,11 +46,7 @@
 	</mx:HBox>
 	
 	
-	<mx:Canvas id="vbox" width="600" height="600" backgroundColor="#eeeeee" clipContent="true">
-		
-		
-		
-	</mx:Canvas>
+	<mx:Canvas id="containerInst" width="100%" height="100%" backgroundColor="#eeeeee" clipContent="true" />
 	
 	
 </mx:VBox>

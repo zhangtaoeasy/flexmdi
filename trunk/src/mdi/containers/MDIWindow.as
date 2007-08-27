@@ -365,7 +365,10 @@ package mdi.containers
 		
 		public function minimize(event:MouseEvent = null):void
 		{
-			savePanel();
+			if(windowState == MDIWindowState.NORMAL)
+			{
+				savePanel();
+			}
 			minimizeHeight = this.titleBar.height;
 			dispatchEvent(new MDIWindowEvent(MDIWindowEvent.MINIMIZE, this));
 			windowState = MDIWindowState.MINIMIZED;
@@ -376,6 +379,7 @@ package mdi.containers
 		{
 			if(maximizeRestoreBtn.styleName == "increaseBtn")
 			{
+				savePanel();
 				doMaximize();
 				windowState = MDIWindowState.MAXIMIZED;
 				maximizeRestoreBtn.styleName = "decreaseBtn";
@@ -383,8 +387,6 @@ package mdi.containers
 			}
 			else
 			{
-				//restorePanel();
-				
 				maximizeRestoreBtn.styleName = "increaseBtn";
 				windowState = MDIWindowState.NORMAL;
 				dispatchEvent(new MDIWindowEvent(MDIWindowEvent.RESTORE, this));
@@ -410,7 +412,6 @@ package mdi.containers
 			this.y = dragStartPanelY;
 			this.width = dragStartPanelWidth;
 			this.height = dragStartPanelHeight;
-			trace(dragStartPanelWidth);
 		}
 		
 		public function addControl(uic:UIComponent, index:int = -1):void

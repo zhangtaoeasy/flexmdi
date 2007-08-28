@@ -711,8 +711,7 @@ package mdi.managers
 		 */	
 		public function cascade():void
 		{
-			
-			
+
 			var effectItems : Array = [];
 			
 			var windows:Array = getOpenWindowList();
@@ -723,16 +722,15 @@ package mdi.managers
 				
 				this.bringToFront(window);
 					
-				var item : MDIGroupEffectItem = new MIDGroupEffectItem(window);
+				var item : MDIGroupEffectItem = new MDIGroupEffectItem(window);
 		
-					item.moveTo =  new Point( openCount * 40,  openCount * 40);
+					item.moveTo =  new Point( i * 40,  i * 40);
 					item.heightFrom = window.height;
 					item.heightTo = window.height;
 					item.widthFrom = window.width;
 					item.widthTo = window.width;
 					
 				effectItems.push(item);
-			
 			}
 			
 			this.effects.playCascadeEffects( effectItems, this );

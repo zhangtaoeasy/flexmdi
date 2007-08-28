@@ -38,6 +38,8 @@ package mdi.effects.effectsLib
 	import mx.effects.Rotate;
 	import mx.effects.Move;
 
+	import mdi.effects.effectClasses.MDIGroupEffectItem;
+
 	public class MDIVistaEffectsDescriptor extends MDIBaseEffects implements IMDIEffectsDescriptor
 	{
 	
@@ -66,27 +68,9 @@ package mdi.effects.effectsLib
 				
 			
 			blurSequence.addChild(blurIn);
-			
-			
+
 			parallel.addChild(blurSequence);
-			
-			var resizeSequence : Sequence = new Sequence();
-			
-		 	var expand : Resize = new Resize();
-		 		expand.heightBy = 20;
-		 		expand.widthBy = 20;
-				
-				
-			resizeSequence.addChild(expand);
-			
-			var contract : Resize = new Resize();
-				contract.heightBy = -10;
-				contract.widthBy = -10;
-				
-				
-			resizeSequence.addChild(contract);
-			
-			parallel.addChild(resizeSequence);
+	
 			
 			parallel.duration = 200;
 			parallel.play();
@@ -100,7 +84,7 @@ package mdi.effects.effectsLib
 				blur.blurYFrom = 0;
 				blur.blurXTo = 10;
 				blur.blurYTo = 10;
-				blur.duration = 150;
+				blur.duration = 200;
 				blur.addEventListener(EffectEvent.EFFECT_END, function():void {callBack.call(window,window);});
 				blur.play();
 
@@ -113,34 +97,46 @@ package mdi.effects.effectsLib
   			return b+c*(33*tc*ts + -106*ts*ts + 126*tc + -67*ts + 15*t);
 		}
 		
-		override public function playCascadeEffects(window:MDIWindow,manager:MDIManager,moveTo:Point):void
+		override public function playCascadeEffects(items:Array,manager:MDIManager):void
 		{
-			var move : Move = new Move(window);
-				move.xTo = moveTo.x;
-				move.yTo = moveTo.y;
-				move.easingFunction = this.cascadeEasingFunction;
-				move.duration = 500;
-				move.play();
+
+			for each(var item : MDIGroupEffectItem  in items)
+			{	
+
+				var move : Move = new Move(item.window);
+					move.xTo = item.moveTo.x;
+					move.yTo = item.moveTo.y;
+					move.easingFunction = this.cascadeEasingFunction;
+					move.duration = 200;
+					move.play();
+			}
+
+
 		}
 		
-		override public function playTileEffects(window:MDIWindow,manager:MDIManager,moveTo:Point):void
+		override public function playTileEffects(items:Array,manager:MDIManager):void
 		{
-			var move : Move = new Move(window);
-				move.xTo = moveTo.x;
-				move.yTo = moveTo.y;
-				move.easingFunction = this.tileEasingFunction;
-				move.duration = 500;
-				move.play();
+			
+			var sequence : Sequence = new Sequence();
+			
+			for each(var item : MDIGroupEffectItem  in items)
+			{	
+
+				var move : Move = new Move(item.window);
+					move.xTo = item.moveTo.x;
+					move.yTo = item.moveTo.y;
+
+				sequence.addChild( move );
+				
+				item.setWindowSize();
+			}
+			
+			sequence.duration = 100;
+			sequence.play();
+
 		}
 		
-		private function tileEasingFunction(t:Number, b:Number, c:Number, d:Number):Number 
-		{
-  			var ts:Number=(t/=d)*t;
-  			var tc:Number=ts*t;
-  			return b+c*(54.125*tc*ts + -167.5*ts*ts + 188.75*tc + -92.5*ts + 18.125*t);
-		}
-		
-		
+	
 		override public function playMinimizeEffects(window:MDIWindow, manager:MDIManager, moveTo:Point=null):void
 		{
 			var parallel : Parallel = new Parallel(window);

@@ -32,6 +32,7 @@ package mdi.effects
 	import flash.geom.Point;
 	import mx.containers.Panel;
 	import mx.effects.Move;
+	import mdi.effects.effectClasses.MDIGroupEffectItem;
 	
 
 	
@@ -105,19 +106,28 @@ package mdi.effects
 
 		}
 		
-		public function playTileEffects(window:MDIWindow,manager:MDIManager,moveTo:Point):void
+		public function playTileEffects(items:Array,manager:MDIManager):void
 		{
-			var move : Move = new Move(window);
-				move.xTo = moveTo.x;
-				move.yTo = moveTo.y;
-				move.play();
+			for each(var item : MDIGroupEffectItem  in items)
+			{	
+
+				var move : Move = new Move(item.window);
+					move.xTo = item.moveTo.x;
+					move.yTo = item.moveTo.y;
+					move.play();
+			}
 		}
-		public function playCascadeEffects(window:MDIWindow,manager:MDIManager,moveTo:Point):void
+		
+		public function playCascadeEffects(items:Array,manager:MDIManager):void
 		{
-			var move : Move = new Move(window);
-				move.xTo = moveTo.x;
-				move.yTo = moveTo.y;
-				move.play();
+			for each(var item : MDIGroupEffectItem  in items)
+			{	
+
+				var move : Move = new Move(item.window);
+					move.xTo = item.moveTo.x;
+					move.yTo = item.moveTo.y;
+					move.play();
+			}
 		}
 		
 		

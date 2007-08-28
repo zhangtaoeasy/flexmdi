@@ -49,11 +49,13 @@ package mdi.effects
 	
 		function playCloseEffects(window:MDIWindow,manager:MDIManager,callBack:Function):void
 	
-		function playTileEffects(window:MDIWindow,manager:MDIManager,moveTo:Point):void
 	
-		function playCascadeEffects(window:MDIWindow,manager:MDIManager,moveTo:Point):void
+	
+		//group window effects
 		
-	
+		function playTileEffects(items:Array,manager:MDIManager):void
+		
+		function playCascadeEffects(items:Array,manager:MDIManager):void
 		
 	}
 }

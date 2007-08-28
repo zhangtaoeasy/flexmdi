@@ -49,7 +49,10 @@ package mdi.managers
 	import mx.core.IUIComponent;
 	import mx.managers.PopUpManager;
 	import mx.managers.PopUpManagerChildList;
+
 	import mx.collections.ArrayCollection;
+	import mdi.effects.effectClasses.MDIGroupEffectItem;
+
 	
 	
 	public class MDIManager extends EventDispatcher
@@ -454,11 +457,13 @@ package mdi.managers
 		}
 		
 		/**
+		 *  @private
+		 * 
 		 *  Adds listeners 
 		 *  @param window:MDIWindow  
 		 */
 		
-		public function addListeners(window:MDIWindow):void
+		private function addListeners(window:MDIWindow):void
 		{
 					
 			window.addEventListener(MDIWindowEvent.MOVE, this.windowMoveEventHandler );
@@ -475,10 +480,13 @@ package mdi.managers
 
 
 		/**
-		 *  Removes listeners 
+		 * 	@private
+		 * 
+		 *  Removes listeners
+		 *  
 		 *  @param window:MDIWindow 
 		 */
-		public function removeListeners(window:MDIWindow):void
+		private function removeListeners(window:MDIWindow):void
 		{
 			window.removeEventListener(MDIWindowEvent.MOVE, this.windowMoveEventHandler );
 			window.removeEventListener(MDIWindowEvent.RESIZE, this.windowResizeEventHandler);
@@ -556,11 +564,11 @@ package mdi.managers
 		private function getOpenWindowList():Array
 		{	
 			var array : Array = [];
-			for(var winIndex:int = 0; winIndex < windowList.length; winIndex++)
+			for(var i:int = 0; i < windowList.length; i++)
 			{
-				if(!MDIWindow(windowList[winIndex]).minimized)
+				if(!MDIWindow(windowList[i]).minimized)
 				{
-					array.push(windowList[winIndex]);
+					array.push(windowList[i]);
 				}
 			}
 			return array;
@@ -593,12 +601,21 @@ package mdi.managers
 			var availHeight:Number = this.container.height;
 			var targetWidth:Number = availWidth / numCols - ((gap * (numCols - 1)) / numCols);
 			var targetHeight:Number = availHeight / numRows - ((gap * (numRows - 1)) / numRows);
-						
+			
+			var effectItems : Array = [];
+				
 			for(var i:int = 0; i < openWinList.length; i++)
 			{
+				
 				var win:MDIWindow = openWinList[i];
-				win.width = targetWidth;
-				win.height = targetHeight;
+				
+				var item : MDIGroupEffectItem = new MDIGroupEffectItem(win);
+				
+				item.widthTo = targetWidth;
+				item.heightTo = targetHeight;
+				
+				//win.width = targetWidth;
+				//win.height = targetHeight;
 				
 				if(i % numCols == 0 && i > 0)
 				{
@@ -609,22 +626,21 @@ package mdi.managers
 				{
 					col++;
 				}
-				//positin window within parent
-				var winX:Number = (col * targetWidth);
-				var winY:Number = (row * targetHeight);
-				
+
+				item.moveTo = new Point( (col * targetWidth), (row * targetHeight) ); 
+		
 				//pushing out by gap
 				if(col > 0) 
-					winX += gap * col;
-				if(row > 0) 
-					winY += gap * row;
-					
-				var moveTo : Point = new Point( winX, winY ); 
+					item.moveTo.x += gap * col;
 				
-				this.effects.playTileEffects( win,this,moveTo);
+				if(row > 0) 
+					item.moveTo.y += gap * row;
+
+				effectItems.push( item );
 
 			}
 			
+
 			if(col < numCols && fillAvailableSpace)
 			{
 				var numOrphans:int = numWindows % numCols;
@@ -633,14 +649,20 @@ package mdi.managers
 				var orphanCount:int = 0
 				for(var j:int = numWindows - numOrphans; j < numWindows; j++)
 				{
-					var orphan:MDIWindow = openWinList[j];
-					orphan.width = orphanWidth;
-					orphan.x = (j - (numWindows - numOrphans)) * orphanWidth;
+					//var orphan:MDIWindow = openWinList[j];
+					var orphan : MDIGroupEffectItem = effectItems[j];
+					
+					orphan.widthTo = orphanWidth;
+					//orphan.window.width = orphanWidth;
+					
+					orphan.moveTo.x = (j - (numWindows - numOrphans)) * orphanWidth;
 					if(orphanCount > 0) 
-						orphan.x += gap * orphanCount;
+						orphan.moveTo.x += gap * orphanCount;
 					orphanCount++;
 				}
-			}
+			} 
+			
+			this.effects.playTileEffects( effectItems,this);
 		}
 		
 		// set a min. width/height
@@ -689,21 +711,31 @@ package mdi.managers
 		 */	
 		public function cascade():void
 		{
-			var openCount:int;
-			for(var i:int=0; i < this.windowList.length; i++)
-			{
-				var window : MDIWindow = this.windowList[i] as MDIWindow;
-				if(!window.minimized)
-				{
-					this.bringToFront(window);
-					
-					var moveTo : Point = new Point( openCount * 40,  openCount * 40);
-					
-					this.effects.playCascadeEffects( window, this, moveTo );
 			
-					openCount++;
-				}
+			
+			var effectItems : Array = [];
+			
+			var windows:Array = getOpenWindowList();
+			
+			for(var i:int=0; i < windows.length; i++)
+			{
+				var window : MDIWindow = windows[i] as MDIWindow;
+				
+				this.bringToFront(window);
+					
+				var item : MDIGroupEffectItem = new MIDGroupEffectItem(window);
+		
+					item.moveTo =  new Point( openCount * 40,  openCount * 40);
+					item.heightFrom = window.height;
+					item.heightTo = window.height;
+					item.widthFrom = window.width;
+					item.widthTo = window.width;
+					
+				effectItems.push(item);
+			
 			}
+			
+			this.effects.playCascadeEffects( effectItems, this );
 		}
 		
 			

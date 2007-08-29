@@ -15,16 +15,33 @@ VRule {
 	strokeColor: #FFFFFF;	
 }
 
-Panel {
+.mdiWindowNoFocus
+{
 	headerHeight: 26;
 	roundedBottomCorners: true;
 	borderThicknessTop: 0;
 	borderThicknessBottom: 3;
 	borderThicknessLeft: 3;
 	borderThicknessRight: 3;
-	borderAlpha: 1.0;
+	borderAlpha: .8;
 	titleStyleName: "mypanelTitle";
+	background-alpha: .8;
+	background-color: #BBBBBB;
 }
+
+.mdiWindowFocus
+{
+	headerHeight: 26;
+	roundedBottomCorners: true;
+	borderThicknessTop: 0;
+	borderThicknessBottom: 3;
+	borderThicknessLeft: 3;
+	borderThicknessRight: 3;
+	borderAlpha: 1;
+	titleStyleName: "mypanelTitle";
+	background-color: #FFFFFF;
+}
+
 .mypanelTitle {
 	fontFamily: Arial;
 	fontSize: 10;

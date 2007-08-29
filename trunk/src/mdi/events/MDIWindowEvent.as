@@ -28,19 +28,18 @@ package mdi.events
 	import mdi.containers.MDIWindow;
 
 	public class MDIWindowEvent extends Event
-	{	
-		public static const SHOW:String = "mdiSHOW";
-		public static const FOCUS_IN:String = "mdiFocusIn";
-		public static const FOCUS_OUT:String = "mdiFocusOut";
-		public static const MOVE:String = "mdiMove";
-		public static const RESIZE_START:String = "mdiResizeStart";
-		public static const RESIZE:String = "mdiResize";
-		public static const RESIZE_END:String = "mdiResizeEnd";
+	{
+		public static const MINIMIZE:String = "minimize";
+		public static const RESTORE:String = "restore";
+		public static const MAXIMIZE:String = "maximize";
+		public static const CLOSE:String = "close";
 		
-		public static const MINIMIZE:String = "mdiMinimize";
-		public static const RESTORE:String = "mdiRestore";
-		public static const MAXIMIZE:String = "mdiMaximize";
-		public static const CLOSE:String = "mdiClose";
+		public static const FOCUS_IN:String = "focusIn";
+		public static const FOCUS_OUT:String = "focusOut";
+		public static const MOVE:String = "move";
+		public static const RESIZE_START:String = "resizeStart";
+		public static const RESIZE:String = "resize";
+		public static const RESIZE_END:String = "resizeEnd";
 		
 		public var window:MDIWindow;
 		

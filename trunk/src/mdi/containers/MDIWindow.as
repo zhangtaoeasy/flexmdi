@@ -27,6 +27,9 @@ package mdi.containers
 	import flash.events.Event;
 	import flash.events.MouseEvent;
 	import flash.geom.Rectangle;
+	import flash.events.ContextMenuEvent;
+	import flash.ui.ContextMenu;
+	import flash.ui.ContextMenuItem;
 	
 	import mdi.events.MDIWindowEvent;
 	import mdi.managers.MDIManager;
@@ -37,6 +40,9 @@ package mdi.containers
 	import mx.core.UIComponent;
 	import mx.events.FlexEvent;
 	import mx.managers.CursorManager;
+	
+	
+	
 	
 	//--------------------------------------
 	//  Events
@@ -79,13 +85,15 @@ package mdi.containers
 		private var _prevWindowState:int;
 		
 		public var minimizeHeight:Number;
-		public var collapseDuration:Number;
+		
 		public var controls:Array;
 		private var controlsHolder:UIComponent;
 		
 		public var minimizeBtn:Button;
 		public var maximizeRestoreBtn:Button;
 		public var closeBtn:Button;
+		
+		public var winContextMenu:ContextMenu = null;
 		
 		public var preventedDefaultActions:ArrayCollection;
 		
@@ -139,6 +147,13 @@ package mdi.containers
 			minHeight = 200;
 			windowState = MDIWindowState.NORMAL;
 			
+			this.addEventListener(FlexEvent.CREATION_COMPLETE, componentComplete);
+			
+		}
+		
+		private function componentComplete(event:FlexEvent):void
+		{
+			minimizeHeight = this.titleBar.height;
 		}
 		
 		override protected function createChildren():void
@@ -335,21 +350,21 @@ package mdi.containers
 			// clicking
 			titleBar.addEventListener(MouseEvent.MOUSE_DOWN, onTitleBarPress, false, 0, true);
 			titleBar.addEventListener(MouseEvent.MOUSE_UP, onTitleBarRelease, false, 0, true);
-			titleBar.addEventListener(MouseEvent.DOUBLE_CLICK, onMaximizeRestoreBtnClick, false, 0, true);
-			titleBar.addEventListener(MouseEvent.CLICK, onTitleBarClick, false, 0, true);
+			titleBar.addEventListener(MouseEvent.DOUBLE_CLICK, maximizeRestoreHandler, false, 0, true);
+			titleBar.addEventListener(MouseEvent.CLICK, onTitleBarClickHandler, false, 0, true);
 			
 			
 			if(minimizeBtn)
 			{
-				minimizeBtn.addEventListener(MouseEvent.CLICK, minimize, false, 0, true);
+				minimizeBtn.addEventListener(MouseEvent.CLICK, minimizeHandler, false, 0, true);
 			}
 			if(maximizeRestoreBtn)
 			{
-				maximizeRestoreBtn.addEventListener(MouseEvent.CLICK, onMaximizeRestoreBtnClick, false, 0, true);
+				maximizeRestoreBtn.addEventListener(MouseEvent.CLICK, maximizeRestoreHandler, false, 0, true);
 			}
 			if(closeBtn)
 			{
-				closeBtn.addEventListener(MouseEvent.CLICK, close, false, 0, true);
+				closeBtn.addEventListener(MouseEvent.CLICK, closeHandler, false, 0, true);
 			}
 			
 			this.addEventListener(MouseEvent.MOUSE_DOWN, setMDIWindowFocus);
@@ -364,28 +379,51 @@ package mdi.containers
 			parent.setChildIndex(this, parent.numChildren - 1);
 		}
 		
-		public function minimize(event:MouseEvent = null):void
+		
+		/**
+		 *  Called from minimize button click - internal
+		 *
+		 *  @event MouseEvent
+		 */
+		private function minimizeHandler(event:MouseEvent = null):void
+		{
+			minimize();
+		}
+		
+		
+		/**
+		 *  Called from manager class to minimize this instance
+		 * 
+		 */
+		public function minimize():void
 		{
 			if(windowState != MDIWindowState.MAXIMIZED)
 				savePanel();
 			_prevWindowState = windowState;
-			//titleBar is protected property, so we have to keep setting minimizeHeight
-			minimizeHeight = this.titleBar.height;
 			dispatchEvent(new MDIWindowEvent(MDIWindowEvent.MINIMIZE, this));
 			windowState = MDIWindowState.MINIMIZED;
 			showControls = false;
 		}
 		
-		private function onMaximizeRestoreBtnClick(event:MouseEvent):void
+		
+		/**
+		 *  Called from minimize button click - internal
+		 *
+		 *  @event MouseEvent
+		 * 
+		 */
+		private function maximizeRestoreHandler(event:MouseEvent):void
 		{
-			//titleBar is protected property, so we have to keep setting minimizeHeight
-			minimizeHeight = this.titleBar.height;
+			maximizeRestore();
+		}
+		
+		
+		public function maximizeRestore():void
+		{
 			if(maximizeRestoreBtn.styleName == "increaseBtn")
 			{
 				savePanel();
-				windowState = MDIWindowState.MAXIMIZED;
-				maximizeRestoreBtn.styleName = "decreaseBtn";
-				dispatchEvent(new MDIWindowEvent(MDIWindowEvent.MAXIMIZE, this));
+				maximize();
 			}
 			else
 			{
@@ -394,11 +432,26 @@ package mdi.containers
 				dispatchEvent(new MDIWindowEvent(MDIWindowEvent.RESTORE, this));
 			}
 		}
+	
+		public function maximize():void
+		{
+			showControls = true;
+			windowState = MDIWindowState.MAXIMIZED;
+			maximizeRestoreBtn.styleName = "decreaseBtn";
+			dispatchEvent(new MDIWindowEvent(MDIWindowEvent.MAXIMIZE, this));
+		}
 		
-		public function close(event:MouseEvent = null):void
+		
+		private function closeHandler(event:MouseEvent = null):void
+		{
+			close();
+		}
+		
+		public function close():void
 		{
 			dispatchEvent(new MDIWindowEvent(MDIWindowEvent.CLOSE, this));
 		}
+		
 		
 		private function savePanel():void
 		{
@@ -427,8 +480,11 @@ package mdi.containers
 		 */
 		private function onTitleBarPress(event:MouseEvent):void
 		{
-			this.startDrag(false, new Rectangle(0, 0, parent.width - this.width, parent.height - this.height - 5));
-			systemManager.addEventListener(MouseEvent.MOUSE_UP, onTitleBarRelease);
+			if(this.windowState != MDIWindowState.MINIMIZED)
+			{
+				this.startDrag(false, new Rectangle(0, 0, parent.width - this.width, parent.height - this.height - 5));
+				systemManager.addEventListener(MouseEvent.MOUSE_UP, onTitleBarRelease);
+			}
 		}
 		
 		private function onTitleBarRelease(event:Event):void
@@ -437,7 +493,12 @@ package mdi.containers
 			systemManager.removeEventListener(MouseEvent.MOUSE_UP, onTitleBarRelease);
 		}
 		
-		private function onTitleBarClick(event:MouseEvent):void
+		private function onTitleBarClickHandler(event:MouseEvent):void
+		{
+			unMinimize();
+		}
+		
+		public function unMinimize():void
 		{
 			if(minimized)
 			{
@@ -615,11 +676,102 @@ package mdi.containers
 		{
 			_prevWindowState = _windowState;
 			_windowState = newState;
+			
+			updateContextMenu(_windowState);
 		}
 		
 		public function get minimized():Boolean
 		{
 			return _windowState == MDIWindowState.MINIMIZED;
+		}
+		
+		public function updateContextMenu(currentState:int):void
+		{
+			var defaultContextMenu : ContextMenu = new ContextMenu();
+				defaultContextMenu.hideBuiltInItems();
+			
+			var minimizeItem:ContextMenuItem = new ContextMenuItem("Minimize");
+		  		minimizeItem.addEventListener(ContextMenuEvent.MENU_ITEM_SELECT, menuItemSelectHandler);
+		  		minimizeItem.enabled = currentState != MDIWindowState.MINIMIZED;
+		  		defaultContextMenu.customItems.push(minimizeItem);	
+			
+			var maximizeItem:ContextMenuItem = new ContextMenuItem("Maximize");
+		  		maximizeItem.addEventListener(ContextMenuEvent.MENU_ITEM_SELECT, menuItemSelectHandler);
+		  		maximizeItem.enabled = currentState != MDIWindowState.MAXIMIZED;
+		  		defaultContextMenu.customItems.push(maximizeItem);	
+			
+			var restoreItem:ContextMenuItem = new ContextMenuItem("Restore");
+		  		restoreItem.addEventListener(ContextMenuEvent.MENU_ITEM_SELECT, menuItemSelectHandler);
+		  		restoreItem.enabled = currentState != MDIWindowState.NORMAL;
+		  		defaultContextMenu.customItems.push(restoreItem);	
+			
+			var closeItem:ContextMenuItem = new ContextMenuItem("Close");
+		  		closeItem.addEventListener(ContextMenuEvent.MENU_ITEM_SELECT, menuItemSelectHandler);
+		  		defaultContextMenu.customItems.push(closeItem);  
+	
+
+			var arrangeItem:ContextMenuItem = new ContextMenuItem("Auto Arrange");
+				arrangeItem.separatorBefore = true;
+		  		arrangeItem.addEventListener(ContextMenuEvent.MENU_ITEM_SELECT, menuItemSelectHandler);	
+		  		defaultContextMenu.customItems.push(arrangeItem);
+
+       	 	var arrangeFillItem:ContextMenuItem = new ContextMenuItem("Auto Arrange Fill");
+		  		arrangeFillItem.addEventListener(ContextMenuEvent.MENU_ITEM_SELECT, menuItemSelectHandler);  	
+		  		defaultContextMenu.customItems.push(arrangeFillItem);   
+               	
+            var cascadeItem:ContextMenuItem = new ContextMenuItem("Cascade");
+		  		cascadeItem.addEventListener(ContextMenuEvent.MENU_ITEM_SELECT, menuItemSelectHandler);
+		  		defaultContextMenu.customItems.push(cascadeItem);                     	
+			
+			var showAllItem:ContextMenuItem = new ContextMenuItem("Show All Windows");
+		  		showAllItem.addEventListener(ContextMenuEvent.MENU_ITEM_SELECT, menuItemSelectHandler);
+		  		defaultContextMenu.customItems.push(showAllItem);  
+			
+        	this.contextMenu = defaultContextMenu;
+
+		}
+		
+		private function menuItemSelectHandler(event:ContextMenuEvent):void
+		{
+			switch(event.target.caption)
+			{
+				case("Minimize"):
+					minimize();
+				break;
+				
+				case("Maximize"):
+					maximize();
+				break;
+				
+				case("Restore"):
+					if(this.windowState == MDIWindowState.MINIMIZED){
+						unMinimize()();
+					}else if(this.windowState == MDIWindowState.MAXIMIZED){
+						maximizeRestore();
+					}	
+				break;
+				
+				case("Close"):
+					close();
+				break;
+				
+				case("Auto Arrange"):
+					this.windowManager.tile(false, this.windowManager.tilePadding);
+				break;
+				
+				case("Auto Arrange Fill"):
+					this.windowManager.tile(true, this.windowManager.tilePadding);
+				break;
+				
+				case("Cascade"):
+					this.windowManager.cascade();
+				break;
+				
+				case("Show All Windows"):
+					this.windowManager.showAllWindows();
+				break;
+
+			}
 		}
 	}
 }

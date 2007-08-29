@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" layout="horizontal">
-	<mx:Style source="/assets/css/styles.css" />
+	<mx:Style source="/assets/css/style.css" />
 	<mx:Script>
 		<![CDATA[
 			import mx.utils.ObjectUtil;

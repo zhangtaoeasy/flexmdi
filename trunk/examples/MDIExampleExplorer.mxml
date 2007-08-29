@@ -3,7 +3,7 @@
     horizontalAlign="left" paddingLeft="0" paddingTop="0" 
     paddingBottom="0" paddingRight="0" layout="absolute" 
 	backgroundColor="#343434" xmlns:explorer="explorer.*" 
-	initialize="StyleManager.loadStyleDeclarations('assets/css/explorer.swf')">
+	initialize="StyleManager.loadStyleDeclarations('assets/css/style.swf')">
 	
 
 	

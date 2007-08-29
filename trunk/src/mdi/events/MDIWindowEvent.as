@@ -34,8 +34,8 @@ package mdi.events
 		public static const MAXIMIZE:String = "maximize";
 		public static const CLOSE:String = "close";
 		
-		public static const FOCUS_IN:String = "focusIn";
-		public static const FOCUS_OUT:String = "focusOut";
+		public static const FOCUS_START:String = "focusStart";
+		public static const FOCUS_END:String = "focusEnd";
 		public static const MOVE:String = "move";
 		public static const RESIZE_START:String = "resizeStart";
 		public static const RESIZE:String = "resize";

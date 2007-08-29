@@ -46,6 +46,7 @@ package mdi.managers
 	import mx.events.ResizeEvent;
 	import mx.managers.PopUpManager;
 	import mx.utils.ArrayUtil;
+	import flash.events.Event;
 	
 	
 	public class MDIManager extends EventDispatcher
@@ -208,36 +209,66 @@ package mdi.managers
 		}
 		
 		
-		
-		private function windowMoveEventHandler(event:MDIWindowEvent):void
+		private function windowEventHandler(event:MDIWindowEvent):void
 		{
-			this.effects.playMoveEffects(event.window,this);
-		}
+			switch( event.type )
+			{
+				case MDIWindowEvent.CLOSE:
+					removeTileInstance(event.window);
+					this.effects.playCloseEffects(event.window,this,this.remove);
+				break;
+				
+				case MDIWindowEvent.FOCUS_IN:
+					this.effects.playFocusInEffects(event.window,this);
+				break;
+				
+				case MDIWindowEvent.FOCUS_OUT:
+					this.effects.playFocusOutEffects(event.window,this);
+				break;
+				
+				case MDIWindowEvent.MAXIMIZE:
+					removeTileInstance(event.window);
+					maximizeWindow(event.window);
+				break;
+				
+				case MDIWindowEvent.MINIMIZE:
+					var maxTiles:int = Math.floor(this.container.width / (this.tileMinimizeWidth + this.tilePadding));
+					var xPos:Number = getLeftOffsetPosition(this.tiledWindows.length, maxTiles, this.tileMinimizeWidth, this.minTilePadding);
+					var yPos:Number = this.container.height - getBottomTilePosition(this.tiledWindows.length, maxTiles, event.window.minimizeHeight, this.minTilePadding);
+					var minimizePoint:Point = new Point(xPos, yPos);
+					this.effects.playMinimizeEffects(event.window, this, minimizePoint);
+					this.tiledWindows.addItem(event.window);
+			
+					reTileWindows();
+				break;
+	
+				case MDIWindowEvent.MOVE:
+					this.effects.playMoveEffects(event.window,this);
+				break;
+				
+				case MDIWindowEvent.RESIZE:
+					this.effects.playResizeEffects(event.window,this);
+				break;
+				
+				case MDIWindowEvent.RESIZE_END:
+					// future implementation of a resize end
+				break;
+				
+				case MDIWindowEvent.RESIZE_START:
+					// future implementation of resize start
+				break;
+				
+				case MDIWindowEvent.RESTORE:
+					removeTileInstance(event.window);
+					var restorePoint:Point = new Point(event.window.dragStartPanelX, event.window.dragStartPanelY);
+					this.effects.playRestoreEffects(event.window, this, restorePoint);
+				break;
 
-		private function windowResizeEventHandler(event:MDIWindowEvent):void
-		{
-			this.effects.playResizeEffects(event.window,this);
+			}
+			
 		}
 		
-		private function windowFocusInEventHandler(event:MDIWindowEvent):void
-		{
-			this.effects.playFocusInEffects(event.window,this);
-		}
 		
-		private function windowFocusOutEventHandler(event:MDIWindowEvent):void
-		{
-			this.effects.playFocusOutEffects(event.window,this);
-		}
-		
-		private function windowResizeStartEventHandler(event:MDIWindowEvent):void
-		{
-			// implement minimize functionality
-		}
-		
-		private function windowResizeEndEventHandler(event:MDIWindowEvent):void
-		{
-			// implement minimize funrighctionality
-		}
 		
 		/**
 		 * Handles resizing of container to reposition elements
@@ -345,53 +376,7 @@ package mdi.managers
 			}	
 		}
 		
-		
-		/**
-		 * Minimizing of Window
-		 * 
-		 *  @param event MDIWindowEvent instance containing even type and window instance that is being handled
-		 * 
-		 * */
-		private function windowMinimizeHandler(event:MDIWindowEvent):void
-		{
-			var maxTiles:int = Math.floor(this.container.width / (this.tileMinimizeWidth + this.tilePadding));
-			var xPos:Number = getLeftOffsetPosition(this.tiledWindows.length, maxTiles, this.tileMinimizeWidth, this.minTilePadding);
-			var yPos:Number = this.container.height - getBottomTilePosition(this.tiledWindows.length, maxTiles, event.window.minimizeHeight, this.minTilePadding);
-			var minimizePoint:Point = new Point(xPos, yPos);
-			this.effects.playMinimizeEffects(event.window, this, minimizePoint);
-			this.tiledWindows.addItem(event.window);
-			
-			reTileWindows()
-		}
-		
-		
-		/**
-		 * Restoring of Window
-		 * 
-		 *  @param event MDIWindowEvent instance containing even type and window instance that is being handled
-		 * 
-		 * */
-		private function windowRestoreEventHandler(event:MDIWindowEvent):void
-		{
-			removeTileInstance(event.window);
-			
-			var restorePoint:Point = new Point(event.window.dragStartPanelX, event.window.dragStartPanelY);
-			this.effects.playRestoreEffects(event.window, this, restorePoint);
-		}
-		
-		
-		/**
-		 * Handler for window maximize event... passes to maximizeWindow
-		 * 
-		 *  @param event MDIWindowEvent instance containing even type and window instance that is being handled
-		 * 
-		 **/
-		private function windowMaximizeEventHandler(event:MDIWindowEvent):void
-		{
-			removeTileInstance(event.window);
-			maximizeWindow(event.window);
-		}
-		
+	
 		
 		/**
 		 * Maximizing of Window
@@ -408,19 +393,7 @@ package mdi.managers
 				this.effects.playMaximizeEffects(window, this);
 		}
 		
-		
-		/**
-		 * Closing of Window
-		 * 
-		 *  @param event MDIWindowEvent instance containing even type and window instance that is being handled
-		 * 
-		 * */
-		private function windowCloseEventHandler(event:MDIWindowEvent):void
-		{
-			removeTileInstance(event.window);
-			this.effects.playCloseEffects(event.window,this,this.remove);
-		}
-		
+
 		
 		/**
 		 * Removes the closed window from the ArrayCollection of tiled windows
@@ -512,16 +485,16 @@ package mdi.managers
 		private function addListeners(window:MDIWindow):void
 		{
 					
-			window.addEventListener(MDIWindowEvent.MOVE, this.windowMoveEventHandler );
-			window.addEventListener(MDIWindowEvent.RESIZE, this.windowResizeEventHandler);
-			window.addEventListener(MDIWindowEvent.FOCUS_IN, this.windowFocusInEventHandler);
-			window.addEventListener(MDIWindowEvent.FOCUS_OUT, this.windowFocusOutEventHandler);
-			window.addEventListener(MDIWindowEvent.MINIMIZE,this.windowMinimizeHandler);
-			window.addEventListener(MDIWindowEvent.RESTORE,this.windowRestoreEventHandler);
-			window.addEventListener(MDIWindowEvent.MAXIMIZE,this.windowMaximizeEventHandler);
-			window.addEventListener(MDIWindowEvent.CLOSE,this.windowCloseEventHandler);
-			window.addEventListener(MDIWindowEvent.RESIZE_END,this.windowResizeEndEventHandler);
-			window.addEventListener(MDIWindowEvent.RESIZE_START,this.windowResizeStartEventHandler); 
+			window.addEventListener(MDIWindowEvent.MOVE, this.windowEventHandler );
+			window.addEventListener(MDIWindowEvent.RESIZE, this.windowEventHandler);
+			window.addEventListener(MDIWindowEvent.FOCUS_IN, this.windowEventHandler);
+			window.addEventListener(MDIWindowEvent.FOCUS_OUT, this.windowEventHandler);
+			window.addEventListener(MDIWindowEvent.MINIMIZE,this.windowEventHandler);
+			window.addEventListener(MDIWindowEvent.RESTORE,this.windowEventHandler);
+			window.addEventListener(MDIWindowEvent.MAXIMIZE,this.windowEventHandler);
+			window.addEventListener(MDIWindowEvent.CLOSE,this.windowEventHandler);
+			window.addEventListener(MDIWindowEvent.RESIZE_END,this.windowEventHandler);
+			window.addEventListener(MDIWindowEvent.RESIZE_START,this.windowEventHandler); 
 		}
 
 
@@ -533,16 +506,16 @@ package mdi.managers
 		 */
 		private function removeListeners(window:MDIWindow):void
 		{
-			window.removeEventListener(MDIWindowEvent.MOVE, this.windowMoveEventHandler );
-			window.removeEventListener(MDIWindowEvent.RESIZE, this.windowResizeEventHandler);
-			window.removeEventListener(MDIWindowEvent.FOCUS_IN, this.windowFocusInEventHandler);
-			window.removeEventListener(MDIWindowEvent.FOCUS_OUT, this.windowFocusOutEventHandler);
-			window.removeEventListener(MDIWindowEvent.MINIMIZE,this.windowMinimizeHandler);
-			window.removeEventListener(MDIWindowEvent.RESTORE,this.windowRestoreEventHandler);
-			window.removeEventListener(MDIWindowEvent.MAXIMIZE,this.windowMaximizeEventHandler);
-			window.removeEventListener(MDIWindowEvent.CLOSE,this.windowCloseEventHandler);
-			window.removeEventListener(MDIWindowEvent.RESIZE_END,this.windowResizeEndEventHandler);
-			window.removeEventListener(MDIWindowEvent.RESIZE_START,this.windowResizeStartEventHandler); 
+			window.removeEventListener(MDIWindowEvent.MOVE, this.windowEventHandler );
+			window.removeEventListener(MDIWindowEvent.RESIZE, this.windowEventHandler);
+			window.removeEventListener(MDIWindowEvent.FOCUS_IN, this.windowEventHandler);
+			window.removeEventListener(MDIWindowEvent.FOCUS_OUT, this.windowEventHandler);
+			window.removeEventListener(MDIWindowEvent.MINIMIZE,this.windowEventHandler);
+			window.removeEventListener(MDIWindowEvent.RESTORE,this.windowEventHandler);
+			window.removeEventListener(MDIWindowEvent.MAXIMIZE,this.windowEventHandler);
+			window.removeEventListener(MDIWindowEvent.CLOSE,this.windowEventHandler);
+			window.removeEventListener(MDIWindowEvent.RESIZE_END,this.windowEventHandler);
+			window.removeEventListener(MDIWindowEvent.RESIZE_START,this.windowEventHandler); 
 		}
 		
 		

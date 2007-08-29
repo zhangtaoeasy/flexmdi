@@ -112,7 +112,6 @@ package mdi.managers
 			this.windowList.push(window);
 			
 			this.addContextMenu(window);
-
 			
 			if(this.isGlobal)
 			{
@@ -129,8 +128,9 @@ package mdi.managers
 					this.bringToFront(window);
 				}
 			} 		
-
-			this.effects.playShowEffects(window,this);
+			
+			window.setMDIWindowFocus();
+			this.effects.playShowEffects(window, this);
 		}
 		
 		/**
@@ -223,10 +223,12 @@ package mdi.managers
 					break;
 					
 					case MDIWindowEvent.FOCUS_START:
+						winEvent.window.styleName = "mdiWindowFocus";
 						this.effects.playFocusInEffects(winEvent.window, this);
 					break;
 					
 					case MDIWindowEvent.FOCUS_END:
+						winEvent.window.styleName = "mdiWindowNoFocus";
 						this.effects.playFocusOutEffects(winEvent.window, this);
 					break;
 					
@@ -488,16 +490,17 @@ package mdi.managers
 		
 		private function addListeners(window:MDIWindow):void
 		{
-			window.addEventListener(MDIWindowEvent.MOVE, this.windowEventHandler );
-			window.addEventListener(MDIWindowEvent.RESIZE, this.windowEventHandler);
-			window.addEventListener(MDIWindowEvent.FOCUS_START, this.windowEventHandler);
-			window.addEventListener(MDIWindowEvent.FOCUS_END, this.windowEventHandler);
 			window.addEventListener(MDIWindowEvent.MINIMIZE, this.windowEventHandler);
 			window.addEventListener(MDIWindowEvent.RESTORE, this.windowEventHandler);
 			window.addEventListener(MDIWindowEvent.MAXIMIZE, this.windowEventHandler);
 			window.addEventListener(MDIWindowEvent.CLOSE, this.windowEventHandler);
+			
+			window.addEventListener(MDIWindowEvent.FOCUS_START, this.windowEventHandler);
+			window.addEventListener(MDIWindowEvent.FOCUS_END, this.windowEventHandler);
+			window.addEventListener(MDIWindowEvent.MOVE, this.windowEventHandler);
+			window.addEventListener(MDIWindowEvent.RESIZE_START, this.windowEventHandler);
+			window.addEventListener(MDIWindowEvent.RESIZE, this.windowEventHandler);
 			window.addEventListener(MDIWindowEvent.RESIZE_END, this.windowEventHandler);
-			window.addEventListener(MDIWindowEvent.RESIZE_START, this.windowEventHandler); 
 		}
 
 
@@ -509,16 +512,17 @@ package mdi.managers
 		 */
 		private function removeListeners(window:MDIWindow):void
 		{
-			window.removeEventListener(MDIWindowEvent.MOVE, this.windowEventHandler );
-			window.removeEventListener(MDIWindowEvent.RESIZE, this.windowEventHandler);
+			window.removeEventListener(MDIWindowEvent.MINIMIZE, this.windowEventHandler);
+			window.removeEventListener(MDIWindowEvent.RESTORE, this.windowEventHandler);
+			window.removeEventListener(MDIWindowEvent.MAXIMIZE, this.windowEventHandler);
+			window.removeEventListener(MDIWindowEvent.CLOSE, this.windowEventHandler);
+			
 			window.removeEventListener(MDIWindowEvent.FOCUS_START, this.windowEventHandler);
 			window.removeEventListener(MDIWindowEvent.FOCUS_END, this.windowEventHandler);
-			window.removeEventListener(MDIWindowEvent.MINIMIZE,this.windowEventHandler);
-			window.removeEventListener(MDIWindowEvent.RESTORE,this.windowEventHandler);
-			window.removeEventListener(MDIWindowEvent.MAXIMIZE,this.windowEventHandler);
-			window.removeEventListener(MDIWindowEvent.CLOSE,this.windowEventHandler);
-			window.removeEventListener(MDIWindowEvent.RESIZE_END,this.windowEventHandler);
-			window.removeEventListener(MDIWindowEvent.RESIZE_START,this.windowEventHandler); 
+			window.removeEventListener(MDIWindowEvent.MOVE, this.windowEventHandler);
+			window.removeEventListener(MDIWindowEvent.RESIZE_START, this.windowEventHandler);
+			window.removeEventListener(MDIWindowEvent.RESIZE, this.windowEventHandler);	
+			window.removeEventListener(MDIWindowEvent.RESIZE_END, this.windowEventHandler);
 		}
 		
 		

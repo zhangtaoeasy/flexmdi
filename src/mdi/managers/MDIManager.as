@@ -33,26 +33,19 @@ package mdi.managers
 	import flash.ui.ContextMenuItem;
 	
 	import mdi.containers.MDIWindow;
-	import mdi.events.MDIWindowEvent;
+	import mdi.containers.MDIWindowState;
 	import mdi.effects.IMDIEffectsDescriptor;
 	import mdi.effects.MDIBaseEffects;
+	import mdi.effects.effectClasses.MDIGroupEffectItem;
+	import mdi.events.MDIWindowEvent;
 	
-	import mx.containers.Panel;
-	import mx.controls.Alert;
+	import mx.collections.ArrayCollection;
 	import mx.core.Application;
-	import mx.core.Container;
 	import mx.core.IFlexDisplayObject;
 	import mx.core.UIComponent;
-	import mx.effects.Effect;
-	import mx.effects.WipeDown;
-	import mx.utils.ArrayUtil;
-	import mx.core.IUIComponent;
+	import mx.events.ResizeEvent;
 	import mx.managers.PopUpManager;
-	import mx.managers.PopUpManagerChildList;
-
-	import mx.collections.ArrayCollection;
-	import mdi.effects.effectClasses.MDIGroupEffectItem;
-
+	import mx.utils.ArrayUtil;
 	
 	
 	public class MDIManager extends EventDispatcher
@@ -70,9 +63,11 @@ package mdi.managers
 		private var isGlobal : Boolean = false;
 
 		private var tiledWindows:ArrayCollection;
-		private var tileMinimize:Boolean = true;
-		private var tileMinimizeWidth:int = 200;
-		private var showMinimizedTiles:Boolean = true;
+		public var tileMinimize:Boolean = true;
+		public var tileMinimizeWidth:int = 200;
+		public var showMinimizedTiles:Boolean = false;
+		public var tilePadding:Number = 8;
+		public var minTilePadding:Number = 5;
 		
 		public var effects : IMDIEffectsDescriptor = new MDIBaseEffects();
 		
@@ -85,7 +80,8 @@ package mdi.managers
 			if( effects != null)
 				this.effects = effects;
 			if(tileMinimize)
-				tiledWindows = new ArrayCollection();	
+				tiledWindows = new ArrayCollection();
+			this.container.addEventListener(ResizeEvent.RESIZE, containerResizeHandler);
 		}
 		
 		
@@ -120,7 +116,7 @@ package mdi.managers
 			if(this.isGlobal)
 			{
 				PopUpManager.addPopUp( window,Application.application as DisplayObject);
-				
+				this.position(window);
 			}
 			else
 			{
@@ -132,11 +128,8 @@ package mdi.managers
 					this.bringToFront(window);
 				}
 			} 		
-	
-			this.position(window); 
 
 			this.effects.playShowEffects(window,this);
-
 		}
 		
 		/**
@@ -162,25 +155,26 @@ package mdi.managers
 			{
 				var defaultContextMenu : ContextMenu = new ContextMenu();
 					defaultContextMenu.hideBuiltInItems();
+				
+				var arrangeItem:ContextMenuItem = new ContextMenuItem("Auto Arrange");
+			  		arrangeItem.addEventListener(ContextMenuEvent.MENU_ITEM_SELECT, menuItemSelectHandler);	
+			  		defaultContextMenu.customItems.push(arrangeItem);
 
-			
-				var item1:ContextMenuItem = new ContextMenuItem("Auto Arrange");
-			  		item1.addEventListener(ContextMenuEvent.MENU_ITEM_SELECT, menuItemSelectHandler);
-					defaultContextMenu.customItems.push(item1);
-
-           	 	var item2:ContextMenuItem = new ContextMenuItem("Auto Arrange Fill");
-			  		item2.addEventListener(ContextMenuEvent.MENU_ITEM_SELECT, menuItemSelectHandler);
-                   	defaultContextMenu.customItems.push(item2);  
+           	 	var arrangeFillItem:ContextMenuItem = new ContextMenuItem("Auto Arrange Fill");
+			  		arrangeFillItem.addEventListener(ContextMenuEvent.MENU_ITEM_SELECT, menuItemSelectHandler);  	
+			  		defaultContextMenu.customItems.push(arrangeFillItem);   
+                
+                var showAllItem:ContextMenuItem = new ContextMenuItem("Show All Windows");
+			  		showAllItem.addEventListener(ContextMenuEvent.MENU_ITEM_SELECT, menuItemSelectHandler);
+			  		defaultContextMenu.customItems.push(showAllItem);  
+                
+                var cascadeItem:ContextMenuItem = new ContextMenuItem("Cascade");
+			  		cascadeItem.addEventListener(ContextMenuEvent.MENU_ITEM_SELECT, menuItemSelectHandler);
+			  		defaultContextMenu.customItems.push(cascadeItem);  
+			  		
+			  	
                    	
-                var item3:ContextMenuItem = new ContextMenuItem("Cascade");
-			  		item3.addEventListener(ContextMenuEvent.MENU_ITEM_SELECT, menuItemSelectHandler);
-                   	defaultContextMenu.customItems.push(item3);
-                   	
-                var item4:ContextMenuItem = new ContextMenuItem("Close");
-			  		item4.addEventListener(ContextMenuEvent.MENU_ITEM_SELECT, menuItemSelectHandler);
-                   	defaultContextMenu.customItems.push(item4);  
-            	     
-            	window.contextMenu = defaultContextMenu;
+            	this.container.contextMenu = defaultContextMenu;
 			}
 			else
 			{	
@@ -192,25 +186,28 @@ package mdi.managers
 		
 		private function menuItemSelectHandler(event:ContextMenuEvent):void
 		{
+			var win:MDIWindow = event.contextMenuOwner as MDIWindow;
 			switch(event.target.caption)
-			{
+			{	
 				case("Auto Arrange"):
-					this.tile();
+					this.tile(false, this.tilePadding);
 				break;
 				
 				case("Auto Arrange Fill"):
-					this.tile(true);
+					this.tile(true, this.tilePadding);
 				break;
 				
 				case("Cascade"):
 					this.cascade();
 				break;
 				
-				case("Close"):
-					this.remove(event.contextMenuOwner as MDIWindow);
+				case("Show All Windows"):
+					this.showAllWindows();
 				break;
 			}
 		}
+		
+		
 		
 		private function windowMoveEventHandler(event:MDIWindowEvent):void
 		{
@@ -242,6 +239,17 @@ package mdi.managers
 			// implement minimize funrighctionality
 		}
 		
+		/**
+		 * Handles resizing of container to reposition elements
+		 * 
+		 *  @param event The ResizeEvent object from event dispatch
+		 * 
+		 * */
+		private function containerResizeHandler(event:ResizeEvent):void
+		{	
+			//repositions any minimized tiled windows to bottom left in their rows
+			reTileWindows();
+		}
 		
 		
 		
@@ -277,10 +285,13 @@ package mdi.managers
 		 * 	@param padding The padding accordance to place between minimized tile window instances
 		 * 
 		 * */
-		private function getBottomTilePosition(maxTiles:int, minWindowHeight:Number, padding:Number):Number
+		private function getBottomTilePosition(tileIndex:int, maxTiles:int, minWindowHeight:Number, padding:Number):Number
 		{
-			var numRows:int = Math.floor(this.tiledWindows.length / maxTiles);
-			return ((numRows + 1) * minWindowHeight) + ((numRows + 1) * padding);
+			var numRows:int = Math.floor(tileIndex / maxTiles);
+			if(numRows == 0)
+				return minWindowHeight + padding;
+			else
+				return ((numRows + 1) * minWindowHeight) + ((numRows + 1) * padding);
 		}
 		
 		
@@ -296,10 +307,10 @@ package mdi.managers
 		 * */
 		private function getBottomOffsetHeight(maxTiles:int, minWindowHeight:Number, padding:Number):Number
 		{
-			var numRows:int = Math.floor(this.tiledWindows.length / maxTiles);
+			var numRows:int = Math.ceil(this.tiledWindows.length / maxTiles);
 			//if we have some rows get their combined heights... if not, return 0 so maximized window takes up full height of container
-			if(numRows != 0)
-				return ((numRows + 1) * minWindowHeight) + ((numRows + 1) * padding);
+			if(this.tiledWindows.length != 0)
+				return ((numRows) * minWindowHeight) + ((numRows + 1) * padding);
 			else
 				return 0;
 		}
@@ -310,12 +321,25 @@ package mdi.managers
 		 * */
 		private function reTileWindows():void
 		{
-			var maxTiles:int = this.container.width / this.tileMinimizeWidth;
+			var maxTiles:int = Math.floor(this.container.width / (this.tileMinimizeWidth + this.tilePadding));
+			
+			//we've just removed/added a row from the tiles, so we tell any maximized windows to change their height
+			
+			if(this.tiledWindows.length % maxTiles == 0 || (this.tiledWindows.length - 1) % maxTiles == 0)
+			{
+				var openWins:Array = getOpenWindowList();
+				for(var winIndex:int = 0; winIndex < openWins.length; winIndex++)
+				{
+					if(MDIWindow(openWins[winIndex]).windowState == MDIWindowState.MAXIMIZED)
+						maximizeWindow(MDIWindow(openWins[winIndex]));
+				}
+			}
+			
 			for(var i:int = 0; i < tiledWindows.length; i++)
 			{
 				var currentWindow:MDIWindow = tiledWindows.getItemAt(i) as MDIWindow;
-				var xPos:Number = getLeftOffsetPosition(i, maxTiles, this.tileMinimizeWidth, 5);
-				var yPos:Number = this.container.height - getBottomTilePosition(maxTiles, currentWindow.minimizeHeight, 5);
+				var xPos:Number = getLeftOffsetPosition(i, maxTiles, this.tileMinimizeWidth, this.minTilePadding);
+				var yPos:Number = this.container.height - getBottomTilePosition(i, maxTiles, currentWindow.minimizeHeight, this.minTilePadding);
 				var movePoint:Point = new Point(xPos, yPos);
 				this.effects.reTileMinWindowsEffects(currentWindow, this, movePoint);
 			}	
@@ -330,12 +354,14 @@ package mdi.managers
 		 * */
 		private function windowMinimizeHandler(event:MDIWindowEvent):void
 		{
-			var maxTiles:int = this.container.width / this.tileMinimizeWidth;
-			var xPos:Number = getLeftOffsetPosition(this.tiledWindows.length, maxTiles, this.tileMinimizeWidth, 5);
-			var yPos:Number = this.container.height - getBottomTilePosition(maxTiles, event.window.minimizeHeight, 5);
+			var maxTiles:int = Math.floor(this.container.width / (this.tileMinimizeWidth + this.tilePadding));
+			var xPos:Number = getLeftOffsetPosition(this.tiledWindows.length, maxTiles, this.tileMinimizeWidth, this.minTilePadding);
+			var yPos:Number = this.container.height - getBottomTilePosition(this.tiledWindows.length, maxTiles, event.window.minimizeHeight, this.minTilePadding);
 			var minimizePoint:Point = new Point(xPos, yPos);
 			this.effects.playMinimizeEffects(event.window, this, minimizePoint);
 			this.tiledWindows.addItem(event.window);
+			
+			reTileWindows()
 		}
 		
 		
@@ -347,39 +373,39 @@ package mdi.managers
 		 * */
 		private function windowRestoreEventHandler(event:MDIWindowEvent):void
 		{
-			for(var i:int = 0; i < tiledWindows.length; i++)
-			{
-				if(tiledWindows.getItemAt(i) == event.window)
-				{
-					tiledWindows.removeItemAt(i);
-					reTileWindows();
-				}
-			}
+			removeTileInstance(event.window);
+			
 			var restorePoint:Point = new Point(event.window.dragStartPanelX, event.window.dragStartPanelY);
 			this.effects.playRestoreEffects(event.window, this, restorePoint);
 		}
 		
+		
 		/**
-		 * Maximizing of Window
+		 * Handler for window maximize event... passes to maximizeWindow
 		 * 
 		 *  @param event MDIWindowEvent instance containing even type and window instance that is being handled
 		 * 
-		 * */
+		 **/
 		private function windowMaximizeEventHandler(event:MDIWindowEvent):void
 		{
-			for(var i:int = 0; i < tiledWindows.length; i++)
-			{
-				if(tiledWindows.getItemAt(i) == event.window)
-				{
-					tiledWindows.removeItemAt(i);
-					reTileWindows();
-				}
-			}
+			removeTileInstance(event.window);
+			maximizeWindow(event.window);
+		}
+		
+		
+		/**
+		 * Maximizing of Window
+		 * 
+		 * @param window MDIWindowinstance to maximize
+		 * 
+		 **/
+		private function maximizeWindow(window:MDIWindow):void
+		{
 			var maxTiles:int = this.container.width / this.tileMinimizeWidth;
 			if(showMinimizedTiles)
-				this.effects.playMaximizeEffects(event.window,this,getBottomOffsetHeight(maxTiles, event.window.minimizeHeight, 5) + 5);
+				this.effects.playMaximizeEffects(window, this, getBottomOffsetHeight(maxTiles, window.minimizeHeight, this.minTilePadding));
 			else
-				this.effects.playMaximizeEffects(event.window,this);
+				this.effects.playMaximizeEffects(window, this);
 		}
 		
 		
@@ -391,7 +417,27 @@ package mdi.managers
 		 * */
 		private function windowCloseEventHandler(event:MDIWindowEvent):void
 		{
+			removeTileInstance(event.window);
 			this.effects.playCloseEffects(event.window,this,this.remove);
+		}
+		
+		
+		/**
+		 * Removes the closed window from the ArrayCollection of tiled windows
+		 * 
+		 *  @param event MDIWindowEvent instance containing even type and window instance that is being handled
+		 * 
+		 * */
+		private function removeTileInstance(window:MDIWindow):void
+		{
+			for(var i:int = 0; i < tiledWindows.length; i++)
+			{
+				if(tiledWindows.getItemAt(i) == window)
+				{
+					this.tiledWindows.removeItemAt(i);
+					reTileWindows();
+				}
+			}
 		}
 
 
@@ -480,10 +526,9 @@ package mdi.managers
 
 
 		/**
-		 * 	@private
+		 *  @private
 		 * 
-		 *  Removes listeners
-		 *  
+		 *  Removes listeners 
 		 *  @param window:MDIWindow 
 		 */
 		private function removeListeners(window:MDIWindow):void
@@ -592,77 +637,87 @@ package mdi.managers
 				
 			var numWindows:int = openWinList.length;
 			
-			var sqrt:int = Math.round(Math.sqrt(numWindows));
-			var numCols:int = Math.ceil(numWindows / sqrt);
-			var numRows:int = Math.ceil(numWindows / numCols);
-			var col:int = 0;
-			var row:int = 0;
-			var availWidth:Number = this.container.width;
-			var availHeight:Number = this.container.height;
-			var targetWidth:Number = availWidth / numCols - ((gap * (numCols - 1)) / numCols);
-			var targetHeight:Number = availHeight / numRows - ((gap * (numRows - 1)) / numRows);
-			
-			var effectItems : Array = [];
-				
-			for(var i:int = 0; i < openWinList.length; i++)
+			if(numWindows == 1)
 			{
-				
-				var win:MDIWindow = openWinList[i];
-				
-				var item : MDIGroupEffectItem = new MDIGroupEffectItem(win);
-				
-				item.widthTo = targetWidth;
-				item.heightTo = targetHeight;
-				
-				//win.width = targetWidth;
-				//win.height = targetHeight;
-				
-				if(i % numCols == 0 && i > 0)
-				{
-					row++;
-					col = 0;
-				}
-				else if(i > 0)
-				{
-					col++;
-				}
-
-				item.moveTo = new Point( (col * targetWidth), (row * targetHeight) ); 
-		
-				//pushing out by gap
-				if(col > 0) 
-					item.moveTo.x += gap * col;
-				
-				if(row > 0) 
-					item.moveTo.y += gap * row;
-
-				effectItems.push( item );
-
+				MDIWindow(openWinList[0]).maximizeRestore();
 			}
-			
-
-			if(col < numCols && fillAvailableSpace)
+			else if(numWindows > 1)
 			{
-				var numOrphans:int = numWindows % numCols;
-				var orphanWidth:Number = availWidth / numOrphans - ((gap * (numOrphans - 1)) / numOrphans);
-				//var orphanWidth:Number = availWidth / numOrphans;
-				var orphanCount:int = 0
-				for(var j:int = numWindows - numOrphans; j < numWindows; j++)
+				var sqrt:int = Math.round(Math.sqrt(numWindows));
+				var numCols:int = Math.ceil(numWindows / sqrt);
+				var numRows:int = Math.ceil(numWindows / numCols);
+				var col:int = 0;
+				var row:int = 0;
+				var availWidth:Number = this.container.width;
+				var availHeight:Number = this.container.height
+				
+				if(showMinimizedTiles)
+					availHeight = availHeight - getBottomOffsetHeight(this.tiledWindows.length, openWinList[0].minimizeHeight, this.minTilePadding);
+					
+				var targetWidth:Number = availWidth / numCols - ((gap * (numCols - 1)) / numCols);
+				var targetHeight:Number = availHeight / numRows - ((gap * (numRows - 1)) / numRows);
+				
+				var effectItems : Array = [];
+					
+				for(var i:int = 0; i < openWinList.length; i++)
 				{
-					//var orphan:MDIWindow = openWinList[j];
-					var orphan : MDIGroupEffectItem = effectItems[j];
 					
-					orphan.widthTo = orphanWidth;
-					//orphan.window.width = orphanWidth;
+					var win:MDIWindow = openWinList[i];
 					
-					orphan.moveTo.x = (j - (numWindows - numOrphans)) * orphanWidth;
-					if(orphanCount > 0) 
-						orphan.moveTo.x += gap * orphanCount;
-					orphanCount++;
-				}
-			} 
+					bringToFront(win)
+					
+					var item : MDIGroupEffectItem = new MDIGroupEffectItem(win);
+					
+					item.widthTo = targetWidth;
+					item.heightTo = targetHeight;
+
+					if(i % numCols == 0 && i > 0)
+					{
+						row++;
+						col = 0;
+					}
+					else if(i > 0)
+					{
+						col++;
+					}
+	
+					item.moveTo = new Point( (col * targetWidth), (row * targetHeight) ); 
 			
-			this.effects.playTileEffects( effectItems,this);
+					//pushing out by gap
+					if(col > 0) 
+						item.moveTo.x += gap * col;
+					
+					if(row > 0) 
+						item.moveTo.y += gap * row;
+	
+					effectItems.push( item );
+	
+				}
+				
+	
+				if(col < numCols && fillAvailableSpace)
+				{
+					var numOrphans:int = numWindows % numCols;
+					var orphanWidth:Number = availWidth / numOrphans - ((gap * (numOrphans - 1)) / numOrphans);
+					//var orphanWidth:Number = availWidth / numOrphans;
+					var orphanCount:int = 0
+					for(var j:int = numWindows - numOrphans; j < numWindows; j++)
+					{
+						//var orphan:MDIWindow = openWinList[j];
+						var orphan : MDIGroupEffectItem = effectItems[j];
+						
+						orphan.widthTo = orphanWidth;
+						//orphan.window.width = orphanWidth;
+						
+						orphan.moveTo.x = (j - (numWindows - numOrphans)) * orphanWidth;
+						if(orphanCount > 0) 
+							orphan.moveTo.x += gap * orphanCount;
+						orphanCount++;
+					}
+				} 
+				
+				this.effects.playTileEffects( effectItems,this);
+			}
 		}
 		
 		// set a min. width/height
@@ -676,31 +731,6 @@ package mdi.managers
 			if( h > window.height )
 				window.height=h;
 		}
-		
-		
-		
-		
-		
-		
-		
-		/**
-		 *  Maximizes a window to use all available space
-		 * 
-		 *  @param window:MDIWindow Window to maximize
-		 */
-		public function maximize(window:MDIWindow):void
-		{					
-			
-			window.x=10;
-			window.y=40;
-			window.width = this.container.width - 20;
-			window.height = this.container.height - 60;
-	
-			this.bringToFront(window);
-		}
-		
-		
-		
 		
 		
 		
@@ -720,7 +750,7 @@ package mdi.managers
 			{
 				var window : MDIWindow = windows[i] as MDIWindow;
 				
-				this.bringToFront(window);
+				bringToFront(window);
 					
 				var item : MDIGroupEffectItem = new MDIGroupEffectItem(window);
 		
@@ -734,6 +764,18 @@ package mdi.managers
 			}
 			
 			this.effects.playCascadeEffects( effectItems, this );
+		}
+		
+		
+		public function showAllWindows():void
+		{
+			for(var i:int = 0; i < tiledWindows.length; i++)
+			{
+				var currentWindow:MDIWindow = tiledWindows.getItemAt(i) as MDIWindow;
+				currentWindow.unMinimize();
+				tiledWindows.removeItemAt(i);
+				i--;
+			}
 		}
 		
 			

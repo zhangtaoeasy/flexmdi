@@ -19,7 +19,8 @@
 				win.title = "Global Window";
 				
 				win.addEventListener(MDIWindowEvent.RESIZE, this.windowResizeEventHandler);
-				win.addEventListener(MDIWindowEvent.FOCUS_IN, this.windowFocusEventHandler);
+				win.addEventListener(MDIWindowEvent.FOCUS_START, this.windowFocusEventHandler);
+				win.addEventListener(MDIWindowEvent.FOCUS_END, this.windowFocusEventHandler);
 				win.addEventListener(MDIWindowEvent.MINIMIZE,this.windowMinimizeHandler);
 				win.addEventListener(MDIWindowEvent.RESTORE,this.windowRestoreEventHandler);
 				win.addEventListener(MDIWindowEvent.MAXIMIZE,this.windowMaximizeEventHandler);
@@ -31,39 +32,39 @@
 				MDIManager.global.add(win); 
 			}
 			
-			private function windowMoveEventHandler(event:MDIWindowEvent):void
+			private function windowMoveEventHandler(event:Event):void
 			{
 				this.output.text += ObjectUtil.toString(event.type) + " ";
 			}
-			private function windowResizeEventHandler(event:MDIWindowEvent):void
+			private function windowResizeEventHandler(event:Event):void
 			{
 				this.output.text += ObjectUtil.toString(event.type) + " ";
 			}
-			private function windowFocusEventHandler(event:MDIWindowEvent):void
+			private function windowFocusEventHandler(event:Event):void
 			{
 				this.output.text += ObjectUtil.toString(event.type) + " ";
 			}
-			private function windowResizeStartEventHandler(event:MDIWindowEvent):void
+			private function windowResizeStartEventHandler(event:Event):void
 			{
 				this.output.text += ObjectUtil.toString(event.type) + " ";
 			}
-			private function windowResizeEndEventHandler(event:MDIWindowEvent):void
+			private function windowResizeEndEventHandler(event:Event):void
 			{
 				this.output.text +=  ObjectUtil.toString(event.type) + " ";
 			}
-			private function windowMinimizeHandler(event:MDIWindowEvent):void
+			private function windowMinimizeHandler(event:Event):void
 			{
 				this.output.text +=  ObjectUtil.toString(event.type) + " ";
 			}
-			private function windowRestoreEventHandler(event:MDIWindowEvent):void
+			private function windowRestoreEventHandler(event:Event):void
 			{
 				this.output.text +=  ObjectUtil.toString(event.type) + " ";
 			}
-			private function windowMaximizeEventHandler(event:MDIWindowEvent):void
+			private function windowMaximizeEventHandler(event:Event):void
 			{
 				this.output.text +=  ObjectUtil.toString(event.type) + " ";
 			}
-			private function windowCloseEventHandler(event:MDIWindowEvent):void
+			private function windowCloseEventHandler(event:Event):void
 			{
 				this.output.text +=  ObjectUtil.toString(event.type) + " ";
 			}

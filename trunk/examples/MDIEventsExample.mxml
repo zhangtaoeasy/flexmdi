@@ -17,7 +17,8 @@
 				win.title = "Global Window";
 				
 				win.addEventListener(MDIWindowEvent.RESIZE, this.windowResizeEventHandler);
-				win.addEventListener(MDIWindowEvent.FOCUS_IN, this.windowFocusEventHandler);
+				win.addEventListener(MDIWindowEvent.FOCUS_START, this.windowFocusEventHandler);
+				win.addEventListener(MDIWindowEvent.FOCUS_END, this.windowFocusEventHandler);
 				win.addEventListener(MDIWindowEvent.MINIMIZE,this.windowMinimizeHandler);
 				win.addEventListener(MDIWindowEvent.RESTORE,this.windowRestoreEventHandler);
 				win.addEventListener(MDIWindowEvent.MAXIMIZE,this.windowMaximizeEventHandler);

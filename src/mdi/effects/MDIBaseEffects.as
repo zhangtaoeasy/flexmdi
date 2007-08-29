@@ -110,7 +110,7 @@ package mdi.effects
 		{
 			for each(var item : MDIGroupEffectItem  in items)
 			{	
-
+				manager.bringToFront(item.window);
 				var move : Move = new Move(item.window);
 					move.xTo = item.moveTo.x;
 					move.yTo = item.moveTo.y;

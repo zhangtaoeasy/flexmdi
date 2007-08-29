@@ -39,9 +39,7 @@ package mdi.containers
 	import mx.controls.Button;
 	import mx.core.UIComponent;
 	import mx.events.FlexEvent;
-	import mx.managers.CursorManager;
-	
-	
+	import mx.managers.CursorManager;	
 	
 	
 	//--------------------------------------
@@ -189,9 +187,9 @@ package mdi.containers
 			minWidth = 200;
 			minHeight = 200;
 			windowState = MDIWindowState.NORMAL;
+			styleName = "mdiWindowFocus";
 			
-			this.addEventListener(FlexEvent.CREATION_COMPLETE, componentComplete);
-			
+			this.addEventListener(FlexEvent.CREATION_COMPLETE, componentComplete);			
 		}
 		
 		private function componentComplete(event:FlexEvent):void
@@ -290,19 +288,19 @@ package mdi.containers
 				minimizeBtn = new Button();
 				minimizeBtn.width = 10;
 				minimizeBtn.height = 10;
-				minimizeBtn.styleName ="minimizeBtn";
+				minimizeBtn.styleName = "minimizeBtn";
 				controls.push(minimizeBtn);
 				
 				maximizeRestoreBtn = new Button();
 				maximizeRestoreBtn.width = 10;
 				maximizeRestoreBtn.height = 10;
-				maximizeRestoreBtn.styleName ="increaseBtn";
+				maximizeRestoreBtn.styleName = "increaseBtn";
 				controls.push(maximizeRestoreBtn);
 				
 				closeBtn = new Button();
 				closeBtn.width = 10;
 				closeBtn.height = 10;
-				closeBtn.styleName ="closeBtn";
+				closeBtn.styleName = "closeBtn";
 				controls.push(closeBtn);				
 			}
 			
@@ -413,10 +411,11 @@ package mdi.containers
 			this.addEventListener(MouseEvent.MOUSE_DOWN, setMDIWindowFocus);
 		}
 		
-		private function setMDIWindowFocus(event:Event):void
+		public function setMDIWindowFocus(event:Event = null):void
 		{
 			if(parent.getChildIndex(this) != parent.numChildren - 1)
 			{
+				dispatchEvent(new MDIWindowEvent(MDIWindowEvent.FOCUS_END, parent.getChildAt(parent.numChildren - 1) as MDIWindow));
 				dispatchEvent(new MDIWindowEvent(MDIWindowEvent.FOCUS_START, this));
 			}
 			parent.setChildIndex(this, parent.numChildren - 1);

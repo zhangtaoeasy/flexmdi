@@ -2,34 +2,115 @@
 <mx:Application xmlns:mx="http://www.adobe.com/2006/mxml"  horizontalGap="0" width="100%" height="100%"  
     horizontalAlign="left" paddingLeft="0" paddingTop="0" 
     paddingBottom="0" paddingRight="0" layout="absolute" 
-	backgroundColor="#343434" xmlns:explorer="explorer.*">
+	backgroundColor="#343434" xmlns:explorer="explorer.*" 
+	initialize="StyleManager.loadStyleDeclarations('assets/css/explorer.swf')">
 	
-	<mx:Style source="/assets/css/explorer.css" />
+
+	
+	
+	<mx:Script>
+		<![CDATA[
+			import mdi.effects.MDIBaseEffects;
+		
+			import mdi.managers.MDIManager;
+			import mdi.containers.MDIWindow;
+			import mdi.effects.effectsLib.MDIVistaEffectsDescriptor;
+			
+			public function addGlobalWindow():void
+			{
+				var win : MDIWindow = new MDIWindow();
+				win.title = "Mngd. by Global Instance (" + MDIManager.global.windowList.length + ")";
+				win.width = 400;
+				win.height = 300;
+				
+				
+				// the global manager is accessed by using MDIManager.global 
+				MDIManager.global.add(win);
+				
+			}
+			
+			[Bindable]
+            public var stylesList: Array = [ {label:"Default"}, {label:"Noir"} ];
+		
+			
+			public function onChangeStyle():void
+			{
+				switch(this.styleCombo.selectedItem.label)
+				{	
+					case "Default":
+						StyleManager.loadStyleDeclarations('assets/css/default.swf')
+					break;
+					case "Vista":
+						StyleManager.loadStyleDeclarations('assets/css/explorer.swf')
+					break;
+					
+				}
+			}
+			
+			
+			[Bindable]
+            public var effectsList: Array = [ {label:"Default"}, {label:"Vista"} ];
+		
+			
+			
+			public function onChangeEffects():void
+			{
+				switch(this.effectsCombo.selectedItem.label)
+				{	
+					case "Default":
+						MDIManager.global.effects = new MDIBaseEffects();
+					break;
+					case "Vista":
+						MDIManager.global.effects = new MDIVistaEffectsDescriptor();
+					break;
+					
+				}
+			
+				//MDIManager.global.effects = new MDIVistaEffectsDescriptor();
+			}
+			
+			
+		]]>
+	</mx:Script>
+	
+	
+	
+	<mx:ApplicationControlBar dock="true" width="100%">
+		<mx:Text text="(MDI) Multiple Document Interface Explorer" />
+		<mx:Button click="addGlobalWindow()" label="Add Global Window" />
+		<mx:Button click="MDIManager.global.cascade()" label="Cascade" />
+		<mx:Button click="MDIManager.global.tile(tileFill.selected, Number(gapValue.text))" label="Tile" />
+		<mx:FormItem label="Tile Gap">
+			<mx:TextInput id="gapValue" width="30" color="#000000" change="MDIManager.global.tile(tileFill.selected, Number(gapValue.text))" />
+		</mx:FormItem>
+		<mx:CheckBox label="Fill" id="tileFill" change="MDIManager.global.tile(tileFill.selected, Number(gapValue.text))" />
+		<mx:Spacer width="100%" />
+		
+		<mx:Label text="Style" />
+		<mx:ComboBox id="styleCombo" dataProvider="{this.stylesList}" change="onChangeStyle()" />
+		
+		<mx:Label text="Effects" />
+		<mx:ComboBox id="effectsCombo" dataProvider="{this.effectsList}" change="onChangeEffects()" />
+		
+	</mx:ApplicationControlBar>
+	
+	
+	
+	
 	
 	<mx:HBox width="100%" height="100%">
 		
-		<mx:VBox backgroundColor="#565656" width="20%" height="100%"  horizontalAlign="right" styleName="padded">
+		<mx:VBox backgroundColor="#565656" width="30%" height="100%"  horizontalAlign="right" styleName="padded" borderSides="">
 		
-			<mx:Text condenseWhite="true" width="100%">
-				<mx:htmlText><![CDATA[ <b>Multiple Document Interface Explorer</b> ]]></mx:htmlText>
-			</mx:Text>
-
-			<mx:LinkBar dataProvider="{this.viewstack}" width="100%" direction="vertical" />
+			
 			
 		</mx:VBox>
 	
-		<mx:VRule height="100%" />
-	
-		<mx:ViewStack id="viewstack" width="80%" height="100%" horizontalGap="20">
+		<mx:VRule height="100%" width="1" />
+		
+		<explorer:LocalMgrExplorer label="Local Instance" width="70%" height="100%" styleName="padded"  />
 
-			<explorer:GlobalMgrExplorer label="Global Instance" width="100%" height="100%" styleName="padded"  />
-			<explorer:LocalMgrExplorer label="Local Instance" width="100%" height="100%" styleName="padded"  />
-			<explorer:WindowEventWatcher label="Window Events" width="100%" height="100%" styleName="padded" />
-			<explorer:EffectsExplorer label="Effects" width="100%" height="100%" styleName="padded" />
-		</mx:ViewStack>
-		
-		
-	</mx:HBox>
+	</mx:HBox> 
 	
 	
 	

@@ -23,6 +23,8 @@
 				// the global manager is accessed by using MDIManager.global 
 				MDIManager.global.add(win);
 			}
+			
+			
 		]]>
 	</mx:Script>
 	

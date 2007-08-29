@@ -24,10 +24,10 @@ SOFTWARE.
 
 package mdi.containers
 {
+	import flash.events.ContextMenuEvent;
 	import flash.events.Event;
 	import flash.events.MouseEvent;
 	import flash.geom.Rectangle;
-	import flash.events.ContextMenuEvent;
 	import flash.ui.ContextMenu;
 	import flash.ui.ContextMenuItem;
 	
@@ -53,7 +53,7 @@ package mdi.containers
 	 *
 	 *  @eventType mdi.events.MDIWindowEvent.MINIMIZE
 	 */
-	[Event(name="mdiMinimize", type="mdi.events.MDIWindowEvent")]
+	[Event(name="minimize", type="mdi.events.MDIWindowEvent")]
 	
 	/**
 	 *  If the window is minimized, this event is dispatched when the titleBar is clicked. 
@@ -62,7 +62,7 @@ package mdi.containers
 	 *
 	 *  @eventType mdi.events.MDIWindowEvent.RESTORE
 	 */
-	[Event(name="mdiRestore", type="mdi.events.MDIWindowEvent")]
+	[Event(name="restore", type="mdi.events.MDIWindowEvent")]
 	
 	/**
 	 *  Dispatched when the maximize button is clicked or when the window is in a
@@ -70,14 +70,57 @@ package mdi.containers
 	 *
 	 *  @eventType mdi.events.MDIWindowEvent.MAXIMIZE
 	 */
-	[Event(name="mdiMaximize", type="mdi.events.MDIWindowEvent")]
+	[Event(name="maximize", type="mdi.events.MDIWindowEvent")]
 	
 	/**
 	 *  Dispatched when the minimize button is clicked.
 	 *
 	 *  @eventType mdi.events.MDIWindowEvent.CLOSE
 	 */
-	[Event(name="mdiClose", type="mdi.events.MDIWindowEvent")]
+	[Event(name="close", type="mdi.events.MDIWindowEvent")]
+	
+	/**
+	 *  Dispatched when the window gains focus and is given topmost z-index of MDIManager's children.
+	 *
+	 *  @eventType mdi.events.MDIWindowEvent.FOCUS_IN
+	 */
+	[Event(name="focusIn", type="mdi.events.MDIWindowEvent")]
+	
+	/**
+	 *  Dispatched when the window loses focus and no longer has topmost z-index of MDIManager's children.
+	 *
+	 *  @eventType mdi.events.MDIWindowEvent.FOCUS_OUT
+	 */
+	[Event(name="focusOut", type="mdi.events.MDIWindowEvent")]
+	
+	/**
+	 *  Dispatched while the window is being dragged.
+	 *
+	 *  @eventType mdi.events.MDIWindowEvent.MOVE
+	 */
+	[Event(name="move", type="mdi.events.MDIWindowEvent")]
+	
+	/**
+	 *  Dispatched when a resize handle is pressed.
+	 *
+	 *  @eventType mdi.events.MDIWindowEvent.RESIZE_START
+	 */
+	[Event(name="resizeStart", type="mdi.events.MDIWindowEvent")]
+	
+	/**
+	 *  Dispatched while the mouse is down on a resize handle.
+	 *
+	 *  @eventType mdi.events.MDIWindowEvent.RESIZE
+	 */
+	[Event(name="resize", type="mdi.events.MDIWindowEvent")]
+	
+	/**
+	 *  Dispatched when the mouse is released from a resize handle.
+	 *
+	 *  @eventType mdi.events.MDIWindowEvent.RESIZE_END
+	 */
+	[Event(name="resizeEnd", type="mdi.events.MDIWindowEvent")]
+	
 	
 	public class MDIWindow extends Panel
 	{
@@ -744,9 +787,12 @@ package mdi.containers
 				break;
 				
 				case("Restore"):
-					if(this.windowState == MDIWindowState.MINIMIZED){
-						unMinimize()();
-					}else if(this.windowState == MDIWindowState.MAXIMIZED){
+					if(this.windowState == MDIWindowState.MINIMIZED)
+					{
+						unMinimize();
+					}
+					else if(this.windowState == MDIWindowState.MAXIMIZED)
+					{
 						maximizeRestore();
 					}	
 				break;

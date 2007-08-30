@@ -5,9 +5,6 @@
 	backgroundColor="#343434" xmlns:explorer="explorer.*" 
 	initialize="StyleManager.loadStyleDeclarations('assets/css/style.swf')" creationComplete="init()">
 	
-
-	
-	
 	<mx:Script>
 		<![CDATA[
 			import mdi.effects.MDIEffectsDescriptorBase;

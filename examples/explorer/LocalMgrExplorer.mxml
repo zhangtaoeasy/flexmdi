@@ -4,6 +4,8 @@
 	
 	<mx:Script>
 		<![CDATA[
+			import mdi.events.MDIWindowEvent;
+			import mdi.events.MDIManagerEvent;
 			import mdi.managers.MDIManager;
 			import mdi.containers.MDIWindow;
 			import mdi.effects.effectsLib.MDIVistaEffectsDescriptor;
@@ -16,6 +18,17 @@
 				// when using a local instance of the MDIManager 
 				this.mgr = new MDIManager(this.containerInst, new MDIVistaEffectsDescriptor() );
 				this.mgr.showMinimizedTiles = true;
+				this.mgr.addEventListener(MDIWindowEvent.CLOSE, onWinCloseMgr);
+			}
+			
+			private function onWinCloseMgr(event:MDIManagerEvent):void
+			{
+				//event.stopImmediatePropagation();
+			}
+			
+			private function onWinClose(event:MDIWindowEvent):void
+			{
+				//event.stopImmediatePropagation();
 			}
 			
 			public function addWindow():void
@@ -26,6 +39,8 @@
 				win.height = 200;
 				
 				this.mgr.add(win);
+				
+				win.addEventListener(MDIWindowEvent.CLOSE, onWinClose);
 			}
 			
 		]]>

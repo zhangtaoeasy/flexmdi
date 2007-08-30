@@ -35,7 +35,7 @@ package mdi.effects
 	
 
 	
-	public class MDIBaseEffects implements IMDIEffectsDescriptor
+	public class MDIEffectsDescriptorBase implements IMDIEffectsDescriptor
 	{
 		public function getFocusInEffect(window:MDIWindow,manager:MDIManager):Effect
 		{

@@ -27,7 +27,7 @@ package mdi.effects.effectsLib
 	
 	import mdi.containers.MDIWindow;
 	import mdi.effects.IMDIEffectsDescriptor;
-	import mdi.effects.MDIBaseEffects;
+	import mdi.effects.MDIEffectsDescriptorBase;
 	import mdi.effects.effectClasses.MDIGroupEffectItem;
 	import mdi.managers.MDIManager;
 	
@@ -41,7 +41,7 @@ package mdi.effects.effectsLib
 	import mx.effects.WipeDown;
 	import mx.events.EffectEvent;
 
-	public class MDIVistaEffectsDescriptor extends MDIBaseEffects implements IMDIEffectsDescriptor
+	public class MDIVistaEffectsDescriptor extends MDIEffectsDescriptorBase implements IMDIEffectsDescriptor
 	{		
 		override public function getShowEffect(window:MDIWindow, manager:MDIManager):Effect
 		{			

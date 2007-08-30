@@ -36,7 +36,7 @@ package mdi.managers
 	import mdi.containers.MDIWindow;
 	import mdi.containers.MDIWindowState;
 	import mdi.effects.IMDIEffectsDescriptor;
-	import mdi.effects.MDIBaseEffects;
+	import mdi.effects.MDIEffectsDescriptorBase;
 	import mdi.effects.effectClasses.MDIGroupEffectItem;
 	import mdi.events.MDIManagerEvent;
 	import mdi.events.MDIWindowEvent;
@@ -74,7 +74,7 @@ package mdi.managers
 		public var tilePadding:Number = 8;
 		public var minTilePadding:Number = 5;
 		
-		public var effects:IMDIEffectsDescriptor = new MDIBaseEffects();
+		public var effects:IMDIEffectsDescriptor = new MDIEffectsDescriptorBase();
 		
 		/**
      	*   Contstructor()

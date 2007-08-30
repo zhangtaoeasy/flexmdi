@@ -23,39 +23,39 @@ SOFTWARE.
 
 package mdi.effects
 {
-	import mdi.containers.MDIWindow;
-	import mdi.managers.MDIManager;
 	import flash.geom.Point;
 	
+	import mdi.containers.MDIWindow;
+	import mdi.managers.MDIManager;
+	
+	import mx.effects.Effect;
+	
 	public interface IMDIEffectsDescriptor
-	{	
-		function playFocusInEffects(window:MDIWindow,manager:MDIManager):void
+	{
+		function getMinimizeEffect(window:MDIWindow, manager:MDIManager, moveTo:Point = null):Effect
 	
-		function playFocusOutEffects(window:MDIWindow,manager:MDIManager):void
-	
-		function playShowEffects(window:MDIWindow,manager:MDIManager):void
-	
-		function playMoveEffects(window:MDIWindow,manager:MDIManager):void
-	
-		function playResizeEffects(window:MDIWindow,manager:MDIManager):void
-	
-		function playMinimizeEffects(window:MDIWindow,manager:MDIManager,moveTo:Point=null):void
-	
-		function playRestoreEffects(window:MDIWindow,manager:MDIManager,moveTo:Point=null):void
+		function getRestoreEffect(window:MDIWindow, manager:MDIManager, moveTo:Point = null):Effect
 		
-		function reTileMinWindowsEffects(window:MDIWindow,manager:MDIManager,moveTo:Point):void
+		function getMaximizeEffect(window:MDIWindow, manager:MDIManager, bottomOffset:Number = 0):Effect
 	
-		function playMaximizeEffects(window:MDIWindow,manager:MDIManager,bottomOffset:Number=0):void
+		function getCloseEffect(window:MDIWindow, manager:MDIManager):Effect
+		
+		function getFocusInEffect(window:MDIWindow, manager:MDIManager):Effect
 	
-		function playCloseEffects(window:MDIWindow,manager:MDIManager,callBack:Function):void
+		function getFocusOutEffect(window:MDIWindow, manager:MDIManager):Effect
 	
+		function getShowEffect(window:MDIWindow, manager:MDIManager):Effect
 	
+		function getMoveEffect(window:MDIWindow, manager:MDIManager):Effect
+	
+		function getResizeEffect(window:MDIWindow, manager:MDIManager):Effect
+	
+		function reTileMinWindowsEffect(window:MDIWindow, manager:MDIManager, moveTo:Point):Effect	
 	
 		//group window effects
 		
-		function playTileEffects(items:Array,manager:MDIManager):void
+		function getTileEffect(items:Array, manager:MDIManager):Effect
 		
-		function playCascadeEffects(items:Array,manager:MDIManager):void
-		
+		function getCascadeEffect(items:Array, manager:MDIManager):Effect		
 	}
 }

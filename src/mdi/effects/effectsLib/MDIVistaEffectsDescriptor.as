@@ -23,47 +23,45 @@ SOFTWARE.
 
 package mdi.effects.effectsLib
 {
+	import flash.geom.Point;
+	
 	import mdi.containers.MDIWindow;
 	import mdi.effects.IMDIEffectsDescriptor;
+	import mdi.effects.MDIBaseEffects;
+	import mdi.effects.effectClasses.MDIGroupEffectItem;
 	import mdi.managers.MDIManager;
-
+	
 	import mx.effects.Blur;
-	import mx.effects.Sequence;
+	import mx.effects.Effect;
+	import mx.effects.Move;
 	import mx.effects.Parallel;
 	import mx.effects.Resize;
-	import mdi.effects.MDIBaseEffects;
-	import mx.events.EffectEvent;
-	import mx.effects.WipeDown;
-	import flash.geom.Point;
 	import mx.effects.Rotate;
-	import mx.effects.Move;
-
-	import mdi.effects.effectClasses.MDIGroupEffectItem;
+	import mx.effects.Sequence;
+	import mx.effects.WipeDown;
+	import mx.events.EffectEvent;
 
 	public class MDIVistaEffectsDescriptor extends MDIBaseEffects implements IMDIEffectsDescriptor
-	{
-	
-		
-		override public function playShowEffects(window:MDIWindow,manager:MDIManager):void
-		{
-			
-			var parallel : Parallel = new Parallel(window);
+	{		
+		override public function getShowEffect(window:MDIWindow, manager:MDIManager):Effect
+		{			
+			var parallel:Parallel = new Parallel(window);
 
-			var blurSequence : Sequence = new Sequence();
+			var blurSequence:Sequence = new Sequence();
 
-			var blurOut : Blur = new Blur();
+			var blurOut:Blur = new Blur();
 				blurOut.blurXFrom = 0;
 				blurOut.blurYFrom = 0;
-				blurOut.blurXTo= 10;
+				blurOut.blurXTo = 10;
 				blurOut.blurYTo = 10;
 			
 			
 			blurSequence.addChild(blurOut);
 			
-			var blurIn : Blur = new Blur();
+			var blurIn:Blur = new Blur();
 				blurIn.blurXFrom = 10;
 				blurIn.blurYFrom = 10;
-				blurIn.blurXTo= 0;
+				blurIn.blurXTo  = 0;
 				blurIn.blurYTo = 0;
 				
 			
@@ -73,21 +71,18 @@ package mdi.effects.effectsLib
 	
 			
 			parallel.duration = 200;
-			parallel.play();
-			
+			return parallel;
 		}
 		
-		override public function playCloseEffects(window:MDIWindow,manager:MDIManager,callBack:Function):void
+		override public function getCloseEffect(window:MDIWindow, manager:MDIManager):Effect
 		{
-			var blur : Blur = new Blur(window);
+			var blur:Blur = new Blur(window);
 				blur.blurXFrom = 0;
 				blur.blurYFrom = 0;
 				blur.blurXTo = 10;
 				blur.blurYTo = 10;
 				blur.duration = 200;
-				blur.addEventListener(EffectEvent.EFFECT_END, function():void {callBack.call(window,window);});
-				blur.play();
-
+				return blur;
 		}
 		
 		private function cascadeEasingFunction(t:Number, b:Number, c:Number, d:Number):Number 
@@ -97,48 +92,45 @@ package mdi.effects.effectsLib
   			return b+c*(33*tc*ts + -106*ts*ts + 126*tc + -67*ts + 15*t);
 		}
 		
-		override public function playCascadeEffects(items:Array,manager:MDIManager):void
+		override public function getCascadeEffect(items:Array,manager:MDIManager):Effect
 		{
-
-			for each(var item : MDIGroupEffectItem  in items)
-			{	
-
-				var move : Move = new Move(item.window);
+			var parallel:Parallel = new Parallel();
+			
+			for each(var item:MDIGroupEffectItem  in items)
+			{
+				var move:Move = new Move(item.window);
 					move.xTo = item.moveTo.x;
 					move.yTo = item.moveTo.y;
 					move.easingFunction = this.cascadeEasingFunction;
 					move.duration = 200;
-					move.play();
+					parallel.addChild(move);
 			}
-
-
+			
+			return parallel;
 		}
 		
-		override public function playTileEffects(items:Array,manager:MDIManager):void
-		{
+		override public function getTileEffect(items:Array,manager:MDIManager):Effect
+		{			
+			var sequence:Sequence = new Sequence();
 			
-			var sequence : Sequence = new Sequence();
-			
-			for each(var item : MDIGroupEffectItem  in items)
+			for each(var item:MDIGroupEffectItem  in items)
 			{	
 				manager.bringToFront(item.window);
-				var move : Move = new Move(item.window);
+				var move:Move = new Move(item.window);
 					move.xTo = item.moveTo.x;
 					move.yTo = item.moveTo.y;
 
-				sequence.addChild( move );
+				sequence.addChild(move);
 				item.setWindowSize();
 			}
 			
 			sequence.duration = 100;
-			sequence.play();
-
-		}
-		
+			return sequence;
+		}		
 	
-		override public function playMinimizeEffects(window:MDIWindow, manager:MDIManager, moveTo:Point=null):void
+		override public function getMinimizeEffect(window:MDIWindow, manager:MDIManager, moveTo:Point=null):Effect
 		{
-			var parallel : Parallel = new Parallel(window);
+			var parallel:Parallel = new Parallel(window);
 			
 			var move:Move = new Move(window);
 			move.xTo = moveTo.x;
@@ -153,12 +145,12 @@ package mdi.effects.effectsLib
 			parallel.addChild(resize);
 			
 			parallel.end();
-			parallel.play();
+			return parallel;
 		}
 		
-		override public function playRestoreEffects(window:MDIWindow, manager:MDIManager, moveTo:Point=null):void
+		override public function getRestoreEffect(window:MDIWindow, manager:MDIManager, moveTo:Point=null):Effect
 		{
-			var parallel : Parallel = new Parallel(window);
+			var parallel:Parallel = new Parallel(window);
 			
 			var move:Move = new Move(window);
 			move.xTo = moveTo.x;
@@ -173,12 +165,12 @@ package mdi.effects.effectsLib
 			parallel.addChild(resize);
 			
 			parallel.end();
-			parallel.play();
+			return parallel;
 		}
 		
-		override public function playMaximizeEffects(window:MDIWindow, manager:MDIManager, bottomOffset:Number = 0):void
+		override public function getMaximizeEffect(window:MDIWindow, manager:MDIManager, bottomOffset:Number = 0):Effect
 		{
-			var parallel : Parallel = new Parallel(window);
+			var parallel:Parallel = new Parallel(window);
 			
 			var move:Move = new Move(window);
 			move.xTo = 0;
@@ -193,21 +185,17 @@ package mdi.effects.effectsLib
 			parallel.addChild(resize);
 			
 			parallel.end();
-			parallel.play();
+			return parallel;
 		}
 		
-		override public function reTileMinWindowsEffects(window:MDIWindow, manager:MDIManager, moveTo:Point):void
+		override public function reTileMinWindowsEffect(window:MDIWindow, manager:MDIManager, moveTo:Point):Effect
 		{
 			var move:Move = new Move(window);
 			move.xTo = moveTo.x;
 			move.yTo = moveTo.y;
 			move.duration = 300;
 			move.end();
-			move.play();
-		}
-		
-		
-	
-		
+			return move;
+		}		
 	}
 }

@@ -23,47 +23,46 @@ SOFTWARE.
 
 package mdi.effects
 {
+	import flash.geom.Point;
+	
 	import mdi.containers.MDIWindow;
-	import mdi.effects.IMDIEffectsDescriptor;
-	import mdi.managers.MDIManager;
-
-	import flash.geom.Point;
-
-	import flash.geom.Point;
-	import mx.containers.Panel;
-	import mx.effects.Move;
 	import mdi.effects.effectClasses.MDIGroupEffectItem;
+	import mdi.managers.MDIManager;
+	
+	import mx.containers.Panel;
+	import mx.effects.Effect;
+	import mx.effects.Move;
 	
 
 	
 	public class MDIBaseEffects implements IMDIEffectsDescriptor
 	{
-		
-
-		public function playFocusInEffects(window:MDIWindow,manager:MDIManager):void
+		public function getFocusInEffect(window:MDIWindow,manager:MDIManager):Effect
 		{
-			
+			return new Effect();
 		}
 		
-		public function playFocusOutEffects(window:MDIWindow,manager:MDIManager):void
+		public function getFocusOutEffect(window:MDIWindow,manager:MDIManager):Effect
 		{
-			
+			return new Effect();
 		}
 		
-		public function playShowEffects(window:MDIWindow,manager:MDIManager):void
+		public function getShowEffect(window:MDIWindow,manager:MDIManager):Effect
 		{
-			
+			return new Effect();
 		}
 		
-		public function playMoveEffects(window:MDIWindow,manager:MDIManager):void
+		public function getMoveEffect(window:MDIWindow,manager:MDIManager):Effect
 		{
-			
+			return new Effect();
 		}
-		public function playResizeEffects(window:MDIWindow,manager:MDIManager):void
+		
+		public function getResizeEffect(window:MDIWindow,manager:MDIManager):Effect
 		{
-			
+			return new Effect();
 		}
-		public function playMinimizeEffects(window:MDIWindow, manager:MDIManager, moveTo:Point = null):void
+		
+		public function getMinimizeEffect(window:MDIWindow, manager:MDIManager, moveTo:Point = null):Effect
 		{
 			window.height = window.minimizeHeight;
 			window.width = window.minWidth;
@@ -72,9 +71,10 @@ package mdi.effects
 				window.x = moveTo.x;
 				window.y = moveTo.y;
 			}
+			return new Effect();
 		}
 		
-		public function playRestoreEffects(window:MDIWindow, manager:MDIManager, moveTo:Point = null):void
+		public function getRestoreEffect(window:MDIWindow, manager:MDIManager, moveTo:Point = null):Effect
 		{
 			window.height = window.dragStartPanelHeight;
 			window.width = window.dragStartPanelWidth;
@@ -83,30 +83,32 @@ package mdi.effects
 				window.x = moveTo.x;
 				window.y = moveTo.y;
 			}
+			return new Effect();
 		}
 		
-		public function reTileMinWindowsEffects(window:MDIWindow, manager:MDIManager, moveTo:Point):void
+		public function reTileMinWindowsEffect(window:MDIWindow, manager:MDIManager, moveTo:Point):Effect
 		{
 			window.x = moveTo.x;
 			window.y = moveTo.y;
+			return new Effect();
 		}
 		
 		
-		public function playMaximizeEffects(window:MDIWindow,manager:MDIManager,bottomOffset:Number = 0):void
+		public function getMaximizeEffect(window:MDIWindow,manager:MDIManager,bottomOffset:Number = 0):Effect
 		{
 			window.height = manager.container.height - bottomOffset;
 			window.width = manager.container.width;
 			window.x = 0;
 			window.y = 0;
-		}
-		public function playCloseEffects(window:MDIWindow,manager:MDIManager,callback:Function):void
-		{
-
-			callback.call(window,window);	
-
+			return new Effect();
 		}
 		
-		public function playTileEffects(items:Array,manager:MDIManager):void
+		public function getCloseEffect(window:MDIWindow, manager:MDIManager):Effect
+		{
+			return new Effect();
+		}
+		
+		public function getTileEffect(items:Array,manager:MDIManager):Effect
 		{
 			for each(var item : MDIGroupEffectItem  in items)
 			{	
@@ -116,9 +118,10 @@ package mdi.effects
 					move.yTo = item.moveTo.y;
 					move.play();
 			}
+			return new Effect();
 		}
 		
-		public function playCascadeEffects(items:Array,manager:MDIManager):void
+		public function getCascadeEffect(items:Array,manager:MDIManager):Effect
 		{
 			for each(var item : MDIGroupEffectItem  in items)
 			{	
@@ -128,8 +131,7 @@ package mdi.effects
 					move.yTo = item.moveTo.y;
 					move.play();
 			}
-		}
-		
-		
+			return new Effect();
+		}		
 	}
 }

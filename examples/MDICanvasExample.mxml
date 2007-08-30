@@ -10,9 +10,17 @@
 		<mx:Button label="Tile + Fill" click="mdic.mdiManager.tile(true)" />
 	</mx:VBox>
 	
-	<containers:MDICanvas id="mdic" x="100" width="500" height="500" backgroundColor="#CCCCCC">
-		<containers:MDIWindow id="win1" title="Window One" x="10" y="10" />
-		<containers:MDIWindow id="win2" title="Window Two" x="250" y="250" />
-		<containers:MDIWindow id="win3" title="Window Three" x="100" y="100" />
-	</containers:MDICanvas>
+	<mx:TabNavigator>
+		<containers:MDICanvas label="Panel 1" id="mdic" x="100" width="500" height="500" backgroundColor="#CCCCCC">
+			<containers:MDIWindow id="win11" title="Window One" x="10" y="10" />
+			<containers:MDIWindow id="win12" title="Window Two" x="250" y="250" />
+			<containers:MDIWindow id="win13" title="Window Three" x="100" y="100" />
+		</containers:MDICanvas>
+		
+		<containers:MDICanvas label="Panel 2" id="mdic2" x="100" width="500" height="500" backgroundColor="#CCCCCC">
+			<containers:MDIWindow id="win21" title="Window One" x="10" y="10" />
+			<containers:MDIWindow id="win22" title="Window Two" x="250" y="250" />
+			<containers:MDIWindow id="win23" title="Window Three" x="100" y="100" />
+		</containers:MDICanvas>
+	</mx:TabNavigator>
 </mx:Application>

@@ -28,12 +28,12 @@ package mdi.containers
 	import mx.containers.Canvas;
 	import mx.events.FlexEvent;
 	import mx.core.UIComponent;
-	import mdi.effects.MDIBaseEffects;
+	import mdi.effects.MDIEffectsDescriptorBase;
 
 	public class MDICanvas extends Canvas
 	{
 		public var mdiManager:MDIManager;
-		public var effectsLib:MDIBaseEffects = new MDIBaseEffects();
+		public var effectsLib:MDIEffectsDescriptorBase = new MDIEffectsDescriptorBase();
 		
 		public function MDICanvas()
 		{

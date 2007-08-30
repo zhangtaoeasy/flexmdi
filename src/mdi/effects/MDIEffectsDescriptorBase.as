@@ -32,106 +32,148 @@ package mdi.effects
 	import mx.containers.Panel;
 	import mx.effects.Effect;
 	import mx.effects.Move;
-	
-
+	import mx.effects.Resize;
+	import mx.effects.Parallel;
 	
 	public class MDIEffectsDescriptorBase implements IMDIEffectsDescriptor
 	{
-		public function getFocusInEffect(window:MDIWindow,manager:MDIManager):Effect
+		public function getFocusInEffect(window:MDIWindow, manager:MDIManager):Effect
 		{
 			return new Effect();
 		}
 		
-		public function getFocusOutEffect(window:MDIWindow,manager:MDIManager):Effect
+		public function getFocusOutEffect(window:MDIWindow, manager:MDIManager):Effect
 		{
 			return new Effect();
 		}
 		
-		public function getShowEffect(window:MDIWindow,manager:MDIManager):Effect
+		public function getShowEffect(window:MDIWindow, manager:MDIManager):Effect
 		{
 			return new Effect();
 		}
 		
-		public function getMoveEffect(window:MDIWindow,manager:MDIManager):Effect
+		public function getMoveEffect(window:MDIWindow, manager:MDIManager):Effect
 		{
 			return new Effect();
 		}
 		
-		public function getResizeEffect(window:MDIWindow,manager:MDIManager):Effect
+		public function getResizeEffect(window:MDIWindow, manager:MDIManager):Effect
 		{
 			return new Effect();
 		}
 		
 		public function getMinimizeEffect(window:MDIWindow, manager:MDIManager, moveTo:Point = null):Effect
 		{
-			window.height = window.minimizeHeight;
-			window.width = window.minWidth;
+			var parallel:Parallel = new Parallel();
+			parallel.duration = 0;
+			
+			var resize:Resize = new Resize(window);
+			resize.widthTo = window.minWidth;
+			resize.heightTo = window.minimizeHeight;
+			parallel.addChild(resize);
+			
 			if(moveTo != null)
 			{
-				window.x = moveTo.x;
-				window.y = moveTo.y;
+				var move:Move = new Move(window);
+				move.xTo = moveTo.x;
+				move.yTo = moveTo.y;
+				parallel.addChild(move);
 			}
-			return new Effect();
+			
+			return parallel;
 		}
 		
 		public function getRestoreEffect(window:MDIWindow, manager:MDIManager, moveTo:Point = null):Effect
 		{
-			window.height = window.dragStartPanelHeight;
-			window.width = window.dragStartPanelWidth;
+			var parallel:Parallel = new Parallel();
+			parallel.duration = 0;
+			
+			var resize:Resize = new Resize(window);
+			resize.widthTo = window.dragStartPanelWidth;
+			resize.heightTo = window.dragStartPanelHeight;
+			parallel.addChild(resize);
+			
 			if(moveTo != null)
 			{
-				window.x = moveTo.x;
-				window.y = moveTo.y;
+				var move:Move = new Move(window);
+				move.xTo = moveTo.x;
+				move.yTo = moveTo.y;
+				parallel.addChild(move);
 			}
-			return new Effect();
+			
+			return parallel;
 		}
 		
 		public function reTileMinWindowsEffect(window:MDIWindow, manager:MDIManager, moveTo:Point):Effect
 		{
-			window.x = moveTo.x;
-			window.y = moveTo.y;
-			return new Effect();
+			var move:Move = new Move(window);
+			move.duration = 0;
+			move.xTo = moveTo.x;
+			move.yTo = moveTo.y;
+			return move
 		}
 		
-		
-		public function getMaximizeEffect(window:MDIWindow,manager:MDIManager,bottomOffset:Number = 0):Effect
+		public function getMaximizeEffect(window:MDIWindow, manager:MDIManager, bottomOffset:Number = 0):Effect
 		{
-			window.height = manager.container.height - bottomOffset;
-			window.width = manager.container.width;
-			window.x = 0;
-			window.y = 0;
-			return new Effect();
+			var parallel:Parallel = new Parallel();
+			parallel.duration = 0;
+			
+			var resize:Resize = new Resize(window);
+			resize.widthTo = manager.container.width;
+			resize.heightTo = manager.container.height - bottomOffset;
+			parallel.addChild(resize);
+			
+			var move:Move = new Move(window);
+			move.xTo = 0;
+			move.yTo = 0;
+			parallel.addChild(move);
+			
+			return parallel;
 		}
 		
 		public function getCloseEffect(window:MDIWindow, manager:MDIManager):Effect
 		{
-			return new Effect();
+			// have to return something so that EFFECT_END listener will fire
+			var resize:Resize = new Resize(window);
+			resize.duration = 0;
+			resize.widthTo = window.width;
+			resize.heightTo = window.height;
+			
+			return resize;
 		}
 		
-		public function getTileEffect(items:Array,manager:MDIManager):Effect
+		public function getTileEffect(items:Array, manager:MDIManager):Effect
 		{
-			for each(var item : MDIGroupEffectItem  in items)
+			var parallel:Parallel = new Parallel();
+			parallel.duration = 0;
+			
+			for each(var item:MDIGroupEffectItem  in items)
 			{	
 				manager.bringToFront(item.window);
-				var move : Move = new Move(item.window);
+				var move:Move = new Move(item.window);
 					move.xTo = item.moveTo.x;
 					move.yTo = item.moveTo.y;
-					move.play();
+					parallel.addChild(move);
 			}
-			return new Effect();
+			
+			return parallel;
 		}
 		
-		public function getCascadeEffect(items:Array,manager:MDIManager):Effect
+		public function getCascadeEffect(items:Array, manager:MDIManager):Effect
 		{
-			for each(var item : MDIGroupEffectItem  in items)
+			var parallel:Parallel = new Parallel();
+			parallel.duration = 0;
+			
+			for each(var item:MDIGroupEffectItem  in items)
 			{	
 
-				var move : Move = new Move(item.window);
+				var move:Move = new Move(item.window);
 					move.xTo = item.moveTo.x;
 					move.yTo = item.moveTo.y;
-					move.play();
+					parallel.addChild(move);
 			}
-			return new Effect();
+			
+			return parallel;
 		}		
 	}
 }

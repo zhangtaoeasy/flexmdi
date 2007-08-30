@@ -3,7 +3,7 @@
     horizontalAlign="left" paddingLeft="0" paddingTop="0" 
     paddingBottom="0" paddingRight="0" layout="absolute" 
 	backgroundColor="#343434" xmlns:explorer="explorer.*" 
-	initialize="StyleManager.loadStyleDeclarations('assets/css/style.swf')">
+	initialize="StyleManager.loadStyleDeclarations('assets/css/style.swf')" creationComplete="init()">
 	
 
 	
@@ -15,6 +15,11 @@
 			import mdi.managers.MDIManager;
 			import mdi.containers.MDIWindow;
 			import mdi.effects.effectsLib.MDIVistaEffectsDescriptor;
+			
+			private function init():void
+			{
+				MDIManager.global.effects = new MDIEffectsDescriptorBase();
+			}
 			
 			public function addGlobalWindow():void
 			{

@@ -3,7 +3,7 @@
 	xmlns:containers="mdi.containers.*"
 	xmlns:managers="mdi.managers.*"
 	creationComplete="init()" viewSourceURL="srcview/index.html">
-	<mx:Style source="/assets/css/styles.css" />
+	<mx:Style source="/assets/css/style.css" />
 	<mx:VBox>
 		<mx:Button label="Cascade" click="mdic.mdiManager.cascade()" />
 		<mx:Button label="Tile" click="mdic.mdiManager.tile()" />

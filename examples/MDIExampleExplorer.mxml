@@ -10,7 +10,7 @@
 	
 	<mx:Script>
 		<![CDATA[
-			import mdi.effects.MDIBaseEffects;
+			import mdi.effects.MDIEffectsDescriptorBase;
 		
 			import mdi.managers.MDIManager;
 			import mdi.containers.MDIWindow;
@@ -58,7 +58,7 @@
 				switch(this.effectsCombo.selectedItem.label)
 				{	
 					case "Default":
-						MDIManager.global.effects = new MDIBaseEffects();
+						MDIManager.global.effects = new MDIEffectsDescriptorBase();
 					break;
 					case "Vista":
 						MDIManager.global.effects = new MDIVistaEffectsDescriptor();

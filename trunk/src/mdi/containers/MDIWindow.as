@@ -80,16 +80,16 @@ package mdi.containers
 	/**
 	 *  Dispatched when the window gains focus and is given topmost z-index of MDIManager's children.
 	 *
-	 *  @eventType mdi.events.MDIWindowEvent.FOCUS_IN
+	 *  @eventType mdi.events.MDIWindowEvent.FOCUS_START
 	 */
-	[Event(name="focusIn", type="mdi.events.MDIWindowEvent")]
+	[Event(name="focusStart", type="mdi.events.MDIWindowEvent")]
 	
 	/**
 	 *  Dispatched when the window loses focus and no longer has topmost z-index of MDIManager's children.
 	 *
-	 *  @eventType mdi.events.MDIWindowEvent.FOCUS_OUT
+	 *  @eventType mdi.events.MDIWindowEvent.FOCUS_END
 	 */
-	[Event(name="focusOut", type="mdi.events.MDIWindowEvent")]
+	[Event(name="focusEnd", type="mdi.events.MDIWindowEvent")]
 	
 	/**
 	 *  Dispatched while the window is being dragged.
@@ -122,49 +122,182 @@ package mdi.containers
 	
 	public class MDIWindow extends Panel
 	{
+		/**
+	     * @private
+	     */
+	    private static const DEFAULT_EDGE_HANDLE_SIZE:Number = 4;
+	    
+	    /**
+	     * @private
+	     */
+		private static const DEFAULT_CORNER_HANDLE_SIZE:Number = 10;
+	    
+	    /**
+	     * @private
+	     * Internal storage for windowState property.
+	     */
 		private var _windowState:int;
+		
+		/**
+	     * @private
+	     * Internal storage of previous state, used in min/max/restore logic.
+	     */
 		private var _prevWindowState:int;
 		
-		public var minimizeHeight:Number;
-		
-		public var controls:Array;
+		/**
+	     * @private
+	     * Parent of window controls (min, restore/max and close buttons).
+	     */
 		private var controlsHolder:UIComponent;
 		
+		/**
+		 * Array of controlsHolder's child components.
+		 */
+		public var controls:Array;
+		
+		/**
+		 * Minimize window button.
+		 */
 		public var minimizeBtn:Button;
+		
+		/**
+		 * Maximize/restore window button.
+		 */
 		public var maximizeRestoreBtn:Button;
+		
+		/**
+		 * Close window button.
+		 */
 		public var closeBtn:Button;
 		
-		public var winContextMenu:ContextMenu = null;
+		/**
+		 * Height of window when minimized.
+		 */
+		public var minimizeHeight:Number;
 		
-		public var preventedDefaultActions:ArrayCollection;
+		/**
+		 * Flag determining whether or not this window is resizable.
+		 */
+		public var resizable:Boolean;
 		
-		// resize handles and default values
-		private static var DEFAULT_EDGE_HANDLE_SIZE:Number = 4;
-		private static var DEFAULT_CORNER_HANDLE_SIZE:Number = 10;
-		private var currentResizeHandle:Button;
-		
+		/**
+	     * @private
+	     * Resize handle for top edge of window.
+	     */
 		private var resizeHandleTop:Button;
+		
+		/**
+	     * @private
+	     * Resize handle for right edge of window.
+	     */
 		private var resizeHandleRight:Button;
+		
+		/**
+	     * @private
+	     * Resize handle for bottom edge of window.
+	     */
 		private var resizeHandleBottom:Button;
+		
+		/**
+	     * @private
+	     * Resize handle for left edge of window.
+	     */
 		private var resizeHandleLeft:Button;
 		
+		/**
+	     * @private
+	     * Resize handle for top left corner of window.
+	     */
 		private var resizeHandleTL:Button;
+		
+		/**
+	     * @private
+	     * Resize handle for top right corner of window.
+	     */
 		private var resizeHandleTR:Button;
+		
+		/**
+	     * @private
+	     * Resize handle for bottom right corner of window.
+	     */
 		private var resizeHandleBR:Button;
-		private var resizeHandleBL:Button;
 		
+		/**
+	     * @private
+	     * Resize handle for bottom left corner of window.
+	     */
+		private var resizeHandleBL:Button;		
 		
+		/**
+		 * Resize handle currently in use.
+		 */
+		private var currentResizeHandle:Button;
+		
+		/**
+	     * Window's x position when resize begins or panel's size/position is saved.
+	     */
 		public var dragStartPanelX:Number;
+		
+		/**
+	     * Window's y position when resize begins or panel's size/position is saved.
+	     */
 		public var dragStartPanelY:Number;
+		
+		/**
+	     * Window's width when resize begins or panel's size/position is saved.
+	     */
 		public var dragStartPanelWidth:Number;
+		
+		/**
+	     * Window's height when resize begins or panel's size/position is saved.
+	     */
 		public var dragStartPanelHeight:Number;
 		
+		/**
+		 * @private
+	     * Mouse's x position when resize begins.
+	     */
 		private var dragStartMouseX:Number;
+		
+		/**
+		 * @private
+	     * Mouse's y position when resize begins.
+	     */
 		private var dragStartMouseY:Number;
-		private var dragAmountX:Number;
-		private var dragAmountY:Number;
+		
+		/**
+		 * @private
+	     * Maximum allowable x value for resize. Used to enforce minWidth.
+	     */
 		private var dragMaxX:Number;
+		
+		/**
+		 * @private
+	     * Maximum allowable x value for resize. Used to enforce minWidth.
+	     */
 		private var dragMaxY:Number;
+		
+		/**
+		 * @private
+	     * Amount the mouse's x position has changed during current resizing.
+	     */
+		private var dragAmountX:Number;
+		
+		/**
+		 * @private
+	     * Amount the mouse's y position has changed during current resizing.
+	     */
+		private var dragAmountY:Number;
+		
+		/**
+	     * Window's context menu.
+	     */
+		public var winContextMenu:ContextMenu = null;
+		
+		/**
+		 * Reference to MDIManager instance this window is managed by, if any.
+	     */
+		public var windowManager:MDIManager;
 		
 		[Embed(source="/mdi/assets/img/resizeCursorV.gif")]
 		private var resizeCursorV:Class;
@@ -175,21 +308,21 @@ package mdi.containers
 		[Embed(source="/mdi/assets/img/resizeCursorTRBL.gif")]
 		private var resizeCursorTRBL:Class;
 		
-		public var windowManager:MDIManager;
-		
-		
+		/**
+		 * Constructor
+	     */
 		public function MDIWindow()
 		{
 			super();
 			controls = new Array();
-			preventedDefaultActions = new ArrayCollection();
 			doubleClickEnabled = true;
 			minWidth = 200;
 			minHeight = 200;
 			windowState = MDIWindowState.NORMAL;
+			resizable = true;
 			styleName = "mdiWindowFocus";
 			
-			this.addEventListener(FlexEvent.CREATION_COMPLETE, componentComplete);			
+			addEventListener(FlexEvent.CREATION_COMPLETE, componentComplete);			
 		}
 		
 		private function componentComplete(event:FlexEvent):void
@@ -563,7 +696,7 @@ package mdi.containers
 		 */
 		private function onResizeButtonPress(event:MouseEvent):void
 		{
-			if(!minimized)
+			if(!minimized && resizable)
 			{
 				currentResizeHandle = event.target as Button;
 				setCursor(currentResizeHandle);
@@ -589,7 +722,7 @@ package mdi.containers
 		 */
 		private function onResizeButtonDrag(event:Event):void
 		{
-			if(!minimized)
+			if(!minimized && resizable)
 			{
 				dragAmountX = parent.mouseX - dragStartMouseX;
 				dragAmountY = parent.mouseY - dragStartMouseY;
@@ -642,7 +775,7 @@ package mdi.containers
 		
 		private function onResizeButtonRelease(event:MouseEvent = null):void
 		{
-			if(!minimized)
+			if(!minimized && resizable)
 			{
 				currentResizeHandle = null;
 				systemManager.removeEventListener(Event.ENTER_FRAME, onResizeButtonDrag);
@@ -685,7 +818,8 @@ package mdi.containers
 		
 		private function onResizeButtonRollOver(event:MouseEvent):void
 		{
-			if(!minimized && !event.buttonDown)
+			// event.buttonDown is to detect being dragged over
+			if(!minimized && resizable && !event.buttonDown)
 			{
 				setCursor(event.target as Button);
 			}

@@ -273,7 +273,7 @@ package mdi.containers
 		
 		/**
 		 * @private
-	     * Maximum allowable x value for resize. Used to enforce minWidth.
+	     * Maximum allowable x value for resize. Used to enforce minHeight.
 	     */
 		private var dragMaxY:Number;
 		

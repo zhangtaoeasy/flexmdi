@@ -45,6 +45,9 @@ package mdi.managers
 	import mx.core.Application;
 	import mx.core.IFlexDisplayObject;
 	import mx.core.UIComponent;
+	import mx.effects.CompositeEffect;
+	import mx.effects.Effect;
+	import mx.effects.effectClasses.CompositeEffectInstance;
 	import mx.events.EffectEvent;
 	import mx.events.ResizeEvent;
 	import mx.managers.PopUpManager;
@@ -296,8 +299,7 @@ package mdi.managers
 				switch(mgrEvent.type)
 				{					
 					case MDIWindowEvent.MINIMIZE:
-						tiledWindows.addItem(mgrEvent.window);				
-						reTileWindows();
+						mgrEvent.effect.addEventListener(EffectEvent.EFFECT_END, onMinimizeEffectEnd);
 						mgrEvent.effect.play();
 					break;
 					
@@ -344,6 +346,20 @@ package mdi.managers
 					break;
 				}
 			}			
+		}
+		
+		private function onMinimizeEffectEnd(event:EffectEvent):void
+		{
+			// if this was a composite effect (almost definitely is), we make sure a target was defined on it
+			// since that is optional, we look in its first child if we don't find one
+			var targetWindow:MDIWindow = event.effectInstance.target as MDIWindow;
+			if(targetWindow == null && event.effectInstance is CompositeEffectInstance)
+			{
+				var compEffect:CompositeEffect = event.effectInstance.effect as CompositeEffect;
+				targetWindow = Effect(compEffect.children[0]).target as MDIWindow;
+			}
+			tiledWindows.addItem(targetWindow);
+			reTileWindows();
 		}
 		
 		private function onCloseEffectEnd(event:EffectEvent):void

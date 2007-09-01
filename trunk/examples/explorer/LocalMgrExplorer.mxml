@@ -4,19 +4,22 @@
 	
 	<mx:Script>
 		<![CDATA[
+			import mdi.effects.MDIEffectsDescriptorBase;
 			import mdi.events.MDIWindowEvent;
 			import mdi.events.MDIManagerEvent;
 			import mdi.managers.MDIManager;
 			import mdi.containers.MDIWindow;
 			import mdi.effects.effectsLib.MDIVistaEffectsDescriptor;
+			import mdi.effects.effectsLib.MDIEffectsLinear;
 			
-			public var mgr : MDIManager
+			public var mgr:MDIManager;
 			
 			public function onCreationComplete():void
-			{	
+			{
 				// pass in the parent that you wish to contain windows to 
 				// when using a local instance of the MDIManager 
-				this.mgr = new MDIManager(this.containerInst, new MDIVistaEffectsDescriptor() );
+				this.mgr = new MDIManager(this.containerInst);
+				this.mgr.effects = new MDIEffectsLinear();
 				this.mgr.showMinimizedTiles = true;
 				this.mgr.addEventListener(MDIWindowEvent.CLOSE, onWinCloseMgr);
 			}

@@ -325,11 +325,17 @@ package mdi.containers
 			addEventListener(FlexEvent.CREATION_COMPLETE, componentComplete);			
 		}
 		
+		/**
+		 * @private
+		 */
 		private function componentComplete(event:FlexEvent):void
 		{
 			minimizeHeight = this.titleBar.height;
 		}
 		
+		/**
+		 * Create resize handles and window controls.
+		 */
 		override protected function createChildren():void
 		{
 			super.createChildren();
@@ -453,7 +459,9 @@ package mdi.containers
 			addListeners();
 		}		
 		
-		
+		/**
+		 * Position resize handles and window controls.
+		 */
 		override protected function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number):void
 		{
 			super.updateDisplayList(unscaledWidth, unscaledHeight);
@@ -488,92 +496,96 @@ package mdi.containers
 			}
 		}
 		
-		
+		/**
+		 * Add listeners for resize handles and window controls.
+		 */
 		private function addListeners():void
 		{
-			// rollover and rollout
+			// edges
 			resizeHandleTop.addEventListener(MouseEvent.ROLL_OVER, onResizeButtonRollOver, false, 0, true);
 			resizeHandleTop.addEventListener(MouseEvent.ROLL_OUT, onResizeButtonRollOut, false, 0, true);
+			resizeHandleTop.addEventListener(MouseEvent.MOUSE_DOWN, onResizeButtonPress, false, 0, true);
+			
 			resizeHandleRight.addEventListener(MouseEvent.ROLL_OVER, onResizeButtonRollOver, false, 0, true);
 			resizeHandleRight.addEventListener(MouseEvent.ROLL_OUT, onResizeButtonRollOut, false, 0, true);
+			resizeHandleRight.addEventListener(MouseEvent.MOUSE_DOWN, onResizeButtonPress, false, 0, true);
+			
 			resizeHandleBottom.addEventListener(MouseEvent.ROLL_OVER, onResizeButtonRollOver, false, 0, true);
 			resizeHandleBottom.addEventListener(MouseEvent.ROLL_OUT, onResizeButtonRollOut, false, 0, true);
+			resizeHandleBottom.addEventListener(MouseEvent.MOUSE_DOWN, onResizeButtonPress, false, 0, true);
+			
 			resizeHandleLeft.addEventListener(MouseEvent.ROLL_OVER, onResizeButtonRollOver, false, 0, true);
 			resizeHandleLeft.addEventListener(MouseEvent.ROLL_OUT, onResizeButtonRollOut, false, 0, true);
-			
-			resizeHandleTL.addEventListener(MouseEvent.ROLL_OVER, onResizeButtonRollOver, false, 0, true);
-			resizeHandleTL.addEventListener(MouseEvent.ROLL_OUT, onResizeButtonRollOut, false, 0, true);
-			resizeHandleTR.addEventListener(MouseEvent.ROLL_OVER, onResizeButtonRollOver, false, 0, true);
-			resizeHandleTR.addEventListener(MouseEvent.ROLL_OUT, onResizeButtonRollOut, false, 0, true);
-			resizeHandleBR.addEventListener(MouseEvent.ROLL_OVER, onResizeButtonRollOver, false, 0, true);
-			resizeHandleBR.addEventListener(MouseEvent.ROLL_OUT, onResizeButtonRollOut, false, 0, true);
-			resizeHandleBL.addEventListener(MouseEvent.ROLL_OVER, onResizeButtonRollOver, false, 0, true);
-			resizeHandleBL.addEventListener(MouseEvent.ROLL_OUT, onResizeButtonRollOut, false, 0, true);
-			
-			// dragging
-			resizeHandleTop.addEventListener(MouseEvent.MOUSE_DOWN, onResizeButtonPress, false, 0, true);
-			resizeHandleRight.addEventListener(MouseEvent.MOUSE_DOWN, onResizeButtonPress, false, 0, true);
-			resizeHandleBottom.addEventListener(MouseEvent.MOUSE_DOWN, onResizeButtonPress, false, 0, true);
 			resizeHandleLeft.addEventListener(MouseEvent.MOUSE_DOWN, onResizeButtonPress, false, 0, true);
 			
+			// corners
+			resizeHandleTL.addEventListener(MouseEvent.ROLL_OVER, onResizeButtonRollOver, false, 0, true);
+			resizeHandleTL.addEventListener(MouseEvent.ROLL_OUT, onResizeButtonRollOut, false, 0, true);
 			resizeHandleTL.addEventListener(MouseEvent.MOUSE_DOWN, onResizeButtonPress, false, 0, true);
+			
+			resizeHandleTR.addEventListener(MouseEvent.ROLL_OVER, onResizeButtonRollOver, false, 0, true);
+			resizeHandleTR.addEventListener(MouseEvent.ROLL_OUT, onResizeButtonRollOut, false, 0, true);
 			resizeHandleTR.addEventListener(MouseEvent.MOUSE_DOWN, onResizeButtonPress, false, 0, true);
+			
+			resizeHandleBR.addEventListener(MouseEvent.ROLL_OVER, onResizeButtonRollOver, false, 0, true);
+			resizeHandleBR.addEventListener(MouseEvent.ROLL_OUT, onResizeButtonRollOut, false, 0, true);
 			resizeHandleBR.addEventListener(MouseEvent.MOUSE_DOWN, onResizeButtonPress, false, 0, true);
+			
+			resizeHandleBL.addEventListener(MouseEvent.ROLL_OVER, onResizeButtonRollOver, false, 0, true);
+			resizeHandleBL.addEventListener(MouseEvent.ROLL_OUT, onResizeButtonRollOut, false, 0, true);
 			resizeHandleBL.addEventListener(MouseEvent.MOUSE_DOWN, onResizeButtonPress, false, 0, true);
 			
-			// clicking
+			// titleBar
 			titleBar.addEventListener(MouseEvent.MOUSE_DOWN, onTitleBarPress, false, 0, true);
 			titleBar.addEventListener(MouseEvent.MOUSE_UP, onTitleBarRelease, false, 0, true);
-			titleBar.addEventListener(MouseEvent.DOUBLE_CLICK, maximizeRestoreHandler, false, 0, true);
-			titleBar.addEventListener(MouseEvent.CLICK, onTitleBarClickHandler, false, 0, true);
+			titleBar.addEventListener(MouseEvent.DOUBLE_CLICK, maximizeRestore, false, 0, true);
+			titleBar.addEventListener(MouseEvent.CLICK, unMinimize, false, 0, true);
 			
-			
+			// window controls
 			if(minimizeBtn)
 			{
-				minimizeBtn.addEventListener(MouseEvent.CLICK, minimizeHandler, false, 0, true);
+				minimizeBtn.addEventListener(MouseEvent.CLICK, minimize, false, 0, true);
 			}
 			if(maximizeRestoreBtn)
 			{
-				maximizeRestoreBtn.addEventListener(MouseEvent.CLICK, maximizeRestoreHandler, false, 0, true);
+				maximizeRestoreBtn.addEventListener(MouseEvent.CLICK, maximizeRestore, false, 0, true);
 			}
 			if(closeBtn)
 			{
-				closeBtn.addEventListener(MouseEvent.CLICK, closeHandler, false, 0, true);
+				closeBtn.addEventListener(MouseEvent.CLICK, close, false, 0, true);
 			}
 			
-			this.addEventListener(MouseEvent.MOUSE_DOWN, setMDIWindowFocus);
+			// clicking anywhere brings window to front
+			this.addEventListener(MouseEvent.MOUSE_DOWN, bringToFront);
 		}
 		
-		public function setMDIWindowFocus(event:Event = null):void
+		/**
+		 * Bring this window to front of parent's child list. Called automatically by clicking on window.
+		 * Can be called manually by developer.
+		 */
+		public function bringToFront(event:Event = null):void
 		{
-			if(parent.getChildIndex(this) != parent.numChildren - 1)
+			for each(var win:MDIWindow in windowManager.windowList)
 			{
-				dispatchEvent(new MDIWindowEvent(MDIWindowEvent.FOCUS_END, parent.getChildAt(parent.numChildren - 1) as MDIWindow));
-				dispatchEvent(new MDIWindowEvent(MDIWindowEvent.FOCUS_START, this));
+				if(win.parent.getChildIndex(win) == win.parent.numChildren - 1)
+				{
+					win.dispatchEvent(new MDIWindowEvent(MDIWindowEvent.FOCUS_END, win));
+				}
 			}
+			dispatchEvent(new MDIWindowEvent(MDIWindowEvent.FOCUS_START, this));
 			parent.setChildIndex(this, parent.numChildren - 1);
 		}
 		
-		
 		/**
-		 *  Called from minimize button click - internal
-		 *
-		 *  @event MouseEvent
+		 *  Minimize the window.
 		 */
-		private function minimizeHandler(event:MouseEvent = null):void
+		public function minimize(event:MouseEvent = null):void
 		{
-			minimize();
-		}
-		
-		
-		/**
-		 *  Called from manager class to minimize this instance
-		 * 
-		 */
-		public function minimize():void
-		{
+			// if the panel is floating, save its state
 			if(windowState != MDIWindowState.MAXIMIZED)
+			{
 				savePanel();
+			}
 			_prevWindowState = windowState;
 			dispatchEvent(new MDIWindowEvent(MDIWindowEvent.MINIMIZE, this));
 			windowState = MDIWindowState.MINIMIZED;
@@ -582,18 +594,11 @@ package mdi.containers
 		
 		
 		/**
-		 *  Called from minimize button click - internal
-		 *
-		 *  @event MouseEvent
+		 *  Called from maximize/restore button 
 		 * 
+		 *  @event MouseEvent (optional)
 		 */
-		private function maximizeRestoreHandler(event:MouseEvent):void
-		{
-			maximizeRestore();
-		}
-		
-		
-		public function maximizeRestore():void
+		public function maximizeRestore(event:MouseEvent = null):void
 		{
 			if(maximizeRestoreBtn.styleName == "increaseBtn")
 			{
@@ -607,7 +612,10 @@ package mdi.containers
 				dispatchEvent(new MDIWindowEvent(MDIWindowEvent.RESTORE, this));
 			}
 		}
-	
+		
+		/**
+		 * Maximize the window.
+		 */
 		public function maximize():void
 		{
 			showControls = true;
@@ -616,18 +624,19 @@ package mdi.containers
 			dispatchEvent(new MDIWindowEvent(MDIWindowEvent.MAXIMIZE, this));
 		}
 		
-		
-		private function closeHandler(event:MouseEvent = null):void
-		{
-			close();
-		}
-		
-		public function close():void
+		/**
+		 * Close the window.
+		 */
+		public function close(event:MouseEvent = null):void
 		{
 			dispatchEvent(new MDIWindowEvent(MDIWindowEvent.CLOSE, this));
 		}
 		
-		
+		/**
+		 * Save the panel's floating coordinates.
+		 * 
+		 * @private
+		 */
 		private function savePanel():void
 		{
 			dragStartPanelX = this.x;
@@ -636,7 +645,12 @@ package mdi.containers
 			dragStartPanelHeight = this.height;
 		}
 		
-		public function addControl(uic:UIComponent, index:int = -1):void
+		/**
+		 * Not fully supported yet. Should be made public once it is.
+		 * 
+		 * @private
+		 */
+		private function addControl(uic:UIComponent, index:int = -1):void
 		{
 			uic.buttonMode = true;
 			if(index > -1)
@@ -651,7 +665,9 @@ package mdi.containers
 		}
 		
 		/**
-		 * Title bar dragging and collapsing
+		 * Title bar dragging.
+		 * 
+		 * @private
 		 */
 		private function onTitleBarPress(event:MouseEvent):void
 		{
@@ -668,12 +684,10 @@ package mdi.containers
 			systemManager.removeEventListener(MouseEvent.MOUSE_UP, onTitleBarRelease);
 		}
 		
-		private function onTitleBarClickHandler(event:MouseEvent):void
-		{
-			unMinimize();
-		}
-		
-		public function unMinimize():void
+		/**
+		 * Restore window to state it was in prior to being minimized.
+		 */
+		public function unMinimize(event:MouseEvent = null):void
 		{
 			if(minimized)
 			{
@@ -692,7 +706,7 @@ package mdi.containers
 		}
 		
 		/**
-		 * Mouse down on any resize handle
+		 * Mouse down on any resize handle.
 		 */
 		private function onResizeButtonPress(event:MouseEvent):void
 		{
@@ -833,22 +847,17 @@ package mdi.containers
 			}
 		}
 		
-		public function set collapsible(value:Boolean):void
-		{
-			doubleClickEnabled = value;
-		}
-		
 		public function set showControls(value:Boolean):void
 		{
 			controlsHolder.visible = value;
 		}
 		
-		public function get windowState():int
+		private function get windowState():int
 		{
 			return _windowState;
 		}
 		
-		public function set windowState(newState:int):void
+		private function set windowState(newState:int):void
 		{
 			_prevWindowState = _windowState;
 			_windowState = newState;
@@ -859,6 +868,11 @@ package mdi.containers
 		public function get minimized():Boolean
 		{
 			return _windowState == MDIWindowState.MINIMIZED;
+		}
+		
+		public function get maximized():Boolean
+		{
+			return _windowState == MDIWindowState.MAXIMIZED;
 		}
 		
 		public function updateContextMenu(currentState:int):void
@@ -904,7 +918,6 @@ package mdi.containers
 		  		defaultContextMenu.customItems.push(showAllItem);  
 			
         	this.contextMenu = defaultContextMenu;
-
 		}
 		
 		private function menuItemSelectHandler(event:ContextMenuEvent):void

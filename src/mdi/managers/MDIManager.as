@@ -152,7 +152,7 @@ package mdi.managers
 				}
 			} 		
 			
-			window.setMDIWindowFocus();
+			window.bringToFront();
 			this.effects.getShowEffect(window, this).play();
 		}
 		
@@ -459,7 +459,7 @@ package mdi.managers
 				var openWins:Array = getOpenWindowList();
 				for(var winIndex:int = 0; winIndex < openWins.length; winIndex++)
 				{
-					if(MDIWindow(openWins[winIndex]).windowState == MDIWindowState.MAXIMIZED)
+					if(MDIWindow(openWins[winIndex]).maximized)
 						maximizeWindow(MDIWindow(openWins[winIndex]));
 				}
 			}

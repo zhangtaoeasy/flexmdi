@@ -32,25 +32,25 @@ package mdi.containers
 
 	public class MDICanvas extends Canvas
 	{
-		public var mdiManager:MDIManager;
+		public var windowManager:MDIManager;
 		public var effectsLib:MDIEffectsDescriptorBase = new MDIEffectsDescriptorBase();
 		
 		public function MDICanvas()
 		{
 			super();
-			mdiManager = new MDIManager(this);
+			windowManager = new MDIManager(this);
 			addEventListener(FlexEvent.CREATION_COMPLETE, onCreationComplete);
 		}
 		
 		private function onCreationComplete(event:FlexEvent):void
 		{
-			mdiManager.effects = effectsLib;
+			windowManager.effects = effectsLib;
 			
 			for each(var child:UIComponent in getChildren())
 			{
 				if(child is MDIWindow)
 				{
-					mdiManager.add(child as MDIWindow);
+					windowManager.add(child as MDIWindow);
 				}
 			}
 			removeEventListener(FlexEvent.CREATION_COMPLETE, onCreationComplete);

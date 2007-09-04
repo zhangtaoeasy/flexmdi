@@ -5,10 +5,46 @@
 	xmlns:samples="sample_content.*"
 	creationComplete="init()" viewSourceURL="srcview/index.html">
 	<mx:Style source="/assets/css/style.css" />
+	<mx:Script>
+		<![CDATA[
+			import mdi.effects.effectsLib.MDIVistaEffectsDescriptor;
+			import mx.events.CloseEvent;
+			import flash.debugger.enterDebugger;
+			import mdi.events.MDIWindowEvent;
+			import mx.controls.Alert;
+			import mdi.events.MDIManagerEvent;
+			
+			private var queuedEvent:MDIManagerEvent;
+			
+			private function init():void
+			{
+				mdic.windowManager.effects = new MDIVistaEffectsDescriptor();
+				mdic.windowManager.addEventListener(MDIWindowEvent.CLOSE, onWinClose);
+			}
+			
+			private function onWinClose(event:Event):void
+			{
+				if(event is MDIManagerEvent)
+				{
+					queuedEvent = event as MDIManagerEvent;
+					event.stopImmediatePropagation();					
+					Alert.show("Seriously?", "Confirm close", 3, null, confirmClose);
+				}
+			}
+			
+			private function confirmClose(event:CloseEvent):void
+			{
+				if(event.detail == mx.controls.Alert.YES)
+				{
+					mdic.windowManager.executeDefaultBehavior(queuedEvent);
+				}
+			}
+		]]>
+	</mx:Script>
 	<mx:VBox>
-		<mx:Button label="Cascade" click="mdic.mdiManager.cascade()" />
-		<mx:Button label="Tile" click="mdic.mdiManager.tile()" />
-		<mx:Button label="Tile + Fill" click="mdic.mdiManager.tile(true)" />
+		<mx:Button label="Cascade" click="mdic.windowManager.cascade()" />
+		<mx:Button label="Tile" click="mdic.windowManager.tile()" />
+		<mx:Button label="Tile + Fill" click="mdic.windowManager.tile(true)" />
 	</mx:VBox>
 	
 	<mx:TabNavigator>

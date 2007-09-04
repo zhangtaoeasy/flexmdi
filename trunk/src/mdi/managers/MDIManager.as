@@ -53,6 +53,97 @@ package mdi.managers
 	import mx.managers.PopUpManager;
 	import mx.utils.ArrayUtil;
 	
+	//--------------------------------------
+	//  Events
+	//--------------------------------------
+	
+	/**
+	 *  Dispatched when the minimize button is clicked.
+	 *
+	 *  @eventType mdi.events.MDIManagerEvent.MINIMIZE
+	 */
+	[Event(name="minimize", type="mdi.events.MDIManagerEvent")]
+	
+	/**
+	 *  If the window is minimized, this event is dispatched when the titleBar is clicked. 
+	 * 	If the window is maxmimized, this event is dispatched upon clicking the restore button
+	 *  or double clicking the titleBar.
+	 *
+	 *  @eventType mdi.events.MDIManagerEvent.RESTORE
+	 */
+	[Event(name="restore", type="mdi.events.MDIManagerEvent")]
+	
+	/**
+	 *  Dispatched when the maximize button is clicked or when the window is in a
+	 *  normal state (not minimized or maximized) and the titleBar is double clicked.
+	 *
+	 *  @eventType mdi.events.MDIManagerEvent.MAXIMIZE
+	 */
+	[Event(name="maximize", type="mdi.events.MDIManagerEvent")]
+	
+	/**
+	 *  Dispatched when the minimize button is clicked.
+	 *
+	 *  @eventType mdi.events.MDIManagerEvent.CLOSE
+	 */
+	[Event(name="close", type="mdi.events.MDIManagerEvent")]
+	
+	/**
+	 *  Dispatched when the window gains focus and is given topmost z-index of MDIManager's children.
+	 *
+	 *  @eventType mdi.events.MDIManagerEvent.FOCUS_START
+	 */
+	[Event(name="focusStart", type="mdi.events.MDIManagerEvent")]
+	
+	/**
+	 *  Dispatched when the window loses focus and no longer has topmost z-index of MDIManager's children.
+	 *
+	 *  @eventType mdi.events.MDIManagerEvent.FOCUS_END
+	 */
+	[Event(name="focusEnd", type="mdi.events.MDIManagerEvent")]
+	
+	/**
+	 *  Dispatched while the window is being dragged.
+	 *
+	 *  @eventType mdi.events.MDIManagerEvent.MOVE
+	 */
+	[Event(name="move", type="mdi.events.MDIManagerEvent")]
+	
+	/**
+	 *  Dispatched when a resize handle is pressed.
+	 *
+	 *  @eventType mdi.events.MDIManagerEvent.RESIZE_START
+	 */
+	[Event(name="resizeStart", type="mdi.events.MDIManagerEvent")]
+	
+	/**
+	 *  Dispatched while the mouse is down on a resize handle.
+	 *
+	 *  @eventType mdi.events.MDIManagerEvent.RESIZE
+	 */
+	[Event(name="resize", type="mdi.events.MDIManagerEvent")]
+	
+	/**
+	 *  Dispatched when the mouse is released from a resize handle.
+	 *
+	 *  @eventType mdi.events.MDIManagerEvent.RESIZE_END
+	 */
+	[Event(name="resizeEnd", type="mdi.events.MDIManagerEvent")]
+	
+	/**
+	 *  Dispatched when the windows are cascaded.
+	 *
+	 *  @eventType mdi.events.MDIManagerEvent.CASCADE
+	 */
+	[Event(name="cascade", type="mdi.events.MDIManagerEvent")]
+	
+	/**
+	 *  Dispatched when the windows are tiled.
+	 *
+	 *  @eventType mdi.events.MDIManagerEvent.TILE
+	 */
+	[Event(name="tile", type="mdi.events.MDIManagerEvent")]
+	
 	
 	public class MDIManager extends EventDispatcher
 	{
@@ -96,17 +187,17 @@ package mdi.managers
 			this.container.addEventListener(ResizeEvent.RESIZE, containerResizeHandler);
 			
 			// these handlers execute default behaviors
-			addEventListener(MDIWindowEvent.MINIMIZE, defaultWindowEventHandler, false, -1);
-			addEventListener(MDIWindowEvent.RESTORE, defaultWindowEventHandler, false, -1);
-			addEventListener(MDIWindowEvent.MAXIMIZE, defaultWindowEventHandler, false, -1);
-			addEventListener(MDIWindowEvent.CLOSE, defaultWindowEventHandler, false, -1);
+			addEventListener(MDIWindowEvent.MINIMIZE, executeDefaultBehavior, false, -1);
+			addEventListener(MDIWindowEvent.RESTORE, executeDefaultBehavior, false, -1);
+			addEventListener(MDIWindowEvent.MAXIMIZE, executeDefaultBehavior, false, -1);
+			addEventListener(MDIWindowEvent.CLOSE, executeDefaultBehavior, false, -1);
 			
-			addEventListener(MDIWindowEvent.FOCUS_START, defaultWindowEventHandler, false, -1);
-			addEventListener(MDIWindowEvent.FOCUS_END, defaultWindowEventHandler, false, -1);
-			addEventListener(MDIWindowEvent.MOVE, defaultWindowEventHandler, false, -1);
-			addEventListener(MDIWindowEvent.RESIZE_START, defaultWindowEventHandler, false, -1);
-			addEventListener(MDIWindowEvent.RESIZE, defaultWindowEventHandler, false, -1);
-			addEventListener(MDIWindowEvent.RESIZE_END, defaultWindowEventHandler, false, -1);
+			addEventListener(MDIWindowEvent.FOCUS_START, executeDefaultBehavior, false, -1);
+			addEventListener(MDIWindowEvent.FOCUS_END, executeDefaultBehavior, false, -1);
+			addEventListener(MDIWindowEvent.MOVE, executeDefaultBehavior, false, -1);
+			addEventListener(MDIWindowEvent.RESIZE_START, executeDefaultBehavior, false, -1);
+			addEventListener(MDIWindowEvent.RESIZE, executeDefaultBehavior, false, -1);
+			addEventListener(MDIWindowEvent.RESIZE_END, executeDefaultBehavior, false, -1);
 		}
 		
 		private var _container:UIComponent;
@@ -290,7 +381,7 @@ package mdi.managers
 			}			
 		}
 		
-		private function defaultWindowEventHandler(event:Event):void
+		public function executeDefaultBehavior(event:Event):void
 		{
 			if(event is MDIManagerEvent)
 			{

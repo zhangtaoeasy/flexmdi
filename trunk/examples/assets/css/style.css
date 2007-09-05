@@ -17,6 +17,12 @@ Panel {
 	borderAlpha: 1.0;
 	titleStyleName: "mypanelTitle";
 }
+
+TabNavigator
+{
+		
+}
+
 .mypanelTitle {
 	fontFamily: Arial;
 	fontSize: 10;

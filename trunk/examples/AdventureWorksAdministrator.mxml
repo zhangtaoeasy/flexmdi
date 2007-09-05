@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" 
+	xmlns:flexmdi="http://flexmdi.googlecode.com/" xmlns:grids="aworks.grids.*" 
+	initialize="StyleManager.loadStyleDeclarations('assets/css/style.swf')" 
+	creationComplete="onCreationComplete()">
+	
+	
+	
+	
+	<mx:Script>
+		<![CDATA[
+			
+			import mdi.effects.effectsLib.MDIVistaEffectsDescriptor;
+			import mdi.containers.MDICanvas;
+			
+			public function onCreationComplete():void
+			{
+				//
+			}
+			
+		]]>
+	</mx:Script>
+	
+	<mx:VBox width="100%" height="100%">
+		
+		<mx:HBox width="100%" height="50">
+			
+			<mx:Text text="Adventure Works Administrator" />
+			
+		</mx:HBox>
+		
+		<mx:TabNavigator width="100%" height="100%">
+			
+			<flexmdi:MDICanvas id="hr" width="100%" height="100%" label="Human Resources">
+				<grids:EmployeeGrid title="Employees" width="596" height="452" />
+				<grids:DepartmentGrid title="Departments" width="304" height="451"  x="604" y="1"/>
+			</flexmdi:MDICanvas>
+			<flexmdi:MDICanvas id="inventory" width="100%" height="100%" label="Inventory">
+				
+			</flexmdi:MDICanvas>
+			<flexmdi:MDICanvas id="purchasing" width="100%" height="100%" label="Purchasing">
+				
+			</flexmdi:MDICanvas>
+			<flexmdi:MDICanvas id="sales" width="100%" height="100%" label="Sales">
+				
+			</flexmdi:MDICanvas>
+			<flexmdi:MDICanvas id="shipping" width="100%" height="100%" label="Shipping">
+				
+			</flexmdi:MDICanvas>
+			<flexmdi:MDICanvas id="system" width="100%" height="100%" label="System">
+				<grids:AWBuildVersionGrid title="Build Version" width="400" height="200" />
+			</flexmdi:MDICanvas>
+		</mx:TabNavigator>
+	
+	</mx:VBox>
+</mx:Application>

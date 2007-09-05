@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<flexmdi:MDIWindow xmlns:mx="http://www.adobe.com/2006/mxml" width="400" height="300" creationComplete="onCreationComplete()"
+	xmlns:flexmdi="http://flexmdi.googlecode.com/">
+	
+	<mx:Script>
+		<![CDATA[
+			import aworks.vo.Contact;
+			import aworks.core.DataTable;
+			import mdi.containers.MDIWindow;
+			
+			[Bindable]
+			public var vvendors : DataTable = new DataTable("getvVendors",aworks.vo.vVendor);
+			
+			public function onCreationComplete():void
+			{
+				vvendors.invoke();
+			}
+			
+		]]>
+	</mx:Script>
+	
+	<mx:DataGrid dataProvider="{this.vvendors.rows}" width="100%" height="100%">
+		<mx:columns>
+		
+			<mx:DataGridColumn dataField="VENDORID" headerText="VendorID" />
+			<mx:DataGridColumn dataField="NAME" headerText="Name" />
+			<mx:DataGridColumn dataField="CONTACTTYPE" headerText="ContactType" />
+			<mx:DataGridColumn dataField="TITLE" headerText="Title" />
+			<mx:DataGridColumn dataField="FIRSTNAME" headerText="FirstName" />
+			<mx:DataGridColumn dataField="MIDDLENAME" headerText="MiddleName" />
+			<mx:DataGridColumn dataField="LASTNAME" headerText="LastName" />
+			<mx:DataGridColumn dataField="SUFFIX" headerText="Suffix" />
+			<mx:DataGridColumn dataField="PHONE" headerText="Phone" />
+			<mx:DataGridColumn dataField="EMAILADDRESS" headerText="EmailAddress" />
+			<mx:DataGridColumn dataField="EMAILPROMOTION" headerText="EmailPromotion" />
+			<mx:DataGridColumn dataField="ADDRESSLINE1" headerText="AddressLine1" />
+			<mx:DataGridColumn dataField="ADDRESSLINE2" headerText="AddressLine2" />
+			<mx:DataGridColumn dataField="CITY" headerText="City" />
+			<mx:DataGridColumn dataField="STATEPROVINCENAME" headerText="StateProvinceName" />
+			<mx:DataGridColumn dataField="POSTALCODE" headerText="PostalCode" />
+			<mx:DataGridColumn dataField="COUNTRYREGIONNAME" headerText="CountryRegionName" />
+			
+		</mx:columns>
+	</mx:DataGrid>
+	
+	<mx:ControlBar width="100%">
+		
+		<mx:Button click="vvendors.invoke()" label="refresh" />
+		<mx:Text text="{vvendors.rows.length} Record(s)" />
+		<mx:Spacer width="100%" />
+		
+		
+	</mx:ControlBar>
+	
+</flexmdi:MDIWindow>
+
+
+

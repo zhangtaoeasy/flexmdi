@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<flexmdi:MDIWindow xmlns:mx="http://www.adobe.com/2006/mxml" width="400" height="300" creationComplete="onCreationComplete()"
+	xmlns:flexmdi="http://flexmdi.googlecode.com/">
+	
+	<mx:Script>
+		<![CDATA[
+			import aworks.vo.Contact;
+			import aworks.core.DataTable;
+			import mdi.containers.MDIWindow;
+			
+			[Bindable]
+			public var employees : DataTable = new DataTable("getEmployees",aworks.vo.Employee);
+			
+			public function onCreationComplete():void
+			{
+				employees.invoke();
+			}
+			
+		]]>
+	</mx:Script>
+	
+	<mx:DataGrid dataProvider="{this.employees.rows}" width="100%" height="100%">
+		<mx:columns>
+		
+			<mx:DataGridColumn dataField="EMPLOYEEID" headerText="EmployeeID" />
+			<mx:DataGridColumn dataField="NATIONALIDNUMBER" headerText="NationalIDNumber" />
+			<mx:DataGridColumn dataField="CONTACTID" headerText="ContactID" />
+			<mx:DataGridColumn dataField="LOGINID" headerText="LoginID" />
+			<mx:DataGridColumn dataField="MANAGERID" headerText="ManagerID" />
+			<mx:DataGridColumn dataField="TITLE" headerText="Title" />
+			<mx:DataGridColumn dataField="BIRTHDATE" headerText="BirthDate" />
+			<mx:DataGridColumn dataField="MARITALSTATUS" headerText="MaritalStatus" />
+			<mx:DataGridColumn dataField="GENDER" headerText="Gender" />
+			<mx:DataGridColumn dataField="HIREDATE" headerText="HireDate" />
+			<mx:DataGridColumn dataField="SALARIEDFLAG" headerText="SalariedFlag" />
+			<mx:DataGridColumn dataField="VACATIONHOURS" headerText="VacationHours" />
+			<mx:DataGridColumn dataField="SICKLEAVEHOURS" headerText="SickLeaveHours" />
+			<mx:DataGridColumn dataField="CURRENTFLAG" headerText="CurrentFlag" />
+			<mx:DataGridColumn dataField="ROWGUID" headerText="rowguid" />
+			<mx:DataGridColumn dataField="MODIFIEDDATE" headerText="ModifiedDate" />
+			
+		</mx:columns>
+	</mx:DataGrid>
+	
+	<mx:ControlBar width="100%">
+		
+		<mx:Button click="employees.invoke()" label="refresh" />
+		<mx:Text text="{employees.rows.length} Record(s)" />
+		<mx:Spacer width="100%" />
+		
+		
+	</mx:ControlBar>
+	
+</flexmdi:MDIWindow>
+
+
+

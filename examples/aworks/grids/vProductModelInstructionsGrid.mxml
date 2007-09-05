@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<flexmdi:MDIWindow xmlns:mx="http://www.adobe.com/2006/mxml" width="400" height="300" creationComplete="onCreationComplete()"
+	xmlns:flexmdi="http://flexmdi.googlecode.com/">
+	
+	<mx:Script>
+		<![CDATA[
+			import aworks.vo.Contact;
+			import aworks.core.DataTable;
+			import mdi.containers.MDIWindow;
+			
+			[Bindable]
+			public var vproductmodelinstructionss : DataTable = new DataTable("getvProductModelInstructionss",aworks.vo.vProductModelInstructions);
+			
+			public function onCreationComplete():void
+			{
+				vproductmodelinstructionss.invoke();
+			}
+			
+		]]>
+	</mx:Script>
+	
+	<mx:DataGrid dataProvider="{this.vproductmodelinstructionss.rows}" width="100%" height="100%">
+		<mx:columns>
+		
+			<mx:DataGridColumn dataField="PRODUCTMODELID" headerText="ProductModelID" />
+			<mx:DataGridColumn dataField="NAME" headerText="Name" />
+			<mx:DataGridColumn dataField="INSTRUCTIONS" headerText="Instructions" />
+			<mx:DataGridColumn dataField="LOCATIONID" headerText="LocationID" />
+			<mx:DataGridColumn dataField="SETUPHOURS" headerText="SetupHours" />
+			<mx:DataGridColumn dataField="MACHINEHOURS" headerText="MachineHours" />
+			<mx:DataGridColumn dataField="LABORHOURS" headerText="LaborHours" />
+			<mx:DataGridColumn dataField="LOTSIZE" headerText="LotSize" />
+			<mx:DataGridColumn dataField="STEP" headerText="Step" />
+			<mx:DataGridColumn dataField="ROWGUID" headerText="rowguid" />
+			<mx:DataGridColumn dataField="MODIFIEDDATE" headerText="ModifiedDate" />
+			
+		</mx:columns>
+	</mx:DataGrid>
+	
+	<mx:ControlBar width="100%">
+		
+		<mx:Button click="vproductmodelinstructionss.invoke()" label="refresh" />
+		<mx:Text text="{vproductmodelinstructionss.rows.length} Record(s)" />
+		<mx:Spacer width="100%" />
+		
+		
+	</mx:ControlBar>
+	
+</flexmdi:MDIWindow>
+
+
+

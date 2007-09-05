@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<flexmdi:MDIWindow xmlns:mx="http://www.adobe.com/2006/mxml" width="400" height="300" creationComplete="onCreationComplete()"
+	xmlns:flexmdi="http://flexmdi.googlecode.com/">
+	
+	<mx:Script>
+		<![CDATA[
+			import aworks.vo.Contact;
+			import aworks.core.DataTable;
+			import mdi.containers.MDIWindow;
+			
+			[Bindable]
+			public var productreviews : DataTable = new DataTable("getProductReviews",aworks.vo.ProductReview);
+			
+			public function onCreationComplete():void
+			{
+				productreviews.invoke();
+			}
+			
+		]]>
+	</mx:Script>
+	
+	<mx:DataGrid dataProvider="{this.productreviews.rows}" width="100%" height="100%">
+		<mx:columns>
+		
+			<mx:DataGridColumn dataField="PRODUCTREVIEWID" headerText="ProductReviewID" />
+			<mx:DataGridColumn dataField="PRODUCTID" headerText="ProductID" />
+			<mx:DataGridColumn dataField="REVIEWERNAME" headerText="ReviewerName" />
+			<mx:DataGridColumn dataField="REVIEWDATE" headerText="ReviewDate" />
+			<mx:DataGridColumn dataField="EMAILADDRESS" headerText="EmailAddress" />
+			<mx:DataGridColumn dataField="RATING" headerText="Rating" />
+			<mx:DataGridColumn dataField="COMMENTS" headerText="Comments" />
+			<mx:DataGridColumn dataField="MODIFIEDDATE" headerText="ModifiedDate" />
+			
+		</mx:columns>
+	</mx:DataGrid>
+	
+	<mx:ControlBar width="100%">
+		
+		<mx:Button click="productreviews.invoke()" label="refresh" />
+		<mx:Text text="{productreviews.rows.length} Record(s)" />
+		<mx:Spacer width="100%" />
+		
+		
+	</mx:ControlBar>
+	
+</flexmdi:MDIWindow>
+
+
+

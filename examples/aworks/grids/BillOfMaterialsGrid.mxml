@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<flexmdi:MDIWindow xmlns:mx="http://www.adobe.com/2006/mxml" width="400" height="300" creationComplete="onCreationComplete()"
+	xmlns:flexmdi="http://flexmdi.googlecode.com/">
+	
+	<mx:Script>
+		<![CDATA[
+			import aworks.vo.Contact;
+			import aworks.core.DataTable;
+			import mdi.containers.MDIWindow;
+			
+			[Bindable]
+			public var billofmaterialss : DataTable = new DataTable("getBillOfMaterialss",aworks.vo.BillOfMaterials);
+			
+			public function onCreationComplete():void
+			{
+				billofmaterialss.invoke();
+			}
+			
+		]]>
+	</mx:Script>
+	
+	<mx:DataGrid dataProvider="{this.billofmaterialss.rows}" width="100%" height="100%">
+		<mx:columns>
+		
+			<mx:DataGridColumn dataField="BILLOFMATERIALSID" headerText="BillOfMaterialsID" />
+			<mx:DataGridColumn dataField="PRODUCTASSEMBLYID" headerText="ProductAssemblyID" />
+			<mx:DataGridColumn dataField="COMPONENTID" headerText="ComponentID" />
+			<mx:DataGridColumn dataField="STARTDATE" headerText="StartDate" />
+			<mx:DataGridColumn dataField="ENDDATE" headerText="EndDate" />
+			<mx:DataGridColumn dataField="UNITMEASURECODE" headerText="UnitMeasureCode" />
+			<mx:DataGridColumn dataField="BOMLEVEL" headerText="BOMLevel" />
+			<mx:DataGridColumn dataField="PERASSEMBLYQTY" headerText="PerAssemblyQty" />
+			<mx:DataGridColumn dataField="MODIFIEDDATE" headerText="ModifiedDate" />
+			
+		</mx:columns>
+	</mx:DataGrid>
+	
+	<mx:ControlBar width="100%">
+		
+		<mx:Button click="billofmaterialss.invoke()" label="refresh" />
+		<mx:Text text="{billofmaterialss.rows.length} Record(s)" />
+		<mx:Spacer width="100%" />
+		
+		
+	</mx:ControlBar>
+	
+</flexmdi:MDIWindow>
+
+
+

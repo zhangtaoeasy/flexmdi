@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<flexmdi:MDIWindow xmlns:mx="http://www.adobe.com/2006/mxml" width="400" height="300" creationComplete="onCreationComplete()"
+	xmlns:flexmdi="http://flexmdi.googlecode.com/">
+	
+	<mx:Script>
+		<![CDATA[
+			import aworks.vo.Contact;
+			import aworks.core.DataTable;
+			import mdi.containers.MDIWindow;
+			
+			[Bindable]
+			public var vjobcandidates : DataTable = new DataTable("getvJobCandidates",aworks.vo.vJobCandidate);
+			
+			public function onCreationComplete():void
+			{
+				vjobcandidates.invoke();
+			}
+			
+		]]>
+	</mx:Script>
+	
+	<mx:DataGrid dataProvider="{this.vjobcandidates.rows}" width="100%" height="100%">
+		<mx:columns>
+		
+			<mx:DataGridColumn dataField="JOBCANDIDATEID" headerText="JobCandidateID" />
+			<mx:DataGridColumn dataField="EMPLOYEEID" headerText="EmployeeID" />
+			<mx:DataGridColumn dataField="NAME.PREFIX" headerText="Name.Prefix" />
+			<mx:DataGridColumn dataField="NAME.FIRST" headerText="Name.First" />
+			<mx:DataGridColumn dataField="NAME.MIDDLE" headerText="Name.Middle" />
+			<mx:DataGridColumn dataField="NAME.LAST" headerText="Name.Last" />
+			<mx:DataGridColumn dataField="NAME.SUFFIX" headerText="Name.Suffix" />
+			<mx:DataGridColumn dataField="SKILLS" headerText="Skills" />
+			<mx:DataGridColumn dataField="ADDR.TYPE" headerText="Addr.Type" />
+			<mx:DataGridColumn dataField="ADDR.LOC.COUNTRYREGION" headerText="Addr.Loc.CountryRegion" />
+			<mx:DataGridColumn dataField="ADDR.LOC.STATE" headerText="Addr.Loc.State" />
+			<mx:DataGridColumn dataField="ADDR.LOC.CITY" headerText="Addr.Loc.City" />
+			<mx:DataGridColumn dataField="ADDR.POSTALCODE" headerText="Addr.PostalCode" />
+			<mx:DataGridColumn dataField="EMAIL" headerText="EMail" />
+			<mx:DataGridColumn dataField="WEBSITE" headerText="WebSite" />
+			<mx:DataGridColumn dataField="MODIFIEDDATE" headerText="ModifiedDate" />
+			
+		</mx:columns>
+	</mx:DataGrid>
+	
+	<mx:ControlBar width="100%">
+		
+		<mx:Button click="vjobcandidates.invoke()" label="refresh" />
+		<mx:Text text="{vjobcandidates.rows.length} Record(s)" />
+		<mx:Spacer width="100%" />
+		
+		
+	</mx:ControlBar>
+	
+</flexmdi:MDIWindow>
+
+
+

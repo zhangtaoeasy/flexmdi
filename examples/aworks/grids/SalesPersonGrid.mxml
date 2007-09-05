@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<flexmdi:MDIWindow xmlns:mx="http://www.adobe.com/2006/mxml" width="400" height="300" creationComplete="onCreationComplete()"
+	xmlns:flexmdi="http://flexmdi.googlecode.com/">
+	
+	<mx:Script>
+		<![CDATA[
+			import aworks.vo.Contact;
+			import aworks.core.DataTable;
+			import mdi.containers.MDIWindow;
+			
+			[Bindable]
+			public var salespersons : DataTable = new DataTable("getSalesPersons",aworks.vo.SalesPerson);
+			
+			public function onCreationComplete():void
+			{
+				salespersons.invoke();
+			}
+			
+		]]>
+	</mx:Script>
+	
+	<mx:DataGrid dataProvider="{this.salespersons.rows}" width="100%" height="100%">
+		<mx:columns>
+		
+			<mx:DataGridColumn dataField="SALESPERSONID" headerText="SalesPersonID" />
+			<mx:DataGridColumn dataField="TERRITORYID" headerText="TerritoryID" />
+			<mx:DataGridColumn dataField="SALESQUOTA" headerText="SalesQuota" />
+			<mx:DataGridColumn dataField="BONUS" headerText="Bonus" />
+			<mx:DataGridColumn dataField="COMMISSIONPCT" headerText="CommissionPct" />
+			<mx:DataGridColumn dataField="SALESYTD" headerText="SalesYTD" />
+			<mx:DataGridColumn dataField="SALESLASTYEAR" headerText="SalesLastYear" />
+			<mx:DataGridColumn dataField="ROWGUID" headerText="rowguid" />
+			<mx:DataGridColumn dataField="MODIFIEDDATE" headerText="ModifiedDate" />
+			
+		</mx:columns>
+	</mx:DataGrid>
+	
+	<mx:ControlBar width="100%">
+		
+		<mx:Button click="salespersons.invoke()" label="refresh" />
+		<mx:Text text="{salespersons.rows.length} Record(s)" />
+		<mx:Spacer width="100%" />
+		
+		
+	</mx:ControlBar>
+	
+</flexmdi:MDIWindow>
+
+
+

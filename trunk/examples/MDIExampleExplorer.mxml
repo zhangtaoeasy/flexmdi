@@ -7,11 +7,11 @@
 	
 	<mx:Script>
 		<![CDATA[
-			import mdi.effects.MDIEffectsDescriptorBase;
+			import flexmdi.effects.MDIEffectsDescriptorBase;
 		
-			import mdi.managers.MDIManager;
-			import mdi.containers.MDIWindow;
-			import mdi.effects.effectsLib.MDIVistaEffectsDescriptor;
+			import flexmdi.managers.MDIManager;
+			import flexmdi.containers.MDIWindow;
+			import flexmdi.effects.effectsLib.MDIVistaEffectsDescriptor;
 			
 			private function init():void
 			{

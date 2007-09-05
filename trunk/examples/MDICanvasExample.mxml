@@ -7,12 +7,12 @@
 	<mx:Style source="/assets/css/style.css" />
 	<mx:Script>
 		<![CDATA[
-			import mdi.effects.effectsLib.MDIVistaEffectsDescriptor;
+			import flexmdi.effects.effectsLib.MDIVistaEffectsDescriptor;
 			import mx.events.CloseEvent;
 			import flash.debugger.enterDebugger;
-			import mdi.events.MDIWindowEvent;
+			import flexmdi.events.MDIWindowEvent;
 			import mx.controls.Alert;
-			import mdi.events.MDIManagerEvent;
+			import flexmdi.events.MDIManagerEvent;
 			
 			private var queuedEvent:MDIManagerEvent;
 			

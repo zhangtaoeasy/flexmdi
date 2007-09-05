@@ -21,41 +21,35 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-package mdi.effects
+package flexmdi.events
 {
-	import flash.geom.Point;
+	import flash.events.Event;
 	
-	import mdi.containers.MDIWindow;
-	import mdi.managers.MDIManager;
+	import flexmdi.containers.MDIWindow;
+	import flexmdi.managers.MDIManager;
 	
 	import mx.effects.Effect;
-	
-	public interface IMDIEffectsDescriptor
+
+	public class MDIManagerEvent extends Event
 	{
-		function getMinimizeEffect(window:MDIWindow, manager:MDIManager, moveTo:Point = null):Effect
-	
-		function getRestoreEffect(window:MDIWindow, manager:MDIManager, moveTo:Point = null):Effect
+		public static const CASCADE:String = "cascade";
+		public static const TILE:String = "tile";
 		
-		function getMaximizeEffect(window:MDIWindow, manager:MDIManager, bottomOffset:Number = 0):Effect
-	
-		function getCloseEffect(window:MDIWindow, manager:MDIManager):Effect
+		public var window:MDIWindow;
+		public var manager:MDIManager;
+		public var effect:Effect;
 		
-		function getFocusInEffect(window:MDIWindow, manager:MDIManager):Effect
-	
-		function getFocusOutEffect(window:MDIWindow, manager:MDIManager):Effect
-	
-		function getShowEffect(window:MDIWindow, manager:MDIManager):Effect
-	
-		function getMoveEffect(window:MDIWindow, manager:MDIManager):Effect
-	
-		function getResizeEffect(window:MDIWindow, manager:MDIManager):Effect
-	
-		function reTileMinWindowsEffect(window:MDIWindow, manager:MDIManager, moveTo:Point):Effect	
-	
-		//group window effects
+		public function MDIManagerEvent(type:String, window:MDIWindow, manager:MDIManager, effect:Effect = null, bubbles:Boolean = false, cancelable:Boolean = false)
+		{
+			super(type, bubbles, cancelable);
+			this.window = window;
+			this.manager = manager;
+			this.effect = effect;
+		}
 		
-		function getTileEffect(items:Array, manager:MDIManager):Effect
-		
-		function getCascadeEffect(items:Array, manager:MDIManager):Effect		
+		override public function clone():Event
+		{
+			return new MDIManagerEvent(type, window, manager, effect, bubbles, cancelable);
+		}
 	}
 }

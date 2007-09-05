@@ -1,6 +1,6 @@
-package mdi.effects.effectClasses
+package flexmdi.effects.effectClasses
 {
-	import mdi.containers.MDIWindow;
+	import flexmdi.containers.MDIWindow;
 	import flash.geom.Point;
 	
 	public class MDIGroupEffectItem

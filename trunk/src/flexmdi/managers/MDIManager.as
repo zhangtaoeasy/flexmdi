@@ -22,7 +22,7 @@ SOFTWARE.
 */
 
 
-package mdi.managers
+package flexmdi.managers
 {	
 
 	import flash.display.DisplayObject;
@@ -33,13 +33,13 @@ package mdi.managers
 	import flash.ui.ContextMenu;
 	import flash.ui.ContextMenuItem;
 	
-	import mdi.containers.MDIWindow;
-	import mdi.containers.MDIWindowState;
-	import mdi.effects.IMDIEffectsDescriptor;
-	import mdi.effects.MDIEffectsDescriptorBase;
-	import mdi.effects.effectClasses.MDIGroupEffectItem;
-	import mdi.events.MDIManagerEvent;
-	import mdi.events.MDIWindowEvent;
+	import flexmdi.containers.MDIWindow;
+	import flexmdi.containers.MDIWindowState;
+	import flexmdi.effects.IMDIEffectsDescriptor;
+	import flexmdi.effects.MDIEffectsDescriptorBase;
+	import flexmdi.effects.effectClasses.MDIGroupEffectItem;
+	import flexmdi.events.MDIManagerEvent;
+	import flexmdi.events.MDIWindowEvent;
 	
 	import mx.collections.ArrayCollection;
 	import mx.core.Application;
@@ -60,7 +60,7 @@ package mdi.managers
 	/**
 	 *  Dispatched when the minimize button is clicked.
 	 *
-	 *  @eventType mdi.events.MDIManagerEvent.MINIMIZE
+	 *  @eventType flexmdi.events.MDIManagerEvent.MINIMIZE
 	 */
 	[Event(name="minimize", type="mdi.events.MDIManagerEvent")]
 	
@@ -69,7 +69,7 @@ package mdi.managers
 	 * 	If the window is maxmimized, this event is dispatched upon clicking the restore button
 	 *  or double clicking the titleBar.
 	 *
-	 *  @eventType mdi.events.MDIManagerEvent.RESTORE
+	 *  @eventType flexmdi.events.MDIManagerEvent.RESTORE
 	 */
 	[Event(name="restore", type="mdi.events.MDIManagerEvent")]
 	
@@ -77,70 +77,70 @@ package mdi.managers
 	 *  Dispatched when the maximize button is clicked or when the window is in a
 	 *  normal state (not minimized or maximized) and the titleBar is double clicked.
 	 *
-	 *  @eventType mdi.events.MDIManagerEvent.MAXIMIZE
+	 *  @eventType flexmdi.events.MDIManagerEvent.MAXIMIZE
 	 */
 	[Event(name="maximize", type="mdi.events.MDIManagerEvent")]
 	
 	/**
 	 *  Dispatched when the minimize button is clicked.
 	 *
-	 *  @eventType mdi.events.MDIManagerEvent.CLOSE
+	 *  @eventType flexmdi.events.MDIManagerEvent.CLOSE
 	 */
 	[Event(name="close", type="mdi.events.MDIManagerEvent")]
 	
 	/**
 	 *  Dispatched when the window gains focus and is given topmost z-index of MDIManager's children.
 	 *
-	 *  @eventType mdi.events.MDIManagerEvent.FOCUS_START
+	 *  @eventType flexmdi.events.MDIManagerEvent.FOCUS_START
 	 */
 	[Event(name="focusStart", type="mdi.events.MDIManagerEvent")]
 	
 	/**
 	 *  Dispatched when the window loses focus and no longer has topmost z-index of MDIManager's children.
 	 *
-	 *  @eventType mdi.events.MDIManagerEvent.FOCUS_END
+	 *  @eventType flexmdi.events.MDIManagerEvent.FOCUS_END
 	 */
 	[Event(name="focusEnd", type="mdi.events.MDIManagerEvent")]
 	
 	/**
 	 *  Dispatched while the window is being dragged.
 	 *
-	 *  @eventType mdi.events.MDIManagerEvent.MOVE
+	 *  @eventType flexmdi.events.MDIManagerEvent.MOVE
 	 */
 	[Event(name="move", type="mdi.events.MDIManagerEvent")]
 	
 	/**
 	 *  Dispatched when a resize handle is pressed.
 	 *
-	 *  @eventType mdi.events.MDIManagerEvent.RESIZE_START
+	 *  @eventType flexmdi.events.MDIManagerEvent.RESIZE_START
 	 */
 	[Event(name="resizeStart", type="mdi.events.MDIManagerEvent")]
 	
 	/**
 	 *  Dispatched while the mouse is down on a resize handle.
 	 *
-	 *  @eventType mdi.events.MDIManagerEvent.RESIZE
+	 *  @eventType flexmdi.events.MDIManagerEvent.RESIZE
 	 */
 	[Event(name="resize", type="mdi.events.MDIManagerEvent")]
 	
 	/**
 	 *  Dispatched when the mouse is released from a resize handle.
 	 *
-	 *  @eventType mdi.events.MDIManagerEvent.RESIZE_END
+	 *  @eventType flexmdi.events.MDIManagerEvent.RESIZE_END
 	 */
 	[Event(name="resizeEnd", type="mdi.events.MDIManagerEvent")]
 	
 	/**
 	 *  Dispatched when the windows are cascaded.
 	 *
-	 *  @eventType mdi.events.MDIManagerEvent.CASCADE
+	 *  @eventType flexmdi.events.MDIManagerEvent.CASCADE
 	 */
 	[Event(name="cascade", type="mdi.events.MDIManagerEvent")]
 	
 	/**
 	 *  Dispatched when the windows are tiled.
 	 *
-	 *  @eventType mdi.events.MDIManagerEvent.TILE
+	 *  @eventType flexmdi.events.MDIManagerEvent.TILE
 	 */
 	[Event(name="tile", type="mdi.events.MDIManagerEvent")]
 	

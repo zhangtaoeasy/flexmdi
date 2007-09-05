@@ -1,4 +1,4 @@
-package mdi.containers
+package flexmdi.containers
 {
 	public class MDIWindowState
 	{

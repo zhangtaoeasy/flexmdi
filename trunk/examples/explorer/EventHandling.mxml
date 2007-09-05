@@ -5,9 +5,9 @@
 		<![CDATA[
 			import mx.events.CloseEvent;
 			import mx.controls.Alert;
-			import mdi.managers.MDIManager;
-			import mdi.containers.MDIWindow;
-			import mdi.effects.effectsLib.MDIVistaEffectsDescriptor;
+			import flexmdi.managers.MDIManager;
+			import flexmdi.containers.MDIWindow;
+			import flexmdi.effects.effectsLib.MDIVistaEffectsDescriptor;
 			
 			public function onCreationComplete():void
 			{

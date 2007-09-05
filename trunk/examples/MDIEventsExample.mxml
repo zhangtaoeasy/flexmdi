@@ -5,9 +5,9 @@
 		<![CDATA[
 			import mx.utils.ObjectUtil;
 			
-			import mdi.containers.MDIWindow;
-			import mdi.events.MDIWindowEvent;
-			import mdi.managers.MDIManager;
+			import flexmdi.containers.MDIWindow;
+			import flexmdi.events.MDIWindowEvent;
+			import flexmdi.managers.MDIManager;
 			
 			public function addWindow():void
 			{

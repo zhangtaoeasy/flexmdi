@@ -22,7 +22,7 @@ SOFTWARE.
 */
 
 
-package mdi.containers
+package flexmdi.containers
 {
 	import flash.events.ContextMenuEvent;
 	import flash.events.Event;
@@ -31,8 +31,8 @@ package mdi.containers
 	import flash.ui.ContextMenu;
 	import flash.ui.ContextMenuItem;
 	
-	import mdi.events.MDIWindowEvent;
-	import mdi.managers.MDIManager;
+	import flexmdi.events.MDIWindowEvent;
+	import flexmdi.managers.MDIManager;
 	
 	import mx.collections.ArrayCollection;
 	import mx.containers.Panel;
@@ -49,7 +49,7 @@ package mdi.containers
 	/**
 	 *  Dispatched when the minimize button is clicked.
 	 *
-	 *  @eventType mdi.events.MDIWindowEvent.MINIMIZE
+	 *  @eventType flexmdi.events.MDIWindowEvent.MINIMIZE
 	 */
 	[Event(name="minimize", type="mdi.events.MDIWindowEvent")]
 	
@@ -58,7 +58,7 @@ package mdi.containers
 	 * 	If the window is maxmimized, this event is dispatched upon clicking the restore button
 	 *  or double clicking the titleBar.
 	 *
-	 *  @eventType mdi.events.MDIWindowEvent.RESTORE
+	 *  @eventType flexmdi.events.MDIWindowEvent.RESTORE
 	 */
 	[Event(name="restore", type="mdi.events.MDIWindowEvent")]
 	
@@ -66,56 +66,56 @@ package mdi.containers
 	 *  Dispatched when the maximize button is clicked or when the window is in a
 	 *  normal state (not minimized or maximized) and the titleBar is double clicked.
 	 *
-	 *  @eventType mdi.events.MDIWindowEvent.MAXIMIZE
+	 *  @eventType flexmdi.events.MDIWindowEvent.MAXIMIZE
 	 */
 	[Event(name="maximize", type="mdi.events.MDIWindowEvent")]
 	
 	/**
 	 *  Dispatched when the minimize button is clicked.
 	 *
-	 *  @eventType mdi.events.MDIWindowEvent.CLOSE
+	 *  @eventType flexmdi.events.MDIWindowEvent.CLOSE
 	 */
 	[Event(name="close", type="mdi.events.MDIWindowEvent")]
 	
 	/**
 	 *  Dispatched when the window gains focus and is given topmost z-index of MDIManager's children.
 	 *
-	 *  @eventType mdi.events.MDIWindowEvent.FOCUS_START
+	 *  @eventType flexmdi.events.MDIWindowEvent.FOCUS_START
 	 */
 	[Event(name="focusStart", type="mdi.events.MDIWindowEvent")]
 	
 	/**
 	 *  Dispatched when the window loses focus and no longer has topmost z-index of MDIManager's children.
 	 *
-	 *  @eventType mdi.events.MDIWindowEvent.FOCUS_END
+	 *  @eventType flexmdi.events.MDIWindowEvent.FOCUS_END
 	 */
 	[Event(name="focusEnd", type="mdi.events.MDIWindowEvent")]
 	
 	/**
 	 *  Dispatched while the window is being dragged.
 	 *
-	 *  @eventType mdi.events.MDIWindowEvent.MOVE
+	 *  @eventType flexmdi.events.MDIWindowEvent.MOVE
 	 */
 	[Event(name="move", type="mdi.events.MDIWindowEvent")]
 	
 	/**
 	 *  Dispatched when a resize handle is pressed.
 	 *
-	 *  @eventType mdi.events.MDIWindowEvent.RESIZE_START
+	 *  @eventType flexmdi.events.MDIWindowEvent.RESIZE_START
 	 */
 	[Event(name="resizeStart", type="mdi.events.MDIWindowEvent")]
 	
 	/**
 	 *  Dispatched while the mouse is down on a resize handle.
 	 *
-	 *  @eventType mdi.events.MDIWindowEvent.RESIZE
+	 *  @eventType flexmdi.events.MDIWindowEvent.RESIZE
 	 */
 	[Event(name="resize", type="mdi.events.MDIWindowEvent")]
 	
 	/**
 	 *  Dispatched when the mouse is released from a resize handle.
 	 *
-	 *  @eventType mdi.events.MDIWindowEvent.RESIZE_END
+	 *  @eventType flexmdi.events.MDIWindowEvent.RESIZE_END
 	 */
 	[Event(name="resizeEnd", type="mdi.events.MDIWindowEvent")]
 	
@@ -299,13 +299,13 @@ package mdi.containers
 	     */
 		public var windowManager:MDIManager;
 		
-		[Embed(source="/mdi/assets/img/resizeCursorV.gif")]
+		[Embed(source="/flexmdi/assets/img/resizeCursorV.gif")]
 		private var resizeCursorV:Class;
-		[Embed(source="/mdi/assets/img/resizeCursorH.gif")]
+		[Embed(source="/flexmdi/assets/img/resizeCursorH.gif")]
 		private var resizeCursorH:Class;
-		[Embed(source="/mdi/assets/img/resizeCursorTLBR.gif")]
+		[Embed(source="/flexmdi/assets/img/resizeCursorTLBR.gif")]
 		private var resizeCursorTLBR:Class;
-		[Embed(source="/mdi/assets/img/resizeCursorTRBL.gif")]
+		[Embed(source="/flexmdi/assets/img/resizeCursorTRBL.gif")]
 		private var resizeCursorTRBL:Class;
 		
 		/**

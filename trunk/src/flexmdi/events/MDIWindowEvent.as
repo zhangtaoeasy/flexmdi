@@ -21,39 +21,37 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-package mdi.containers
+package flexmdi.events
 {
-	import mdi.managers.MDIManager;
+	import flash.events.Event;
 	
-	import mx.containers.Canvas;
-	import mx.events.FlexEvent;
-	import mx.core.UIComponent;
-	import mdi.effects.MDIEffectsDescriptorBase;
+	import flexmdi.containers.MDIWindow;
 
-	public class MDICanvas extends Canvas
+	public class MDIWindowEvent extends Event
 	{
-		public var windowManager:MDIManager;
-		public var effectsLib:MDIEffectsDescriptorBase = new MDIEffectsDescriptorBase();
+		public static const MINIMIZE:String = "minimize";
+		public static const RESTORE:String = "restore";
+		public static const MAXIMIZE:String = "maximize";
+		public static const CLOSE:String = "close";
 		
-		public function MDICanvas()
+		public static const FOCUS_START:String = "focusStart";
+		public static const FOCUS_END:String = "focusEnd";
+		public static const MOVE:String = "move";
+		public static const RESIZE_START:String = "resizeStart";
+		public static const RESIZE:String = "resize";
+		public static const RESIZE_END:String = "resizeEnd";
+		
+		public var window:MDIWindow;
+		
+		public function MDIWindowEvent(type:String, window:MDIWindow, bubbles:Boolean = false, cancelable:Boolean = false)
 		{
-			super();
-			windowManager = new MDIManager(this);
-			addEventListener(FlexEvent.CREATION_COMPLETE, onCreationComplete);
+			super(type, bubbles, cancelable);
+			this.window = window;
 		}
 		
-		private function onCreationComplete(event:FlexEvent):void
+		override public function clone():Event
 		{
-			windowManager.effects = effectsLib;
-			
-			for each(var child:UIComponent in getChildren())
-			{
-				if(child is MDIWindow)
-				{
-					windowManager.add(child as MDIWindow);
-				}
-			}
-			removeEventListener(FlexEvent.CREATION_COMPLETE, onCreationComplete);
+			return new MDIWindowEvent(type, window, bubbles, cancelable);
 		}
 	}
 }

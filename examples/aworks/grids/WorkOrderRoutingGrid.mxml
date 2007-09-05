@@ -6,7 +6,7 @@
 		<![CDATA[
 			import aworks.vo.Contact;
 			import aworks.core.DataTable;
-			import mdi.containers.MDIWindow;
+			import flexmdi.containers.MDIWindow;
 			
 			[Bindable]
 			public var workorderroutings : DataTable = new DataTable("getWorkOrderRoutings",aworks.vo.WorkOrderRouting);

@@ -44,17 +44,18 @@
 		]]>
 	</mx:Script>
 	
-	<mx:HBox width="100%" height="100%">
+	<mx:HBox width="100%" height="100%" verticalAlign="middle" horizontalAlign="center">
 		
 		
 	
-	<mx:VBox width="30%" paddingLeft="10" paddingRight="10">
-		<mx:Button label="Cascade" click="mdic.windowManager.cascade()" width="100%" />
-		<mx:Button label="Tile" click="mdic.windowManager.tile()" width="100%" />
-		<mx:Button label="Tile + Fill" click="mdic.windowManager.tile(true)" width="100%" />
+	<mx:VBox width="20%" height="100%" paddingLeft="10" paddingRight="10" horizontalAlign="center"  paddingTop="10">
+		<mx:Button label="Cascade" click="mdic.windowManager.cascade()" width="70%" />
+		<mx:Button label="Tile" click="mdic.windowManager.tile()" width="70%" />
+		<mx:Button label="Tile + Fill" click="mdic.windowManager.tile(true)" width="70%" />
 	</mx:VBox>
 	
-	<mx:TabNavigator width="70%" height="100%">
+	
+	<mx:TabNavigator width="75%" height="95%" paddingTop="20" >
 	
 		<flexmdi:MDICanvas label="Panel 1" id="mdic" x="100" width="100%" height="100%" creationComplete="this.mdic.windowManager.cascade()" 
 			backgroundColor="#CCCCCC" effectsLib="{flexmdi.effects.effectsLib.MDIVistaEffectsDescriptor}">

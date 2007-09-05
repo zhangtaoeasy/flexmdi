@@ -15,25 +15,25 @@ package aworks.vo
 		
 		public var JobCandidateID : Number = 0;
 		
-		public var Emp.StartDate : Date;
+		public var EmpStartDate : Date;
 		
-		public var Emp.EndDate : Date;
+		public var EmpEndDate : Date;
 		
-		public var Emp.OrgName : String = "";
+		public var EmpOrgName : String = "";
 		
-		public var Emp.JobTitle : String = "";
+		public var EmpJobTitle : String = "";
 		
-		public var Emp.Responsibility : String = "";
+		public var EmpResponsibility : String = "";
 		
-		public var Emp.FunctionCategory : String = "";
+		public var EmpFunctionCategory : String = "";
 		
-		public var Emp.IndustryCategory : String = "";
+		public var EmpIndustryCategory : String = "";
 		
-		public var Emp.Loc.CountryRegion : String = "";
+		public var EmpLocCountryRegion : String = "";
 		
-		public var Emp.Loc.State : String = "";
+		public var EmpLocState : String = "";
 		
-		public var Emp.Loc.City : String = "";
+		public var EmpLocCity : String = "";
 		
 		
 	}

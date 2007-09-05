@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<flexmdi:MDIWindow xmlns:mx="http://www.adobe.com/2006/mxml" width="400" height="300" creationComplete="onCreationComplete()"
+	xmlns:flexmdi="http://flexmdi.googlecode.com/">
+	
+	<mx:Script>
+		<![CDATA[
+			import aworks.vo.Contact;
+			import aworks.core.DataTable;
+			import mdi.containers.MDIWindow;
+			
+			[Bindable]
+			public var errorlogs : DataTable = new DataTable("getErrorLogs",aworks.vo.ErrorLog);
+			
+			public function onCreationComplete():void
+			{
+				errorlogs.invoke();
+			}
+			
+		]]>
+	</mx:Script>
+	
+	<mx:DataGrid dataProvider="{this.errorlogs.rows}" width="100%" height="100%">
+		<mx:columns>
+		
+			<mx:DataGridColumn dataField="ERRORLOGID" headerText="ErrorLogID" />
+			<mx:DataGridColumn dataField="ERRORTIME" headerText="ErrorTime" />
+			<mx:DataGridColumn dataField="USERNAME" headerText="UserName" />
+			<mx:DataGridColumn dataField="ERRORNUMBER" headerText="ErrorNumber" />
+			<mx:DataGridColumn dataField="ERRORSEVERITY" headerText="ErrorSeverity" />
+			<mx:DataGridColumn dataField="ERRORSTATE" headerText="ErrorState" />
+			<mx:DataGridColumn dataField="ERRORPROCEDURE" headerText="ErrorProcedure" />
+			<mx:DataGridColumn dataField="ERRORLINE" headerText="ErrorLine" />
+			<mx:DataGridColumn dataField="ERRORMESSAGE" headerText="ErrorMessage" />
+			
+		</mx:columns>
+	</mx:DataGrid>
+	
+	<mx:ControlBar width="100%">
+		
+		<mx:Button click="errorlogs.invoke()" label="refresh" />
+		<mx:Text text="{errorlogs.rows.length} Record(s)" />
+		<mx:Spacer width="100%" />
+		
+		
+	</mx:ControlBar>
+	
+</flexmdi:MDIWindow>
+
+
+

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<flexmdi:MDIWindow xmlns:mx="http://www.adobe.com/2006/mxml" width="400" height="300" creationComplete="onCreationComplete()"
+	xmlns:flexmdi="http://flexmdi.googlecode.com/">
+	
+	<mx:Script>
+		<![CDATA[
+			import aworks.vo.Contact;
+			import aworks.core.DataTable;
+			import mdi.containers.MDIWindow;
+			
+			[Bindable]
+			public var cultures : DataTable = new DataTable("getCultures",aworks.vo.Culture);
+			
+			public function onCreationComplete():void
+			{
+				cultures.invoke();
+			}
+			
+		]]>
+	</mx:Script>
+	
+	<mx:DataGrid dataProvider="{this.cultures.rows}" width="100%" height="100%">
+		<mx:columns>
+		
+			<mx:DataGridColumn dataField="CULTUREID" headerText="CultureID" />
+			<mx:DataGridColumn dataField="NAME" headerText="Name" />
+			<mx:DataGridColumn dataField="MODIFIEDDATE" headerText="ModifiedDate" />
+			
+		</mx:columns>
+	</mx:DataGrid>
+	
+	<mx:ControlBar width="100%">
+		
+		<mx:Button click="cultures.invoke()" label="refresh" />
+		<mx:Text text="{cultures.rows.length} Record(s)" />
+		<mx:Spacer width="100%" />
+		
+		
+	</mx:ControlBar>
+	
+</flexmdi:MDIWindow>
+
+
+

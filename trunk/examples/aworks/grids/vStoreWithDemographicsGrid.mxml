@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<flexmdi:MDIWindow xmlns:mx="http://www.adobe.com/2006/mxml" width="400" height="300" creationComplete="onCreationComplete()"
+	xmlns:flexmdi="http://flexmdi.googlecode.com/">
+	
+	<mx:Script>
+		<![CDATA[
+			import aworks.vo.Contact;
+			import aworks.core.DataTable;
+			import mdi.containers.MDIWindow;
+			
+			[Bindable]
+			public var vstorewithdemographicss : DataTable = new DataTable("getvStoreWithDemographicss",aworks.vo.vStoreWithDemographics);
+			
+			public function onCreationComplete():void
+			{
+				vstorewithdemographicss.invoke();
+			}
+			
+		]]>
+	</mx:Script>
+	
+	<mx:DataGrid dataProvider="{this.vstorewithdemographicss.rows}" width="100%" height="100%">
+		<mx:columns>
+		
+			<mx:DataGridColumn dataField="CUSTOMERID" headerText="CustomerID" />
+			<mx:DataGridColumn dataField="NAME" headerText="Name" />
+			<mx:DataGridColumn dataField="CONTACTTYPE" headerText="ContactType" />
+			<mx:DataGridColumn dataField="TITLE" headerText="Title" />
+			<mx:DataGridColumn dataField="FIRSTNAME" headerText="FirstName" />
+			<mx:DataGridColumn dataField="MIDDLENAME" headerText="MiddleName" />
+			<mx:DataGridColumn dataField="LASTNAME" headerText="LastName" />
+			<mx:DataGridColumn dataField="SUFFIX" headerText="Suffix" />
+			<mx:DataGridColumn dataField="PHONE" headerText="Phone" />
+			<mx:DataGridColumn dataField="EMAILADDRESS" headerText="EmailAddress" />
+			<mx:DataGridColumn dataField="EMAILPROMOTION" headerText="EmailPromotion" />
+			<mx:DataGridColumn dataField="ADDRESSTYPE" headerText="AddressType" />
+			<mx:DataGridColumn dataField="ADDRESSLINE1" headerText="AddressLine1" />
+			<mx:DataGridColumn dataField="ADDRESSLINE2" headerText="AddressLine2" />
+			<mx:DataGridColumn dataField="CITY" headerText="City" />
+			<mx:DataGridColumn dataField="STATEPROVINCENAME" headerText="StateProvinceName" />
+			<mx:DataGridColumn dataField="POSTALCODE" headerText="PostalCode" />
+			<mx:DataGridColumn dataField="COUNTRYREGIONNAME" headerText="CountryRegionName" />
+			<mx:DataGridColumn dataField="ANNUALSALES" headerText="AnnualSales" />
+			<mx:DataGridColumn dataField="ANNUALREVENUE" headerText="AnnualRevenue" />
+			<mx:DataGridColumn dataField="BANKNAME" headerText="BankName" />
+			<mx:DataGridColumn dataField="BUSINESSTYPE" headerText="BusinessType" />
+			<mx:DataGridColumn dataField="YEAROPENED" headerText="YearOpened" />
+			<mx:DataGridColumn dataField="SPECIALTY" headerText="Specialty" />
+			<mx:DataGridColumn dataField="SQUAREFEET" headerText="SquareFeet" />
+			<mx:DataGridColumn dataField="BRANDS" headerText="Brands" />
+			<mx:DataGridColumn dataField="INTERNET" headerText="Internet" />
+			<mx:DataGridColumn dataField="NUMBEREMPLOYEES" headerText="NumberEmployees" />
+			
+		</mx:columns>
+	</mx:DataGrid>
+	
+	<mx:ControlBar width="100%">
+		
+		<mx:Button click="vstorewithdemographicss.invoke()" label="refresh" />
+		<mx:Text text="{vstorewithdemographicss.rows.length} Record(s)" />
+		<mx:Spacer width="100%" />
+		
+		
+	</mx:ControlBar>
+	
+</flexmdi:MDIWindow>
+
+
+

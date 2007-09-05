@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<flexmdi:MDIWindow xmlns:mx="http://www.adobe.com/2006/mxml" width="400" height="300" creationComplete="onCreationComplete()"
+	xmlns:flexmdi="http://flexmdi.googlecode.com/">
+	
+	<mx:Script>
+		<![CDATA[
+			import aworks.vo.Contact;
+			import aworks.core.DataTable;
+			import mdi.containers.MDIWindow;
+			
+			[Bindable]
+			public var currencyrates : DataTable = new DataTable("getCurrencyRates",aworks.vo.CurrencyRate);
+			
+			public function onCreationComplete():void
+			{
+				currencyrates.invoke();
+			}
+			
+		]]>
+	</mx:Script>
+	
+	<mx:DataGrid dataProvider="{this.currencyrates.rows}" width="100%" height="100%">
+		<mx:columns>
+		
+			<mx:DataGridColumn dataField="CURRENCYRATEID" headerText="CurrencyRateID" />
+			<mx:DataGridColumn dataField="CURRENCYRATEDATE" headerText="CurrencyRateDate" />
+			<mx:DataGridColumn dataField="FROMCURRENCYCODE" headerText="FromCurrencyCode" />
+			<mx:DataGridColumn dataField="TOCURRENCYCODE" headerText="ToCurrencyCode" />
+			<mx:DataGridColumn dataField="AVERAGERATE" headerText="AverageRate" />
+			<mx:DataGridColumn dataField="ENDOFDAYRATE" headerText="EndOfDayRate" />
+			<mx:DataGridColumn dataField="MODIFIEDDATE" headerText="ModifiedDate" />
+			
+		</mx:columns>
+	</mx:DataGrid>
+	
+	<mx:ControlBar width="100%">
+		
+		<mx:Button click="currencyrates.invoke()" label="refresh" />
+		<mx:Text text="{currencyrates.rows.length} Record(s)" />
+		<mx:Spacer width="100%" />
+		
+		
+	</mx:ControlBar>
+	
+</flexmdi:MDIWindow>
+
+
+

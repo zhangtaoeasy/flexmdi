@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<flexmdi:MDIWindow xmlns:mx="http://www.adobe.com/2006/mxml" width="400" height="300" creationComplete="onCreationComplete()"
+	xmlns:flexmdi="http://flexmdi.googlecode.com/">
+	
+	<mx:Script>
+		<![CDATA[
+			import aworks.vo.Contact;
+			import aworks.core.DataTable;
+			import mdi.containers.MDIWindow;
+			
+			[Bindable]
+			public var productdescriptions : DataTable = new DataTable("getProductDescriptions",aworks.vo.ProductDescription);
+			
+			public function onCreationComplete():void
+			{
+				productdescriptions.invoke();
+			}
+			
+		]]>
+	</mx:Script>
+	
+	<mx:DataGrid dataProvider="{this.productdescriptions.rows}" width="100%" height="100%">
+		<mx:columns>
+		
+			<mx:DataGridColumn dataField="PRODUCTDESCRIPTIONID" headerText="ProductDescriptionID" />
+			<mx:DataGridColumn dataField="DESCRIPTION" headerText="Description" />
+			<mx:DataGridColumn dataField="ROWGUID" headerText="rowguid" />
+			<mx:DataGridColumn dataField="MODIFIEDDATE" headerText="ModifiedDate" />
+			
+		</mx:columns>
+	</mx:DataGrid>
+	
+	<mx:ControlBar width="100%">
+		
+		<mx:Button click="productdescriptions.invoke()" label="refresh" />
+		<mx:Text text="{productdescriptions.rows.length} Record(s)" />
+		<mx:Spacer width="100%" />
+		
+		
+	</mx:ControlBar>
+	
+</flexmdi:MDIWindow>
+
+
+

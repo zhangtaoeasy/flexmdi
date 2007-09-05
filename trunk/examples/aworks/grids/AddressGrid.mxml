@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<flexmdi:MDIWindow xmlns:mx="http://www.adobe.com/2006/mxml" width="400" height="300" creationComplete="onCreationComplete()"
+	xmlns:flexmdi="http://flexmdi.googlecode.com/">
+	
+	<mx:Script>
+		<![CDATA[
+			import aworks.vo.Contact;
+			import aworks.core.DataTable;
+			import mdi.containers.MDIWindow;
+			
+			[Bindable]
+			public var addresses : DataTable = new DataTable("getAddresses",aworks.vo.Address);
+			
+			public function onCreationComplete():void
+			{
+				addresses.invoke();
+			}
+			
+		]]>
+	</mx:Script>
+	
+	<mx:DataGrid dataProvider="{this.addresses.rows}" width="100%" height="100%">
+		<mx:columns>
+		
+			<mx:DataGridColumn dataField="ADDRESSID" headerText="AddressID" />
+			<mx:DataGridColumn dataField="ADDRESSLINE1" headerText="AddressLine1" />
+			<mx:DataGridColumn dataField="ADDRESSLINE2" headerText="AddressLine2" />
+			<mx:DataGridColumn dataField="CITY" headerText="City" />
+			<mx:DataGridColumn dataField="STATEPROVINCEID" headerText="StateProvinceID" />
+			<mx:DataGridColumn dataField="POSTALCODE" headerText="PostalCode" />
+			<mx:DataGridColumn dataField="ROWGUID" headerText="rowguid" />
+			<mx:DataGridColumn dataField="MODIFIEDDATE" headerText="ModifiedDate" />
+			
+		</mx:columns>
+	</mx:DataGrid>
+	
+	<mx:ControlBar width="100%">
+		
+		<mx:Button click="addresses.invoke()" label="refresh" />
+		<mx:Text text="{addresses.rows.length} Record(s)" />
+		<mx:Spacer width="100%" />
+		
+		
+	</mx:ControlBar>
+	
+</flexmdi:MDIWindow>
+
+
+

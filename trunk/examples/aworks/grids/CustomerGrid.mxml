@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<flexmdi:MDIWindow xmlns:mx="http://www.adobe.com/2006/mxml" width="400" height="300" creationComplete="onCreationComplete()"
+	xmlns:flexmdi="http://flexmdi.googlecode.com/">
+	
+	<mx:Script>
+		<![CDATA[
+			import aworks.vo.Contact;
+			import aworks.core.DataTable;
+			import mdi.containers.MDIWindow;
+			
+			[Bindable]
+			public var customers : DataTable = new DataTable("getCustomers",aworks.vo.Customer);
+			
+			public function onCreationComplete():void
+			{
+				customers.invoke();
+			}
+			
+		]]>
+	</mx:Script>
+	
+	<mx:DataGrid dataProvider="{this.customers.rows}" width="100%" height="100%">
+		<mx:columns>
+		
+			<mx:DataGridColumn dataField="CUSTOMERID" headerText="CustomerID" />
+			<mx:DataGridColumn dataField="TERRITORYID" headerText="TerritoryID" />
+			<mx:DataGridColumn dataField="ACCOUNTNUMBER" headerText="AccountNumber" />
+			<mx:DataGridColumn dataField="CUSTOMERTYPE" headerText="CustomerType" />
+			<mx:DataGridColumn dataField="ROWGUID" headerText="rowguid" />
+			<mx:DataGridColumn dataField="MODIFIEDDATE" headerText="ModifiedDate" />
+			
+		</mx:columns>
+	</mx:DataGrid>
+	
+	<mx:ControlBar width="100%">
+		
+		<mx:Button click="customers.invoke()" label="refresh" />
+		<mx:Text text="{customers.rows.length} Record(s)" />
+		<mx:Spacer width="100%" />
+		
+		
+	</mx:ControlBar>
+	
+</flexmdi:MDIWindow>
+
+
+

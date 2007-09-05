@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<flexmdi:MDIWindow xmlns:mx="http://www.adobe.com/2006/mxml" width="400" height="300" creationComplete="onCreationComplete()"
+	xmlns:flexmdi="http://flexmdi.googlecode.com/">
+	
+	<mx:Script>
+		<![CDATA[
+			import aworks.vo.Contact;
+			import aworks.core.DataTable;
+			import mdi.containers.MDIWindow;
+			
+			[Bindable]
+			public var employeedepartmenthistorys : DataTable = new DataTable("getEmployeeDepartmentHistorys",aworks.vo.EmployeeDepartmentHistory);
+			
+			public function onCreationComplete():void
+			{
+				employeedepartmenthistorys.invoke();
+			}
+			
+		]]>
+	</mx:Script>
+	
+	<mx:DataGrid dataProvider="{this.employeedepartmenthistorys.rows}" width="100%" height="100%">
+		<mx:columns>
+		
+			<mx:DataGridColumn dataField="EMPLOYEEID" headerText="EmployeeID" />
+			<mx:DataGridColumn dataField="DEPARTMENTID" headerText="DepartmentID" />
+			<mx:DataGridColumn dataField="SHIFTID" headerText="ShiftID" />
+			<mx:DataGridColumn dataField="STARTDATE" headerText="StartDate" />
+			<mx:DataGridColumn dataField="ENDDATE" headerText="EndDate" />
+			<mx:DataGridColumn dataField="MODIFIEDDATE" headerText="ModifiedDate" />
+			
+		</mx:columns>
+	</mx:DataGrid>
+	
+	<mx:ControlBar width="100%">
+		
+		<mx:Button click="employeedepartmenthistorys.invoke()" label="refresh" />
+		<mx:Text text="{employeedepartmenthistorys.rows.length} Record(s)" />
+		<mx:Spacer width="100%" />
+		
+		
+	</mx:ControlBar>
+	
+</flexmdi:MDIWindow>
+
+
+

@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<flexmdi:MDIWindow xmlns:mx="http://www.adobe.com/2006/mxml" width="400" height="300" creationComplete="onCreationComplete()"
+	xmlns:flexmdi="http://flexmdi.googlecode.com/">
+	
+	<mx:Script>
+		<![CDATA[
+			import aworks.vo.Contact;
+			import aworks.core.DataTable;
+			import mdi.containers.MDIWindow;
+			
+			[Bindable]
+			public var contacts : DataTable = new DataTable("getContacts",aworks.vo.Contact);
+			
+			public function onCreationComplete():void
+			{
+				contacts.invoke();
+			}
+			
+		]]>
+	</mx:Script>
+	
+	<mx:DataGrid dataProvider="{this.contacts.rows}" width="100%" height="100%">
+		<mx:columns>
+		
+			<mx:DataGridColumn dataField="CONTACTID" headerText="ContactID" />
+			<mx:DataGridColumn dataField="NAMESTYLE" headerText="NameStyle" />
+			<mx:DataGridColumn dataField="TITLE" headerText="Title" />
+			<mx:DataGridColumn dataField="FIRSTNAME" headerText="FirstName" />
+			<mx:DataGridColumn dataField="MIDDLENAME" headerText="MiddleName" />
+			<mx:DataGridColumn dataField="LASTNAME" headerText="LastName" />
+			<mx:DataGridColumn dataField="SUFFIX" headerText="Suffix" />
+			<mx:DataGridColumn dataField="EMAILADDRESS" headerText="EmailAddress" />
+			<mx:DataGridColumn dataField="EMAILPROMOTION" headerText="EmailPromotion" />
+			<mx:DataGridColumn dataField="PHONE" headerText="Phone" />
+			<mx:DataGridColumn dataField="PASSWORDHASH" headerText="PasswordHash" />
+			<mx:DataGridColumn dataField="PASSWORDSALT" headerText="PasswordSalt" />
+			<mx:DataGridColumn dataField="ADDITIONALCONTACTINFO" headerText="AdditionalContactInfo" />
+			<mx:DataGridColumn dataField="ROWGUID" headerText="rowguid" />
+			<mx:DataGridColumn dataField="MODIFIEDDATE" headerText="ModifiedDate" />
+			
+		</mx:columns>
+	</mx:DataGrid>
+	
+	<mx:ControlBar width="100%">
+		
+		<mx:Button click="contacts.invoke()" label="refresh" />
+		<mx:Text text="{contacts.rows.length} Record(s)" />
+		<mx:Spacer width="100%" />
+		
+		
+	</mx:ControlBar>
+	
+</flexmdi:MDIWindow>
+
+
+

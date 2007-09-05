@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<flexmdi:MDIWindow xmlns:mx="http://www.adobe.com/2006/mxml" width="400" height="300" creationComplete="onCreationComplete()"
+	xmlns:flexmdi="http://flexmdi.googlecode.com/">
+	
+	<mx:Script>
+		<![CDATA[
+			import aworks.vo.Contact;
+			import aworks.core.DataTable;
+			import mdi.containers.MDIWindow;
+			
+			[Bindable]
+			public var specialoffers : DataTable = new DataTable("getSpecialOffers",aworks.vo.SpecialOffer);
+			
+			public function onCreationComplete():void
+			{
+				specialoffers.invoke();
+			}
+			
+		]]>
+	</mx:Script>
+	
+	<mx:DataGrid dataProvider="{this.specialoffers.rows}" width="100%" height="100%">
+		<mx:columns>
+		
+			<mx:DataGridColumn dataField="SPECIALOFFERID" headerText="SpecialOfferID" />
+			<mx:DataGridColumn dataField="DESCRIPTION" headerText="Description" />
+			<mx:DataGridColumn dataField="DISCOUNTPCT" headerText="DiscountPct" />
+			<mx:DataGridColumn dataField="TYPE" headerText="Type" />
+			<mx:DataGridColumn dataField="CATEGORY" headerText="Category" />
+			<mx:DataGridColumn dataField="STARTDATE" headerText="StartDate" />
+			<mx:DataGridColumn dataField="ENDDATE" headerText="EndDate" />
+			<mx:DataGridColumn dataField="MINQTY" headerText="MinQty" />
+			<mx:DataGridColumn dataField="MAXQTY" headerText="MaxQty" />
+			<mx:DataGridColumn dataField="ROWGUID" headerText="rowguid" />
+			<mx:DataGridColumn dataField="MODIFIEDDATE" headerText="ModifiedDate" />
+			
+		</mx:columns>
+	</mx:DataGrid>
+	
+	<mx:ControlBar width="100%">
+		
+		<mx:Button click="specialoffers.invoke()" label="refresh" />
+		<mx:Text text="{specialoffers.rows.length} Record(s)" />
+		<mx:Spacer width="100%" />
+		
+		
+	</mx:ControlBar>
+	
+</flexmdi:MDIWindow>
+
+
+

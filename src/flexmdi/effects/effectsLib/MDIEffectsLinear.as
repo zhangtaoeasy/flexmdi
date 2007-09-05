@@ -21,15 +21,15 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-package mdi.effects.effectsLib
+package flexmdi.effects.effectsLib
 {
 	import flash.geom.Point;
 	
-	import mdi.containers.MDIWindow;
-	import mdi.effects.IMDIEffectsDescriptor;
-	import mdi.effects.MDIEffectsDescriptorBase;
-	import mdi.effects.effectClasses.MDIGroupEffectItem;
-	import mdi.managers.MDIManager;
+	import flexmdi.containers.MDIWindow;
+	import flexmdi.effects.IMDIEffectsDescriptor;
+	import flexmdi.effects.MDIEffectsDescriptorBase;
+	import flexmdi.effects.effectClasses.MDIGroupEffectItem;
+	import flexmdi.managers.MDIManager;
 	
 	import mx.effects.Blur;
 	import mx.effects.Effect;
@@ -40,49 +40,39 @@ package mdi.effects.effectsLib
 	import mx.effects.Sequence;
 	import mx.effects.WipeDown;
 	import mx.events.EffectEvent;
+	import mx.effects.AnimateProperty;
+	import mx.effects.Dissolve;
 
-	public class MDIVistaEffectsDescriptor extends MDIEffectsDescriptorBase implements IMDIEffectsDescriptor
+	public class MDIEffectsLinear extends MDIEffectsDescriptorBase implements IMDIEffectsDescriptor
 	{		
 		override public function getShowEffect(window:MDIWindow, manager:MDIManager):Effect
-		{			
-			var parallel:Parallel = new Parallel(window);
-
-			var blurSequence:Sequence = new Sequence();
-
-			var blurOut:Blur = new Blur();
-				blurOut.blurXFrom = 0;
-				blurOut.blurYFrom = 0;
-				blurOut.blurXTo = 10;
-				blurOut.blurYTo = 10;
+		{
+			var p:Parallel = new Parallel(window);
 			
+			var resize:Resize = new Resize(window);
+			resize.widthTo = window.width;
+			resize.heightTo = window.height;
+			resize.widthFrom = resize.heightFrom = 1;
+			resize.duration = 100;
+			p.addChild(resize);
 			
-			blurSequence.addChild(blurOut);
+			var d:Dissolve = new Dissolve(window);
+			d.alphaFrom = 0;
+			d.alphaTo = 1;
+			d.duration = 100;
+			p.addChild(d);
 			
-			var blurIn:Blur = new Blur();
-				blurIn.blurXFrom = 10;
-				blurIn.blurYFrom = 10;
-				blurIn.blurXTo  = 0;
-				blurIn.blurYTo = 0;
-				
-			
-			blurSequence.addChild(blurIn);
-
-			parallel.addChild(blurSequence);
-	
-			
-			parallel.duration = 200;
-			return parallel;
+			return p;
 		}
 		
 		override public function getCloseEffect(window:MDIWindow, manager:MDIManager):Effect
 		{
-			var blur:Blur = new Blur(window);
-				blur.blurXFrom = 0;
-				blur.blurYFrom = 0;
-				blur.blurXTo = 10;
-				blur.blurYTo = 10;
-				blur.duration = 200;
-				return blur;
+			window.minWidth = window.minHeight = 1;
+			
+			var resize:Resize = new Resize(window);
+			resize.widthTo = resize.heightTo = 1;
+			resize.duration = 100;
+			return resize;
 		}
 		
 		private function cascadeEasingFunction(t:Number, b:Number, c:Number, d:Number):Number 
@@ -130,62 +120,86 @@ package mdi.effects.effectsLib
 	
 		override public function getMinimizeEffect(window:MDIWindow, manager:MDIManager, moveTo:Point=null):Effect
 		{
-			var parallel:Parallel = new Parallel(window);
+			var seq:Sequence = new Sequence();
 			
-			var move:Move = new Move(window);
-			move.xTo = moveTo.x;
-			move.yTo = moveTo.y;
-			move.duration = 300;
-			parallel.addChild(move);
+			var resizeW:Resize = new Resize(window);
+			resizeW.widthTo = window.minWidth;
+			resizeW.duration = 100;
+			seq.addChild(resizeW);
 			
-			var resize:Resize = new Resize(window);
-			resize.heightTo = window.minimizeHeight;
-			resize.widthTo = window.minWidth;
-			resize.duration = 300;
-			parallel.addChild(resize);
+			var resizeH:Resize = new Resize(window);
+			resizeH.heightTo = window.minimizeHeight;
+			resizeH.duration = 100;
+			seq.addChild(resizeH);
 			
-			parallel.end();
-			return parallel;
+			var moveX:Move = new Move(window);
+			moveX.xTo = moveTo.x;
+			moveX.duration = 100;
+			seq.addChild(moveX);
+			
+			var moveY:Move = new Move(window);
+			moveY.yTo = moveTo.y;
+			moveY.duration = 100;
+			seq.addChild(moveY);
+			
+			seq.end();
+			return seq;
 		}
 		
 		override public function getRestoreEffect(window:MDIWindow, manager:MDIManager, moveTo:Point=null):Effect
 		{
-			var parallel:Parallel = new Parallel(window);
+			var seq:Sequence = new Sequence();
 			
-			var move:Move = new Move(window);
-			move.xTo = moveTo.x;
-			move.yTo = moveTo.y;
-			move.duration = 300;
-			parallel.addChild(move);
+			var moveY:Move = new Move(window);
+			moveY.yTo = moveTo.y;
+			moveY.duration = 100;
+			seq.addChild(moveY);
 			
-			var resize:Resize = new Resize(window);
-			resize.heightTo = window.dragStartPanelHeight;
-			resize.widthTo = window.dragStartPanelWidth;
-			resize.duration = 300;
-			parallel.addChild(resize);
+			var moveX:Move = new Move(window);
+			moveX.xTo = moveTo.x;
+			moveX.duration = 100;
+			seq.addChild(moveX);
 			
-			parallel.end();
-			return parallel;
+			var resizeW:Resize = new Resize(window);
+			resizeW.widthTo = window.dragStartPanelWidth;
+			resizeW.duration = 100;
+			seq.addChild(resizeW);
+			
+			var resizeH:Resize = new Resize(window);
+			resizeH.heightTo = window.dragStartPanelHeight;
+			resizeH.duration = 100;
+			seq.addChild(resizeH);
+			
+			seq.end();
+			return seq;
 		}
 		
 		override public function getMaximizeEffect(window:MDIWindow, manager:MDIManager, bottomOffset:Number = 0):Effect
 		{
-			var parallel:Parallel = new Parallel(window);
+			var seq:Sequence = new Sequence(window);
 			
-			var move:Move = new Move(window);
-			move.xTo = 0;
-			move.yTo = 0;
-			move.duration = 300;
-			parallel.addChild(move);
+			var moveX:Move = new Move(window);
+			moveX.xTo = 0;
+			moveX.duration = 100;
+			seq.addChild(moveX);
 			
-			var resize:Resize = new Resize(window);
-			resize.heightTo = manager.container.height - bottomOffset;
-			resize.widthTo = manager.container.width;
-			resize.duration = 300;
-			parallel.addChild(resize);
+			var moveY:Move = new Move(window);
+			moveY.yTo = 0;
+			moveY.duration = 100;
+			seq.addChild(moveY);
 			
-			parallel.end();
-			return parallel;
+			var resizeW:Resize = new Resize(window);
+			resizeW.widthTo = manager.container.width;
+			resizeW.duration = 100;
+			seq.addChild(resizeW);
+			
+			var resizeH:Resize = new Resize(window);
+			resizeH.heightTo = manager.container.height - bottomOffset;
+			resizeH.duration = 100;
+			seq.addChild(resizeH);
+			
+			seq.end();
+			return seq;
 		}
 		
 		override public function reTileMinWindowsEffect(window:MDIWindow, manager:MDIManager, moveTo:Point):Effect

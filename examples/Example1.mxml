@@ -4,11 +4,11 @@
 	
 	<mx:Script>
 		<![CDATA[
-			import mdi.events.MDIWindowEvent;
+			import flexmdi.events.MDIWindowEvent;
 			import mx.effects.Effect;
 			
-			import mdi.managers.MDIManager;
-			import mdi.containers.MDIWindow;
+			import flexmdi.managers.MDIManager;
+			import flexmdi.containers.MDIWindow;
 			
 			public var windowManager : MDIManager;
 			
@@ -135,5 +135,4 @@
 		
 		
 	</mx:VBox>
-	
 </mx:Application>

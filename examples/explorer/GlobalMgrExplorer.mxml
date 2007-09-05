@@ -3,9 +3,9 @@
 	
 	<mx:Script>
 		<![CDATA[
-			import mdi.effects.effectsLib.MDIVistaEffectsDescriptor;
-			import mdi.managers.MDIManager;
-			import mdi.containers.MDIWindow;
+			import flexmdi.effects.effectsLib.MDIVistaEffectsDescriptor;
+			import flexmdi.managers.MDIManager;
+			import flexmdi.containers.MDIWindow;
 			
 			public function addWindow():void
 			{

@@ -21,13 +21,13 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-package mdi.effects
+package flexmdi.effects
 {
 	import flash.geom.Point;
 	
-	import mdi.containers.MDIWindow;
-	import mdi.effects.effectClasses.MDIGroupEffectItem;
-	import mdi.managers.MDIManager;
+	import flexmdi.containers.MDIWindow;
+	import flexmdi.effects.effectClasses.MDIGroupEffectItem;
+	import flexmdi.managers.MDIManager;
 	
 	import mx.containers.Panel;
 	import mx.effects.Effect;

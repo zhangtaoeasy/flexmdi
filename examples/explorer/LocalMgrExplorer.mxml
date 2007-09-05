@@ -2,13 +2,13 @@
 <mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml" creationComplete="onCreationComplete()">	
 	<mx:Script>
 		<![CDATA[
-			import mdi.effects.MDIEffectsDescriptorBase;
-			import mdi.events.MDIWindowEvent;
-			import mdi.events.MDIManagerEvent;
-			import mdi.managers.MDIManager;
-			import mdi.containers.MDIWindow;
-			import mdi.effects.effectsLib.MDIVistaEffectsDescriptor;
-			import mdi.effects.effectsLib.MDIEffectsLinear;
+			import flexmdi.effects.MDIEffectsDescriptorBase;
+			import flexmdi.events.MDIWindowEvent;
+			import flexmdi.events.MDIManagerEvent;
+			import flexmdi.managers.MDIManager;
+			import flexmdi.containers.MDIWindow;
+			import flexmdi.effects.effectsLib.MDIVistaEffectsDescriptor;
+			import flexmdi.effects.effectsLib.MDIEffectsLinear;
 			
 			public var mgr:MDIManager;
 			

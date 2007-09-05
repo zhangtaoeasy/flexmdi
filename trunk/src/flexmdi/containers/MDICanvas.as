@@ -29,11 +29,18 @@ package flexmdi.containers
 	import mx.events.FlexEvent;
 	import mx.core.UIComponent;
 	import flexmdi.effects.MDIEffectsDescriptorBase;
+	import flexmdi.effects.IMDIEffectsDescriptor;
 
 	public class MDICanvas extends Canvas
 	{
 		public var windowManager:MDIManager;
-		public var effectsLib:MDIEffectsDescriptorBase = new MDIEffectsDescriptorBase();
+		
+		
+		
+		public function set effectsLib(classRef:Class):void
+		{
+			this.windowManager.effects = new classRef();
+		}
 		
 		public function MDICanvas()
 		{
@@ -44,7 +51,7 @@ package flexmdi.containers
 		
 		private function onCreationComplete(event:FlexEvent):void
 		{
-			windowManager.effects = effectsLib;
+
 			
 			for each(var child:UIComponent in getChildren())
 			{

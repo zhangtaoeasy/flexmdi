@@ -36,7 +36,9 @@ package flexmdi.events
 		
 		public static const FOCUS_START:String = "focusStart";
 		public static const FOCUS_END:String = "focusEnd";
-		public static const MOVE:String = "move";
+		public static const DRAG_START:String = "dragStart";
+		public static const DRAG:String = "drag";
+		public static const DRAG_END:String = "dragEnd";
 		public static const RESIZE_START:String = "resizeStart";
 		public static const RESIZE:String = "resize";
 		public static const RESIZE_END:String = "resizeEnd";

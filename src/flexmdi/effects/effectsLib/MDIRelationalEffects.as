@@ -20,7 +20,7 @@ package flexmdi.effects.effectsLib
 		override public function getMinimizeEffect(window:MDIWindow, manager:MDIManager, moveTo:Point=null):Effect
 		{
 			
-			var parallel:Parallel = super.getMinimizeEffect(window,manager,moveTo);
+			var parallel:Parallel = super.getMinimizeEffect(window,manager,moveTo) as Parallel;
 			
 			parallel.addEventListener(EffectEvent.EFFECT_END, function():void {manager.tile(true,10); } );
 			
@@ -30,7 +30,7 @@ package flexmdi.effects.effectsLib
 		
 		override public function getRestoreEffect(window:MDIWindow, manager:MDIManager, moveTo:Point=null):Effect
 		{
-			var parallel:Parallel = super.getRestoreEffect(window,manager,moveTo);
+			var parallel:Parallel = super.getRestoreEffect(window,manager,moveTo) as Parallel;
 			
 			parallel.addEventListener(EffectEvent.EFFECT_START, function():void {manager.tile(true,10); } );
 			
@@ -39,7 +39,7 @@ package flexmdi.effects.effectsLib
 		
 		override public function reTileMinWindowsEffect(window:MDIWindow, manager:MDIManager, moveTo:Point):Effect
 		{
-			var move:Move = super.reTileMinWindowsEffect(window,manager,moveTo);
+			var move:Move = super.reTileMinWindowsEffect(window,manager,moveTo) as Move;
 			manager.bringToFront(window);
 			return move;
 		}

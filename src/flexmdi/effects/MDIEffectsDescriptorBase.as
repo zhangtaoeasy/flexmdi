@@ -52,7 +52,7 @@ package flexmdi.effects
 			return new Effect();
 		}
 		
-		public function getMoveEffect(window:MDIWindow, manager:MDIManager):Effect
+		public function getDragEffect(window:MDIWindow, manager:MDIManager):Effect
 		{
 			return new Effect();
 		}

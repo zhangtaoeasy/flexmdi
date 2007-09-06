@@ -32,6 +32,7 @@ package flexmdi.managers
 	import flash.geom.Point;
 	import flash.ui.ContextMenu;
 	import flash.ui.ContextMenuItem;
+	import flash.utils.Dictionary;
 	
 	import flexmdi.containers.MDIWindow;
 	import flexmdi.containers.MDIWindowState;
@@ -60,75 +61,89 @@ package flexmdi.managers
 	/**
 	 *  Dispatched when the minimize button is clicked.
 	 *
-	 *  @eventType flexmdi.events.MDIManagerEvent.MINIMIZE
+	 *  @eventType flexmdi.events.MDIManagerEvent.WINDOW_MINIMIZE
 	 */
-	[Event(name="minimize", type="mdi.events.MDIManagerEvent")]
+	[Event(name="windowMinimize", type="mdi.events.MDIManagerEvent")]
 	
 	/**
 	 *  If the window is minimized, this event is dispatched when the titleBar is clicked. 
 	 * 	If the window is maxmimized, this event is dispatched upon clicking the restore button
 	 *  or double clicking the titleBar.
 	 *
-	 *  @eventType flexmdi.events.MDIManagerEvent.RESTORE
+	 *  @eventType flexmdi.events.MDIManagerEvent.WINDOW_RESTORE
 	 */
-	[Event(name="restore", type="mdi.events.MDIManagerEvent")]
+	[Event(name="windowRestore", type="mdi.events.MDIManagerEvent")]
 	
 	/**
 	 *  Dispatched when the maximize button is clicked or when the window is in a
 	 *  normal state (not minimized or maximized) and the titleBar is double clicked.
 	 *
-	 *  @eventType flexmdi.events.MDIManagerEvent.MAXIMIZE
+	 *  @eventType flexmdi.events.MDIManagerEvent.WINDOW_MAXIMIZE
 	 */
-	[Event(name="maximize", type="mdi.events.MDIManagerEvent")]
+	[Event(name="windowMaximize", type="mdi.events.MDIManagerEvent")]
 	
 	/**
 	 *  Dispatched when the minimize button is clicked.
 	 *
-	 *  @eventType flexmdi.events.MDIManagerEvent.CLOSE
+	 *  @eventType flexmdi.events.MDIManagerEvent.WINDOW_CLOSE
 	 */
-	[Event(name="close", type="mdi.events.MDIManagerEvent")]
+	[Event(name="windowClose", type="mdi.events.MDIManagerEvent")]
 	
 	/**
 	 *  Dispatched when the window gains focus and is given topmost z-index of MDIManager's children.
 	 *
-	 *  @eventType flexmdi.events.MDIManagerEvent.FOCUS_START
+	 *  @eventType flexmdi.events.MDIManagerEvent.WINDOW_FOCUS_START
 	 */
-	[Event(name="focusStart", type="mdi.events.MDIManagerEvent")]
+	[Event(name="windowFocusStart", type="mdi.events.MDIManagerEvent")]
 	
 	/**
 	 *  Dispatched when the window loses focus and no longer has topmost z-index of MDIManager's children.
 	 *
-	 *  @eventType flexmdi.events.MDIManagerEvent.FOCUS_END
+	 *  @eventType flexmdi.events.MDIManagerEvent.WINDOW_FOCUS_END
 	 */
-	[Event(name="focusEnd", type="mdi.events.MDIManagerEvent")]
+	[Event(name="windowFocusEnd", type="mdi.events.MDIManagerEvent")]
+	
+	/**
+	 *  Dispatched when the window begins being dragged.
+	 *
+	 *  @eventType flexmdi.events.MDIManagerEvent.WINDOW_DRAG_START
+	 */
+	[Event(name="windowDragStart", type="mdi.events.MDIManagerEvent")]
 	
 	/**
 	 *  Dispatched while the window is being dragged.
 	 *
-	 *  @eventType flexmdi.events.MDIManagerEvent.MOVE
+	 *  @eventType flexmdi.events.MDIManagerEvent.WINDOW_DRAG
 	 */
-	[Event(name="move", type="mdi.events.MDIManagerEvent")]
+	[Event(name="windowDrag", type="mdi.events.MDIManagerEvent")]
+	
+	/**
+	 *  Dispatched when the window stops being dragged.
+	 *
+	 *  @eventType flexmdi.events.MDIManagerEvent.WINDOW_DRAG_END
+	 */
+	[Event(name="windowDragEnd", type="mdi.events.MDIManagerEvent")]
 	
 	/**
 	 *  Dispatched when a resize handle is pressed.
 	 *
-	 *  @eventType flexmdi.events.MDIManagerEvent.RESIZE_START
+	 *  @eventType flexmdi.events.MDIManagerEvent.WINDOW_RESIZE_START
 	 */
-	[Event(name="resizeStart", type="mdi.events.MDIManagerEvent")]
+	[Event(name="windowResizeStart", type="mdi.events.MDIManagerEvent")]
 	
 	/**
 	 *  Dispatched while the mouse is down on a resize handle.
 	 *
-	 *  @eventType flexmdi.events.MDIManagerEvent.RESIZE
+	 *  @eventType flexmdi.events.MDIManagerEvent.WINDOW_RESIZE
 	 */
-	[Event(name="resize", type="mdi.events.MDIManagerEvent")]
+	[Event(name="windowResize", type="mdi.events.MDIManagerEvent")]
 	
 	/**
 	 *  Dispatched when the mouse is released from a resize handle.
 	 *
-	 *  @eventType flexmdi.events.MDIManagerEvent.RESIZE_END
+	 *  @eventType flexmdi.events.MDIManagerEvent.WINDOW_RESIZE_END
 	 */
-	[Event(name="resizeEnd", type="mdi.events.MDIManagerEvent")]
+	[Event(name="windowResizeEnd", type="mdi.events.MDIManagerEvent")]
 	
 	/**
 	 *  Dispatched when the windows are cascaded.
@@ -160,6 +175,7 @@ package flexmdi.managers
 		}
 		
 		private var isGlobal:Boolean = false;
+		private var windowToManagerEventMap:Dictionary;
 
 		private var tiledWindows:ArrayCollection;
 		public var tileMinimize:Boolean = true;
@@ -186,18 +202,35 @@ package flexmdi.managers
 			}
 			this.container.addEventListener(ResizeEvent.RESIZE, containerResizeHandler);
 			
-			// these handlers execute default behaviors
-			addEventListener(MDIWindowEvent.MINIMIZE, executeDefaultBehavior, false, -1);
-			addEventListener(MDIWindowEvent.RESTORE, executeDefaultBehavior, false, -1);
-			addEventListener(MDIWindowEvent.MAXIMIZE, executeDefaultBehavior, false, -1);
-			addEventListener(MDIWindowEvent.CLOSE, executeDefaultBehavior, false, -1);
+			// map of window events to corresponding manager events
+			windowToManagerEventMap = new Dictionary();
+			windowToManagerEventMap[MDIWindowEvent.MINIMIZE] = MDIManagerEvent.WINDOW_MINIMIZE;
+			windowToManagerEventMap[MDIWindowEvent.RESTORE] = MDIManagerEvent.WINDOW_RESTORE;
+			windowToManagerEventMap[MDIWindowEvent.MAXIMIZE] = MDIManagerEvent.WINDOW_MAXIMIZE;
+			windowToManagerEventMap[MDIWindowEvent.CLOSE] = MDIManagerEvent.WINDOW_CLOSE;
+			windowToManagerEventMap[MDIWindowEvent.FOCUS_START] = MDIManagerEvent.WINDOW_FOCUS_START;
+			windowToManagerEventMap[MDIWindowEvent.FOCUS_END] = MDIManagerEvent.WINDOW_FOCUS_END;
+			windowToManagerEventMap[MDIWindowEvent.DRAG_START] = MDIManagerEvent.WINDOW_DRAG_START;
+			windowToManagerEventMap[MDIWindowEvent.DRAG] = MDIManagerEvent.WINDOW_DRAG;
+			windowToManagerEventMap[MDIWindowEvent.DRAG_END] = MDIManagerEvent.WINDOW_DRAG_END;
+			windowToManagerEventMap[MDIWindowEvent.RESIZE_START] = MDIManagerEvent.WINDOW_RESIZE_START;
+			windowToManagerEventMap[MDIWindowEvent.RESIZE] = MDIManagerEvent.WINDOW_RESIZE;
+			windowToManagerEventMap[MDIWindowEvent.RESIZE_END] = MDIManagerEvent.WINDOW_RESIZE_END;
 			
-			addEventListener(MDIWindowEvent.FOCUS_START, executeDefaultBehavior, false, -1);
-			addEventListener(MDIWindowEvent.FOCUS_END, executeDefaultBehavior, false, -1);
-			addEventListener(MDIWindowEvent.MOVE, executeDefaultBehavior, false, -1);
-			addEventListener(MDIWindowEvent.RESIZE_START, executeDefaultBehavior, false, -1);
-			addEventListener(MDIWindowEvent.RESIZE, executeDefaultBehavior, false, -1);
-			addEventListener(MDIWindowEvent.RESIZE_END, executeDefaultBehavior, false, -1);
+			// these handlers execute default behaviors, these events are dispatched by this class
+			addEventListener(MDIManagerEvent.WINDOW_MINIMIZE, executeDefaultBehavior, false, -1);
+			addEventListener(MDIManagerEvent.WINDOW_RESTORE, executeDefaultBehavior, false, -1);
+			addEventListener(MDIManagerEvent.WINDOW_MAXIMIZE, executeDefaultBehavior, false, -1);
+			addEventListener(MDIManagerEvent.WINDOW_CLOSE, executeDefaultBehavior, false, -1);
+						
+			addEventListener(MDIManagerEvent.WINDOW_FOCUS_START, executeDefaultBehavior, false, -1);
+			addEventListener(MDIManagerEvent.WINDOW_FOCUS_END, executeDefaultBehavior, false, -1);
+			addEventListener(MDIManagerEvent.WINDOW_DRAG_START, executeDefaultBehavior, false, -1);
+			addEventListener(MDIManagerEvent.WINDOW_DRAG, executeDefaultBehavior, false, -1);
+			addEventListener(MDIManagerEvent.WINDOW_DRAG_END, executeDefaultBehavior, false, -1);
+			addEventListener(MDIManagerEvent.WINDOW_RESIZE_START, executeDefaultBehavior, false, -1);
+			addEventListener(MDIManagerEvent.WINDOW_RESIZE, executeDefaultBehavior, false, -1);
+			addEventListener(MDIManagerEvent.WINDOW_RESIZE_END, executeDefaultBehavior, false, -1);
 		}
 		
 		private var _container:UIComponent;
@@ -327,7 +360,7 @@ package flexmdi.managers
 			if(event is MDIWindowEvent)
 			{
 				var winEvent:MDIWindowEvent = event as MDIWindowEvent;
-				var mgrEvent:MDIManagerEvent = new MDIManagerEvent(winEvent.type, winEvent.window, this);
+				var mgrEvent:MDIManagerEvent = new MDIManagerEvent(windowToManagerEventMap[winEvent.type], winEvent.window, this);
 				
 				switch(winEvent.type)
 				{
@@ -360,8 +393,16 @@ package flexmdi.managers
 						mgrEvent.effect = this.effects.getFocusOutEffect(winEvent.window, this);
 					break;
 		
-					case MDIWindowEvent.MOVE:
-						mgrEvent.effect = this.effects.getMoveEffect(winEvent.window, this);
+					case MDIWindowEvent.DRAG_START:
+						// future implementation of drag start
+					break;
+		
+					case MDIWindowEvent.DRAG:
+						mgrEvent.effect = this.effects.getDragEffect(winEvent.window, this);
+					break;
+		
+					case MDIWindowEvent.DRAG_END:
+						// future implementation of drag end
 					break;
 					
 					case MDIWindowEvent.RESIZE_START:
@@ -389,50 +430,58 @@ package flexmdi.managers
 				
 				switch(mgrEvent.type)
 				{					
-					case MDIWindowEvent.MINIMIZE:
+					case MDIManagerEvent.WINDOW_MINIMIZE:
 						mgrEvent.effect.addEventListener(EffectEvent.EFFECT_END, onMinimizeEffectEnd);
 						mgrEvent.effect.play();
 					break;
 					
-					case MDIWindowEvent.RESTORE:
+					case MDIManagerEvent.WINDOW_RESTORE:
 						removeTileInstance(mgrEvent.window);
 						mgrEvent.effect.play();
 					break;
 					
-					case MDIWindowEvent.MAXIMIZE:
+					case MDIManagerEvent.WINDOW_MAXIMIZE:
 						removeTileInstance(mgrEvent.window);
 						maximizeWindow(mgrEvent.window);
 					break;
 					
-					case MDIWindowEvent.CLOSE:
+					case MDIManagerEvent.WINDOW_CLOSE:
 						removeTileInstance(mgrEvent.window);
 						mgrEvent.effect.addEventListener(EffectEvent.EFFECT_END, onCloseEffectEnd);
 						mgrEvent.effect.play();
 					break;
 					
-					case MDIWindowEvent.FOCUS_START:
+					case MDIManagerEvent.WINDOW_FOCUS_START:
 						mgrEvent.window.styleName = "mdiWindowFocus";
 						mgrEvent.effect.play();
 					break;
 					
-					case MDIWindowEvent.FOCUS_END:
+					case MDIManagerEvent.WINDOW_FOCUS_END:
 						mgrEvent.window.styleName = "mdiWindowNoFocus";
 						mgrEvent.effect.play();
 					break;
 		
-					case MDIWindowEvent.MOVE:
+					case MDIManagerEvent.WINDOW_DRAG_START:
+						//
+					break;
+		
+					case MDIManagerEvent.WINDOW_DRAG:
 						mgrEvent.effect.play();
 					break;
-					
-					case MDIWindowEvent.RESIZE_START:
+		
+					case MDIManagerEvent.WINDOW_DRAG_END:
 						//
 					break;
 					
-					case MDIWindowEvent.RESIZE:
+					case MDIManagerEvent.WINDOW_RESIZE_START:
+						//
+					break;
+					
+					case MDIManagerEvent.WINDOW_RESIZE:
 						mgrEvent.effect.play();
 					break;
 					
-					case MDIWindowEvent.RESIZE_END:
+					case MDIManagerEvent.WINDOW_RESIZE_END:
 						//
 					break;
 				}
@@ -684,7 +733,9 @@ package flexmdi.managers
 			
 			window.addEventListener(MDIWindowEvent.FOCUS_START, windowEventProxy, false, -1);
 			window.addEventListener(MDIWindowEvent.FOCUS_END, windowEventProxy, false, -1);
-			window.addEventListener(MDIWindowEvent.MOVE, windowEventProxy, false, -1);
+			window.addEventListener(MDIWindowEvent.DRAG_START, windowEventProxy, false, -1);
+			window.addEventListener(MDIWindowEvent.DRAG, windowEventProxy, false, -1);
+			window.addEventListener(MDIWindowEvent.DRAG_END, windowEventProxy, false, -1);
 			window.addEventListener(MDIWindowEvent.RESIZE_START, windowEventProxy, false, -1);
 			window.addEventListener(MDIWindowEvent.RESIZE, windowEventProxy, false, -1);
 			window.addEventListener(MDIWindowEvent.RESIZE_END, windowEventProxy, false, -1);
@@ -706,7 +757,9 @@ package flexmdi.managers
 			
 			window.removeEventListener(MDIWindowEvent.FOCUS_START, windowEventProxy);
 			window.removeEventListener(MDIWindowEvent.FOCUS_END, windowEventProxy);
-			window.removeEventListener(MDIWindowEvent.MOVE, windowEventProxy);
+			window.removeEventListener(MDIWindowEvent.DRAG_START, windowEventProxy);
+			window.removeEventListener(MDIWindowEvent.DRAG, windowEventProxy);
+			window.removeEventListener(MDIWindowEvent.DRAG_END, windowEventProxy);
 			window.removeEventListener(MDIWindowEvent.RESIZE_START, windowEventProxy);
 			window.removeEventListener(MDIWindowEvent.RESIZE, windowEventProxy);	
 			window.removeEventListener(MDIWindowEvent.RESIZE_END, windowEventProxy);

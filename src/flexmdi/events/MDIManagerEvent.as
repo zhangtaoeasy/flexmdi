@@ -32,6 +32,20 @@ package flexmdi.events
 
 	public class MDIManagerEvent extends Event
 	{
+		public static const WINDOW_MINIMIZE:String = "windowMinimize";
+		public static const WINDOW_RESTORE:String = "windowRestore";
+		public static const WINDOW_MAXIMIZE:String = "windowMaximize";
+		public static const WINDOW_CLOSE:String = "windowClose";
+		
+		public static const WINDOW_FOCUS_START:String = "windowFocusStart";
+		public static const WINDOW_FOCUS_END:String = "windowFocusEnd";
+		public static const WINDOW_DRAG_START:String = "windowDragStart";
+		public static const WINDOW_DRAG:String = "windowDrag";
+		public static const WINDOW_DRAG_END:String = "windowDragEnd";
+		public static const WINDOW_RESIZE_START:String = "windowResizeStart";
+		public static const WINDOW_RESIZE:String = "windowResize";
+		public static const WINDOW_RESIZE_END:String = "windowResizeEnd";
+		
 		public static const CASCADE:String = "cascade";
 		public static const TILE:String = "tile";
 		

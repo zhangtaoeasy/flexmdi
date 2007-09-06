@@ -17,27 +17,27 @@ package aworks.vo
 		
 		public var EmployeeID : Number = 0;
 		
-		public var Name.Prefix : String = "";
+		public var NamePrefix : String = "";
 		
-		public var Name.First : String = "";
+		public var NameFirst : String = "";
 		
-		public var Name.Middle : String = "";
+		public var NameMiddle : String = "";
 		
-		public var Name.Last : String = "";
+		public var NameLast : String = "";
 		
-		public var Name.Suffix : String = "";
+		public var NameSuffix : String = "";
 		
 		public var Skills : String = "";
 		
-		public var Addr.Type : String = "";
+		public var AddrType : String = "";
 		
-		public var Addr.Loc.CountryRegion : String = "";
+		public var AddrLocCountryRegion : String = "";
 		
-		public var Addr.Loc.State : String = "";
+		public var AddrLocState : String = "";
 		
-		public var Addr.Loc.City : String = "";
+		public var AddrLocCity : String = "";
 		
-		public var Addr.PostalCode : String = "";
+		public var AddrPostalCode : String = "";
 		
 		public var EMail : String = "";
 		

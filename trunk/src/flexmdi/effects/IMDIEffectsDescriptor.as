@@ -46,7 +46,7 @@ package flexmdi.effects
 	
 		function getShowEffect(window:MDIWindow, manager:MDIManager):Effect
 	
-		function getMoveEffect(window:MDIWindow, manager:MDIManager):Effect
+		function getDragEffect(window:MDIWindow, manager:MDIManager):Effect
 	
 		function getResizeEffect(window:MDIWindow, manager:MDIManager):Effect
 	

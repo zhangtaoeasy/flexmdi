@@ -92,11 +92,25 @@ package flexmdi.containers
 	[Event(name="focusEnd", type="mdi.events.MDIWindowEvent")]
 	
 	/**
+	 *  Dispatched when the window starts being dragged.
+	 *
+	 *  @eventType flexmdi.events.MDIWindowEvent.DRAG_START
+	 */
+	[Event(name="dragStart", type="mdi.events.MDIWindowEvent")]
+	
+	/**
 	 *  Dispatched while the window is being dragged.
 	 *
-	 *  @eventType flexmdi.events.MDIWindowEvent.MOVE
+	 *  @eventType flexmdi.events.MDIWindowEvent.DRAG
 	 */
-	[Event(name="move", type="mdi.events.MDIWindowEvent")]
+	[Event(name="drag", type="mdi.events.MDIWindowEvent")]
+	
+	/**
+	 *  Dispatched when the window stops being dragged.
+	 *
+	 *  @eventType flexmdi.events.MDIWindowEvent.DRAG_END
+	 */
+	[Event(name="dragEnd", type="mdi.events.MDIWindowEvent")]
 	
 	/**
 	 *  Dispatched when a resize handle is pressed.
@@ -674,14 +688,25 @@ package flexmdi.containers
 			if(this.windowState != MDIWindowState.MINIMIZED)
 			{
 				this.startDrag(false, new Rectangle(0, 0, parent.width - this.width, parent.height - this.height - 5));
+				dispatchEvent(new MDIWindowEvent(MDIWindowEvent.DRAG_START, this));
 				systemManager.addEventListener(MouseEvent.MOUSE_UP, onTitleBarRelease);
+				systemManager.addEventListener(MouseEvent.MOUSE_MOVE, onWindowMove);
+				systemManager.stage.addEventListener(Event.MOUSE_LEAVE, onTitleBarRelease, false, 0, true);
 			}
+		}
+		
+		private function onWindowMove(event:MouseEvent):void
+		{
+			dispatchEvent(new MDIWindowEvent(MDIWindowEvent.DRAG, this));
 		}
 		
 		private function onTitleBarRelease(event:Event):void
 		{
 			this.stopDrag();
+			dispatchEvent(new MDIWindowEvent(MDIWindowEvent.DRAG_END, this));
 			systemManager.removeEventListener(MouseEvent.MOUSE_UP, onTitleBarRelease);
+			systemManager.removeEventListener(MouseEvent.MOUSE_MOVE, onWindowMove);
+			systemManager.stage.removeEventListener(Event.MOUSE_LEAVE, onTitleBarRelease);
 		}
 		
 		/**
@@ -803,6 +828,7 @@ package flexmdi.containers
 		private function onMouseLeaveStage(event:Event):void
 		{
 			onResizeButtonRelease();
+			systemManager.stage.removeEventListener(Event.MOUSE_LEAVE, onMouseLeaveStage);
 		}
 		
 		private function setCursor(target:Button):void

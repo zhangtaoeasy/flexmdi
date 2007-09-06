@@ -24,17 +24,17 @@
 		
 			<mx:DataGridColumn dataField="JOBCANDIDATEID" headerText="JobCandidateID" />
 			<mx:DataGridColumn dataField="EMPLOYEEID" headerText="EmployeeID" />
-			<mx:DataGridColumn dataField="NAME.PREFIX" headerText="Name.Prefix" />
-			<mx:DataGridColumn dataField="NAME.FIRST" headerText="Name.First" />
-			<mx:DataGridColumn dataField="NAME.MIDDLE" headerText="Name.Middle" />
-			<mx:DataGridColumn dataField="NAME.LAST" headerText="Name.Last" />
-			<mx:DataGridColumn dataField="NAME.SUFFIX" headerText="Name.Suffix" />
+			<mx:DataGridColumn dataField="NAMEPREFIX" headerText="NamePrefix" />
+			<mx:DataGridColumn dataField="NAMEFIRST" headerText="NameFirst" />
+			<mx:DataGridColumn dataField="NAMEMIDDLE" headerText="NameMiddle" />
+			<mx:DataGridColumn dataField="NAMELAST" headerText="NameLast" />
+			<mx:DataGridColumn dataField="NAMESUFFIX" headerText="NameSuffix" />
 			<mx:DataGridColumn dataField="SKILLS" headerText="Skills" />
-			<mx:DataGridColumn dataField="ADDR.TYPE" headerText="Addr.Type" />
-			<mx:DataGridColumn dataField="ADDR.LOC.COUNTRYREGION" headerText="Addr.Loc.CountryRegion" />
-			<mx:DataGridColumn dataField="ADDR.LOC.STATE" headerText="Addr.Loc.State" />
-			<mx:DataGridColumn dataField="ADDR.LOC.CITY" headerText="Addr.Loc.City" />
-			<mx:DataGridColumn dataField="ADDR.POSTALCODE" headerText="Addr.PostalCode" />
+			<mx:DataGridColumn dataField="ADDRTYPE" headerText="AddrType" />
+			<mx:DataGridColumn dataField="ADDRLOCCOUNTRYREGION" headerText="AddrLocCountryRegion" />
+			<mx:DataGridColumn dataField="ADDRLOCSTATE" headerText="AddrLocState" />
+			<mx:DataGridColumn dataField="ADDRLOCCITY" headerText="AddrLocCity" />
+			<mx:DataGridColumn dataField="ADDRPOSTALCODE" headerText="AddrPostalCode" />
 			<mx:DataGridColumn dataField="EMAIL" headerText="EMail" />
 			<mx:DataGridColumn dataField="WEBSITE" headerText="WebSite" />
 			<mx:DataGridColumn dataField="MODIFIEDDATE" headerText="ModifiedDate" />

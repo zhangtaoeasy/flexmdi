@@ -581,13 +581,16 @@ package flexmdi.containers
 		{
 			for each(var win:MDIWindow in windowManager.windowList)
 			{
-				if(win.parent.getChildIndex(win) == win.parent.numChildren - 1)
+				if(win != this && win.parent.getChildIndex(win) == win.parent.numChildren - 1)
 				{
 					win.dispatchEvent(new MDIWindowEvent(MDIWindowEvent.FOCUS_END, win));
 				}
 			}
-			dispatchEvent(new MDIWindowEvent(MDIWindowEvent.FOCUS_START, this));
-			parent.setChildIndex(this, parent.numChildren - 1);
+			if(parent.getChildIndex(this) != parent.numChildren - 1)
+			{
+				parent.setChildIndex(this, parent.numChildren - 1);
+				dispatchEvent(new MDIWindowEvent(MDIWindowEvent.FOCUS_START, this));
+			}
 		}
 		
 		/**

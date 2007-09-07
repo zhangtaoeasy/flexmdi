@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" layout="horizontal">
+<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:flexmdi="http://flexmdi.googlecode.com/">
 	<mx:Style source="/assets/css/style.css" />
 	<mx:Script>
 		<![CDATA[
+			import flexmdi.effects.effectsLib.MDIVistaEffectsDescriptor;
 			import mx.utils.ObjectUtil;
 			
 			import flexmdi.containers.MDIWindow;
@@ -14,93 +15,72 @@
 				var win:MDIWindow = new MDIWindow();
 				win.height = 400;
 				win.width = 300;
-				win.title = "Global Window";
+				win.title = "New Window";
 				
-				win.addEventListener(MDIWindowEvent.RESIZE, this.windowResizeEventHandler);
-				win.addEventListener(MDIWindowEvent.FOCUS_START, this.windowFocusEventHandler);
-				win.addEventListener(MDIWindowEvent.FOCUS_END, this.windowFocusEventHandler);
-				win.addEventListener(MDIWindowEvent.MINIMIZE,this.windowMinimizeHandler);
-				win.addEventListener(MDIWindowEvent.RESTORE,this.windowRestoreEventHandler);
-				win.addEventListener(MDIWindowEvent.MAXIMIZE,this.windowMaximizeEventHandler);
-				win.addEventListener(MDIWindowEvent.CLOSE,this.windowCloseEventHandler);
-				win.addEventListener(MDIWindowEvent.RESIZE_END,this.windowResizeEndEventHandler);
-				win.addEventListener(MDIWindowEvent.RESIZE_START,this.windowResizeStartEventHandler);
-				win.addEventListener(MDIWindowEvent.MOVE, this.windowMoveEventHandler);
+				win.addEventListener(MDIWindowEvent.MINIMIZE,this.windowEventHandler);
+				win.addEventListener(MDIWindowEvent.RESTORE,this.windowEventHandler);
+				win.addEventListener(MDIWindowEvent.MAXIMIZE,this.windowEventHandler);
+				win.addEventListener(MDIWindowEvent.CLOSE,this.windowEventHandler);
 				
-				MDIManager.global.add(win); 
+				win.addEventListener(MDIWindowEvent.FOCUS_START, this.windowEventHandler);
+				win.addEventListener(MDIWindowEvent.FOCUS_END, this.windowEventHandler);
+				win.addEventListener(MDIWindowEvent.DRAG_START, this.windowEventHandler);
+				win.addEventListener(MDIWindowEvent.DRAG, this.windowEventHandler);
+				win.addEventListener(MDIWindowEvent.DRAG_END, this.windowEventHandler);
+				win.addEventListener(MDIWindowEvent.RESIZE_START,this.windowEventHandler);
+				win.addEventListener(MDIWindowEvent.RESIZE, this.windowEventHandler);
+				win.addEventListener(MDIWindowEvent.RESIZE_END,this.windowEventHandler);
+								
+				mdiCanvas.windowManager.add(win);
 			}
 			
-			private function windowMoveEventHandler(event:MDIWindowEvent):void
+			private function windowEventHandler(event:Event):void
 			{
-				this.output.text += ObjectUtil.toString(event.type) + " ";
-			}
-			private function windowResizeEventHandler(event:MDIWindowEvent):void
-			{
-				this.output.text += ObjectUtil.toString(event.type) + " ";
-			}
-			private function windowFocusEventHandler(event:MDIWindowEvent):void
-			{
-				this.output.text += ObjectUtil.toString(event.type) + " ";
-			}
-			private function windowResizeStartEventHandler(event:MDIWindowEvent):void
-			{
-				this.output.text += ObjectUtil.toString(event.type) + " ";
-			}
-			private function windowResizeEndEventHandler(event:MDIWindowEvent):void
-			{
-				this.output.text +=  ObjectUtil.toString(event.type) + " ";
-			}
-			private function windowMinimizeHandler(event:MDIWindowEvent):void
-			{
-				this.output.text +=  ObjectUtil.toString(event.type) + " ";
-			}
-			private function windowRestoreEventHandler(event:MDIWindowEvent):void
-			{
-				this.output.text +=  ObjectUtil.toString(event.type) + " ";
-			}
-			private function windowMaximizeEventHandler(event:MDIWindowEvent):void
-			{
-				this.output.text +=  ObjectUtil.toString(event.type) + " ";
-			}
-			private function windowCloseEventHandler(event:MDIWindowEvent):void
-			{
-				this.output.text +=  ObjectUtil.toString(event.type) + " ";
-			}
-			
+				if(event is MDIWindowEvent)
+				{
+					this.output.text += event.type + ", ";
+				}
+			}			
 		]]>
 	</mx:Script>
 	
 	
-	<mx:VBox width="50%">
-		
-		<mx:Button label="Add Window" click="addWindow()" />
+	<mx:Button label="Add Window" click="addWindow()" />
 		
 		
-		<mx:Text width="100%" height="100%">
-     		<mx:htmlText>
-     			<![CDATA[
-     				To see the events add a window and perform common operations on it to see event sfire.<br />
-     				MDI Windows can fire the following events</br>
-     				<ul>
-     					<li>FOCUS_IN</li>
-     					<li>FOCUS_OUT</li>
-     					<li>RESTORE</li>
-     					<li>CLOSE</li>
-     					<li>MAXIMIZE</li>
-     					<li>MINIMIZE</li>
-     					<li>RESIZE</li>
-     					<li>RESIZE_END</li>
-     					<li>RESIZE_START</li>
-     					
-     				</ul>
-     				
-     			]]>
-     	</mx:htmlText>
-  		</mx:Text>
-		
-		
-	</mx:VBox>
-	<mx:TextArea id="output" width="50%" height="100%" />
+	<!--mx:Text width="100%" height="100%">
+ 		<mx:htmlText>
+ 			<![CDATA[
+ 				To see the events add a window and perform common operations on it to see event sfire.<br />
+ 				MDI Windows can fire the following events</br>
+ 				<ul>
+ 					<li>FOCUS_IN</li>
+ 					<li>FOCUS_OUT</li>
+ 					<li>RESTORE</li>
+ 					<li>CLOSE</li>
+ 					<li>MAXIMIZE</li>
+ 					<li>MINIMIZE</li>
+ 					<li>RESIZE</li>
+ 					<li>RESIZE_END</li>
+ 					<li>RESIZE_START</li>
+ 					
+ 				</ul>
+ 				
+ 			]]>
+	 	</mx:htmlText>
+  	</mx:Text-->
 	
+	<mx:TextArea id="output" width="100%" height="200" bottom="10" />
+	
+	<flexmdi:MDICanvas id="mdiCanvas"
+		effectsLib="{flexmdi.effects.effectsLib.MDIVistaEffectsDescriptor}"
+		top="20" right="20" bottom="20" left="20">
+		<flexmdi:MDIWindow id="win1"
+			title="Window One"
+			x="30" y="30" width="400" height="200" />
+		<flexmdi:MDIWindow id="win2"
+			title="Window Two"
+			x="450" y="30" width="250" height="400" />
+	</flexmdi:MDICanvas>
 	
 </mx:Application>

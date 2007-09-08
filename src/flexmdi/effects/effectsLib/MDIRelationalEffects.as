@@ -15,8 +15,6 @@ package flexmdi.effects.effectsLib
 	
 	public class MDIRelationalEffects extends MDIVistaEffects
 	{
-		
-		
 		override public function getMinimizeEffect(window:MDIWindow, manager:MDIManager, moveTo:Point=null):Effect
 		{
 			

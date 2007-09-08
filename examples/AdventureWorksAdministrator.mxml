@@ -10,7 +10,7 @@
 	<mx:Script>
 		<![CDATA[
 			
-			import flexmdi.effects.effectsLib.MDIVistaEffectsDescriptor;
+			import flexmdi.effects.effectsLib.MDIVistaEffects;
 			import flexmdi.effects.effectsLib.MDIRelationalEffects;
 			
 			public function onCreationComplete():void
@@ -33,7 +33,7 @@
 			
 			<!--<flexmdi:MDICanvas id="workspace" width="100%" height="100%" label="Start Page"
 				creationComplete="workspace.windowManager.cascade()"
-				 effectsLib="{flexmdi.effects.effectsLib.MDIVistaEffectsDescriptor}">
+				 effectsLib="{flexmdi.effects.effectsLib.MDIVistaEffects}">
 				
 			</flexmdi:MDICanvas> -->
 			
@@ -52,7 +52,7 @@
 			
 			<flexmdi:MDICanvas id="inventory" width="100%" height="100%" label="Inventory"
 				creationComplete="inventory.windowManager.tile(true,10)"
-				 effectsLib="{flexmdi.effects.effectsLib.MDIVistaEffectsDescriptor}">
+				 effectsLib="{flexmdi.effects.effectsLib.MDIVistaEffects}">
 				 
 				<grids:ProductCategoryGrid title="Product Categories" width="60%" height="60%" />
 				<grids:ProductGrid  title="Products" width="60%" height="60%" />
@@ -62,27 +62,27 @@
 			
 			<flexmdi:MDICanvas id="purchasing" width="100%" height="100%" label="Purchasing"
 				creationComplete="purchasing.windowManager.cascade()"
-				 effectsLib="{flexmdi.effects.effectsLib.MDIVistaEffectsDescriptor}">
+				 effectsLib="{flexmdi.effects.effectsLib.MDIVistaEffects}">
 				
 			</flexmdi:MDICanvas>
 			
 			
 			<flexmdi:MDICanvas id="sales" width="100%" height="100%" label="Sales"
 				creationComplete="sales.windowManager.cascade()"
-				 effectsLib="{flexmdi.effects.effectsLib.MDIVistaEffectsDescriptor}">
+				 effectsLib="{flexmdi.effects.effectsLib.MDIVistaEffects}">
 				
 			</flexmdi:MDICanvas>
 			
 			
 			<flexmdi:MDICanvas id="shipping" width="100%" height="100%" label="Shipping"
 				creationComplete="shipping.windowManager.cascade()"
-				 effectsLib="{flexmdi.effects.effectsLib.MDIVistaEffectsDescriptor}">
+				 effectsLib="{flexmdi.effects.effectsLib.MDIVistaEffects}">
 				
 			</flexmdi:MDICanvas>
 			
 			<flexmdi:MDICanvas id="system" width="100%" height="100%" label="System"
 				creationComplete="system.windowManager.cascade()"
-				 effectsLib="{flexmdi.effects.effectsLib.MDIVistaEffectsDescriptor}">
+				 effectsLib="{flexmdi.effects.effectsLib.MDIVistaEffects}">
 				 
 				<grids:AWBuildVersionGrid title="Build Version" width="400" height="200" />
 			</flexmdi:MDICanvas>

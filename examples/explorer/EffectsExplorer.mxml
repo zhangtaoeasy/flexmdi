@@ -5,11 +5,11 @@
 		<![CDATA[
 			import flexmdi.managers.MDIManager;
 			import flexmdi.containers.MDIWindow;
-			import flexmdi.effects.effectsLib.MDIVistaEffectsDescriptor;
+			import flexmdi.effects.effectsLib.MDIVistaEffects;
 			
 			public function onCreationComplete():void
 			{
-				MDIManager.global.effects = new MDIVistaEffectsDescriptor();
+				MDIManager.global.effects = new MDIVistaEffects();
 			}
 			
 			public function addWindow():void

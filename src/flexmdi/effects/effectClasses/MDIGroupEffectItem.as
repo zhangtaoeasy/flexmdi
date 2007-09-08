@@ -4,16 +4,15 @@ package flexmdi.effects.effectClasses
 	import flash.geom.Point;
 	
 	public class MDIGroupEffectItem
-	{
+	{		
+		public var window:MDIWindow;
+		public var moveTo:Point;
 		
-		public var window : MDIWindow;
-		public var moveTo : Point;
-		
-		public var heightTo : int;
-		public var heightFrom : int;
-		public var widthTo : int;
-		public var widthFrom : int;
-	
+		public var widthFrom:Number;
+		public var widthTo:Number;
+		public var heightFrom:Number;
+		public var heightTo:Number;
+			
 		public function MDIGroupEffectItem(window:MDIWindow):void
 		{
 			this.window = window;

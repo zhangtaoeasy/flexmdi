@@ -248,24 +248,10 @@ package flexmdi.containers
 		private var currentResizeHandle:Button;
 		
 		/**
-	     * Window's x position when resize begins or panel's size/position is saved.
+	     * Rectangle to represent window's size and position when resize begins
+	     * or window's size/position is saved.
 	     */
-		public var dragStartPanelX:Number;
-		
-		/**
-	     * Window's y position when resize begins or panel's size/position is saved.
-	     */
-		public var dragStartPanelY:Number;
-		
-		/**
-	     * Window's width when resize begins or panel's size/position is saved.
-	     */
-		public var dragStartPanelWidth:Number;
-		
-		/**
-	     * Window's height when resize begins or panel's size/position is saved.
-	     */
-		public var dragStartPanelHeight:Number;
+		public var savedWindowRect:Rectangle;
 		
 		/**
 		 * @private
@@ -656,10 +642,7 @@ package flexmdi.containers
 		 */
 		private function savePanel():void
 		{
-			dragStartPanelX = this.x;
-			dragStartPanelY = this.y;
-			dragStartPanelWidth = this.width;
-			dragStartPanelHeight = this.height;
+			savedWindowRect = new Rectangle(this.x, this.y, this.width, this.height);
 		}
 		
 		/**
@@ -744,13 +727,10 @@ package flexmdi.containers
 				setCursor(currentResizeHandle);
 				dragStartMouseX = parent.mouseX;
 				dragStartMouseY = parent.mouseY;
-				dragStartPanelX = this.x;
-				dragStartPanelY = this.y;
-				dragStartPanelWidth = this.width;
-				dragStartPanelHeight = this.height;
+				savedWindowRect = new Rectangle(this.x, this.y, this.width, this.height);
 				
-				dragMaxX = dragStartPanelX + (dragStartPanelWidth - minWidth);
-				dragMaxY = dragStartPanelY + (dragStartPanelHeight - minHeight);
+				dragMaxX = savedWindowRect.x + (savedWindowRect.width - minWidth);
+				dragMaxY = savedWindowRect.y + (savedWindowRect.height - minHeight);
 				
 				systemManager.addEventListener(Event.ENTER_FRAME, onResizeButtonDrag, false, 0, true);
 				systemManager.addEventListener(MouseEvent.MOUSE_UP, onResizeButtonRelease, false, 0, true);
@@ -772,7 +752,7 @@ package flexmdi.containers
 				if(currentResizeHandle == resizeHandleTop && parent.mouseY > 0)
 				{
 					this.y = Math.min(this.parent.mouseY, dragMaxY);
-					this.height = Math.max(dragStartPanelHeight - dragAmountY, minHeight);
+					this.height = Math.max(savedWindowRect.height - dragAmountY, minHeight);
 				}
 				else if(currentResizeHandle == resizeHandleRight && parent.mouseX < parent.width)
 				{
@@ -785,20 +765,20 @@ package flexmdi.containers
 				else if(currentResizeHandle == resizeHandleLeft && parent.mouseX > 0)
 				{
 					this.x = Math.min(this.parent.mouseX, dragMaxX);
-					this.width = Math.max(dragStartPanelWidth - dragAmountX, minWidth);
+					this.width = Math.max(savedWindowRect.width - dragAmountX, minWidth);
 				}
 				else if(currentResizeHandle == resizeHandleTL && parent.mouseX > 0 && parent.mouseY > 0)
 				{
 					this.x = Math.min(this.parent.mouseX, dragMaxX);
 					this.y = Math.min(this.parent.mouseY, dragMaxY);
-					this.width = Math.max(dragStartPanelWidth - dragAmountX, minWidth);
-					this.height = Math.max(dragStartPanelHeight - dragAmountY, minHeight);				
+					this.width = Math.max(savedWindowRect.width - dragAmountX, minWidth);
+					this.height = Math.max(savedWindowRect.height - dragAmountY, minHeight);				
 				}
 				else if(currentResizeHandle == resizeHandleTR && parent.mouseX < parent.width && parent.mouseY > 0)
 				{
 					this.y = Math.min(this.parent.mouseY, dragMaxY);
 					this.width = Math.max(this.mouseX, minWidth);
-					this.height = Math.max(dragStartPanelHeight - dragAmountY, minHeight);
+					this.height = Math.max(savedWindowRect.height - dragAmountY, minHeight);
 				}
 				else if(currentResizeHandle == resizeHandleBR && parent.mouseX < parent.width && parent.mouseY < parent.height)
 				{
@@ -808,7 +788,7 @@ package flexmdi.containers
 				else if(currentResizeHandle == resizeHandleBL && parent.mouseX > 0 && parent.mouseY < parent.height)
 				{
 					this.x = Math.min(this.parent.mouseX, dragMaxX);
-					this.width = Math.max(dragStartPanelWidth - dragAmountX, minWidth);
+					this.width = Math.max(savedWindowRect.width - dragAmountX, minWidth);
 					this.height = Math.max(this.mouseY, minHeight);
 				}
 				dispatchEvent(new MDIWindowEvent(MDIWindowEvent.RESIZE, this));

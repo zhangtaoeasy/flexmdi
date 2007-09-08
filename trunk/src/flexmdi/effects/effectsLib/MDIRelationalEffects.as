@@ -13,7 +13,7 @@ package flexmdi.effects.effectsLib
 	import mx.events.EffectEvent;
 	import mx.effects.Move;
 	
-	public class MDIRelationalEffects extends MDIVistaEffectsDescriptor
+	public class MDIRelationalEffects extends MDIVistaEffects
 	{
 		
 		

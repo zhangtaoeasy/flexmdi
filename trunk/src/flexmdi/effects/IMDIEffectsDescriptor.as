@@ -32,6 +32,8 @@ package flexmdi.effects
 	
 	public interface IMDIEffectsDescriptor
 	{
+		// window effects
+		
 		function getMinimizeEffect(window:MDIWindow, manager:MDIManager, moveTo:Point = null):Effect
 	
 		function getRestoreEffect(window:MDIWindow, manager:MDIManager, moveTo:Point = null):Effect
@@ -40,22 +42,32 @@ package flexmdi.effects
 	
 		function getCloseEffect(window:MDIWindow, manager:MDIManager):Effect
 		
-		function getFocusInEffect(window:MDIWindow, manager:MDIManager):Effect
+		function getFocusStartEffect(window:MDIWindow, manager:MDIManager):Effect
 	
-		function getFocusOutEffect(window:MDIWindow, manager:MDIManager):Effect
-	
-		function getShowEffect(window:MDIWindow, manager:MDIManager):Effect
-	
+		function getFocusEndEffect(window:MDIWindow, manager:MDIManager):Effect
+		
+		function getDragStartEffect(window:MDIWindow, manager:MDIManager):Effect
+		
 		function getDragEffect(window:MDIWindow, manager:MDIManager):Effect
+		
+		function getDragEndEffect(window:MDIWindow, manager:MDIManager):Effect
 	
+		function getResizeStartEffect(window:MDIWindow, manager:MDIManager):Effect
+		
 		function getResizeEffect(window:MDIWindow, manager:MDIManager):Effect
+		
+		function getResizeEndEffect(window:MDIWindow, manager:MDIManager):Effect
 	
-		function reTileMinWindowsEffect(window:MDIWindow, manager:MDIManager, moveTo:Point):Effect	
-	
-		//group window effects
+		// group effects
 		
 		function getTileEffect(items:Array, manager:MDIManager):Effect
 		
-		function getCascadeEffect(items:Array, manager:MDIManager):Effect		
+		function getCascadeEffect(items:Array, manager:MDIManager):Effect
+		
+		// mystery effects
+		
+		function getShowEffect(window:MDIWindow, manager:MDIManager):Effect
+		
+		function reTileMinWindowsEffect(window:MDIWindow, manager:MDIManager, moveTo:Point):Effect
 	}
 }

@@ -41,7 +41,7 @@ package flexmdi.effects.effectsLib
 	import mx.effects.WipeDown;
 	import mx.events.EffectEvent;
 
-	public class MDIVistaEffectsDescriptor extends MDIEffectsDescriptorBase implements IMDIEffectsDescriptor
+	public class MDIVistaEffects extends MDIEffectsDescriptorBase implements IMDIEffectsDescriptor
 	{		
 		override public function getShowEffect(window:MDIWindow, manager:MDIManager):Effect
 		{			
@@ -104,6 +104,11 @@ package flexmdi.effects.effectsLib
 					move.easingFunction = this.cascadeEasingFunction;
 					move.duration = 200;
 					parallel.addChild(move);
+					
+				var resize:Resize = new Resize(item.window);
+					resize.widthTo = item.widthTo;
+					resize.heightTo = item.heightTo;
+					parallel.addChild(resize);
 			}
 			
 			return parallel;
@@ -159,8 +164,8 @@ package flexmdi.effects.effectsLib
 			parallel.addChild(move);
 			
 			var resize:Resize = new Resize(window);
-			resize.heightTo = window.dragStartPanelHeight;
-			resize.widthTo = window.dragStartPanelWidth;
+			resize.widthTo = window.savedWindowRect.width;
+			resize.heightTo = window.savedWindowRect.height;
 			resize.duration = 300;
 			parallel.addChild(resize);
 			

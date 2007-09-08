@@ -373,7 +373,7 @@ package flexmdi.managers
 					break;
 					
 					case MDIWindowEvent.RESTORE:
-						var restorePoint:Point = new Point(winEvent.window.dragStartPanelX, winEvent.window.dragStartPanelY);
+						var restorePoint:Point = new Point(winEvent.window.savedWindowRect.x, winEvent.window.savedWindowRect.y);
 						mgrEvent.effect = this.effects.getRestoreEffect(winEvent.window, this, restorePoint);
 					break;
 					
@@ -386,15 +386,15 @@ package flexmdi.managers
 					break;
 					
 					case MDIWindowEvent.FOCUS_START:
-						mgrEvent.effect = this.effects.getFocusInEffect(winEvent.window, this);
+						mgrEvent.effect = this.effects.getFocusStartEffect(winEvent.window, this);
 					break;
 					
 					case MDIWindowEvent.FOCUS_END:
-						mgrEvent.effect = this.effects.getFocusOutEffect(winEvent.window, this);
+						mgrEvent.effect = this.effects.getFocusEndEffect(winEvent.window, this);
 					break;
 		
 					case MDIWindowEvent.DRAG_START:
-						// future implementation of drag start
+						mgrEvent.effect = this.effects.getDragStartEffect(winEvent.window, this);
 					break;
 		
 					case MDIWindowEvent.DRAG:
@@ -402,11 +402,11 @@ package flexmdi.managers
 					break;
 		
 					case MDIWindowEvent.DRAG_END:
-						// future implementation of drag end
+						mgrEvent.effect = this.effects.getDragEndEffect(winEvent.window, this);
 					break;
 					
 					case MDIWindowEvent.RESIZE_START:
-						// future implementation of resize start
+						mgrEvent.effect = this.effects.getResizeStartEffect(winEvent.window, this);
 					break;
 					
 					case MDIWindowEvent.RESIZE:
@@ -414,7 +414,7 @@ package flexmdi.managers
 					break;
 					
 					case MDIWindowEvent.RESIZE_END:
-						// future implementation of a resize end
+						mgrEvent.effect = this.effects.getResizeEndEffect(winEvent.window, this);
 					break;
 				}
 				
@@ -462,7 +462,7 @@ package flexmdi.managers
 					break;
 		
 					case MDIManagerEvent.WINDOW_DRAG_START:
-						//
+						mgrEvent.effect.play();
 					break;
 		
 					case MDIManagerEvent.WINDOW_DRAG:
@@ -470,11 +470,11 @@ package flexmdi.managers
 					break;
 		
 					case MDIManagerEvent.WINDOW_DRAG_END:
-						//
+						mgrEvent.effect.play();
 					break;
 					
 					case MDIManagerEvent.WINDOW_RESIZE_START:
-						//
+						mgrEvent.effect.play();
 					break;
 					
 					case MDIManagerEvent.WINDOW_RESIZE:
@@ -482,7 +482,7 @@ package flexmdi.managers
 					break;
 					
 					case MDIManagerEvent.WINDOW_RESIZE_END:
-						//
+						mgrEvent.effect.play();
 					break;
 				}
 			}			
@@ -821,12 +821,11 @@ package flexmdi.managers
 		}
 		
 		/**
-		 *  @private getOpenWindowList():Array
+		 * Gets a list of open windows for scenarios when only open windows need to be managed
 		 * 
-		 *  gets a list of open windows for scenarios when only open windows need to be managed
-		 * 
+		 * @return Array
 		 */
-		private function getOpenWindowList():Array
+		public function getOpenWindowList():Array
 		{	
 			var array:Array = [];
 			for(var i:int = 0; i < windowList.length; i++)
@@ -957,28 +956,26 @@ package flexmdi.managers
 		/**
 		 *  Cascades all managed windows from top left to bottom right 
 		 * 
-		 *  @param window:MDIWindow Window to maximize
 		 */	
 		public function cascade():void
 		{
-
 			var effectItems:Array = [];
 			
 			var windows:Array = getOpenWindowList();
 			
-			for(var i:int=0; i < windows.length; i++)
+			for(var i:int = 0; i < windows.length; i++)
 			{
 				var window:MDIWindow = windows[i] as MDIWindow;
 				
 				bringToFront(window);
-					
+				var destXY:int = i * 40;
+				
 				var item:MDIGroupEffectItem = new MDIGroupEffectItem(window);
-		
-					item.moveTo =  new Point(i * 40,  i * 40);
+					item.moveTo =  new Point(destXY, destXY);
 					item.heightFrom = window.height;
-					item.heightTo = window.height;
+					item.heightTo = (destXY + window.height > container.height) ? container.height - destXY : window.height;
 					item.widthFrom = window.width;
-					item.widthTo = window.width;
+					item.widthTo = (destXY + window.width > container.width) ? container.width - destXY : window.width;
 					
 				effectItems.push(item);
 			}

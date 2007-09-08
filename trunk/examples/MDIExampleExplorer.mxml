@@ -11,7 +11,7 @@
 		
 			import flexmdi.managers.MDIManager;
 			import flexmdi.containers.MDIWindow;
-			import flexmdi.effects.effectsLib.MDIVistaEffectsDescriptor;
+			import flexmdi.effects.effectsLib.MDIVistaEffects;
 			
 			private function init():void
 			{
@@ -25,10 +25,8 @@
 				win.width = 400;
 				win.height = 300;
 				
-				
 				// the global manager is accessed by using MDIManager.global 
 				MDIManager.global.add(win);
-				
 			}
 			
 			[Bindable]
@@ -63,12 +61,12 @@
 						MDIManager.global.effects = new MDIEffectsDescriptorBase();
 					break;
 					case "Vista":
-						MDIManager.global.effects = new MDIVistaEffectsDescriptor();
+						MDIManager.global.effects = new MDIVistaEffects();
 					break;
 					
 				}
 			
-				//MDIManager.global.effects = new MDIVistaEffectsDescriptor();
+				//MDIManager.global.effects = new MDIVistaEffects();
 			}
 			
 			

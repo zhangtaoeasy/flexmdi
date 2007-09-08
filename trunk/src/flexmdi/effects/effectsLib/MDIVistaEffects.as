@@ -42,97 +42,7 @@ package flexmdi.effects.effectsLib
 	import mx.events.EffectEvent;
 
 	public class MDIVistaEffects extends MDIEffectsDescriptorBase implements IMDIEffectsDescriptor
-	{		
-		override public function getShowEffect(window:MDIWindow, manager:MDIManager):Effect
-		{			
-			var parallel:Parallel = new Parallel(window);
-
-			var blurSequence:Sequence = new Sequence();
-
-			var blurOut:Blur = new Blur();
-				blurOut.blurXFrom = 0;
-				blurOut.blurYFrom = 0;
-				blurOut.blurXTo = 10;
-				blurOut.blurYTo = 10;
-			
-			
-			blurSequence.addChild(blurOut);
-			
-			var blurIn:Blur = new Blur();
-				blurIn.blurXFrom = 10;
-				blurIn.blurYFrom = 10;
-				blurIn.blurXTo  = 0;
-				blurIn.blurYTo = 0;
-				
-			
-			blurSequence.addChild(blurIn);
-
-			parallel.addChild(blurSequence);
-	
-			
-			parallel.duration = 200;
-			return parallel;
-		}
-		
-		override public function getCloseEffect(window:MDIWindow, manager:MDIManager):Effect
-		{
-			var blur:Blur = new Blur(window);
-				blur.blurXFrom = 0;
-				blur.blurYFrom = 0;
-				blur.blurXTo = 10;
-				blur.blurYTo = 10;
-				blur.duration = 200;
-				return blur;
-		}
-		
-		private function cascadeEasingFunction(t:Number, b:Number, c:Number, d:Number):Number 
-		{
-			var ts:Number=(t/=d)*t;
-  			var tc:Number=ts*t;
-  			return b+c*(33*tc*ts + -106*ts*ts + 126*tc + -67*ts + 15*t);
-		}
-		
-		override public function getCascadeEffect(items:Array,manager:MDIManager):Effect
-		{
-			var parallel:Parallel = new Parallel();
-			
-			for each(var item:MDIGroupEffectItem  in items)
-			{
-				var move:Move = new Move(item.window);
-					move.xTo = item.moveTo.x;
-					move.yTo = item.moveTo.y;
-					move.easingFunction = this.cascadeEasingFunction;
-					move.duration = 200;
-					parallel.addChild(move);
-					
-				var resize:Resize = new Resize(item.window);
-					resize.widthTo = item.widthTo;
-					resize.heightTo = item.heightTo;
-					parallel.addChild(resize);
-			}
-			
-			return parallel;
-		}
-		
-		override public function getTileEffect(items:Array,manager:MDIManager):Effect
-		{			
-			var sequence:Sequence = new Sequence();
-			
-			for each(var item:MDIGroupEffectItem  in items)
-			{	
-				manager.bringToFront(item.window);
-				var move:Move = new Move(item.window);
-					move.xTo = item.moveTo.x;
-					move.yTo = item.moveTo.y;
-
-				sequence.addChild(move);
-				item.setWindowSize();
-			}
-			
-			sequence.duration = 100;
-			return sequence;
-		}		
-	
+	{
 		override public function getMinimizeEffect(window:MDIWindow, manager:MDIManager, moveTo:Point=null):Effect
 		{
 			var parallel:Parallel = new Parallel(window);
@@ -190,6 +100,96 @@ package flexmdi.effects.effectsLib
 			parallel.addChild(resize);
 			
 			parallel.end();
+			return parallel;
+		}
+		
+		override public function getCloseEffect(window:MDIWindow, manager:MDIManager):Effect
+		{
+			var blur:Blur = new Blur(window);
+				blur.blurXFrom = 0;
+				blur.blurYFrom = 0;
+				blur.blurXTo = 10;
+				blur.blurYTo = 10;
+				blur.duration = 200;
+				return blur;
+		}
+		
+		override public function getTileEffect(items:Array,manager:MDIManager):Effect
+		{			
+			var sequence:Sequence = new Sequence();
+			
+			for each(var item:MDIGroupEffectItem  in items)
+			{	
+				manager.bringToFront(item.window);
+				var move:Move = new Move(item.window);
+					move.xTo = item.moveTo.x;
+					move.yTo = item.moveTo.y;
+
+				sequence.addChild(move);
+				item.setWindowSize();
+			}
+			
+			sequence.duration = 100;
+			return sequence;
+		}
+		
+		private function cascadeEasingFunction(t:Number, b:Number, c:Number, d:Number):Number 
+		{
+			var ts:Number=(t/=d)*t;
+  			var tc:Number=ts*t;
+  			return b+c*(33*tc*ts + -106*ts*ts + 126*tc + -67*ts + 15*t);
+		}
+		
+		override public function getCascadeEffect(items:Array,manager:MDIManager):Effect
+		{
+			var parallel:Parallel = new Parallel();
+			
+			for each(var item:MDIGroupEffectItem  in items)
+			{
+				var move:Move = new Move(item.window);
+					move.xTo = item.moveTo.x;
+					move.yTo = item.moveTo.y;
+					move.easingFunction = this.cascadeEasingFunction;
+					move.duration = 200;
+					parallel.addChild(move);
+					
+				var resize:Resize = new Resize(item.window);
+					resize.widthTo = item.widthTo;
+					resize.heightTo = item.heightTo;
+					parallel.addChild(resize);
+			}
+			
+			return parallel;
+		}
+			
+		override public function getShowEffect(window:MDIWindow, manager:MDIManager):Effect
+		{			
+			var parallel:Parallel = new Parallel(window);
+
+			var blurSequence:Sequence = new Sequence();
+
+			var blurOut:Blur = new Blur();
+				blurOut.blurXFrom = 0;
+				blurOut.blurYFrom = 0;
+				blurOut.blurXTo = 10;
+				blurOut.blurYTo = 10;
+			
+			
+			blurSequence.addChild(blurOut);
+			
+			var blurIn:Blur = new Blur();
+				blurIn.blurXFrom = 10;
+				blurIn.blurYFrom = 10;
+				blurIn.blurXTo  = 0;
+				blurIn.blurYTo = 0;
+				
+			
+			blurSequence.addChild(blurIn);
+
+			parallel.addChild(blurSequence);
+	
+			
+			parallel.duration = 200;
 			return parallel;
 		}
 		

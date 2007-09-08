@@ -7,8 +7,8 @@
 			import flexmdi.events.MDIManagerEvent;
 			import flexmdi.managers.MDIManager;
 			import flexmdi.containers.MDIWindow;
-			import flexmdi.effects.effectsLib.MDIVistaEffectsDescriptor;
-			import flexmdi.effects.effectsLib.MDIEffectsLinear;
+			import flexmdi.effects.effectsLib.MDIVistaEffects;
+			import flexmdi.effects.effectsLib.MDILinearEffects;
 			
 			public var mgr:MDIManager;
 			
@@ -17,7 +17,7 @@
 				// pass in the parent that you wish to contain windows to 
 				// when using a local instance of the MDIManager 
 				this.mgr = new MDIManager(this.containerInst);
-				this.mgr.effects = new MDIEffectsLinear();
+				this.mgr.effects = new MDILinearEffects();
 				this.mgr.showMinimizedTiles = true;
 				this.mgr.addEventListener(MDIWindowEvent.CLOSE, onWinCloseMgr);
 			}

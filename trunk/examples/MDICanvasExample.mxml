@@ -10,7 +10,7 @@
 	
 	<mx:Script>
 		<![CDATA[
-			import flexmdi.effects.effectsLib.MDIVistaEffectsDescriptor;
+			import flexmdi.effects.effectsLib.MDIVistaEffects;
 			import mx.events.CloseEvent;
 			import flash.debugger.enterDebugger;
 			import flexmdi.events.MDIWindowEvent;
@@ -58,7 +58,7 @@
 	<mx:TabNavigator width="75%" height="95%" paddingTop="20" >
 	
 		<flexmdi:MDICanvas label="Panel 1" id="mdic" x="100" width="100%" height="100%" creationComplete="this.mdic.windowManager.cascade()" 
-			backgroundColor="#CCCCCC" effectsLib="{flexmdi.effects.effectsLib.MDIVistaEffectsDescriptor}">
+			backgroundColor="#CCCCCC" effectsLib="{flexmdi.effects.effectsLib.MDIVistaEffects}">
 			
 			<flexmdi:MDIWindow id="win11" title="Window One" width="40%" height="40%">
 				<samples:SampleContent />
@@ -74,7 +74,7 @@
 		
 		
 		<flexmdi:MDICanvas label="Panel 2" id="mdic2" x="100" width="100%" height="100%" backgroundColor="#CCCCCC" 
-			effectsLib="{flexmdi.effects.effectsLib.MDIVistaEffectsDescriptor}" creationComplete="this.mdic2.windowManager.tile()">
+			effectsLib="{flexmdi.effects.effectsLib.MDIVistaEffects}" creationComplete="this.mdic2.windowManager.tile()">
 			
 			<flexmdi:MDIWindow id="win21" title="Window One" width="40%" height="40%">
 				<samples:SampleContent />

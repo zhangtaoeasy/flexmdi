@@ -34,7 +34,7 @@ package flexmdi.effects
 	{
 		// window effects
 		
-		function getWindowAddedEffect(window:MDIWindow, manager:MDIManager):Effect;
+		function getWindowAddEffect(window:MDIWindow, manager:MDIManager):Effect;
 		
 		function getWindowMinimizeEffect(window:MDIWindow, manager:MDIManager, moveTo:Point = null):Effect;
 	

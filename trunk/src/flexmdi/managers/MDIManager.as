@@ -439,6 +439,8 @@ package flexmdi.managers
 				switch(mgrEvent.type)
 				{					
 					case MDIManagerEvent.WINDOW_ADD:
+						// get the effect here because this doesn't pass thru windowEventProxy()
+						mgrEvent.effect = this.effects.getWindowAddEffect(mgrEvent.window, this);
 						mgrEvent.effect.play();
 					break;
 					

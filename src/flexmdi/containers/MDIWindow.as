@@ -255,6 +255,12 @@ package flexmdi.containers
 		
 		/**
 		 * @private
+		 * Flag used to intelligently dispatch drag related events
+		 */
+		private var _dragging:Boolean;
+		
+		/**
+		 * @private
 	     * Mouse's x position when resize begins.
 	     */
 		private var dragStartMouseX:Number;
@@ -674,7 +680,6 @@ package flexmdi.containers
 			if(this.windowState != MDIWindowState.MINIMIZED)
 			{
 				this.startDrag(false, new Rectangle(0, 0, parent.width - this.width, parent.height - this.height - 5));
-				dispatchEvent(new MDIWindowEvent(MDIWindowEvent.DRAG_START, this));
 				systemManager.addEventListener(MouseEvent.MOUSE_UP, onTitleBarRelease);
 				systemManager.addEventListener(MouseEvent.MOUSE_MOVE, onWindowMove);
 				systemManager.stage.addEventListener(Event.MOUSE_LEAVE, onTitleBarRelease, false, 0, true);
@@ -683,13 +688,22 @@ package flexmdi.containers
 		
 		private function onWindowMove(event:MouseEvent):void
 		{
+			if(!_dragging)
+			{
+				_dragging = true;
+				dispatchEvent(new MDIWindowEvent(MDIWindowEvent.DRAG_START, this));
+			}
 			dispatchEvent(new MDIWindowEvent(MDIWindowEvent.DRAG, this));
 		}
 		
 		private function onTitleBarRelease(event:Event):void
 		{
 			this.stopDrag();
-			dispatchEvent(new MDIWindowEvent(MDIWindowEvent.DRAG_END, this));
+			if(_dragging)
+			{
+				_dragging = false;
+				dispatchEvent(new MDIWindowEvent(MDIWindowEvent.DRAG_END, this));
+			}
 			systemManager.removeEventListener(MouseEvent.MOUSE_UP, onTitleBarRelease);
 			systemManager.removeEventListener(MouseEvent.MOUSE_MOVE, onWindowMove);
 			systemManager.stage.removeEventListener(Event.MOUSE_LEAVE, onTitleBarRelease);

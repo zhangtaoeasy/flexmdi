@@ -37,7 +37,12 @@ package flexmdi.effects
 	
 	public class MDIEffectsDescriptorBase implements IMDIEffectsDescriptor
 	{
-		public function getMinimizeEffect(window:MDIWindow, manager:MDIManager, moveTo:Point = null):Effect
+		public function getWindowAddedEffect(window:MDIWindow, manager:MDIManager):Effect
+		{
+			return new Effect();
+		}
+		
+		public function getWindowMinimizeEffect(window:MDIWindow, manager:MDIManager, moveTo:Point = null):Effect
 		{
 			var parallel:Parallel = new Parallel();
 			parallel.duration = 0;
@@ -58,7 +63,7 @@ package flexmdi.effects
 			return parallel;
 		}
 		
-		public function getRestoreEffect(window:MDIWindow, manager:MDIManager, moveTo:Point = null):Effect
+		public function getWindowRestoreEffect(window:MDIWindow, manager:MDIManager, moveTo:Point = null):Effect
 		{
 			var parallel:Parallel = new Parallel();
 			parallel.duration = 0;
@@ -79,7 +84,7 @@ package flexmdi.effects
 			return parallel;
 		}
 		
-		public function getMaximizeEffect(window:MDIWindow, manager:MDIManager, bottomOffset:Number = 0):Effect
+		public function getWindowMaximizeEffect(window:MDIWindow, manager:MDIManager, bottomOffset:Number = 0):Effect
 		{
 			var parallel:Parallel = new Parallel();
 			parallel.duration = 0;
@@ -97,7 +102,7 @@ package flexmdi.effects
 			return parallel;
 		}
 		
-		public function getCloseEffect(window:MDIWindow, manager:MDIManager):Effect
+		public function getWindowCloseEffect(window:MDIWindow, manager:MDIManager):Effect
 		{
 			// have to return something so that EFFECT_END listener will fire
 			var resize:Resize = new Resize(window);
@@ -108,42 +113,42 @@ package flexmdi.effects
 			return resize;
 		}
 		
-		public function getFocusStartEffect(window:MDIWindow, manager:MDIManager):Effect
+		public function getWindowFocusStartEffect(window:MDIWindow, manager:MDIManager):Effect
 		{
 			return new Effect();
 		}
 		
-		public function getFocusEndEffect(window:MDIWindow, manager:MDIManager):Effect
+		public function getWindowFocusEndEffect(window:MDIWindow, manager:MDIManager):Effect
 		{
 			return new Effect();
 		}
 		
-		public function getDragStartEffect(window:MDIWindow, manager:MDIManager):Effect
+		public function getWindowDragStartEffect(window:MDIWindow, manager:MDIManager):Effect
 		{
 			return new Effect();
 		}
 		
-		public function getDragEffect(window:MDIWindow, manager:MDIManager):Effect
+		public function getWindowDragEffect(window:MDIWindow, manager:MDIManager):Effect
 		{
 			return new Effect();
 		}
 		
-		public function getDragEndEffect(window:MDIWindow, manager:MDIManager):Effect
+		public function getWindowDragEndEffect(window:MDIWindow, manager:MDIManager):Effect
 		{
 			return new Effect();
 		}
 		
-		public function getResizeStartEffect(window:MDIWindow, manager:MDIManager):Effect
+		public function getWindowResizeStartEffect(window:MDIWindow, manager:MDIManager):Effect
 		{
 			return new Effect();
 		}
 		
-		public function getResizeEffect(window:MDIWindow, manager:MDIManager):Effect
+		public function getWindowResizeEffect(window:MDIWindow, manager:MDIManager):Effect
 		{
 			return new Effect();
 		}
 		
-		public function getResizeEndEffect(window:MDIWindow, manager:MDIManager):Effect
+		public function getWindowResizeEndEffect(window:MDIWindow, manager:MDIManager):Effect
 		{
 			return new Effect();
 		}		
@@ -185,11 +190,6 @@ package flexmdi.effects
 			
 			return parallel;
 		}		
-		
-		public function getShowEffect(window:MDIWindow, manager:MDIManager):Effect
-		{
-			return new Effect();
-		}
 		
 		public function reTileMinWindowsEffect(window:MDIWindow, manager:MDIManager, moveTo:Point):Effect
 		{

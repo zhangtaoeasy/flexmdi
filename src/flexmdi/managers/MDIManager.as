@@ -59,6 +59,13 @@ package flexmdi.managers
 	//--------------------------------------
 	
 	/**
+	 *  Dispatched when a window is added to the manager.
+	 *
+	 *  @eventType flexmdi.events.MDIManagerEvent.WINDOW_ADD
+	 */
+	[Event(name="windowAdd", type="mdi.events.MDIManagerEvent")]
+	
+	/**
 	 *  Dispatched when the minimize button is clicked.
 	 *
 	 *  @eventType flexmdi.events.MDIManagerEvent.WINDOW_MINIMIZE
@@ -189,7 +196,7 @@ package flexmdi.managers
 		/**
      	*   Contstructor()
      	*/
-		public function MDIManager(container:UIComponent,effects:IMDIEffectsDescriptor=null):void
+		public function MDIManager(container:UIComponent, effects:IMDIEffectsDescriptor = null):void
 		{
 			this.container = container;
 			if(effects != null)
@@ -218,6 +225,7 @@ package flexmdi.managers
 			windowToManagerEventMap[MDIWindowEvent.RESIZE_END] = MDIManagerEvent.WINDOW_RESIZE_END;
 			
 			// these handlers execute default behaviors, these events are dispatched by this class
+			addEventListener(MDIManagerEvent.WINDOW_ADD, executeDefaultBehavior, false, -1);
 			addEventListener(MDIManagerEvent.WINDOW_MINIMIZE, executeDefaultBehavior, false, -1);
 			addEventListener(MDIManagerEvent.WINDOW_RESTORE, executeDefaultBehavior, false, -1);
 			addEventListener(MDIManagerEvent.WINDOW_MAXIMIZE, executeDefaultBehavior, false, -1);
@@ -277,7 +285,7 @@ package flexmdi.managers
 			} 		
 			
 			window.bringToFront();
-			this.effects.getShowEffect(window, this).play();
+			dispatchEvent(new MDIManagerEvent(MDIManagerEvent.WINDOW_ADD, window, this));
 		}
 		
 		/**
@@ -369,52 +377,52 @@ package flexmdi.managers
 						var xPos:Number = getLeftOffsetPosition(this.tiledWindows.length, maxTiles, this.tileMinimizeWidth, this.minTilePadding);
 						var yPos:Number = this.container.height - getBottomTilePosition(this.tiledWindows.length, maxTiles, mgrEvent.window.minimizeHeight, this.minTilePadding);
 						var minimizePoint:Point = new Point(xPos, yPos);
-						mgrEvent.effect = this.effects.getMinimizeEffect(mgrEvent.window, this, minimizePoint);
+						mgrEvent.effect = this.effects.getWindowMinimizeEffect(mgrEvent.window, this, minimizePoint);
 					break;
 					
 					case MDIWindowEvent.RESTORE:
 						var restorePoint:Point = new Point(winEvent.window.savedWindowRect.x, winEvent.window.savedWindowRect.y);
-						mgrEvent.effect = this.effects.getRestoreEffect(winEvent.window, this, restorePoint);
+						mgrEvent.effect = this.effects.getWindowRestoreEffect(winEvent.window, this, restorePoint);
 					break;
 					
 					case MDIWindowEvent.MAXIMIZE:
-						mgrEvent.effect = this.effects.getMaximizeEffect(winEvent.window, this);
+						mgrEvent.effect = this.effects.getWindowMaximizeEffect(winEvent.window, this);
 					break;
 					
 					case MDIWindowEvent.CLOSE:
-						mgrEvent.effect = this.effects.getCloseEffect(mgrEvent.window, this);
+						mgrEvent.effect = this.effects.getWindowCloseEffect(mgrEvent.window, this);
 					break;
 					
 					case MDIWindowEvent.FOCUS_START:
-						mgrEvent.effect = this.effects.getFocusStartEffect(winEvent.window, this);
+						mgrEvent.effect = this.effects.getWindowFocusStartEffect(winEvent.window, this);
 					break;
 					
 					case MDIWindowEvent.FOCUS_END:
-						mgrEvent.effect = this.effects.getFocusEndEffect(winEvent.window, this);
+						mgrEvent.effect = this.effects.getWindowFocusEndEffect(winEvent.window, this);
 					break;
 		
 					case MDIWindowEvent.DRAG_START:
-						mgrEvent.effect = this.effects.getDragStartEffect(winEvent.window, this);
+						mgrEvent.effect = this.effects.getWindowDragStartEffect(winEvent.window, this);
 					break;
 		
 					case MDIWindowEvent.DRAG:
-						mgrEvent.effect = this.effects.getDragEffect(winEvent.window, this);
+						mgrEvent.effect = this.effects.getWindowDragEffect(winEvent.window, this);
 					break;
 		
 					case MDIWindowEvent.DRAG_END:
-						mgrEvent.effect = this.effects.getDragEndEffect(winEvent.window, this);
+						mgrEvent.effect = this.effects.getWindowDragEndEffect(winEvent.window, this);
 					break;
 					
 					case MDIWindowEvent.RESIZE_START:
-						mgrEvent.effect = this.effects.getResizeStartEffect(winEvent.window, this);
+						mgrEvent.effect = this.effects.getWindowResizeStartEffect(winEvent.window, this);
 					break;
 					
 					case MDIWindowEvent.RESIZE:
-						mgrEvent.effect = this.effects.getResizeEffect(winEvent.window, this);
+						mgrEvent.effect = this.effects.getWindowResizeEffect(winEvent.window, this);
 					break;
 					
 					case MDIWindowEvent.RESIZE_END:
-						mgrEvent.effect = this.effects.getResizeEndEffect(winEvent.window, this);
+						mgrEvent.effect = this.effects.getWindowResizeEndEffect(winEvent.window, this);
 					break;
 				}
 				
@@ -430,6 +438,10 @@ package flexmdi.managers
 				
 				switch(mgrEvent.type)
 				{					
+					case MDIManagerEvent.WINDOW_ADD:
+						mgrEvent.effect.play();
+					break;
+					
 					case MDIManagerEvent.WINDOW_MINIMIZE:
 						mgrEvent.effect.addEventListener(EffectEvent.EFFECT_END, onMinimizeEffectEnd);
 						mgrEvent.effect.play();
@@ -519,7 +531,6 @@ package flexmdi.managers
 			//repositions any minimized tiled windows to bottom left in their rows
 			reTileWindows();
 		}
-		
 		
 		
 		/**
@@ -627,11 +638,11 @@ package flexmdi.managers
 			var maxTiles:int = this.container.width / this.tileMinimizeWidth;
 			if(showMinimizedTiles)
 			{
-				this.effects.getMaximizeEffect(window, this, getBottomOffsetHeight(maxTiles, window.minimizeHeight, this.minTilePadding)).play();
+				this.effects.getWindowMaximizeEffect(window, this, getBottomOffsetHeight(maxTiles, window.minimizeHeight, this.minTilePadding)).play();
 			}
 			else
 			{
-				this.effects.getMaximizeEffect(window, this).play();
+				this.effects.getWindowMaximizeEffect(window, this).play();
 			}
 		}
 		

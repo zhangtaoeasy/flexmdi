@@ -34,40 +34,38 @@ package flexmdi.effects
 	{
 		// window effects
 		
-		function getMinimizeEffect(window:MDIWindow, manager:MDIManager, moveTo:Point = null):Effect
+		function getWindowAddedEffect(window:MDIWindow, manager:MDIManager):Effect;
+		
+		function getWindowMinimizeEffect(window:MDIWindow, manager:MDIManager, moveTo:Point = null):Effect;
 	
-		function getRestoreEffect(window:MDIWindow, manager:MDIManager, moveTo:Point = null):Effect
+		function getWindowRestoreEffect(window:MDIWindow, manager:MDIManager, moveTo:Point = null):Effect;
 		
-		function getMaximizeEffect(window:MDIWindow, manager:MDIManager, bottomOffset:Number = 0):Effect
+		function getWindowMaximizeEffect(window:MDIWindow, manager:MDIManager, bottomOffset:Number = 0):Effect;
 	
-		function getCloseEffect(window:MDIWindow, manager:MDIManager):Effect
+		function getWindowCloseEffect(window:MDIWindow, manager:MDIManager):Effect;
 		
-		function getFocusStartEffect(window:MDIWindow, manager:MDIManager):Effect
+		function getWindowFocusStartEffect(window:MDIWindow, manager:MDIManager):Effect;
 	
-		function getFocusEndEffect(window:MDIWindow, manager:MDIManager):Effect
+		function getWindowFocusEndEffect(window:MDIWindow, manager:MDIManager):Effect;
 		
-		function getDragStartEffect(window:MDIWindow, manager:MDIManager):Effect
+		function getWindowDragStartEffect(window:MDIWindow, manager:MDIManager):Effect;
 		
-		function getDragEffect(window:MDIWindow, manager:MDIManager):Effect
+		function getWindowDragEffect(window:MDIWindow, manager:MDIManager):Effect;
 		
-		function getDragEndEffect(window:MDIWindow, manager:MDIManager):Effect
+		function getWindowDragEndEffect(window:MDIWindow, manager:MDIManager):Effect;
 	
-		function getResizeStartEffect(window:MDIWindow, manager:MDIManager):Effect
+		function getWindowResizeStartEffect(window:MDIWindow, manager:MDIManager):Effect;
 		
-		function getResizeEffect(window:MDIWindow, manager:MDIManager):Effect
+		function getWindowResizeEffect(window:MDIWindow, manager:MDIManager):Effect;
 		
-		function getResizeEndEffect(window:MDIWindow, manager:MDIManager):Effect
+		function getWindowResizeEndEffect(window:MDIWindow, manager:MDIManager):Effect;
 	
 		// group effects
 		
-		function getTileEffect(items:Array, manager:MDIManager):Effect
+		function getTileEffect(items:Array, manager:MDIManager):Effect;
 		
-		function getCascadeEffect(items:Array, manager:MDIManager):Effect
+		function getCascadeEffect(items:Array, manager:MDIManager):Effect;
 		
-		// mystery effects
-		
-		function getShowEffect(window:MDIWindow, manager:MDIManager):Effect
-		
-		function reTileMinWindowsEffect(window:MDIWindow, manager:MDIManager, moveTo:Point):Effect
+		function reTileMinWindowsEffect(window:MDIWindow, manager:MDIManager, moveTo:Point):Effect;
 	}
 }

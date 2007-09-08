@@ -15,10 +15,10 @@ package flexmdi.effects.effectsLib
 	
 	public class MDIRelationalEffects extends MDIVistaEffects
 	{
-		override public function getMinimizeEffect(window:MDIWindow, manager:MDIManager, moveTo:Point=null):Effect
+		override public function getWindowMinimizeEffect(window:MDIWindow, manager:MDIManager, moveTo:Point=null):Effect
 		{
 			
-			var parallel:Parallel = super.getMinimizeEffect(window,manager,moveTo) as Parallel;
+			var parallel:Parallel = super.getWindowMinimizeEffect(window,manager,moveTo) as Parallel;
 			
 			parallel.addEventListener(EffectEvent.EFFECT_END, function():void {manager.tile(true,10); } );
 			
@@ -26,9 +26,9 @@ package flexmdi.effects.effectsLib
 			return parallel;
 		}
 		
-		override public function getRestoreEffect(window:MDIWindow, manager:MDIManager, moveTo:Point=null):Effect
+		override public function getWindowRestoreEffect(window:MDIWindow, manager:MDIManager, moveTo:Point=null):Effect
 		{
-			var parallel:Parallel = super.getRestoreEffect(window,manager,moveTo) as Parallel;
+			var parallel:Parallel = super.getWindowRestoreEffect(window,manager,moveTo) as Parallel;
 			
 			parallel.addEventListener(EffectEvent.EFFECT_START, function():void {manager.tile(true,10); } );
 			

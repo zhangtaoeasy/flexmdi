@@ -32,6 +32,7 @@ package flexmdi.events
 
 	public class MDIManagerEvent extends Event
 	{
+		public static const WINDOW_ADD:String = "windowAdd";
 		public static const WINDOW_MINIMIZE:String = "windowMinimize";
 		public static const WINDOW_RESTORE:String = "windowRestore";
 		public static const WINDOW_MAXIMIZE:String = "windowMaximize";

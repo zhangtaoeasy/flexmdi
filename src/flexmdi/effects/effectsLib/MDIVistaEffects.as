@@ -43,7 +43,38 @@ package flexmdi.effects.effectsLib
 
 	public class MDIVistaEffects extends MDIEffectsDescriptorBase implements IMDIEffectsDescriptor
 	{
-		override public function getMinimizeEffect(window:MDIWindow, manager:MDIManager, moveTo:Point=null):Effect
+		override public function getWindowAddedEffect(window:MDIWindow, manager:MDIManager):Effect
+		{			
+			var parallel:Parallel = new Parallel(window);
+
+			var blurSequence:Sequence = new Sequence();
+
+			var blurOut:Blur = new Blur();
+				blurOut.blurXFrom = 0;
+				blurOut.blurYFrom = 0;
+				blurOut.blurXTo = 10;
+				blurOut.blurYTo = 10;
+			
+			
+			blurSequence.addChild(blurOut);
+			
+			var blurIn:Blur = new Blur();
+				blurIn.blurXFrom = 10;
+				blurIn.blurYFrom = 10;
+				blurIn.blurXTo  = 0;
+				blurIn.blurYTo = 0;
+				
+			
+			blurSequence.addChild(blurIn);
+
+			parallel.addChild(blurSequence);
+	
+			
+			parallel.duration = 200;
+			return parallel;
+		}
+		
+		override public function getWindowMinimizeEffect(window:MDIWindow, manager:MDIManager, moveTo:Point=null):Effect
 		{
 			var parallel:Parallel = new Parallel(window);
 			
@@ -63,7 +94,7 @@ package flexmdi.effects.effectsLib
 			return parallel;
 		}
 		
-		override public function getRestoreEffect(window:MDIWindow, manager:MDIManager, moveTo:Point=null):Effect
+		override public function getWindowRestoreEffect(window:MDIWindow, manager:MDIManager, moveTo:Point=null):Effect
 		{
 			var parallel:Parallel = new Parallel(window);
 			
@@ -83,7 +114,7 @@ package flexmdi.effects.effectsLib
 			return parallel;
 		}
 		
-		override public function getMaximizeEffect(window:MDIWindow, manager:MDIManager, bottomOffset:Number = 0):Effect
+		override public function getWindowMaximizeEffect(window:MDIWindow, manager:MDIManager, bottomOffset:Number = 0):Effect
 		{
 			var parallel:Parallel = new Parallel(window);
 			
@@ -103,7 +134,7 @@ package flexmdi.effects.effectsLib
 			return parallel;
 		}
 		
-		override public function getCloseEffect(window:MDIWindow, manager:MDIManager):Effect
+		override public function getWindowCloseEffect(window:MDIWindow, manager:MDIManager):Effect
 		{
 			var blur:Blur = new Blur(window);
 				blur.blurXFrom = 0;
@@ -162,37 +193,6 @@ package flexmdi.effects.effectsLib
 			return parallel;
 		}
 			
-		override public function getShowEffect(window:MDIWindow, manager:MDIManager):Effect
-		{			
-			var parallel:Parallel = new Parallel(window);
-
-			var blurSequence:Sequence = new Sequence();
-
-			var blurOut:Blur = new Blur();
-				blurOut.blurXFrom = 0;
-				blurOut.blurYFrom = 0;
-				blurOut.blurXTo = 10;
-				blurOut.blurYTo = 10;
-			
-			
-			blurSequence.addChild(blurOut);
-			
-			var blurIn:Blur = new Blur();
-				blurIn.blurXFrom = 10;
-				blurIn.blurYFrom = 10;
-				blurIn.blurXTo  = 0;
-				blurIn.blurYTo = 0;
-				
-			
-			blurSequence.addChild(blurIn);
-
-			parallel.addChild(blurSequence);
-	
-			
-			parallel.duration = 200;
-			return parallel;
-		}
-		
 		override public function reTileMinWindowsEffect(window:MDIWindow, manager:MDIManager, moveTo:Point):Effect
 		{
 			var move:Move = new Move(window);

@@ -43,7 +43,7 @@ package flexmdi.effects.effectsLib
 
 	public class MDIVistaEffects extends MDIEffectsDescriptorBase implements IMDIEffectsDescriptor
 	{
-		override public function getWindowAddedEffect(window:MDIWindow, manager:MDIManager):Effect
+		override public function getWindowAddEffect(window:MDIWindow, manager:MDIManager):Effect
 		{			
 			var parallel:Parallel = new Parallel(window);
 

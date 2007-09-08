@@ -37,7 +37,7 @@ package flexmdi.effects
 	
 	public class MDIEffectsDescriptorBase implements IMDIEffectsDescriptor
 	{
-		public function getWindowAddedEffect(window:MDIWindow, manager:MDIManager):Effect
+		public function getWindowAddEffect(window:MDIWindow, manager:MDIManager):Effect
 		{
 			return new Effect();
 		}

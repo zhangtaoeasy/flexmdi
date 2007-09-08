@@ -45,7 +45,7 @@ package flexmdi.effects.effectsLib
 
 	public class MDILinearEffects extends MDIEffectsDescriptorBase implements IMDIEffectsDescriptor
 	{
-		override public function getMinimizeEffect(window:MDIWindow, manager:MDIManager, moveTo:Point=null):Effect
+		override public function getWindowMinimizeEffect(window:MDIWindow, manager:MDIManager, moveTo:Point=null):Effect
 		{
 			var seq:Sequence = new Sequence();
 			
@@ -73,7 +73,7 @@ package flexmdi.effects.effectsLib
 			return seq;
 		}
 		
-		override public function getRestoreEffect(window:MDIWindow, manager:MDIManager, moveTo:Point=null):Effect
+		override public function getWindowRestoreEffect(window:MDIWindow, manager:MDIManager, moveTo:Point=null):Effect
 		{
 			var seq:Sequence = new Sequence();
 			
@@ -101,7 +101,7 @@ package flexmdi.effects.effectsLib
 			return seq;
 		}
 		
-		override public function getMaximizeEffect(window:MDIWindow, manager:MDIManager, bottomOffset:Number = 0):Effect
+		override public function getWindowMaximizeEffect(window:MDIWindow, manager:MDIManager, bottomOffset:Number = 0):Effect
 		{
 			var seq:Sequence = new Sequence(window);
 			
@@ -129,7 +129,7 @@ package flexmdi.effects.effectsLib
 			return seq;
 		}
 		
-		override public function getCloseEffect(window:MDIWindow, manager:MDIManager):Effect
+		override public function getWindowCloseEffect(window:MDIWindow, manager:MDIManager):Effect
 		{
 			window.minWidth = window.minHeight = 1;
 			

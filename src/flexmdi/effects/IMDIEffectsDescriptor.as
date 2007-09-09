@@ -30,6 +30,9 @@ package flexmdi.effects
 	
 	import mx.effects.Effect;
 	
+	/**
+	 * Interface expected by MDIManager. All effects classes must implement this interface.
+	 */
 	public interface IMDIEffectsDescriptor
 	{
 		// window effects

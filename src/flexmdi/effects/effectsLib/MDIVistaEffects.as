@@ -40,7 +40,10 @@ package flexmdi.effects.effectsLib
 	import mx.effects.Sequence;
 	import mx.effects.WipeDown;
 	import mx.events.EffectEvent;
-
+	
+	/**
+	 * Collection of effects inspired by Windows Vista.
+	 */
 	public class MDIVistaEffects extends MDIEffectsDescriptorBase implements IMDIEffectsDescriptor
 	{
 		override public function getWindowAddEffect(window:MDIWindow, manager:MDIManager):Effect

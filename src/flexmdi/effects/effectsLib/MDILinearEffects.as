@@ -42,7 +42,10 @@ package flexmdi.effects.effectsLib
 	import mx.events.EffectEvent;
 	import mx.effects.AnimateProperty;
 	import mx.effects.Dissolve;
-
+	
+	/**
+	 * Collection of effects that limit movement to one dimension (horizontal/vertical) at a time.
+	 */
 	public class MDILinearEffects extends MDIEffectsDescriptorBase implements IMDIEffectsDescriptor
 	{
 		override public function getWindowMinimizeEffect(window:MDIWindow, manager:MDIManager, moveTo:Point=null):Effect

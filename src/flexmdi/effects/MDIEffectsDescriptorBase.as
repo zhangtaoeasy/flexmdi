@@ -35,6 +35,10 @@ package flexmdi.effects
 	import mx.effects.Resize;
 	import mx.effects.Parallel;
 	
+	/**
+	 * Base effects implementation with no animation. Extending this class means the developer
+	 * can choose to implement only certain effects, rather than all required by IMDIEffectsDescriptor.
+	 */
 	public class MDIEffectsDescriptorBase implements IMDIEffectsDescriptor
 	{
 		public function getWindowAddEffect(window:MDIWindow, manager:MDIManager):Effect

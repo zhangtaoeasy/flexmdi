@@ -166,7 +166,10 @@ package flexmdi.managers
 	 */
 	[Event(name="tile", type="mdi.events.MDIManagerEvent")]
 	
-	
+	/**
+	 * Class responsible for applying effects and default behaviors to MDIWindow instances such as
+	 * tiling, cascading, minimizing, maximizing, etc.
+	 */
 	public class MDIManager extends EventDispatcher
 	{
 		

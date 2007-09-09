@@ -30,7 +30,12 @@ package flexmdi.containers
 	import mx.containers.Canvas;
 	import mx.core.UIComponent;
 	import mx.events.FlexEvent;
-
+	
+	/**
+	 * Convenience class that allows quick MXML implementations by implicitly creating
+	 * container and manager members of MDI. Will auto-detect MDIWindow children
+	 * and add them to list of managed windows.
+	 */
 	public class MDICanvas extends Canvas
 	{
 		public var windowManager:MDIManager;

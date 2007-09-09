@@ -39,7 +39,7 @@ package flexmdi.containers
 	import mx.controls.Button;
 	import mx.core.UIComponent;
 	import mx.events.FlexEvent;
-	import mx.managers.CursorManager;	
+	import mx.managers.CursorManager;
 	
 	
 	//--------------------------------------
@@ -166,6 +166,12 @@ package flexmdi.containers
 	     * Parent of window controls (min, restore/max and close buttons).
 	     */
 		private var controlsHolder:UIComponent;
+		
+		/**
+		 * @private
+		 * Flag to determine whether or not close button is visible.
+		 */
+		private var _showCloseButton:Boolean = true;
 		
 		/**
 		 * Array of controlsHolder's child components.
@@ -449,6 +455,7 @@ package flexmdi.containers
 				closeBtn.width = 10;
 				closeBtn.height = 10;
 				closeBtn.styleName = "closeBtn";
+				closeBtn.visible = showCloseButton;
 				controls.push(closeBtn);				
 			}
 			
@@ -496,12 +503,39 @@ package flexmdi.containers
 			resizeHandleBL.x = -(MDIWindow.DEFAULT_CORNER_HANDLE_SIZE * .3);
 			resizeHandleBL.y = this.height - MDIWindow.DEFAULT_CORNER_HANDLE_SIZE * .7;
 			
+			// position window controls
+			var visibleControls:Array = new Array();
+			
 			for(var i:int = 0; i < controlsHolder.numChildren; i++)
 			{
 				var control:UIComponent = controlsHolder.getChildAt(i) as UIComponent;
+				if(control.visible)
+				{
+					visibleControls.push(control);
+				}
+			}
+			
+			for(i = 0; i < visibleControls.length; i++)
+			{
+				control = visibleControls[i] as UIComponent;
 				
-				control.x = this.width - ((controlsHolder.numChildren - i) * 20);
+				control.x = this.width - ((visibleControls.length - i) * 20);
 				control.y = (titleBar.height - control.height) / 2;
+			}
+		}
+		
+		public function get showCloseButton():Boolean
+		{
+			return _showCloseButton;
+		}
+		
+		public function set showCloseButton(value:Boolean):void
+		{
+			_showCloseButton = value;
+			if(closeBtn)
+			{
+				closeBtn.visible = value;
+				invalidateDisplayList();
 			}
 		}
 		
@@ -594,7 +628,7 @@ package flexmdi.containers
 		public function minimize(event:MouseEvent = null):void
 		{
 			// if the panel is floating, save its state
-			if(windowState != MDIWindowState.MAXIMIZED)
+			if(windowState == MDIWindowState.NORMAL)
 			{
 				savePanel();
 			}

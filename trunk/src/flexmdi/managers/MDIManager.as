@@ -865,7 +865,7 @@ package flexmdi.managers
 		 *  @param fillAvailableSpace:Boolean Variable to determine whether to use the fill the entire available screen
 		 * 
 		 */
-		public function tile(fillAvailableSpace:Boolean = false,gap:int = 0):void
+		public function tile(fillAvailableSpace:Boolean = false,gap:Number = 0):void
 		{
 			
 			var openWinList:Array = getOpenWindowList();

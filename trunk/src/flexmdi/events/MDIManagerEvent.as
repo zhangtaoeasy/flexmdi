@@ -29,7 +29,10 @@ package flexmdi.events
 	import flexmdi.managers.MDIManager;
 	
 	import mx.effects.Effect;
-
+	
+	/**
+	 * Event type dispatched by MDIManager. Majority of events based on/relayed from managed windows.
+	 */
 	public class MDIManagerEvent extends Event
 	{
 		public static const WINDOW_ADD:String = "windowAdd";

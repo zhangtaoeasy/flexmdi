@@ -71,7 +71,7 @@ package flexmdi.containers
 	[Event(name="maximize", type="mdi.events.MDIWindowEvent")]
 	
 	/**
-	 *  Dispatched when the minimize button is clicked.
+	 *  Dispatched when the close button is clicked.
 	 *
 	 *  @eventType flexmdi.events.MDIWindowEvent.CLOSE
 	 */
@@ -134,6 +134,9 @@ package flexmdi.containers
 	[Event(name="resizeEnd", type="mdi.events.MDIWindowEvent")]
 	
 	
+	/**
+	 * Central window class used in flexmdi. Includes min/max/close buttons by default.
+	 */
 	public class MDIWindow extends Panel
 	{
 		/**

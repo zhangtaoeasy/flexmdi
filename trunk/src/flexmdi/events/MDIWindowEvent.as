@@ -26,7 +26,11 @@ package flexmdi.events
 	import flash.events.Event;
 	
 	import flexmdi.containers.MDIWindow;
-
+	
+	/**
+	 * Event type dispatched by MDIWindow. Events will also be rebroadcast (as MDIManagerEvents)
+	 * by the window's manager, if one is present.
+	 */
 	public class MDIWindowEvent extends Event
 	{
 		public static const MINIMIZE:String = "minimize";

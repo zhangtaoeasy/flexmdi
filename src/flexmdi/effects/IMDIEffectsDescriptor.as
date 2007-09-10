@@ -24,6 +24,7 @@ SOFTWARE.
 package flexmdi.effects
 {
 	import flash.geom.Point;
+	import flash.geom.Rectangle;
 	
 	import flexmdi.containers.MDIWindow;
 	import flexmdi.managers.MDIManager;
@@ -41,7 +42,7 @@ package flexmdi.effects
 		
 		function getWindowMinimizeEffect(window:MDIWindow, manager:MDIManager, moveTo:Point = null):Effect;
 	
-		function getWindowRestoreEffect(window:MDIWindow, manager:MDIManager, moveTo:Point = null):Effect;
+		function getWindowRestoreEffect(window:MDIWindow, manager:MDIManager, restoreTo:Rectangle):Effect;
 		
 		function getWindowMaximizeEffect(window:MDIWindow, manager:MDIManager, bottomOffset:Number = 0):Effect;
 	

@@ -384,8 +384,7 @@ package flexmdi.managers
 					break;
 					
 					case MDIWindowEvent.RESTORE:
-						var restorePoint:Point = new Point(winEvent.window.savedWindowRect.x, winEvent.window.savedWindowRect.y);
-						mgrEvent.effect = this.effects.getWindowRestoreEffect(winEvent.window, this, restorePoint);
+						mgrEvent.effect = this.effects.getWindowRestoreEffect(winEvent.window, this, winEvent.window.savedWindowRect);
 					break;
 					
 					case MDIWindowEvent.MAXIMIZE:

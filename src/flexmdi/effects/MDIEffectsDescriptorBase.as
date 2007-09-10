@@ -34,6 +34,7 @@ package flexmdi.effects
 	import mx.effects.Move;
 	import mx.effects.Resize;
 	import mx.effects.Parallel;
+	import flash.geom.Rectangle;
 	
 	/**
 	 * Base effects implementation with no animation. Extending this class means the developer
@@ -67,23 +68,20 @@ package flexmdi.effects
 			return parallel;
 		}
 		
-		public function getWindowRestoreEffect(window:MDIWindow, manager:MDIManager, moveTo:Point = null):Effect
+		public function getWindowRestoreEffect(window:MDIWindow, manager:MDIManager, restoreTo:Rectangle):Effect
 		{
 			var parallel:Parallel = new Parallel();
 			parallel.duration = 0;
 			
 			var resize:Resize = new Resize(window);
-			resize.widthTo = window.savedWindowRect.width;
-			resize.heightTo = window.savedWindowRect.height;
+			resize.widthTo = restoreTo.width;
+			resize.heightTo = restoreTo.height;
 			parallel.addChild(resize);
 			
-			if(moveTo != null)
-			{
-				var move:Move = new Move(window);
-				move.xTo = moveTo.x;
-				move.yTo = moveTo.y;
-				parallel.addChild(move);
-			}
+			var move:Move = new Move(window);
+			move.xTo = restoreTo.x;
+			move.yTo = restoreTo.y;
+			parallel.addChild(move);
 			
 			return parallel;
 		}

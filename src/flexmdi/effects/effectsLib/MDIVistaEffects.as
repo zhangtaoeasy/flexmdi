@@ -24,6 +24,7 @@ SOFTWARE.
 package flexmdi.effects.effectsLib
 {
 	import flash.geom.Point;
+	import flash.geom.Rectangle;
 	
 	import flexmdi.containers.MDIWindow;
 	import flexmdi.effects.IMDIEffectsDescriptor;
@@ -97,19 +98,19 @@ package flexmdi.effects.effectsLib
 			return parallel;
 		}
 		
-		override public function getWindowRestoreEffect(window:MDIWindow, manager:MDIManager, moveTo:Point=null):Effect
+		override public function getWindowRestoreEffect(window:MDIWindow, manager:MDIManager, restoreTo:Rectangle):Effect
 		{
 			var parallel:Parallel = new Parallel(window);
 			
 			var move:Move = new Move(window);
-			move.xTo = moveTo.x;
-			move.yTo = moveTo.y;
+			move.xTo = restoreTo.x;
+			move.yTo = restoreTo.y;
 			move.duration = 300;
 			parallel.addChild(move);
 			
 			var resize:Resize = new Resize(window);
-			resize.widthTo = window.savedWindowRect.width;
-			resize.heightTo = window.savedWindowRect.height;
+			resize.widthTo = restoreTo.width;
+			resize.heightTo = restoreTo.height;
 			resize.duration = 300;
 			parallel.addChild(resize);
 			

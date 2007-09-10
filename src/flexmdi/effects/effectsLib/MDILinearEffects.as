@@ -42,6 +42,7 @@ package flexmdi.effects.effectsLib
 	import mx.events.EffectEvent;
 	import mx.effects.AnimateProperty;
 	import mx.effects.Dissolve;
+	import flash.geom.Rectangle;
 	
 	/**
 	 * Collection of effects that limit movement to one dimension (horizontal/vertical) at a time.
@@ -76,27 +77,27 @@ package flexmdi.effects.effectsLib
 			return seq;
 		}
 		
-		override public function getWindowRestoreEffect(window:MDIWindow, manager:MDIManager, moveTo:Point=null):Effect
+		override public function getWindowRestoreEffect(window:MDIWindow, manager:MDIManager, restoreTo:Rectangle):Effect
 		{
 			var seq:Sequence = new Sequence();
 			
 			var moveY:Move = new Move(window);
-			moveY.yTo = moveTo.y;
+			moveY.yTo = restoreTo.y;
 			moveY.duration = 100;
 			seq.addChild(moveY);
 			
 			var moveX:Move = new Move(window);
-			moveX.xTo = moveTo.x;
+			moveX.xTo = restoreTo.x;
 			moveX.duration = 100;
 			seq.addChild(moveX);
 			
 			var resizeW:Resize = new Resize(window);
-			resizeW.widthTo = window.savedWindowRect.width;
+			resizeW.widthTo = restoreTo.width;
 			resizeW.duration = 100;
 			seq.addChild(resizeW);
 			
 			var resizeH:Resize = new Resize(window);
-			resizeH.heightTo = window.savedWindowRect.height;
+			resizeH.heightTo = restoreTo.height;
 			resizeH.duration = 100;
 			seq.addChild(resizeH);
 			

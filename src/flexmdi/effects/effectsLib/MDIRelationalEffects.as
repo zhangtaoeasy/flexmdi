@@ -12,6 +12,7 @@ package flexmdi.effects.effectsLib
 	
 	import mx.events.EffectEvent;
 	import mx.effects.Move;
+	import flash.geom.Rectangle;
 	
 	public class MDIRelationalEffects extends MDIVistaEffects
 	{
@@ -20,24 +21,24 @@ package flexmdi.effects.effectsLib
 			
 			var parallel:Parallel = super.getWindowMinimizeEffect(window,manager,moveTo) as Parallel;
 			
-			parallel.addEventListener(EffectEvent.EFFECT_END, function():void {manager.tile(true,10); } );
+			parallel.addEventListener(EffectEvent.EFFECT_END, function():void {manager.tile(true, 10); } );
 			
 			
 			return parallel;
 		}
 		
-		override public function getWindowRestoreEffect(window:MDIWindow, manager:MDIManager, moveTo:Point=null):Effect
+		override public function getWindowRestoreEffect(window:MDIWindow, manager:MDIManager, restoreTo:Rectangle):Effect
 		{
-			var parallel:Parallel = super.getWindowRestoreEffect(window,manager,moveTo) as Parallel;
+			var parallel:Parallel = super.getWindowRestoreEffect(window, manager, restoreTo) as Parallel;
 			
-			parallel.addEventListener(EffectEvent.EFFECT_START, function():void {manager.tile(true,10); } );
+			parallel.addEventListener(EffectEvent.EFFECT_START, function():void {manager.tile(true, 10); } );
 			
 			return parallel;
 		}
 		
 		override public function reTileMinWindowsEffect(window:MDIWindow, manager:MDIManager, moveTo:Point):Effect
 		{
-			var move:Move = super.reTileMinWindowsEffect(window,manager,moveTo) as Move;
+			var move:Move = super.reTileMinWindowsEffect(window, manager, moveTo) as Move;
 			manager.bringToFront(window);
 			return move;
 		}

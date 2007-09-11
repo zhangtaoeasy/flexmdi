@@ -169,7 +169,7 @@ if (!isEclipse() || window.name != ECLIPSE_FRAME_NAME) {titleBar_setSubTitle("Cl
 <tr class="">
 <td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
 <div class="summarySignature">
-<a class="signatureLink" href="#getWindowRestoreEffect()">getWindowRestoreEffect</a>(window:<a href="../../containers/MDIWindow.html">MDIWindow</a>, manager:<a href="../../managers/MDIManager.html">MDIManager</a>, moveTo:Point = null):Effect</div>
+<a class="signatureLink" href="#getWindowRestoreEffect()">getWindowRestoreEffect</a>(window:<a href="../../containers/MDIWindow.html">MDIWindow</a>, manager:<a href="../../managers/MDIManager.html">MDIManager</a>, restoreTo:Rectangle):Effect</div>
 <div class="summaryTableDescription"></div>
 </td><td class="summaryTableOwnerCol">MDIVistaEffects</td>
 </tr>
@@ -370,7 +370,7 @@ showHideInherited();
 </tr>
 </table>
 <div class="detailBody">
-<code>public override function getWindowRestoreEffect(window:<a href="../../containers/MDIWindow.html">MDIWindow</a>, manager:<a href="../../managers/MDIManager.html">MDIManager</a>, moveTo:Point = null):Effect</code><span class="label">Parameters</span>
+<code>public override function getWindowRestoreEffect(window:<a href="../../containers/MDIWindow.html">MDIWindow</a>, manager:<a href="../../managers/MDIManager.html">MDIManager</a>, restoreTo:Rectangle):Effect</code><span class="label">Parameters</span>
 <table border="0" cellspacing="0" cellpadding="0">
 <tr>
 <td width="20px"></td><td><code><span class="label">window</span>:<a href="../../containers/MDIWindow.html">MDIWindow</a></code></td>
@@ -385,7 +385,7 @@ showHideInherited();
 <td class="paramSpacer">&nbsp;</td>
 </tr>
 <tr>
-<td width="20px"></td><td><code><span class="label">moveTo</span>:Point</code> (default = <code>null</code>)<code></code></td>
+<td width="20px"></td><td><code><span class="label">restoreTo</span>:Rectangle</code></td>
 </tr>
 </table>
 <p></p>

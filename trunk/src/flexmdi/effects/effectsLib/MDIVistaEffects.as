@@ -80,22 +80,52 @@ package flexmdi.effects.effectsLib
 		
 		override public function getWindowMinimizeEffect(window:MDIWindow, manager:MDIManager, moveTo:Point=null):Effect
 		{
-			var parallel:Parallel = new Parallel(window);
-			
-			var move:Move = new Move(window);
-			move.xTo = moveTo.x;
-			move.yTo = moveTo.y;
-			move.duration = 300;
-			parallel.addChild(move);
+			var sequence : Sequence = new Sequence(window);
+				sequence.duration = 250;
+			var parallel : Parallel = new Parallel();
 			
 			var resize:Resize = new Resize(window);
-			resize.heightTo = window.minimizeHeight;
-			resize.widthTo = window.minWidth;
-			resize.duration = 300;
+				resize.widthTo = window.minWidth;
+				resize.heightTo = window.minimizeHeight;
+			
 			parallel.addChild(resize);
 			
-			parallel.end();
-			return parallel;
+
+			var blurOut : Blur = new Blur();
+				blurOut.blurXFrom = 1;
+				blurOut.blurXTo = .2;
+				blurOut.blurYFrom = 1;
+				blurOut.blurYTo = .2;
+				
+			parallel.addChild(blurOut);
+		
+			sequence.addChild(parallel);
+
+			var move:Move = new Move(window);
+				move.xTo = moveTo.x;
+				move.yTo = moveTo.y;
+				move.easingFunction = minEasingFunction;
+				
+			sequence.addChild( move );
+		
+				
+				var blurIn : Blur = new Blur();
+					blurOut.blurXFrom = .2;
+					blurOut.blurXTo = 1;
+					blurOut.blurYFrom = .2;
+					blurOut.blurYTo = 1;
+				
+				
+			sequence.addChild(blurIn);
+			
+			return sequence;
+		}
+		
+		private function minEasingFunction(t:Number, b:Number, c:Number, d:Number):Number
+		{
+  			var ts:Number=(t/=d)*t;
+ 			var tc:Number=ts*t;
+  			return b+c*(0*tc*ts + -2*ts*ts + 10*tc + -15*ts + 8*t);
 		}
 		
 		override public function getWindowRestoreEffect(window:MDIWindow, manager:MDIManager, restoreTo:Rectangle):Effect
@@ -151,7 +181,7 @@ package flexmdi.effects.effectsLib
 		
 		override public function getTileEffect(items:Array,manager:MDIManager):Effect
 		{			
-			var sequence:Sequence = new Sequence();
+			var effect : Parallel = new Parallel();
 			
 			for each(var item:MDIGroupEffectItem  in items)
 			{	
@@ -160,12 +190,13 @@ package flexmdi.effects.effectsLib
 					move.xTo = item.moveTo.x;
 					move.yTo = item.moveTo.y;
 
-				sequence.addChild(move);
+				effect.addChild(move);
 				item.setWindowSize();
 			}
 			
-			sequence.duration = 100;
-			return sequence;
+			effect.duration = 100;
+			
+			return effect;
 		}
 		
 		private function cascadeEasingFunction(t:Number, b:Number, c:Number, d:Number):Number 

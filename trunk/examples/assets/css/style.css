@@ -7,7 +7,7 @@ Button {
    fillAlphas: 1, 0.16, 0.18, 1;
    fillColors: #5f89b9, #697182, #ffffff, #eeeeee;
 }
-Panel {
+.mdiWindowFocus {
 	headerHeight: 26;
 	roundedBottomCorners: true;
 	borderThicknessTop: 0;
@@ -17,18 +17,22 @@ Panel {
 	borderAlpha: 1.0;
 	titleStyleName: "mypanelTitle";
 }
-
+.mdiWindowNoFocus {
+	headerHeight: 26;
+	roundedBottomCorners: true;
+	borderThicknessTop: 0;
+	borderThicknessBottom: 3;
+	borderThicknessLeft: 3;
+	borderThicknessRight: 3;
+	borderAlpha: .5;
+	titleStyleName: "mypanelTitle";
+	background-alpha: .5;
+}
 
 .mypanelTitle {
 	fontFamily: Arial;
 	fontSize: 10;
 	fontWeight: bold;
-}
-.menuBtn {
-	upSkin:        Embed('../img/menuArrow.png');
-	overSkin:      Embed('../img/menuArrow.png');
-	downSkin:      Embed('../img/menuArrow.png');
-	disabledSkin:  Embed('../img/menuArrow.png');
 }
 .closeBtn {
 	upSkin:        Embed('../img/closeButton.png');

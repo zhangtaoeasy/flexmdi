@@ -36,7 +36,7 @@ package flexmdi.effects.effectClasses
 		
 		public function get isInPlace():Boolean
 		{
-			return isCorrectSize() && isCorrectPosition();
+			return isCorrectSize && isCorrectPosition;
 		}		
 	}
 }

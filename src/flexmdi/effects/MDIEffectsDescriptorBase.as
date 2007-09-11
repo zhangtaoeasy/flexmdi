@@ -181,15 +181,27 @@ package flexmdi.effects
 			
 			for each(var item:MDIGroupEffectItem in items)
 			{
-				var move:Move = new Move(item.window);
-					move.xTo = item.moveTo.x;
-					move.yTo = item.moveTo.y;
-					parallel.addChild(move);
+				
+				if( ! item.isCorrectPosition )
+				{
+					var move:Move = new Move(item.window);
+						move.xTo = item.moveTo.x;
+						move.yTo = item.moveTo.y;
 					
-				var resize:Resize = new Resize(item.window);
-					resize.widthTo = item.widthTo;
-					resize.heightTo = item.heightTo;
+					parallel.addChild(move);
+				
+				}
+				
+				if( ! item.isCorrectSize )
+				{
+					
+					var resize:Resize = new Resize(item.window);
+						resize.widthTo = item.widthTo;
+						resize.heightTo = item.heightTo;
+					
 					parallel.addChild(resize);
+						
+				}
 			}
 			
 			return parallel;

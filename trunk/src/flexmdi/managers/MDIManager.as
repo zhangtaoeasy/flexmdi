@@ -377,7 +377,6 @@ package flexmdi.managers
 				switch(winEvent.type)
 				{
 					case MDIWindowEvent.MINIMIZE:
-						mgrEvent.window.setStyle("backgroundAlpha",0);
 						var maxTiles:int = Math.floor(this.container.width / (this.tileMinimizeWidth + this.tilePadding));
 						var xPos:Number = getLeftOffsetPosition(this.tiledWindows.length, maxTiles, this.tileMinimizeWidth, this.minTilePadding);
 						var yPos:Number = this.container.height - getBottomTilePosition(this.tiledWindows.length, maxTiles, mgrEvent.window.minimizeHeight, this.minTilePadding);
@@ -450,8 +449,7 @@ package flexmdi.managers
 						mgrEvent.effect.play();
 					break;
 					
-					case MDIManagerEvent.WINDOW_MINIMIZE:
-						
+					case MDIManagerEvent.WINDOW_MINIMIZE:						
 						mgrEvent.effect.addEventListener(EffectEvent.EFFECT_END, onMinimizeEffectEnd);
 						mgrEvent.effect.play();
 					break;
@@ -519,6 +517,7 @@ package flexmdi.managers
 				var compEffect:CompositeEffect = event.effectInstance.effect as CompositeEffect;
 				targetWindow = Effect(compEffect.children[0]).target as MDIWindow;
 			}
+			targetWindow.setStyle("backgroundAlpha",0);
 			tiledWindows.addItem(targetWindow);
 			reTileWindows();
 		}

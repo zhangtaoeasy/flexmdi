@@ -167,6 +167,8 @@ package flexmdi.effects
 					move.xTo = item.moveTo.x;
 					move.yTo = item.moveTo.y;
 					parallel.addChild(move);
+					
+				item.setWindowSize();
 			}
 			
 			return parallel;

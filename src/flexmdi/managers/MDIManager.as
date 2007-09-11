@@ -992,9 +992,9 @@ package flexmdi.managers
 				
 				var item:MDIGroupEffectItem = new MDIGroupEffectItem(window);
 				item.widthFrom = window.width;
-				item.widthTo = container.width * .66;
+				item.widthTo = container.width * .5;
 				item.heightFrom = window.height;
-				item.heightTo = container.height * .66;
+				item.heightTo = container.height * .5;
 				
 				if(yIndex * 40 + item.heightTo + 25 >= container.height)
 				{

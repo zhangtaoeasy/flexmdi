@@ -78,16 +78,16 @@ package flexmdi.effects.effectsLib
 			return parallel;
 		}
 		
-		override public function getWindowMinimizeEffect(window:MDIWindow, manager:MDIManager, moveTo:Point=null):Effect
+		override public function getWindowMinimizeEffect(window:MDIWindow, manager:MDIManager, moveTo:Point = null):Effect
 		{
 			var sequence : Sequence = new Sequence(window);
-				sequence.duration = 250;
+				//sequence.duration = 200;
 			var parallel : Parallel = new Parallel();
 			
 			var resize:Resize = new Resize(window);
 				resize.widthTo = window.minWidth;
 				resize.heightTo = window.minimizeHeight;
-			
+				resize.duration = 150;
 			parallel.addChild(resize);
 			
 
@@ -97,16 +97,16 @@ package flexmdi.effects.effectsLib
 				blurOut.blurYFrom = 1;
 				blurOut.blurYTo = .2;
 				
-			parallel.addChild(blurOut);
+			//parallel.addChild(blurOut);
 		
 			sequence.addChild(parallel);
 
 			var move:Move = new Move(window);
 				move.xTo = moveTo.x;
 				move.yTo = moveTo.y;
-				move.easingFunction = minEasingFunction;
-				
-			sequence.addChild( move );
+				//move.easingFunction = minEasingFunction;
+				move.duration = 150;
+			sequence.addChild(move);
 		
 				
 				var blurIn : Blur = new Blur();
@@ -116,7 +116,7 @@ package flexmdi.effects.effectsLib
 					blurOut.blurYTo = 1;
 				
 				
-			sequence.addChild(blurIn);
+			//sequence.addChild(blurIn);
 			
 			return sequence;
 		}
@@ -135,13 +135,13 @@ package flexmdi.effects.effectsLib
 			var move:Move = new Move(window);
 			move.xTo = restoreTo.x;
 			move.yTo = restoreTo.y;
-			move.duration = 300;
+			move.duration = 150;
 			parallel.addChild(move);
 			
 			var resize:Resize = new Resize(window);
 			resize.widthTo = restoreTo.width;
 			resize.heightTo = restoreTo.height;
-			resize.duration = 300;
+			resize.duration = 150;
 			parallel.addChild(resize);
 			
 			parallel.end();
@@ -225,13 +225,14 @@ package flexmdi.effects.effectsLib
 				var move:Move = new Move(item.window);
 					move.xTo = item.moveTo.x;
 					move.yTo = item.moveTo.y;
-					move.easingFunction = this.cascadeEasingFunction;
+					//move.easingFunction = this.cascadeEasingFunction;
 					move.duration = 200;
 					parallel.addChild(move);
 					
 				var resize:Resize = new Resize(item.window);
 					resize.widthTo = item.widthTo;
 					resize.heightTo = item.heightTo;
+					resize.duration = 150;
 					parallel.addChild(resize);
 			}
 			

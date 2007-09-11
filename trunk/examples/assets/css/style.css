@@ -18,15 +18,17 @@ Panel {
 	titleStyleName: "mypanelTitle";
 }
 
-TabNavigator
-{
-		
-}
 
 .mypanelTitle {
 	fontFamily: Arial;
 	fontSize: 10;
 	fontWeight: bold;
+}
+.menuBtn {
+	upSkin:        Embed('../img/menuArrow.png');
+	overSkin:      Embed('../img/menuArrow.png');
+	downSkin:      Embed('../img/menuArrow.png');
+	disabledSkin:  Embed('../img/menuArrow.png');
 }
 .closeBtn {
 	upSkin:        Embed('../img/closeButton.png');

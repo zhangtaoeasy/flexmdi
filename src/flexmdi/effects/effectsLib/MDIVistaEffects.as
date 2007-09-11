@@ -185,13 +185,23 @@ package flexmdi.effects.effectsLib
 			
 			for each(var item:MDIGroupEffectItem  in items)
 			{	
-				manager.bringToFront(item.window);
-				var move:Move = new Move(item.window);
-					move.xTo = item.moveTo.x;
-					move.yTo = item.moveTo.y;
-
-				effect.addChild(move);
-				item.setWindowSize();
+				
+				
+				
+				if( ! item.isCorrectPosition )
+				{
+				
+					var move:Move = new Move(item.window);
+						move.xTo = item.moveTo.x;
+						move.yTo = item.moveTo.y;
+	
+					effect.addChild(move);
+				}
+				
+				if( ! item.isCorrectSize )
+				{
+					item.setWindowSize();
+				}
 			}
 			
 			effect.duration = 100;

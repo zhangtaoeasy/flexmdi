@@ -608,9 +608,19 @@ package flexmdi.containers
 		 */
 		public function bringToFront(event:Event = null):void
 		{
+			var indexToCheck:int;
+			if(event != null && event.type == "newWindow")
+			{
+				indexToCheck = parent.numChildren - 2;
+			}
+			else
+			{
+				indexToCheck = parent.numChildren - 1;
+			}
+			
 			for each(var win:MDIWindow in windowManager.windowList)
 			{
-				if(win != this && win.parent.getChildIndex(win) == win.parent.numChildren - 1)
+				if(win != this && win.parent.getChildIndex(win) == indexToCheck)
 				{
 					win.dispatchEvent(new MDIWindowEvent(MDIWindowEvent.FOCUS_END, win));
 				}

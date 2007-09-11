@@ -263,6 +263,7 @@ package flexmdi.managers
 
 		public function add(window:MDIWindow):void
 		{
+			var bringToFrontEvent:Event = new Event("foo");
 			window.windowManager = this;
 			
 			this.addListeners(window);
@@ -283,11 +284,11 @@ package flexmdi.managers
 				{
 					this.container.addChild(window);
 					this.position(window);
-					this.bringToFront(window);
+					bringToFrontEvent = new Event("newWindow");
 				}
 			} 		
-			
-			window.bringToFront();
+			// send event to denote this window was just added (cleaner solution needed)
+			window.bringToFront(bringToFrontEvent);
 			dispatchEvent(new MDIManagerEvent(MDIManagerEvent.WINDOW_ADD, window, this));
 		}
 		
@@ -981,20 +982,34 @@ package flexmdi.managers
 			var effectItems:Array = [];
 			
 			var windows:Array = getOpenWindowList();
+			var xIndex:int = 0;
+			var yIndex:int = -1;
 			
 			for(var i:int = 0; i < windows.length; i++)
 			{
 				var window:MDIWindow = windows[i] as MDIWindow;
 				
 				bringToFront(window);
-				var destXY:int = i * 40;
 				
 				var item:MDIGroupEffectItem = new MDIGroupEffectItem(window);
-					item.moveTo =  new Point(destXY, destXY);
-					item.heightFrom = window.height;
-					item.heightTo = (destXY + window.height > container.height) ? container.height - destXY : window.height;
-					item.widthFrom = window.width;
-					item.widthTo = (destXY + window.width > container.width) ? container.width - destXY : window.width;
+				item.widthFrom = window.width;
+				item.widthTo = container.width * .66;
+				item.heightFrom = window.height;
+				item.heightTo = container.height * .66;
+				
+				if(yIndex * 40 + item.heightTo + 25 >= container.height)
+				{
+					yIndex = 0;
+					xIndex++;
+				}
+				else
+				{
+					yIndex++;
+				}
+				
+				var destX:int = xIndex * 40 + yIndex * 20;
+				var destY:int = yIndex * 40;
+				item.moveTo = new Point(destX, destY);
 					
 				effectItems.push(item);
 			}

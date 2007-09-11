@@ -28,6 +28,7 @@ package flexmdi.effects.effectClasses
 		{
 			return window.height == heightTo && window.width == widthTo;
 		}
+		
 		public function get isCorrectPosition():Boolean
 		{
 			return window.x == moveTo.x && window.y == moveTo.y;
@@ -36,8 +37,6 @@ package flexmdi.effects.effectClasses
 		public function get isInPlace():Boolean
 		{
 			return isCorrectSize() && isCorrectPosition();
-		}
-		
-		
+		}		
 	}
 }

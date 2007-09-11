@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute"
 	xmlns:flexmdi="http://flexmdi.googlecode.com/"
-	creationComplete="onCreationComplete()">
+	creationComplete="onCreationComplete()" xmlns:ns="sample_content.*" viewSourceURL="srcview/index.html">
 	<mx:Style source="/assets/css/style.css" />
 	<mx:Script>
 		<![CDATA[
+			import sample_content.SampleContent;
 			import flexmdi.effects.effectsLib.MDILinearEffects;
 			import flexmdi.effects.MDIEffectsDescriptorBase;
 			import mx.controls.TextArea;

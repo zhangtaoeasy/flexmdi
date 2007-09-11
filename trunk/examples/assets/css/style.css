@@ -10,6 +10,7 @@ Button {
 .mdiWindowFocus {
 	headerHeight: 26;
 	roundedBottomCorners: true;
+	border-color: #CCCCCC;
 	borderThicknessTop: 0;
 	borderThicknessBottom: 3;
 	borderThicknessLeft: 3;
@@ -20,6 +21,7 @@ Button {
 .mdiWindowNoFocus {
 	headerHeight: 26;
 	roundedBottomCorners: true;
+	border-color: #CCCCCC;
 	borderThicknessTop: 0;
 	borderThicknessBottom: 3;
 	borderThicknessLeft: 3;

@@ -376,6 +376,7 @@ package flexmdi.managers
 				switch(winEvent.type)
 				{
 					case MDIWindowEvent.MINIMIZE:
+						mgrEvent.window.setStyle("backgroundAlpha",0);
 						var maxTiles:int = Math.floor(this.container.width / (this.tileMinimizeWidth + this.tilePadding));
 						var xPos:Number = getLeftOffsetPosition(this.tiledWindows.length, maxTiles, this.tileMinimizeWidth, this.minTilePadding);
 						var yPos:Number = this.container.height - getBottomTilePosition(this.tiledWindows.length, maxTiles, mgrEvent.window.minimizeHeight, this.minTilePadding);
@@ -384,10 +385,12 @@ package flexmdi.managers
 					break;
 					
 					case MDIWindowEvent.RESTORE:
+						mgrEvent.window.setStyle("backgroundAlpha",1);
 						mgrEvent.effect = this.effects.getWindowRestoreEffect(winEvent.window, this, winEvent.window.savedWindowRect);
 					break;
 					
 					case MDIWindowEvent.MAXIMIZE:
+						mgrEvent.window.setStyle("backgroundAlpha",1);
 						mgrEvent.effect = this.effects.getWindowMaximizeEffect(winEvent.window, this);
 					break;
 					
@@ -447,6 +450,7 @@ package flexmdi.managers
 					break;
 					
 					case MDIManagerEvent.WINDOW_MINIMIZE:
+						
 						mgrEvent.effect.addEventListener(EffectEvent.EFFECT_END, onMinimizeEffectEnd);
 						mgrEvent.effect.play();
 					break;

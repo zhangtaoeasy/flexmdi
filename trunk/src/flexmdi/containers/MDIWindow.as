@@ -703,7 +703,7 @@ package flexmdi.containers
 		 * 
 		 * @private
 		 */
-		private function addControl(uic:UIComponent, index:int = -1):void
+		public function addControl(uic:UIComponent, index:int = -1):void
 		{
 			uic.buttonMode = true;
 			if(index > -1)

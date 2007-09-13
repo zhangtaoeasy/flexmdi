@@ -63,14 +63,14 @@ package flexmdi.managers
 	 *
 	 *  @eventType flexmdi.events.MDIManagerEvent.WINDOW_ADD
 	 */
-	[Event(name="windowAdd", type="mdi.events.MDIManagerEvent")]
+	[Event(name="windowAdd", type="flexmdi.events.MDIManagerEvent")]
 	
 	/**
 	 *  Dispatched when the minimize button is clicked.
 	 *
 	 *  @eventType flexmdi.events.MDIManagerEvent.WINDOW_MINIMIZE
 	 */
-	[Event(name="windowMinimize", type="mdi.events.MDIManagerEvent")]
+	[Event(name="windowMinimize", type="flexmdi.events.MDIManagerEvent")]
 	
 	/**
 	 *  If the window is minimized, this event is dispatched when the titleBar is clicked. 
@@ -79,7 +79,7 @@ package flexmdi.managers
 	 *
 	 *  @eventType flexmdi.events.MDIManagerEvent.WINDOW_RESTORE
 	 */
-	[Event(name="windowRestore", type="mdi.events.MDIManagerEvent")]
+	[Event(name="windowRestore", type="flexmdi.events.MDIManagerEvent")]
 	
 	/**
 	 *  Dispatched when the maximize button is clicked or when the window is in a
@@ -87,84 +87,84 @@ package flexmdi.managers
 	 *
 	 *  @eventType flexmdi.events.MDIManagerEvent.WINDOW_MAXIMIZE
 	 */
-	[Event(name="windowMaximize", type="mdi.events.MDIManagerEvent")]
+	[Event(name="windowMaximize", type="flexmdi.events.MDIManagerEvent")]
 	
 	/**
 	 *  Dispatched when the minimize button is clicked.
 	 *
 	 *  @eventType flexmdi.events.MDIManagerEvent.WINDOW_CLOSE
 	 */
-	[Event(name="windowClose", type="mdi.events.MDIManagerEvent")]
+	[Event(name="windowClose", type="flexmdi.events.MDIManagerEvent")]
 	
 	/**
 	 *  Dispatched when the window gains focus and is given topmost z-index of MDIManager's children.
 	 *
 	 *  @eventType flexmdi.events.MDIManagerEvent.WINDOW_FOCUS_START
 	 */
-	[Event(name="windowFocusStart", type="mdi.events.MDIManagerEvent")]
+	[Event(name="windowFocusStart", type="flexmdi.events.MDIManagerEvent")]
 	
 	/**
 	 *  Dispatched when the window loses focus and no longer has topmost z-index of MDIManager's children.
 	 *
 	 *  @eventType flexmdi.events.MDIManagerEvent.WINDOW_FOCUS_END
 	 */
-	[Event(name="windowFocusEnd", type="mdi.events.MDIManagerEvent")]
+	[Event(name="windowFocusEnd", type="flexmdi.events.MDIManagerEvent")]
 	
 	/**
 	 *  Dispatched when the window begins being dragged.
 	 *
 	 *  @eventType flexmdi.events.MDIManagerEvent.WINDOW_DRAG_START
 	 */
-	[Event(name="windowDragStart", type="mdi.events.MDIManagerEvent")]
+	[Event(name="windowDragStart", type="flexmdi.events.MDIManagerEvent")]
 	
 	/**
 	 *  Dispatched while the window is being dragged.
 	 *
 	 *  @eventType flexmdi.events.MDIManagerEvent.WINDOW_DRAG
 	 */
-	[Event(name="windowDrag", type="mdi.events.MDIManagerEvent")]
+	[Event(name="windowDrag", type="flexmdi.events.MDIManagerEvent")]
 	
 	/**
 	 *  Dispatched when the window stops being dragged.
 	 *
 	 *  @eventType flexmdi.events.MDIManagerEvent.WINDOW_DRAG_END
 	 */
-	[Event(name="windowDragEnd", type="mdi.events.MDIManagerEvent")]
+	[Event(name="windowDragEnd", type="flexmdi.events.MDIManagerEvent")]
 	
 	/**
 	 *  Dispatched when a resize handle is pressed.
 	 *
 	 *  @eventType flexmdi.events.MDIManagerEvent.WINDOW_RESIZE_START
 	 */
-	[Event(name="windowResizeStart", type="mdi.events.MDIManagerEvent")]
+	[Event(name="windowResizeStart", type="flexmdi.events.MDIManagerEvent")]
 	
 	/**
 	 *  Dispatched while the mouse is down on a resize handle.
 	 *
 	 *  @eventType flexmdi.events.MDIManagerEvent.WINDOW_RESIZE
 	 */
-	[Event(name="windowResize", type="mdi.events.MDIManagerEvent")]
+	[Event(name="windowResize", type="flexmdi.events.MDIManagerEvent")]
 	
 	/**
 	 *  Dispatched when the mouse is released from a resize handle.
 	 *
 	 *  @eventType flexmdi.events.MDIManagerEvent.WINDOW_RESIZE_END
 	 */
-	[Event(name="windowResizeEnd", type="mdi.events.MDIManagerEvent")]
+	[Event(name="windowResizeEnd", type="flexmdi.events.MDIManagerEvent")]
 	
 	/**
 	 *  Dispatched when the windows are cascaded.
 	 *
 	 *  @eventType flexmdi.events.MDIManagerEvent.CASCADE
 	 */
-	[Event(name="cascade", type="mdi.events.MDIManagerEvent")]
+	[Event(name="cascade", type="flexmdi.events.MDIManagerEvent")]
 	
 	/**
 	 *  Dispatched when the windows are tiled.
 	 *
 	 *  @eventType flexmdi.events.MDIManagerEvent.TILE
 	 */
-	[Event(name="tile", type="mdi.events.MDIManagerEvent")]
+	[Event(name="tile", type="flexmdi.events.MDIManagerEvent")]
 	
 	/**
 	 * Class responsible for applying effects and default behaviors to MDIWindow instances such as

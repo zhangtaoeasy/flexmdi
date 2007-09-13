@@ -51,7 +51,7 @@ package flexmdi.containers
 	 *
 	 *  @eventType flexmdi.events.MDIWindowEvent.MINIMIZE
 	 */
-	[Event(name="minimize", type="mdi.events.MDIWindowEvent")]
+	[Event(name="minimize", type="flexmdi.events.MDIWindowEvent")]
 	
 	/**
 	 *  If the window is minimized, this event is dispatched when the titleBar is clicked. 
@@ -60,7 +60,7 @@ package flexmdi.containers
 	 *
 	 *  @eventType flexmdi.events.MDIWindowEvent.RESTORE
 	 */
-	[Event(name="restore", type="mdi.events.MDIWindowEvent")]
+	[Event(name="restore", type="flexmdi.events.MDIWindowEvent")]
 	
 	/**
 	 *  Dispatched when the maximize button is clicked or when the window is in a
@@ -68,70 +68,70 @@ package flexmdi.containers
 	 *
 	 *  @eventType flexmdi.events.MDIWindowEvent.MAXIMIZE
 	 */
-	[Event(name="maximize", type="mdi.events.MDIWindowEvent")]
+	[Event(name="maximize", type="flexmdi.events.MDIWindowEvent")]
 	
 	/**
 	 *  Dispatched when the close button is clicked.
 	 *
 	 *  @eventType flexmdi.events.MDIWindowEvent.CLOSE
 	 */
-	[Event(name="close", type="mdi.events.MDIWindowEvent")]
+	[Event(name="close", type="flexmdi.events.MDIWindowEvent")]
 	
 	/**
 	 *  Dispatched when the window gains focus and is given topmost z-index of MDIManager's children.
 	 *
 	 *  @eventType flexmdi.events.MDIWindowEvent.FOCUS_START
 	 */
-	[Event(name="focusStart", type="mdi.events.MDIWindowEvent")]
+	[Event(name="focusStart", type="flexmdi.events.MDIWindowEvent")]
 	
 	/**
 	 *  Dispatched when the window loses focus and no longer has topmost z-index of MDIManager's children.
 	 *
 	 *  @eventType flexmdi.events.MDIWindowEvent.FOCUS_END
 	 */
-	[Event(name="focusEnd", type="mdi.events.MDIWindowEvent")]
+	[Event(name="focusEnd", type="flexmdi.events.MDIWindowEvent")]
 	
 	/**
 	 *  Dispatched when the window starts being dragged.
 	 *
 	 *  @eventType flexmdi.events.MDIWindowEvent.DRAG_START
 	 */
-	[Event(name="dragStart", type="mdi.events.MDIWindowEvent")]
+	[Event(name="dragStart", type="flexmdi.events.MDIWindowEvent")]
 	
 	/**
 	 *  Dispatched while the window is being dragged.
 	 *
 	 *  @eventType flexmdi.events.MDIWindowEvent.DRAG
 	 */
-	[Event(name="drag", type="mdi.events.MDIWindowEvent")]
+	[Event(name="drag", type="flexmdi.events.MDIWindowEvent")]
 	
 	/**
 	 *  Dispatched when the window stops being dragged.
 	 *
 	 *  @eventType flexmdi.events.MDIWindowEvent.DRAG_END
 	 */
-	[Event(name="dragEnd", type="mdi.events.MDIWindowEvent")]
+	[Event(name="dragEnd", type="flexmdi.events.MDIWindowEvent")]
 	
 	/**
 	 *  Dispatched when a resize handle is pressed.
 	 *
 	 *  @eventType flexmdi.events.MDIWindowEvent.RESIZE_START
 	 */
-	[Event(name="resizeStart", type="mdi.events.MDIWindowEvent")]
+	[Event(name="resizeStart", type="flexmdi.events.MDIWindowEvent")]
 	
 	/**
 	 *  Dispatched while the mouse is down on a resize handle.
 	 *
 	 *  @eventType flexmdi.events.MDIWindowEvent.RESIZE
 	 */
-	[Event(name="resize", type="mdi.events.MDIWindowEvent")]
+	[Event(name="resize", type="flexmdi.events.MDIWindowEvent")]
 	
 	/**
 	 *  Dispatched when the mouse is released from a resize handle.
 	 *
 	 *  @eventType flexmdi.events.MDIWindowEvent.RESIZE_END
 	 */
-	[Event(name="resizeEnd", type="mdi.events.MDIWindowEvent")]
+	[Event(name="resizeEnd", type="flexmdi.events.MDIWindowEvent")]
 	
 	
 	/**
@@ -202,6 +202,11 @@ package flexmdi.containers
 		 * Flag determining whether or not this window is resizable.
 		 */
 		public var resizable:Boolean;
+		
+		/**
+		 * Flag determining whether or not this window is draggable.
+		 */
+		public var draggable:Boolean;
 		
 		/**
 	     * @private
@@ -334,7 +339,7 @@ package flexmdi.containers
 			minWidth = 200;
 			minHeight = 200;
 			windowState = MDIWindowState.NORMAL;
-			resizable = true;
+			resizable = draggable = true;
 			styleName = "mdiWindowFocus";
 			
 			addEventListener(FlexEvent.CREATION_COMPLETE, componentComplete);			
@@ -724,12 +729,13 @@ package flexmdi.containers
 		 */
 		private function onTitleBarPress(event:MouseEvent):void
 		{
-			if(this.windowState != MDIWindowState.MINIMIZED)
+			// only floating windows can be dragged
+			if(this.windowState == MDIWindowState.NORMAL && draggable)
 			{
 				this.startDrag(false, new Rectangle(0, 0, parent.width - this.width, parent.height - this.height - 5));
 				systemManager.addEventListener(MouseEvent.MOUSE_UP, onTitleBarRelease);
 				systemManager.addEventListener(MouseEvent.MOUSE_MOVE, onWindowMove);
-				systemManager.stage.addEventListener(Event.MOUSE_LEAVE, onTitleBarRelease, false, 0, true);
+				systemManager.stage.addEventListener(Event.MOUSE_LEAVE, onTitleBarRelease);
 			}
 		}
 		
@@ -782,7 +788,7 @@ package flexmdi.containers
 		 */
 		private function onResizeButtonPress(event:MouseEvent):void
 		{
-			if(!minimized && resizable)
+			if(windowState == MDIWindowState.NORMAL && resizable)
 			{
 				currentResizeHandle = event.target as Button;
 				setCursor(currentResizeHandle);
@@ -805,7 +811,7 @@ package flexmdi.containers
 		 */
 		private function onResizeButtonDrag(event:Event):void
 		{
-			if(!minimized && resizable)
+			if(windowState == MDIWindowState.NORMAL && resizable)
 			{
 				dragAmountX = parent.mouseX - dragStartMouseX;
 				dragAmountY = parent.mouseY - dragStartMouseY;
@@ -858,7 +864,7 @@ package flexmdi.containers
 		
 		private function onResizeButtonRelease(event:MouseEvent = null):void
 		{
-			if(!minimized && resizable)
+			if(windowState == MDIWindowState.NORMAL && resizable)
 			{
 				currentResizeHandle = null;
 				systemManager.removeEventListener(Event.ENTER_FRAME, onResizeButtonDrag);
@@ -902,8 +908,9 @@ package flexmdi.containers
 		
 		private function onResizeButtonRollOver(event:MouseEvent):void
 		{
+			// only floating windows can be resized
 			// event.buttonDown is to detect being dragged over
-			if(!minimized && resizable && !event.buttonDown)
+			if(windowState == MDIWindowState.NORMAL && resizable && !event.buttonDown)
 			{
 				setCursor(event.target as Button);
 			}

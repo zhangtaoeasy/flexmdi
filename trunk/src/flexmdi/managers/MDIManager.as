@@ -242,6 +242,8 @@ package flexmdi.managers
 			addEventListener(MDIManagerEvent.WINDOW_RESIZE_START, executeDefaultBehavior, false, -1);
 			addEventListener(MDIManagerEvent.WINDOW_RESIZE, executeDefaultBehavior, false, -1);
 			addEventListener(MDIManagerEvent.WINDOW_RESIZE_END, executeDefaultBehavior, false, -1);
+			
+			addEventListener(MDIManagerEvent.CASCADE, executeDefaultBehavior, false, -1);
 		}
 		
 		private var _container:UIComponent;
@@ -501,6 +503,18 @@ package flexmdi.managers
 					break;
 					
 					case MDIManagerEvent.WINDOW_RESIZE_END:
+						mgrEvent.effect.play();
+					break;
+					
+					case MDIManagerEvent.CASCADE:
+						// get the effect here because this doesn't pass thru windowEventProxy()
+						mgrEvent.effect = this.effects.getCascadeEffect(mgrEvent.effectItems, this);
+						mgrEvent.effect.play();
+					break;
+					
+					case MDIManagerEvent.TILE:
+						// get the effect here because this doesn't pass thru windowEventProxy()
+						mgrEvent.effect = this.effects.getTileEffect(mgrEvent.effectItems, this);
 						mgrEvent.effect.play();
 					break;
 				}
@@ -869,8 +883,7 @@ package flexmdi.managers
 		 * 
 		 */
 		public function tile(fillAvailableSpace:Boolean = false,gap:Number = 0):void
-		{
-			
+		{			
 			var openWinList:Array = getOpenWindowList();
 				
 			var numWindows:int = openWinList.length;
@@ -954,14 +967,13 @@ package flexmdi.managers
 					}
 				} 
 				
-				this.effects.getTileEffect(effectItems,this).play();
+				dispatchEvent(new MDIManagerEvent(MDIManagerEvent.TILE, null, this, null, effectItems));
 			}
 		}
 		
 		// set a min. width/height
 		public function resize(window:MDIWindow):void
-		{	
-		
+		{		
 			var w:int = this.container.width * .6;
 			var h:int = this.container.height * .6
 			if(w > window.width)
@@ -1013,7 +1025,7 @@ package flexmdi.managers
 				effectItems.push(item);
 			}
 			
-			this.effects.getCascadeEffect(effectItems, this).play();
+			dispatchEvent(new MDIManagerEvent(MDIManagerEvent.CASCADE, null, this, null, effectItems));
 		}
 		
 		

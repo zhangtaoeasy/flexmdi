@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute"
 	xmlns:flexmdi="http://flexmdi.googlecode.com/"
-	creationComplete="onCreationComplete()" xmlns:ns="sample_content.*" viewSourceURL="srcview/index.html">
+	creationComplete="onCreationComplete()" initialize="init()"
+	xmlns:ns="sample_content.*" viewSourceURL="srcview/index.html">
 	
 	<mx:Style source="/assets/css/style.css" />
 	
@@ -18,10 +19,21 @@
    			cornerRadius: 0;
    			dropShadowEnabled: false;
 			}
+			
+		.min
+		{
+			background-color: #CCCCCC;
+		}
+		
+		.floating
+		{
+			background-color: #666666;
+		}
 	</mx:Style>
 	
 	<mx:Script>
 		<![CDATA[
+			import flexmdi.managers.MDIManager;
 		
 		
 			import taskbar.TaskBarItem;
@@ -40,7 +52,6 @@
 			
 			private function onCreationComplete():void
 			{
-
 				effectsList = new Array();
 				effectsList.push({data: flexmdi.effects.MDIEffectsDescriptorBase, label: "No effects"});
 				effectsList.push({data: flexmdi.effects.effectsLib.MDIVistaEffects, label: "Vista"});
@@ -48,13 +59,14 @@
 				effectsListCb.dataProvider = effectsList;
 				effectsListCb.selectedIndex = 1;
 				
-
-				
-				
 				// add our own listener for window event
 				mdiCanvas.windowManager.addEventListener(MDIManagerEvent.WINDOW_MINIMIZE, windowMinimizeHandler);
 			}
 			
+			private function init():void
+			{
+				mdiCanvas.windowManager.addEventListener(MDIManagerEvent.WINDOW_ADD, windowMinimizeHandler);
+			}
 			
 			
 			[Bindable]
@@ -64,10 +76,19 @@
 			{
 				if(event is MDIManagerEvent)
 				{
-					var mgrEvent:MDIManagerEvent = event as MDIManagerEvent;	
-					mgrEvent.window.visible = false;
-					var item : TaskBarItem = new TaskBarItem(mgrEvent.window.title,mgrEvent.window);
+					var mgrEvent:MDIManagerEvent = event as MDIManagerEvent;
+					var item:TaskBarItem = new TaskBarItem(mgrEvent.window.title,mgrEvent.window);
 					this.taskBarItems.addItem(item);
+					
+					if(mgrEvent.type == MDIManagerEvent.WINDOW_MINIMIZE)
+					{
+						mgrEvent.window.visible = false;
+						item.styleName = "min";
+					}
+					else
+					{
+						item.styleName = "floating";
+					}
 				}
 			}
 			
@@ -97,11 +118,7 @@
 			private function changeEffects():void
 			{
 				mdiCanvas.effectsLib = effectsListCb.selectedItem.data as Class;
-			}
-			
-			
-			
-			
+			}			
 		]]>
 	</mx:Script>
 	<mx:VBox id="vbox" width="100%" height="100%">
@@ -143,12 +160,9 @@
 	
 	<mx:ApplicationControlBar styleName="taskbar" width="100%" height="40" bottom="0" left="0" >
 
-		<mx:HorizontalList id="tbar" dataProvider="{taskBarItems}"  rollOverColor="#5F869A"  
+		<mx:HorizontalList id="tbar" dataProvider="{taskBarItems}" rollOverColor="#5F869A"  
 			width="100%" height="100%" backgroundAlpha="0"
-			click="restoreWindow(event)" />
-			
-			 
-	
+			click="restoreWindow(event)" />	
 	</mx:ApplicationControlBar>
 	
 	

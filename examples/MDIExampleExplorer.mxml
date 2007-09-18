@@ -5,6 +5,8 @@
 	<mx:Style source="/assets/css/style.css" />
 	<mx:Script>
 		<![CDATA[
+			import explorer.AddWinForm;
+			import mx.managers.PopUpManager;
 			import sample_content.SampleContent;
 			import flexmdi.effects.effectsLib.MDILinearEffects;
 			import flexmdi.effects.MDIEffectsDescriptorBase;
@@ -102,6 +104,13 @@
 				mdiCanvas.windowManager.add(win);
 			}
 			
+			private function addWindowDialog():void
+			{
+				var win:MDIWindow = new AddWinForm();
+				PopUpManager.addPopUp(win, this);
+				PopUpManager.centerPopUp(win);
+			}
+			
 			private function toggleEventMonitor():void
 			{
 				if(eventMonitorCb.selected)
@@ -124,6 +133,7 @@
 	
 		<mx:ApplicationControlBar dock="true" width="100%" height="50" verticalAlign="middle">
 			<mx:Button label="Add Window" click="addWindow()" />
+			<mx:Button label="+" click="addWindowDialog()" />
 			
 			<mx:VRule height="35" />
 			

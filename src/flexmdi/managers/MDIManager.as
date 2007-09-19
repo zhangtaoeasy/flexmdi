@@ -244,6 +244,7 @@ package flexmdi.managers
 			addEventListener(MDIManagerEvent.WINDOW_RESIZE_END, executeDefaultBehavior, false, -1);
 			
 			addEventListener(MDIManagerEvent.CASCADE, executeDefaultBehavior, false, -1);
+			addEventListener(MDIManagerEvent.TILE, executeDefaultBehavior, false, -1);
 		}
 		
 		private var _container:UIComponent;

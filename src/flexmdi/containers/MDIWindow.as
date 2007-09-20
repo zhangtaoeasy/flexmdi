@@ -40,6 +40,8 @@ package flexmdi.containers
 	import mx.core.UIComponent;
 	import mx.events.FlexEvent;
 	import mx.managers.CursorManager;
+	import mx.styles.CSSStyleDeclaration;
+	import mx.styles.StyleManager;
 	
 	
 	//--------------------------------------
@@ -139,6 +141,8 @@ package flexmdi.containers
 	 */
 	public class MDIWindow extends Panel
 	{
+		public var cursorStyleName:String;
+		
 		/**
 	     * @private
 	     */
@@ -319,15 +323,6 @@ package flexmdi.containers
 	     */
 		public var windowManager:MDIManager;
 		
-		[Embed(source="/flexmdi/assets/img/resizeCursorV.gif")]
-		private var resizeCursorV:Class;
-		[Embed(source="/flexmdi/assets/img/resizeCursorH.gif")]
-		private var resizeCursorH:Class;
-		[Embed(source="/flexmdi/assets/img/resizeCursorTLBR.gif")]
-		private var resizeCursorTLBR:Class;
-		[Embed(source="/flexmdi/assets/img/resizeCursorTRBL.gif")]
-		private var resizeCursorTRBL:Class;
-		
 		/**
 		 * Constructor
 	     */
@@ -341,8 +336,35 @@ package flexmdi.containers
 			windowState = MDIWindowState.NORMAL;
 			resizable = draggable = true;
 			styleName = "mdiWindowFocus";
+			cursorStyleName = "mdiWindowCursorStyle";			
 			
 			addEventListener(FlexEvent.CREATION_COMPLETE, componentComplete);			
+		}
+		
+		[Embed(source="/flexmdi/assets/img/resizeCursorV.gif")]
+		private static var resizeCursorV:Class;
+		[Embed(source="/flexmdi/assets/img/resizeCursorH.gif")]
+		private static var resizeCursorH:Class;
+		[Embed(source="/flexmdi/assets/img/resizeCursorTLBR.gif")]
+		private static var resizeCursorTLBR:Class;
+		[Embed(source="/flexmdi/assets/img/resizeCursorTRBL.gif")]
+		private static var resizeCursorTRBL:Class;
+		
+		private static var classConstructed:Boolean = classConstruct();
+		
+		private static function classConstruct():Boolean
+		{
+			if(!StyleManager.getStyleDeclaration(".mdiWindowCursorStyle"))
+			{
+				var s:CSSStyleDeclaration = new CSSStyleDeclaration();
+				s.setStyle("resizeCursorV", resizeCursorV);
+				s.setStyle("resizeCursorH", resizeCursorH);
+				s.setStyle("resizeCursorTLBR", resizeCursorTLBR);
+				s.setStyle("resizeCursorTRBL", resizeCursorTRBL);
+				StyleManager.setStyleDeclaration(".mdiWindowCursorStyle", s, true);
+			}
+			
+			return true;
 		}
 		
 		/**
@@ -884,22 +906,23 @@ package flexmdi.containers
 		private function setCursor(target:Button):void
 		{
 			var cursorClass:Class;
+			var cursorStyle:CSSStyleDeclaration = StyleManager.getStyleDeclaration("." + cursorStyleName);
 			
 			if(target == resizeHandleTop || target == resizeHandleBottom)
 			{
-				cursorClass = resizeCursorV;
+				cursorClass = (cursorStyle.getStyle("resizeCursorV") != null) ? cursorStyle.getStyle("resizeCursorV") : MDIWindow.resizeCursorV;
 			}
 			else if(target == resizeHandleRight || target == resizeHandleLeft)
 			{
-				cursorClass = resizeCursorH;
+				cursorClass = (cursorStyle.getStyle("resizeCursorH") != null) ? cursorStyle.getStyle("resizeCursorH") : MDIWindow.resizeCursorH;
 			}
 			else if(target == resizeHandleTL || target == resizeHandleBR)
 			{
-				cursorClass = resizeCursorTLBR;
+				cursorClass = (cursorStyle.getStyle("resizeCursorTLBR") != null) ? cursorStyle.getStyle("resizeCursorTLBR") : MDIWindow.resizeCursorTLBR;
 			}
 			else if(target == resizeHandleTR || target == resizeHandleBL)
 			{
-				cursorClass = resizeCursorTRBL;
+				cursorClass = (cursorStyle.getStyle("resizeCursorTRBL") != null) ? cursorStyle.getStyle("resizeCursorTRBL") : MDIWindow.resizeCursorTRBL;
 			}
 			
 			CursorManager.removeCursor(CursorManager.currentCursorID);

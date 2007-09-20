@@ -140,9 +140,7 @@ package flexmdi.containers
 	 * Central window class used in flexmdi. Includes min/max/close buttons by default.
 	 */
 	public class MDIWindow extends Panel
-	{
-		public var cursorStyleName:String;
-		
+	{		
 		/**
 	     * @private
 	     */
@@ -266,6 +264,11 @@ package flexmdi.containers
 		private var currentResizeHandle:Button;
 		
 		/**
+		 * Style name to apply to cursors.
+		 */
+		public var cursorStyleName:String;
+		
+		/**
 	     * Rectangle to represent window's size and position when resize begins
 	     * or window's size/position is saved.
 	     */
@@ -357,10 +360,13 @@ package flexmdi.containers
 			if(!StyleManager.getStyleDeclaration(".mdiWindowCursorStyle"))
 			{
 				var s:CSSStyleDeclaration = new CSSStyleDeclaration();
-				s.setStyle("resizeCursorV", resizeCursorV);
-				s.setStyle("resizeCursorH", resizeCursorH);
-				s.setStyle("resizeCursorTLBR", resizeCursorTLBR);
-				s.setStyle("resizeCursorTRBL", resizeCursorTRBL);
+				s.defaultFactory = function():void
+				{
+					this.resizeCursorV = resizeCursorV;
+					this.resizeCursorH = resizeCursorH;
+					this.resizeCursorTLBR = resizeCursorTLBR;
+					this.resizeCursorTRBL = resizeCursorTRBL;
+				}
 				StyleManager.setStyleDeclaration(".mdiWindowCursorStyle", s, true);
 			}
 			

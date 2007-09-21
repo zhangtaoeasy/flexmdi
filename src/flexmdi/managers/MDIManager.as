@@ -262,6 +262,7 @@ package flexmdi.managers
      	*  @private
      	*  the managed window stack
      	*/
+     	[Bindable]
 		public var windowList:Array = new Array();
 
 		public function add(window:MDIWindow):void
@@ -347,6 +348,9 @@ package flexmdi.managers
 		}
 		
 		
+		
+	
+		
 		private function menuItemSelectHandler(event:ContextMenuEvent):void
 		{
 			var win:MDIWindow = event.contextMenuOwner as MDIWindow;
@@ -380,20 +384,25 @@ package flexmdi.managers
 				switch(winEvent.type)
 				{
 					case MDIWindowEvent.MINIMIZE:
+						
+						mgrEvent.window.saveStyle();
+						
 						var maxTiles:int = Math.floor(this.container.width / (this.tileMinimizeWidth + this.tilePadding));
 						var xPos:Number = getLeftOffsetPosition(this.tiledWindows.length, maxTiles, this.tileMinimizeWidth, this.minTilePadding);
 						var yPos:Number = this.container.height - getBottomTilePosition(this.tiledWindows.length, maxTiles, mgrEvent.window.minimizeHeight, this.minTilePadding);
 						var minimizePoint:Point = new Point(xPos, yPos);
+						
 						mgrEvent.effect = this.effects.getWindowMinimizeEffect(mgrEvent.window, this, minimizePoint);
 					break;
 					
 					case MDIWindowEvent.RESTORE:
-						mgrEvent.window.setStyle("backgroundAlpha",1);
+						mgrEvent.window.restoreStyle();
 						mgrEvent.effect = this.effects.getWindowRestoreEffect(winEvent.window, this, winEvent.window.savedWindowRect);
 					break;
 					
 					case MDIWindowEvent.MAXIMIZE:
-						mgrEvent.window.setStyle("backgroundAlpha",1);
+						
+						mgrEvent.window.restoreStyle();
 						mgrEvent.effect = this.effects.getWindowMaximizeEffect(winEvent.window, this);
 					break;
 					
@@ -527,12 +536,16 @@ package flexmdi.managers
 			// if this was a composite effect (almost definitely is), we make sure a target was defined on it
 			// since that is optional, we look in its first child if we don't find one
 			var targetWindow:MDIWindow = event.effectInstance.target as MDIWindow;
-			if(targetWindow == null && event.effectInstance is CompositeEffectInstance)
+			
+				if(targetWindow == null && event.effectInstance is CompositeEffectInstance)
 			{
 				var compEffect:CompositeEffect = event.effectInstance.effect as CompositeEffect;
 				targetWindow = Effect(compEffect.children[0]).target as MDIWindow;
 			}
+			
 			targetWindow.setStyle("backgroundAlpha",0);
+			
+			
 			tiledWindows.addItem(targetWindow);
 			reTileWindows();
 		}

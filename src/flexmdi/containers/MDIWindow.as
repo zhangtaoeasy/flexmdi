@@ -1048,6 +1048,7 @@ package flexmdi.containers
 			var xOffset:Number;
 			var yOffsetStyleName:String = styleName + "YOffset";
 			var yOffset:Number;
+			
 			// get proper skin
 			if(getStyle(styleName))
 			{

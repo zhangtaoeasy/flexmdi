@@ -326,6 +326,29 @@ package flexmdi.containers
 	     */
 		public var windowManager:MDIManager;
 		
+		
+		/**
+		 * @private store the backgroundAlpha when minimized.
+	     */
+		private var backgroundAlphaRestore : Number = 1;
+		
+		/**
+		 * save style settings for minimizing.
+	     */
+		public function saveStyle():void
+		{
+			this.backgroundAlphaRestore = this.getStyle("backgroundAlpha");
+		}
+		/**
+		 * restores style settings for restore and maximize
+	     */
+		public function restoreStyle():void
+		{
+			this.setStyle("backgroundAlpha",this.backgroundAlphaRestore);
+		}		
+		
+		
+		
 		/**
 		 * Constructor
 	     */

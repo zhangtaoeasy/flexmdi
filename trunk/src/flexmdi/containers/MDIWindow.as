@@ -136,6 +136,74 @@ package flexmdi.containers
 	[Event(name="resizeEnd", type="flexmdi.events.MDIWindowEvent")]
 	
 	
+	//--------------------------------------
+	//  Skins
+	//--------------------------------------
+	
+	/**
+	 *  Name of the class used as cursor when resizing the window horizontally.
+	 */
+	[Style(name="resizeHorizontalSkin", type="Class", inherit="no")]
+	
+	/**
+	 *  Distance to horizontally offset resizeHorizontalSkin.
+	 */
+	[Style(name="resizeHorizontalSkinXOffset", type="Number", inherit="no")]
+	
+	/**
+	 *  Distance to vertically offset resizeHorizontalSkin.
+	 */
+	[Style(name="resizeHorizontalSkinYOffset", type="Number", inherit="no")]
+	
+	
+	/**
+	 *  Name of the class used as cursor when resizing the window vertically.
+	 */
+	[Style(name="resizeVerticalSkin", type="Class", inherit="no")]
+	
+	/**
+	 *  Distance to horizontally offset resizeVerticalSkin.
+	 */
+	[Style(name="resizeVerticalSkinXOffset", type="Number", inherit="no")]
+	
+	/**
+	 *  Distance to vertically offset resizeVerticalSkin.
+	 */
+	[Style(name="resizeVerticalSkinYOffset", type="Number", inherit="no")]
+	
+	
+	/**
+	 *  Name of the class used as cursor when resizing from top left or bottom right corner.
+	 */
+	[Style(name="resizeTopLeftBottomRightSkin", type="Class", inherit="no")]
+	
+	/**
+	 *  Distance to horizontally offset resizeTopLeftBottomRightSkin.
+	 */
+	[Style(name="resizeTopLeftBottomRightSkinXOffset", type="Number", inherit="no")]
+	
+	/**
+	 *  Distance to vertically offset resizeTopLeftBottomRightSkin.
+	 */
+	[Style(name="resizeTopLeftBottomRightSkinYOffset", type="Number", inherit="no")]
+	
+	
+	/**
+	 *  Name of the class used as cursor when resizing from top right or bottom left corner.
+	 */
+	[Style(name="resizeTopRightBottomLeftSkin", type="Class", inherit="no")]
+	
+	/**
+	 *  Distance to horizontally offset resizeTopRightBottomLeftSkin.
+	 */
+	[Style(name="resizeTopRightBottomLeftSkinXOffset", type="Number", inherit="no")]
+	
+	/**
+	 *  Distance to vertically offset resizeTopRightBottomLeftSkin.
+	 */
+	[Style(name="resizeTopRightBottomLeftSkinYOffset", type="Number", inherit="no")]
+	
+	
 	/**
 	 * Central window class used in flexmdi. Includes min/max/close buttons by default.
 	 */
@@ -981,7 +1049,11 @@ package flexmdi.containers
 			var yOffsetStyleName:String = styleName + "YOffset";
 			var yOffset:Number;
 			// get proper skin
-			if(cursorStyle.getStyle(styleName))
+			if(getStyle(styleName))
+			{
+				cls = getStyle(styleName);
+			}
+			else if(cursorStyle.getStyle(styleName))
 			{
 				cls = cursorStyle.getStyle(styleName);
 			}
@@ -993,8 +1065,13 @@ package flexmdi.containers
 			{
 				cls = MDIWindow[styleName];
 			}
+			
 			// get proper x offset value
-			if(cursorStyle.getStyle(xOffsetStyleName))
+			if(getStyle(xOffsetStyleName))
+			{
+				xOffset = getStyle(xOffsetStyleName);
+			}
+			else if(cursorStyle.getStyle(xOffsetStyleName))
 			{
 				xOffset = cursorStyle.getStyle(xOffsetStyleName);
 			}
@@ -1006,8 +1083,13 @@ package flexmdi.containers
 			{
 				xOffset = MDIWindow[xOffsetStyleName];
 			}
+			
 			// get proper y offset value
-			if(cursorStyle.getStyle(yOffsetStyleName))
+			if(getStyle(yOffsetStyleName))
+			{
+				yOffset = getStyle(yOffsetStyleName);
+			}
+			else if(cursorStyle.getStyle(yOffsetStyleName))
 			{
 				yOffset = cursorStyle.getStyle(yOffsetStyleName);
 			}
@@ -1026,8 +1108,6 @@ package flexmdi.containers
 		private function setCursor(target:Button):void
 		{
 			var cursorObject:ResizeCursorObject;
-			var cursorStyle:CSSStyleDeclaration = StyleManager.getStyleDeclaration("." + cursorStyleName);
-			var defaultCursorStyle:CSSStyleDeclaration = StyleManager.getStyleDeclaration(".mdiWindowCursorStyle");
 			
 			if(target == resizeHandleRight || target == resizeHandleLeft)
 			{

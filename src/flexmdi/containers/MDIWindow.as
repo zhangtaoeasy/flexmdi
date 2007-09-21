@@ -142,14 +142,14 @@ package flexmdi.containers
 	public class MDIWindow extends Panel
 	{		
 		/**
-	     * @private
+	     * Size of edge handles. Can be adjusted to affect "sensitivity" of resize area.
 	     */
-	    private static const DEFAULT_EDGE_HANDLE_SIZE:Number = 4;
+	    public static var edgeHandleSize:Number = 4;
 	    
 	    /**
-	     * @private
+	     * Size of corner handles. Can be adjusted to affect "sensitivity" of resize area.
 	     */
-		private static const DEFAULT_CORNER_HANDLE_SIZE:Number = 10;
+		public static var cornerHandleSize:Number = 10;
 	    
 	    /**
 	     * @private
@@ -362,38 +362,9 @@ package flexmdi.containers
 			windowState = MDIWindowState.NORMAL;
 			resizable = draggable = true;
 			styleName = "mdiWindowFocus";
-			cursorStyleName = "mdiWindowCursorStyle";			
+			cursorStyleName = "mdiWindowCursorStyle";	
 			
 			addEventListener(FlexEvent.CREATION_COMPLETE, componentComplete);			
-		}
-		
-		[Embed(source="/flexmdi/assets/img/resizeCursorV.gif")]
-		private static var resizeCursorV:Class;
-		[Embed(source="/flexmdi/assets/img/resizeCursorH.gif")]
-		private static var resizeCursorH:Class;
-		[Embed(source="/flexmdi/assets/img/resizeCursorTLBR.gif")]
-		private static var resizeCursorTLBR:Class;
-		[Embed(source="/flexmdi/assets/img/resizeCursorTRBL.gif")]
-		private static var resizeCursorTRBL:Class;
-		
-		private static var classConstructed:Boolean = classConstruct();
-		
-		private static function classConstruct():Boolean
-		{
-			if(!StyleManager.getStyleDeclaration(".mdiWindowCursorStyle"))
-			{
-				var s:CSSStyleDeclaration = new CSSStyleDeclaration();
-				s.defaultFactory = function():void
-				{
-					this.resizeCursorV = resizeCursorV;
-					this.resizeCursorH = resizeCursorH;
-					this.resizeCursorTLBR = resizeCursorTLBR;
-					this.resizeCursorTRBL = resizeCursorTRBL;
-				}
-				StyleManager.setStyleDeclaration(".mdiWindowCursorStyle", s, true);
-			}
-			
-			return true;
 		}
 		
 		/**
@@ -402,6 +373,7 @@ package flexmdi.containers
 		private function componentComplete(event:FlexEvent):void
 		{
 			minimizeHeight = this.titleBar.height;
+			invalidateDisplayList();
 		}
 		
 		/**
@@ -415,9 +387,9 @@ package flexmdi.containers
 			if(!resizeHandleTop)
 			{
 				resizeHandleTop = new Button();
-				resizeHandleTop.x = MDIWindow.DEFAULT_CORNER_HANDLE_SIZE * .5;
-				resizeHandleTop.y = -(MDIWindow.DEFAULT_EDGE_HANDLE_SIZE * .5);
-				resizeHandleTop.height = MDIWindow.DEFAULT_EDGE_HANDLE_SIZE;
+				resizeHandleTop.x = MDIWindow.cornerHandleSize * .5;
+				resizeHandleTop.y = -(MDIWindow.edgeHandleSize * .5);
+				resizeHandleTop.height = MDIWindow.edgeHandleSize;
 				resizeHandleTop.alpha = 0;
 				resizeHandleTop.focusEnabled = false;
 				rawChildren.addChild(resizeHandleTop);
@@ -426,8 +398,8 @@ package flexmdi.containers
 			if(!resizeHandleRight)
 			{
 				resizeHandleRight = new Button();
-				resizeHandleRight.y = MDIWindow.DEFAULT_CORNER_HANDLE_SIZE * .5;
-				resizeHandleRight.width = MDIWindow.DEFAULT_EDGE_HANDLE_SIZE;
+				resizeHandleRight.y = MDIWindow.cornerHandleSize * .5;
+				resizeHandleRight.width = MDIWindow.edgeHandleSize;
 				resizeHandleRight.alpha = 0;
 				resizeHandleRight.focusEnabled = false;
 				rawChildren.addChild(resizeHandleRight);
@@ -436,8 +408,8 @@ package flexmdi.containers
 			if(!resizeHandleBottom)
 			{
 				resizeHandleBottom = new Button();
-				resizeHandleBottom.x = MDIWindow.DEFAULT_CORNER_HANDLE_SIZE * .5;
-				resizeHandleBottom.height = MDIWindow.DEFAULT_EDGE_HANDLE_SIZE;
+				resizeHandleBottom.x = MDIWindow.cornerHandleSize * .5;
+				resizeHandleBottom.height = MDIWindow.edgeHandleSize;
 				resizeHandleBottom.alpha = 0;
 				resizeHandleBottom.focusEnabled = false;
 				rawChildren.addChild(resizeHandleBottom);
@@ -446,9 +418,9 @@ package flexmdi.containers
 			if(!resizeHandleLeft)
 			{
 				resizeHandleLeft = new Button();
-				resizeHandleLeft.x = -(MDIWindow.DEFAULT_EDGE_HANDLE_SIZE * .5);
-				resizeHandleLeft.y = MDIWindow.DEFAULT_CORNER_HANDLE_SIZE * .5;
-				resizeHandleLeft.width = MDIWindow.DEFAULT_EDGE_HANDLE_SIZE;
+				resizeHandleLeft.x = -(MDIWindow.edgeHandleSize * .5);
+				resizeHandleLeft.y = MDIWindow.cornerHandleSize * .5;
+				resizeHandleLeft.width = MDIWindow.edgeHandleSize;
 				resizeHandleLeft.alpha = 0;
 				resizeHandleLeft.focusEnabled = false;
 				rawChildren.addChild(resizeHandleLeft);
@@ -458,8 +430,8 @@ package flexmdi.containers
 			if(!resizeHandleTL)
 			{
 				resizeHandleTL = new Button();
-				resizeHandleTL.x = resizeHandleTL.y = -(MDIWindow.DEFAULT_CORNER_HANDLE_SIZE * .3);
-				resizeHandleTL.width = resizeHandleTL.height = MDIWindow.DEFAULT_CORNER_HANDLE_SIZE;
+				resizeHandleTL.x = resizeHandleTL.y = -(MDIWindow.cornerHandleSize * .3);
+				resizeHandleTL.width = resizeHandleTL.height = MDIWindow.cornerHandleSize;
 				resizeHandleTL.alpha = 0;
 				resizeHandleTL.focusEnabled = false;
 				rawChildren.addChild(resizeHandleTL);
@@ -468,7 +440,7 @@ package flexmdi.containers
 			if(!resizeHandleTR)
 			{
 				resizeHandleTR = new Button();
-				resizeHandleTR.width = resizeHandleTR.height = MDIWindow.DEFAULT_CORNER_HANDLE_SIZE;
+				resizeHandleTR.width = resizeHandleTR.height = MDIWindow.cornerHandleSize;
 				resizeHandleTR.alpha = 0;
 				resizeHandleTR.focusEnabled = false;
 				rawChildren.addChild(resizeHandleTR);
@@ -477,7 +449,7 @@ package flexmdi.containers
 			if(!resizeHandleBR)
 			{
 				resizeHandleBR = new Button();
-				resizeHandleBR.width = resizeHandleBR.height = MDIWindow.DEFAULT_CORNER_HANDLE_SIZE;
+				resizeHandleBR.width = resizeHandleBR.height = MDIWindow.cornerHandleSize;
 				resizeHandleBR.alpha = 0;
 				resizeHandleBR.focusEnabled = false;
 				rawChildren.addChild(resizeHandleBR);
@@ -486,7 +458,7 @@ package flexmdi.containers
 			if(!resizeHandleBL)
 			{
 				resizeHandleBL = new Button();
-				resizeHandleBL.width = resizeHandleBL.height = MDIWindow.DEFAULT_CORNER_HANDLE_SIZE;
+				resizeHandleBL.width = resizeHandleBL.height = MDIWindow.cornerHandleSize;
 				resizeHandleBL.alpha = 0;
 				resizeHandleBL.focusEnabled = false;
 				rawChildren.addChild(resizeHandleBL);
@@ -539,25 +511,41 @@ package flexmdi.containers
 			super.updateDisplayList(unscaledWidth, unscaledHeight);
 			
 			// edges
-			resizeHandleTop.width = this.width - MDIWindow.DEFAULT_CORNER_HANDLE_SIZE;
+			resizeHandleTop.x = MDIWindow.cornerHandleSize * .5;
+			resizeHandleTop.y = -(MDIWindow.edgeHandleSize * .5);
+			resizeHandleTop.width = this.width - MDIWindow.cornerHandleSize;
+			resizeHandleTop.height = MDIWindow.edgeHandleSize;
 			
-			resizeHandleRight.x = this.width - MDIWindow.DEFAULT_EDGE_HANDLE_SIZE * .5;
-			resizeHandleRight.height = this.height - MDIWindow.DEFAULT_CORNER_HANDLE_SIZE;
+			resizeHandleRight.x = this.width - MDIWindow.edgeHandleSize * .5;
+			resizeHandleRight.y = MDIWindow.cornerHandleSize * .5;
+			resizeHandleRight.width = MDIWindow.edgeHandleSize;
+			resizeHandleRight.height = this.height - MDIWindow.cornerHandleSize;
 			
-			resizeHandleBottom.y = this.height - MDIWindow.DEFAULT_EDGE_HANDLE_SIZE * .5;
-			resizeHandleBottom.width = this.width - MDIWindow.DEFAULT_CORNER_HANDLE_SIZE;
+			resizeHandleBottom.x = MDIWindow.cornerHandleSize * .5;
+			resizeHandleBottom.y = this.height - MDIWindow.edgeHandleSize * .5;
+			resizeHandleBottom.width = this.width - MDIWindow.cornerHandleSize;
+			resizeHandleBottom.height = MDIWindow.edgeHandleSize;
 			
-			resizeHandleLeft.height = this.height - MDIWindow.DEFAULT_CORNER_HANDLE_SIZE;
+			resizeHandleLeft.x = -(MDIWindow.edgeHandleSize * .5);
+			resizeHandleLeft.y = MDIWindow.cornerHandleSize * .5;
+			resizeHandleLeft.width = MDIWindow.edgeHandleSize;
+			resizeHandleLeft.height = this.height - MDIWindow.cornerHandleSize;
 			
-			// corners			
-			resizeHandleTR.x = this.width - MDIWindow.DEFAULT_CORNER_HANDLE_SIZE * .7;
-			resizeHandleTR.y = -(MDIWindow.DEFAULT_CORNER_HANDLE_SIZE * .3);
+			// corners
+			resizeHandleTL.x = resizeHandleTL.y = -(MDIWindow.cornerHandleSize * .5);
+			resizeHandleTL.width = resizeHandleTL.height = MDIWindow.cornerHandleSize;
 			
-			resizeHandleBR.x = this.width - MDIWindow.DEFAULT_CORNER_HANDLE_SIZE * .7;
-			resizeHandleBR.y = this.height - MDIWindow.DEFAULT_CORNER_HANDLE_SIZE * .7;
+			resizeHandleTR.x = this.width - MDIWindow.cornerHandleSize * .5;
+			resizeHandleTR.y = -(MDIWindow.cornerHandleSize * .5);
+			resizeHandleTR.width = resizeHandleTR.height = MDIWindow.cornerHandleSize;
 			
-			resizeHandleBL.x = -(MDIWindow.DEFAULT_CORNER_HANDLE_SIZE * .3);
-			resizeHandleBL.y = this.height - MDIWindow.DEFAULT_CORNER_HANDLE_SIZE * .7;
+			resizeHandleBR.x = this.width - MDIWindow.cornerHandleSize * .5;
+			resizeHandleBR.y = this.height - MDIWindow.cornerHandleSize * .5;
+			resizeHandleBR.width = resizeHandleBR.height = MDIWindow.cornerHandleSize;
+			
+			resizeHandleBL.x = -(MDIWindow.cornerHandleSize * .5);
+			resizeHandleBL.y = this.height - MDIWindow.cornerHandleSize * .5;
+			resizeHandleBL.width = resizeHandleBL.height = MDIWindow.cornerHandleSize;
 			
 			// position window controls
 			var visibleControls:Array = new Array();
@@ -932,30 +920,134 @@ package flexmdi.containers
 			systemManager.stage.removeEventListener(Event.MOUSE_LEAVE, onMouseLeaveStage);
 		}
 		
+		[Embed(source="/flexmdi/assets/img/resizeCursorH.gif")]
+		private static var resizeHorizontalSkin:Class;
+		private static var resizeHorizontalSkinXOffset:Number = -10;
+		private static var resizeHorizontalSkinYOffset:Number = -10;
+		
+		[Embed(source="/flexmdi/assets/img/resizeCursorV.gif")]
+		private static var resizeVerticalSkin:Class;
+		private static var resizeVerticalSkinXOffset:Number = -10;
+		private static var resizeVerticalSkinYOffset:Number = -10;
+		
+		[Embed(source="/flexmdi/assets/img/resizeCursorTLBR.gif")]
+		private static var resizeTopLeftBottomRightSkin:Class;
+		private static var resizeTopLeftBottomRightSkinXOffset:Number = -10;
+		private static var resizeTopLeftBottomRightSkinYOffset:Number = -10;
+		
+		[Embed(source="/flexmdi/assets/img/resizeCursorTRBL.gif")]
+		private static var resizeTopRightBottomLeftSkin:Class;
+		private static var resizeTopRightBottomLeftSkinXOffset:Number = -10;
+		private static var resizeTopRightBottomLeftSkinYOffset:Number = -10;
+		
+		private static var classConstructed:Boolean = classConstruct();
+		
+		private static function classConstruct():Boolean
+		{
+			if(!StyleManager.getStyleDeclaration(".mdiWindowCursorStyle"))
+			{
+				var cursorStyle:CSSStyleDeclaration = new CSSStyleDeclaration();
+				cursorStyle.defaultFactory = function():void
+				{
+					this.resizeVerticalSkin = resizeVerticalSkin;
+					this.resizeVerticalSkinXOffset = resizeVerticalSkinXOffset;
+					this.resizeVerticalSkinYOffset = resizeVerticalSkinYOffset;
+					
+					this.resizeHorizontalSkin = resizeHorizontalSkin;
+					this.resizeHorizontalSkinXOffset = resizeHorizontalSkinXOffset;
+					this.resizeHorizontalSkinYOffset = resizeHorizontalSkinYOffset;
+					
+					this.resizeTopLeftBottomRightSkin = resizeTopLeftBottomRightSkin;
+					this.resizeTopLeftBottomRightSkinXOffset = resizeTopLeftBottomRightSkinXOffset;
+					this.resizeTopLeftBottomRightSkinYOffset = resizeTopLeftBottomRightSkinYOffset;
+					
+					this.resizeTopRightBottomLeftSkin = resizeTopRightBottomLeftSkin;
+					this.resizeTopRightBottomLeftSkinXOffset = resizeTopRightBottomLeftSkinXOffset;
+					this.resizeTopRightBottomLeftSkinYOffset = resizeTopRightBottomLeftSkinYOffset;
+				}
+				StyleManager.setStyleDeclaration(".mdiWindowCursorStyle", cursorStyle, true);
+			}
+			
+			return true;
+		}
+		
+		private function getResizeCursorObject(styleName:String):ResizeCursorObject
+		{
+			var cursorStyle:CSSStyleDeclaration = StyleManager.getStyleDeclaration("." + cursorStyleName);
+			var defaultCursorStyle:CSSStyleDeclaration = StyleManager.getStyleDeclaration(".mdiWindowCursorStyle");
+			var cls:Class;
+			var xOffsetStyleName:String = styleName + "XOffset";
+			var xOffset:Number;
+			var yOffsetStyleName:String = styleName + "YOffset";
+			var yOffset:Number;
+			// get proper skin
+			if(cursorStyle.getStyle(styleName))
+			{
+				cls = cursorStyle.getStyle(styleName);
+			}
+			else if(defaultCursorStyle.getStyle(styleName))
+			{
+				cls = defaultCursorStyle.getStyle(styleName);
+			}
+			else
+			{
+				cls = MDIWindow[styleName];
+			}
+			// get proper x offset value
+			if(cursorStyle.getStyle(xOffsetStyleName))
+			{
+				xOffset = cursorStyle.getStyle(xOffsetStyleName);
+			}
+			else if(defaultCursorStyle.getStyle(xOffsetStyleName))
+			{
+				xOffset = defaultCursorStyle.getStyle(xOffsetStyleName);
+			}
+			else
+			{
+				xOffset = MDIWindow[xOffsetStyleName];
+			}
+			// get proper y offset value
+			if(cursorStyle.getStyle(yOffsetStyleName))
+			{
+				yOffset = cursorStyle.getStyle(yOffsetStyleName);
+			}
+			else if(defaultCursorStyle.getStyle(yOffsetStyleName))
+			{
+				yOffset = defaultCursorStyle.getStyle(yOffsetStyleName);
+			}
+			else
+			{
+				yOffset = MDIWindow[yOffsetStyleName];
+			}
+			
+			return new ResizeCursorObject(cls, xOffset, yOffset);
+		}
+		
 		private function setCursor(target:Button):void
 		{
-			var cursorClass:Class;
+			var cursorObject:ResizeCursorObject;
 			var cursorStyle:CSSStyleDeclaration = StyleManager.getStyleDeclaration("." + cursorStyleName);
+			var defaultCursorStyle:CSSStyleDeclaration = StyleManager.getStyleDeclaration(".mdiWindowCursorStyle");
 			
-			if(target == resizeHandleTop || target == resizeHandleBottom)
+			if(target == resizeHandleRight || target == resizeHandleLeft)
 			{
-				cursorClass = (cursorStyle.getStyle("resizeCursorV") != null) ? cursorStyle.getStyle("resizeCursorV") : MDIWindow.resizeCursorV;
+				cursorObject = getResizeCursorObject("resizeHorizontalSkin");
 			}
-			else if(target == resizeHandleRight || target == resizeHandleLeft)
+			else if(target == resizeHandleTop || target == resizeHandleBottom)
 			{
-				cursorClass = (cursorStyle.getStyle("resizeCursorH") != null) ? cursorStyle.getStyle("resizeCursorH") : MDIWindow.resizeCursorH;
+				cursorObject = getResizeCursorObject("resizeVerticalSkin");
 			}
 			else if(target == resizeHandleTL || target == resizeHandleBR)
 			{
-				cursorClass = (cursorStyle.getStyle("resizeCursorTLBR") != null) ? cursorStyle.getStyle("resizeCursorTLBR") : MDIWindow.resizeCursorTLBR;
+				cursorObject = getResizeCursorObject("resizeTopLeftBottomRightSkin");
 			}
 			else if(target == resizeHandleTR || target == resizeHandleBL)
 			{
-				cursorClass = (cursorStyle.getStyle("resizeCursorTRBL") != null) ? cursorStyle.getStyle("resizeCursorTRBL") : MDIWindow.resizeCursorTRBL;
+				cursorObject = getResizeCursorObject("resizeTopRightBottomLeftSkin");
 			}
 			
 			CursorManager.removeCursor(CursorManager.currentCursorID);
-			CursorManager.setCursor(cursorClass, 2, -10, -10);
+			CursorManager.setCursor(cursorObject.skin, 2, cursorObject.xOffset, cursorObject.yOffset);
 		}
 		
 		private function onResizeButtonRollOver(event:MouseEvent):void
@@ -1094,5 +1186,19 @@ package flexmdi.containers
 
 			}
 		}
+	}
+}
+
+class ResizeCursorObject
+{
+	public var skin:Class;
+	public var xOffset:Number;
+	public var yOffset:Number;
+	
+	public function ResizeCursorObject(skin:Class, xOffset:Number, yOffset:Number)
+	{
+		this.skin = skin;
+		this.xOffset = xOffset;
+		this.yOffset = yOffset;
 	}
 }

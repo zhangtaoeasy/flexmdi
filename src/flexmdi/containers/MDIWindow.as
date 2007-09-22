@@ -398,23 +398,7 @@ package flexmdi.containers
 		/**
 		 * @private store the backgroundAlpha when minimized.
 	     */
-		private var backgroundAlphaRestore : Number = 1;
-		
-		/**
-		 * save style settings for minimizing.
-	     */
-		public function saveStyle():void
-		{
-			this.backgroundAlphaRestore = this.getStyle("backgroundAlpha");
-		}
-		/**
-		 * restores style settings for restore and maximize
-	     */
-		public function restoreStyle():void
-		{
-			this.setStyle("backgroundAlpha",this.backgroundAlphaRestore);
-		}		
-		
+		private var backgroundAlphaRestore : Number = 1;		
 		
 		
 		/**
@@ -652,6 +636,22 @@ package flexmdi.containers
 		}
 		
 		/**
+		 * Save style settings for minimizing.
+	     */
+		public function saveStyle():void
+		{
+			this.backgroundAlphaRestore = this.getStyle("backgroundAlpha");
+		}
+		
+		/**
+		 * Restores style settings for restore and maximize
+	     */
+		public function restoreStyle():void
+		{
+			this.setStyle("backgroundAlpha", this.backgroundAlphaRestore);
+		}
+		
+		/**
 		 * Add listeners for resize handles and window controls.
 		 */
 		private function addListeners():void
@@ -775,10 +775,18 @@ package flexmdi.containers
 			}
 			else
 			{
-				maximizeRestoreBtn.styleName = "increaseBtn";
-				windowState = MDIWindowState.NORMAL;
-				dispatchEvent(new MDIWindowEvent(MDIWindowEvent.RESTORE, this));
+				restore();
 			}
+		}
+		
+		/**
+		 * Restores the window to its last floating position.
+		 */
+		public function restore():void
+		{
+			maximizeRestoreBtn.styleName = "increaseBtn";
+			windowState = MDIWindowState.NORMAL;
+			dispatchEvent(new MDIWindowEvent(MDIWindowEvent.RESTORE, this));
 		}
 		
 		/**
@@ -811,9 +819,7 @@ package flexmdi.containers
 		}
 		
 		/**
-		 * Not fully supported yet. Should be made public once it is.
-		 * 
-		 * @private
+		 * Not fully refined yet. Should be improved asap.
 		 */
 		public function addControl(uic:UIComponent, index:int = -1):void
 		{
@@ -901,7 +907,7 @@ package flexmdi.containers
 				setCursor(currentResizeHandle);
 				dragStartMouseX = parent.mouseX;
 				dragStartMouseY = parent.mouseY;
-				savedWindowRect = new Rectangle(this.x, this.y, this.width, this.height);
+				savePanel();
 				
 				dragMaxX = savedWindowRect.x + (savedWindowRect.width - minWidth);
 				dragMaxY = savedWindowRect.y + (savedWindowRect.height - minHeight);

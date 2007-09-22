@@ -143,65 +143,65 @@ package flexmdi.containers
 	/**
 	 *  Name of the class used as cursor when resizing the window horizontally.
 	 */
-	[Style(name="resizeHorizontalSkin", type="Class", inherit="no")]
+	[Style(name="resizeCursorHorizontalSkin", type="Class", inherit="no")]
 	
 	/**
-	 *  Distance to horizontally offset resizeHorizontalSkin.
+	 *  Distance to horizontally offset resizeCursorHorizontalSkin.
 	 */
-	[Style(name="resizeHorizontalSkinXOffset", type="Number", inherit="no")]
+	[Style(name="resizeCursorHorizontalSkinXOffset", type="Number", inherit="no")]
 	
 	/**
-	 *  Distance to vertically offset resizeHorizontalSkin.
+	 *  Distance to vertically offset resizeCursorHorizontalSkin.
 	 */
-	[Style(name="resizeHorizontalSkinYOffset", type="Number", inherit="no")]
+	[Style(name="resizeCursorHorizontalSkinYOffset", type="Number", inherit="no")]
 	
 	
 	/**
 	 *  Name of the class used as cursor when resizing the window vertically.
 	 */
-	[Style(name="resizeVerticalSkin", type="Class", inherit="no")]
+	[Style(name="resizeCursorVerticalSkin", type="Class", inherit="no")]
 	
 	/**
-	 *  Distance to horizontally offset resizeVerticalSkin.
+	 *  Distance to horizontally offset resizeCursorVerticalSkin.
 	 */
-	[Style(name="resizeVerticalSkinXOffset", type="Number", inherit="no")]
+	[Style(name="resizeCursorVerticalSkinXOffset", type="Number", inherit="no")]
 	
 	/**
-	 *  Distance to vertically offset resizeVerticalSkin.
+	 *  Distance to vertically offset resizeCursorVerticalSkin.
 	 */
-	[Style(name="resizeVerticalSkinYOffset", type="Number", inherit="no")]
+	[Style(name="resizeCursorVerticalSkinYOffset", type="Number", inherit="no")]
 	
 	
 	/**
 	 *  Name of the class used as cursor when resizing from top left or bottom right corner.
 	 */
-	[Style(name="resizeTopLeftBottomRightSkin", type="Class", inherit="no")]
+	[Style(name="resizeCursorTopLeftBottomRightSkin", type="Class", inherit="no")]
 	
 	/**
-	 *  Distance to horizontally offset resizeTopLeftBottomRightSkin.
+	 *  Distance to horizontally offset resizeCursorTopLeftBottomRightSkin.
 	 */
-	[Style(name="resizeTopLeftBottomRightSkinXOffset", type="Number", inherit="no")]
+	[Style(name="resizeCursorTopLeftBottomRightSkinXOffset", type="Number", inherit="no")]
 	
 	/**
-	 *  Distance to vertically offset resizeTopLeftBottomRightSkin.
+	 *  Distance to vertically offset resizeCursorTopLeftBottomRightSkin.
 	 */
-	[Style(name="resizeTopLeftBottomRightSkinYOffset", type="Number", inherit="no")]
+	[Style(name="resizeCursorTopLeftBottomRightSkinYOffset", type="Number", inherit="no")]
 	
 	
 	/**
 	 *  Name of the class used as cursor when resizing from top right or bottom left corner.
 	 */
-	[Style(name="resizeTopRightBottomLeftSkin", type="Class", inherit="no")]
+	[Style(name="resizeCursorTopRightBottomLeftSkin", type="Class", inherit="no")]
 	
 	/**
-	 *  Distance to horizontally offset resizeTopRightBottomLeftSkin.
+	 *  Distance to horizontally offset resizeCursorTopRightBottomLeftSkin.
 	 */
-	[Style(name="resizeTopRightBottomLeftSkinXOffset", type="Number", inherit="no")]
+	[Style(name="resizeCursorTopRightBottomLeftSkinXOffset", type="Number", inherit="no")]
 	
 	/**
-	 *  Distance to vertically offset resizeTopRightBottomLeftSkin.
+	 *  Distance to vertically offset resizeCursorTopRightBottomLeftSkin.
 	 */
-	[Style(name="resizeTopRightBottomLeftSkinYOffset", type="Number", inherit="no")]
+	[Style(name="resizeCursorTopRightBottomLeftSkinYOffset", type="Number", inherit="no")]
 	
 	
 	/**
@@ -989,24 +989,24 @@ package flexmdi.containers
 		}
 		
 		[Embed(source="/flexmdi/assets/img/resizeCursorH.gif")]
-		private static var resizeHorizontalSkin:Class;
-		private static var resizeHorizontalSkinXOffset:Number = -10;
-		private static var resizeHorizontalSkinYOffset:Number = -10;
+		private static var resizeCursorHorizontalSkin:Class;
+		private static var resizeCursorHorizontalSkinXOffset:Number = -10;
+		private static var resizeCursorHorizontalSkinYOffset:Number = -10;
 		
 		[Embed(source="/flexmdi/assets/img/resizeCursorV.gif")]
-		private static var resizeVerticalSkin:Class;
-		private static var resizeVerticalSkinXOffset:Number = -10;
-		private static var resizeVerticalSkinYOffset:Number = -10;
+		private static var resizeCursorVerticalSkin:Class;
+		private static var resizeCursorVerticalSkinXOffset:Number = -10;
+		private static var resizeCursorVerticalSkinYOffset:Number = -10;
 		
 		[Embed(source="/flexmdi/assets/img/resizeCursorTLBR.gif")]
-		private static var resizeTopLeftBottomRightSkin:Class;
-		private static var resizeTopLeftBottomRightSkinXOffset:Number = -10;
-		private static var resizeTopLeftBottomRightSkinYOffset:Number = -10;
+		private static var resizeCursorTopLeftBottomRightSkin:Class;
+		private static var resizeCursorTopLeftBottomRightSkinXOffset:Number = -10;
+		private static var resizeCursorTopLeftBottomRightSkinYOffset:Number = -10;
 		
 		[Embed(source="/flexmdi/assets/img/resizeCursorTRBL.gif")]
-		private static var resizeTopRightBottomLeftSkin:Class;
-		private static var resizeTopRightBottomLeftSkinXOffset:Number = -10;
-		private static var resizeTopRightBottomLeftSkinYOffset:Number = -10;
+		private static var resizeCursorTopRightBottomLeftSkin:Class;
+		private static var resizeCursorTopRightBottomLeftSkinXOffset:Number = -10;
+		private static var resizeCursorTopRightBottomLeftSkinYOffset:Number = -10;
 		
 		private static var classConstructed:Boolean = classConstruct();
 		
@@ -1017,21 +1017,21 @@ package flexmdi.containers
 				var cursorStyle:CSSStyleDeclaration = new CSSStyleDeclaration();
 				cursorStyle.defaultFactory = function():void
 				{
-					this.resizeVerticalSkin = resizeVerticalSkin;
-					this.resizeVerticalSkinXOffset = resizeVerticalSkinXOffset;
-					this.resizeVerticalSkinYOffset = resizeVerticalSkinYOffset;
+					this.resizeCursorVerticalSkin = resizeCursorVerticalSkin;
+					this.resizeCursorVerticalSkinXOffset = resizeCursorVerticalSkinXOffset;
+					this.resizeCursorVerticalSkinYOffset = resizeCursorVerticalSkinYOffset;
 					
-					this.resizeHorizontalSkin = resizeHorizontalSkin;
-					this.resizeHorizontalSkinXOffset = resizeHorizontalSkinXOffset;
-					this.resizeHorizontalSkinYOffset = resizeHorizontalSkinYOffset;
+					this.resizeCursorHorizontalSkin = resizeCursorHorizontalSkin;
+					this.resizeCursorHorizontalSkinXOffset = resizeCursorHorizontalSkinXOffset;
+					this.resizeCursorHorizontalSkinYOffset = resizeCursorHorizontalSkinYOffset;
 					
-					this.resizeTopLeftBottomRightSkin = resizeTopLeftBottomRightSkin;
-					this.resizeTopLeftBottomRightSkinXOffset = resizeTopLeftBottomRightSkinXOffset;
-					this.resizeTopLeftBottomRightSkinYOffset = resizeTopLeftBottomRightSkinYOffset;
+					this.resizeCursorTopLeftBottomRightSkin = resizeCursorTopLeftBottomRightSkin;
+					this.resizeCursorTopLeftBottomRightSkinXOffset = resizeCursorTopLeftBottomRightSkinXOffset;
+					this.resizeCursorTopLeftBottomRightSkinYOffset = resizeCursorTopLeftBottomRightSkinYOffset;
 					
-					this.resizeTopRightBottomLeftSkin = resizeTopRightBottomLeftSkin;
-					this.resizeTopRightBottomLeftSkinXOffset = resizeTopRightBottomLeftSkinXOffset;
-					this.resizeTopRightBottomLeftSkinYOffset = resizeTopRightBottomLeftSkinYOffset;
+					this.resizeCursorTopRightBottomLeftSkin = resizeCursorTopRightBottomLeftSkin;
+					this.resizeCursorTopRightBottomLeftSkinXOffset = resizeCursorTopRightBottomLeftSkinXOffset;
+					this.resizeCursorTopRightBottomLeftSkinYOffset = resizeCursorTopRightBottomLeftSkinYOffset;
 				}
 				StyleManager.setStyleDeclaration(".mdiWindowCursorStyle", cursorStyle, true);
 			}
@@ -1039,96 +1039,49 @@ package flexmdi.containers
 			return true;
 		}
 		
-		private function getResizeCursorObject(styleName:String):ResizeCursorObject
+		private function getHighestPriorityStyle(styleName:String):Object
 		{
-			var cursorStyle:CSSStyleDeclaration = StyleManager.getStyleDeclaration("." + cursorStyleName);
-			var defaultCursorStyle:CSSStyleDeclaration = StyleManager.getStyleDeclaration(".mdiWindowCursorStyle");
-			var cls:Class;
-			var xOffsetStyleName:String = styleName + "XOffset";
-			var xOffset:Number;
-			var yOffsetStyleName:String = styleName + "YOffset";
-			var yOffset:Number;
+			var hierarchy:Array = new Array(this, StyleManager.getStyleDeclaration("." + cursorStyleName), StyleManager.getStyleDeclaration(".mdiWindowCursorStyle"));
 			
-			// get proper skin
-			if(getStyle(styleName))
+			for(var i:int = 0, n:int = hierarchy.length; i < n; i++)
 			{
-				cls = getStyle(styleName);
+				if(hierarchy[i].getStyle(styleName))
+				{
+					return hierarchy[i].getStyle(styleName);
+				}
 			}
-			else if(cursorStyle.getStyle(styleName))
-			{
-				cls = cursorStyle.getStyle(styleName);
-			}
-			else if(defaultCursorStyle.getStyle(styleName))
-			{
-				cls = defaultCursorStyle.getStyle(styleName);
-			}
-			else
-			{
-				cls = MDIWindow[styleName];
-			}
-			
-			// get proper x offset value
-			if(getStyle(xOffsetStyleName))
-			{
-				xOffset = getStyle(xOffsetStyleName);
-			}
-			else if(cursorStyle.getStyle(xOffsetStyleName))
-			{
-				xOffset = cursorStyle.getStyle(xOffsetStyleName);
-			}
-			else if(defaultCursorStyle.getStyle(xOffsetStyleName))
-			{
-				xOffset = defaultCursorStyle.getStyle(xOffsetStyleName);
-			}
-			else
-			{
-				xOffset = MDIWindow[xOffsetStyleName];
-			}
-			
-			// get proper y offset value
-			if(getStyle(yOffsetStyleName))
-			{
-				yOffset = getStyle(yOffsetStyleName);
-			}
-			else if(cursorStyle.getStyle(yOffsetStyleName))
-			{
-				yOffset = cursorStyle.getStyle(yOffsetStyleName);
-			}
-			else if(defaultCursorStyle.getStyle(yOffsetStyleName))
-			{
-				yOffset = defaultCursorStyle.getStyle(yOffsetStyleName);
-			}
-			else
-			{
-				yOffset = MDIWindow[yOffsetStyleName];
-			}
-			
-			return new ResizeCursorObject(cls, xOffset, yOffset);
+			return MDIWindow[styleName];
 		}
 		
 		private function setCursor(target:Button):void
 		{
-			var cursorObject:ResizeCursorObject;
+			var styleName:String;
 			
-			if(target == resizeHandleRight || target == resizeHandleLeft)
+			switch(target)
 			{
-				cursorObject = getResizeCursorObject("resizeHorizontalSkin");
-			}
-			else if(target == resizeHandleTop || target == resizeHandleBottom)
-			{
-				cursorObject = getResizeCursorObject("resizeVerticalSkin");
-			}
-			else if(target == resizeHandleTL || target == resizeHandleBR)
-			{
-				cursorObject = getResizeCursorObject("resizeTopLeftBottomRightSkin");
-			}
-			else if(target == resizeHandleTR || target == resizeHandleBL)
-			{
-				cursorObject = getResizeCursorObject("resizeTopRightBottomLeftSkin");
+				case resizeHandleRight:
+				case resizeHandleLeft:
+					styleName = "resizeCursorHorizontalSkin";
+				break;
+				
+				case resizeHandleTop:
+				case resizeHandleBottom:
+					styleName = "resizeCursorVerticalSkin";
+				break;
+				
+				case resizeHandleTL:
+				case resizeHandleBR:
+					styleName = "resizeCursorTopLeftBottomRightSkin";
+				break;
+				
+				case resizeHandleTR:
+				case resizeHandleBL:
+					styleName = "resizeCursorTopRightBottomLeftSkin";
+				break;
 			}
 			
 			CursorManager.removeCursor(CursorManager.currentCursorID);
-			CursorManager.setCursor(cursorObject.skin, 2, cursorObject.xOffset, cursorObject.yOffset);
+			CursorManager.setCursor(Class(getHighestPriorityStyle(styleName)), 2, Number(getHighestPriorityStyle(styleName + "XOffset")), Number(getHighestPriorityStyle(styleName + "YOffset")));
 		}
 		
 		private function onResizeButtonRollOver(event:MouseEvent):void
@@ -1267,19 +1220,5 @@ package flexmdi.containers
 
 			}
 		}
-	}
-}
-
-class ResizeCursorObject
-{
-	public var skin:Class;
-	public var xOffset:Number;
-	public var yOffset:Number;
-	
-	public function ResizeCursorObject(skin:Class, xOffset:Number, yOffset:Number)
-	{
-		this.skin = skin;
-		this.xOffset = xOffset;
-		this.yOffset = yOffset;
 	}
 }

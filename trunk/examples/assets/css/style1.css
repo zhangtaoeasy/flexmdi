@@ -1,0 +1,113 @@
+Application {
+   backgroundColor: #666666;
+   backgroundGradientColors: #cccccc, #999999;
+}
+MDICanvas { backgroundColor: #666666}
+
+Button {
+   highlightAlphas: 1, 0.33;
+   fillAlphas: 1, 0.16, 0.18, 1;
+   fillColors: #5f89b9, #697182, #ffffff, #eeeeee;
+}
+
+TabBar
+{
+	firstButtonStyleName: "tabStyle";
+	tabStyleName: "tabStyle";
+	lastButtonStyleName: "tabStyle";
+	selectedTabTextStyleName: "selectedTabText";
+	color:#000000;
+	textRollOverColor:#000000;
+	textSelectedColor:#000000;
+	fontFamily: Arial;
+	fontsize:10;
+}
+
+
+
+.tabStyle {
+	disabledSkin: Embed(source="/assets/swf/mdi.swf", symbol="Tab_disabledSkin");
+	downSkin: Embed(source="/assets/swf/mdi.swf", symbol="Tab_downSkin");
+	overSkin: Embed(source="/assets/swf/mdi.swf", symbol="Tab_overSkin");
+	selectedDisabledSkin: Embed(source="/assets/swf/mdi.swf", symbol="TabSelected_disabledSkin");
+	selectedDownSkin: Embed(source="/assets/swf/mdi.swf", symbol="TabSelected_upSkin");
+	selectedOverSkin: Embed(source="/assets/swf/mdi.swf", symbol="TabSelected_upSkin");
+	selectedUpSkin: Embed(source="/assets/swf/mdi.swf", symbol="TabSelected_upSkin");
+	upSkin: Embed(source="/assets/swf/mdi.swf", symbol="Tab_upSkin");
+	color:#000000;
+	textRollOverColor:#000000;
+	textSelectedColor:#000000;
+	fontFamily: Arial;
+	fontsize:10;
+}
+
+
+Panel {
+	headerHeight: 26;
+	roundedBottomCorners: true;
+	borderThicknessTop: 0;
+	borderThicknessBottom: 3;
+	borderThicknessLeft: 3;
+	borderThicknessRight: 3;
+	borderAlpha: 1.0;
+	titleStyleName: "mypanelTitle";
+
+
+	closeButtonDisabledSkin: Embed(source="/assets/swf/mdi.swf",symbol="Panel_closeButtonDisabledSkin");
+	closeButtonDownSkin: Embed(source="/assets/swf/mdi.swf",symbol="Panel_closeButtonDownSkin");
+	closeButtonOverSkin: Embed(source="/assets/swf/mdi.swf",symbol="Panel_closeButtonOverSkin");
+	closeButtonUpSkin: Embed(source="/assets/swf/mdi.swf",symbol="Panel_closeButtonUpSkin");
+	borderSkin: Embed(source="/assets/swf/mdi.swf", symbol="Panel_borderSkin");
+	/*titleBackgroundSkin: Embed(source="empty.swf", symbol="Panel_titleBackgroundSkin");*/
+   borderColor: #e7e2a4;
+   borderAlpha: 1;
+   borderThicknessLeft: 10;
+   borderThicknessTop: 5;
+   borderThicknessBottom: 10;
+   borderThicknessRight: 10;
+   roundedBottomCorners: true;
+   cornerRadius: 4;
+   headerHeight: 29;
+   backgroundAlpha: .50;
+   shadowDirection: center;  
+   shadowDistance: 3;
+   titleStyleName: "title";
+   backgroundColor: #ffffff;
+   fontFamily: Arial;
+}
+
+.mypanelTitle {
+	fontFamily: Arial;
+	fontSize: 10;
+	fontWeight: bold;
+}
+.closeBtn {
+	upSkin:        Embed('../img/closeButton.png');
+	overSkin:      Embed('../img/closeButton.png');
+	downSkin:      Embed('../img/closeButton.png');
+	disabledSkin:  Embed('../img/closeButton.png');
+}
+.increaseBtn {
+	upSkin:        Embed('../img/increaseButton.png');
+	overSkin:      Embed('../img/increaseButton.png');
+	downSkin:      Embed('../img/increaseButton.png');
+	disabledSkin:  Embed('../img/increaseButton.png');
+}
+.decreaseBtn {
+	upSkin:        Embed('../img/decreaseButton.png');
+	overSkin:      Embed('../img/decreaseButton.png');
+	downSkin:      Embed('../img/decreaseButton.png');
+	disabledSkin:  Embed('../img/decreaseButton.png');
+}
+.minimizeBtn {
+	upSkin:        Embed('../img/minimizeButton.png');
+	overSkin:      Embed('../img/minimizeButton.png');
+	downSkin:      Embed('../img/minimizeButton.png');
+	disabledSkin:  Embed('../img/minimizeButton.png');
+}
+.resizeHndlr {
+	upSkin:        Embed('../img/resizeHandler.png');
+	overSkin:      Embed('../img/resizeHandler.png');
+	downSkin:      Embed('../img/resizeHandler.png');
+	disabledSkin:  Embed('../img/resizeHandler.png');
+}

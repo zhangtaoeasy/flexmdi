@@ -1,0 +1,180 @@
+TabBar {
+	firstTabStyleName: "firstTab";
+	tabStyleName: "middleTab";
+	lastTabStyleName: "lastTab";
+	firstButtonStyleName: "firstTab";
+	buttonStyleName: "middleTab";
+	lastButtonStyleName: "lastTab";
+	fontFamily: Arial;
+	fontSize: 11;
+	fontWeight: bold;
+	color: #ffffff;
+}
+
+.firstTab {
+	upSkin: Embed(source='/assets/swf/mdi3.swf', symbol='firstTab_Up');
+	overSkin: Embed(source='/assets/swf/mdi3.swf', symbol='firstTab_Up');
+	downSkin: Embed(source='/assets/swf/mdi3.swf', symbol='firstTab_Up');
+	disabledSkin: Embed(source='/assets/swf/mdi3.swf', symbol='firstTab_Up');
+	selectedUpSkin: Embed(source='/assets/swf/mdi3.swf', symbol='firstTabSelected_Up');
+	selectedOverSkin: Embed(source='/assets/swf/mdi3.swf', symbol='firstTabSelected_Up');
+	selectedDownSkin: Embed(source='/assets/swf/mdi3.swf', symbol='firstTabSelected_Up');
+	selectedDisabledSkin: Embed(source='/assets/swf/mdi3.swf', symbol='firstTabSelected_Up');
+	textAlign: left;
+	paddingLeft:10;
+}
+
+.middleTab {
+	upSkin: Embed(source='/assets/swf/mdi3.swf', symbol='middleTab_Up');
+	overSkin: Embed(source='/assets/swf/mdi3.swf', symbol='middleTab_Up');
+	downSkin: Embed(source='/assets/swf/mdi3.swf', symbol='middleTab_Up');
+	disabledSkin: Embed(source='/assets/swf/mdi3.swf', symbol='middleTab_Up');
+	selectedUpSkin: Embed(source='/assets/swf/mdi3.swf', symbol='middleTabSelected_Up');
+	selectedOverSkin: Embed(source='/assets/swf/mdi3.swf', symbol='middleTabSelected_Up');
+	selectedDownSkin: Embed(source='/assets/swf/mdi3.swf', symbol='middleTabSelected_Up');
+	selectedDisabledSkin: Embed(source='/assets/swf/mdi3.swf', symbol='middleTabSelected_Up');
+	textAlign: left;
+	paddingLeft:0;
+}
+
+.lastTab {
+	upSkin: Embed(source='/assets/swf/mdi3.swf', symbol='lastTab_Up');
+	overSkin: Embed(source='/assets/swf/mdi3.swf', symbol='lastTab_Up');
+	downSkin: Embed(source='/assets/swf/mdi3.swf', symbol='lastTab_Up');
+	disabledSkin: Embed(source='/assets/swf/mdi3.swf', symbol='lastTab_Up');
+	selectedUpSkin: Embed(source='/assets/swf/mdi3.swf', symbol='lastTabSelected_Up');
+	selectedOverSkin: Embed(source='/assets/swf/mdi3.swf', symbol='lastTabSelected_Up');
+	selectedDownSkin: Embed(source='/assets/swf/mdi3.swf', symbol='lastTabSelected_Up');
+	selectedDisabledSkin: Embed(source='/assets/swf/mdi3.swf', symbol='lastTabSelected_Up');
+	textAlign: left;
+	paddingLeft:0;
+}
+
+
+
+
+
+
+
+
+Application {  
+   backgroundColors: #000000,#3f3f3f;
+   backgroundImage: Embed(source="/assets/img/bk3.jpg");
+   backgroundSize: "100%";
+   backgroundGradientColors: #B4BFCF, #78829C;
+   themeColor: #0094C7;
+   backgroundGradientAlphas: 0.62, 0.26;
+}
+/*
+MDICanvas { 
+backgroundColor: #0094C7;
+backgroundGradientColors: #78829C, #B4BFCF;
+backgroundGradientAlphas: 0.2, 0.2;
+}
+*/
+Button {
+   highlightAlphas: 1, 0.33;
+   fillAlphas: 1, 0.16, 0.18, 1;
+   fillColors: #5f89b9, #697182, #ffffff, #eeeeee;
+}
+
+
+
+
+Panel {
+	headerHeight: 26;
+	roundedBottomCorners: true;
+	borderThicknessTop: 0;
+	borderThicknessBottom: 3;
+	borderThicknessLeft: 3;
+	borderThicknessRight: 3;
+	borderAlpha: 1.0;
+	titleStyleName: "mypanelTitle";
+
+
+	closeButtonDisabledSkin: Embed(source="/assets/swf/mdi3.swf",symbol="Panel_closeButtonDisabledSkin");
+	closeButtonDownSkin: Embed(source="/assets/swf/mdi3.swf",symbol="Panel_closeButtonDownSkin");
+	closeButtonOverSkin: Embed(source="/assets/swf/mdi3.swf",symbol="Panel_closeButtonOverSkin");
+	closeButtonUpSkin: Embed(source="/assets/swf/mdi3.swf",symbol="Panel_closeButtonUpSkin");
+	borderSkin: Embed(source="/assets/swf/mdi3.swf", symbol="Panel_borderSkin");
+	/*titleBackgroundSkin: Embed(source="empty.swf", symbol="Panel_titleBackgroundSkin");*/
+   borderColor: #e7e2a4;
+   borderAlpha: 1;
+   borderThicknessLeft: 10;
+   borderThicknessTop: 5;
+   borderThicknessBottom: 10;
+   borderThicknessRight: 10;
+   roundedBottomCorners: true;
+   cornerRadius: 4;
+   headerHeight: 29;
+   backgroundAlpha: .50;
+   shadowDirection: center;  
+   shadowDistance: 3;
+   titleStyleName: "mypanelTitle";
+   backgroundColor: #ffffff;
+   fontFamily: Arial;
+}
+
+
+ScrollBar
+{
+
+	downArrowDisabledSkin: Embed(source="/assets/swf/mdi3.swf", symbol="ScrollArrowDown_disabledSkin");
+	downArrowDownSkin: Embed(source="/assets/swf/mdi3.swf", symbol="ScrollArrowDown_downSkin");
+	downArrowOverSkin: Embed(source="/assets/swf/mdi3.swf", symbol="ScrollArrowDown_overSkin");
+	downArrowUpSkin: Embed(source="/assets/swf/mdi3.swf", symbol="ScrollArrowDown_upSkin");
+	thumbDownSkin: Embed(source="/assets/swf/mdi3.swf", symbol="ScrollThumb_downSkin");
+	thumbIcon: Embed(source="/assets/swf/mdi3.swf", symbol="ScrollBar_thumbIcon");
+	thumbOverSkin: Embed(source="/assets/swf/mdi3.swf", symbol="ScrollThumb_overSkin");
+	thumbUpSkin: Embed(source="/assets/swf/mdi3.swf", symbol="ScrollThumb_upSkin");
+	trackSkin: Embed(source="/assets/swf/mdi3.swf", symbol="ScrollTrack_Skin");
+	upArrowDisabledSkin: Embed(source="/assets/swf/mdi3.swf", symbol="ScrollArrowUp_disabledSkin");
+	upArrowDownSkin: Embed(source="/assets/swf/mdi3.swf", symbol="ScrollArrowUp_downSkin");
+	upArrowOverSkin: Embed(source="/assets/swf/mdi3.swf", symbol="ScrollArrowUp_overSkin");
+	upArrowUpSkin: Embed(source="/assets/swf/mdi3.swf", symbol="ScrollArrowUp_upSkin");
+
+}
+
+
+
+
+
+
+.mypanelTitle {
+	fontFamily: Arial;
+	fontSize: 12;
+	fontWeight: bold;
+	color: #ffffff;
+}
+
+
+.closeBtn {
+	upSkin:        Embed('../img/3_closeButton.png');
+	overSkin:      Embed('../img/3_closeButton.png');
+	downSkin:      Embed('../img/3_closeButton.png');
+	disabledSkin:  Embed('../img/3_closeButton.png');
+}
+.increaseBtn {
+	upSkin:        Embed('../img/3_increaseButton.png');
+	overSkin:      Embed('../img/3_increaseButton.png');
+	downSkin:      Embed('../img/3_increaseButton.png');
+	disabledSkin:  Embed('../img/3_increaseButton.png');
+}
+.decreaseBtn {
+	upSkin:        Embed('../img/3_decreaseButton.png');
+	overSkin:      Embed('../img/3_decreaseButton.png');
+	downSkin:      Embed('../img/3_decreaseButton.png');
+	disabledSkin:  Embed('../img/3_decreaseButton.png');
+}
+.minimizeBtn {
+	upSkin:        Embed('../img/3_minimizeButton.png');
+	overSkin:      Embed('../img/3_minimizeButton.png');
+	downSkin:      Embed('../img/3_minimizeButton.png');
+	disabledSkin:  Embed('../img/3_minimizeButton.png');
+}
+.resizeHndlr {
+	upSkin:        Embed('../img/resizeHandler.png');
+	overSkin:      Embed('../img/resizeHandler.png');
+	downSkin:      Embed('../img/resizeHandler.png');
+	disabledSkin:  Embed('../img/resizeHandler.png');
+}

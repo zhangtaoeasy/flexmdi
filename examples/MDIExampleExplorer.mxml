@@ -5,7 +5,8 @@
 	<mx:Style source="/assets/css/style.css" />
 	<mx:Script>
 		<![CDATA[
-			import explorer.AddWinForm;
+			import mx.events.ListEvent;
+			//import explorer.AddWinForm;
 			import mx.managers.PopUpManager;
 			import sample_content.SampleContent;
 			import flexmdi.effects.effectsLib.MDILinearEffects;
@@ -21,6 +22,7 @@
 			private var eventMonitor:TextArea;
 			private var queuedEvent:MDIManagerEvent;
 			private var effectsList:Array;
+			private var stylesList:Array;
 			
 			private function onCreationComplete():void
 			{
@@ -35,6 +37,15 @@
 				effectsList.push({data: flexmdi.effects.effectsLib.MDILinearEffects, label: "Linear"});
 				effectsListCb.dataProvider = effectsList;
 				effectsListCb.selectedIndex = 1;
+				
+				stylesList = new Array();
+				stylesList.push({label: "Plain"});
+				stylesList.push({label: "Noir"});
+				stylesList.push({label: "Style 1"});
+				stylesList.push({label: "Style 2"});
+				stylesList.push({label: "Style 3"});
+				stylesListCb.dataProvider = stylesList;
+				stylesListCb.selectedIndex = 0;
 				
 				// listen for window close
 				mdiCanvas.windowManager.addEventListener(MDIManagerEvent.WINDOW_CLOSE, confirmWindowClose);
@@ -103,14 +114,14 @@
 				win.title = "Window " + String(mdiCanvas.windowManager.windowList.length + 1);
 				mdiCanvas.windowManager.add(win);
 			}
-			
+			/*
 			private function addWindowDialog():void
 			{
 				var win:MDIWindow = new AddWinForm();
 				PopUpManager.addPopUp(win, this);
 				PopUpManager.centerPopUp(win);
 			}
-			
+			*/
 			private function toggleEventMonitor():void
 			{
 				if(eventMonitorCb.selected)
@@ -127,13 +138,37 @@
 			{
 				mdiCanvas.effectsLib = effectsListCb.selectedItem.data as Class;
 			}
+			
+			private function changeStyle(event:ListEvent):void
+			{
+				switch(ComboBox(event.target).selectedLabel)
+				{
+					case 'Plain' :
+						StyleManager.loadStyleDeclarations('assets/css/style.swf');
+						break;
+					case 'Style 1' :
+						StyleManager.loadStyleDeclarations('assets/css/style1.swf');
+						break;
+					case 'Style 2' :
+						StyleManager.loadStyleDeclarations('assets/css/style2.swf');
+						break;
+					case 'Style 3' :
+						StyleManager.loadStyleDeclarations('assets/css/style3.swf');
+						break;
+					case 'Noir' :
+						StyleManager.loadStyleDeclarations('assets/css/noir.swf');
+						break;
+					default:
+						break;
+				}
+			}
 		]]>
 	</mx:Script>
 	<mx:VBox id="vbox" width="100%" height="100%">
 	
 		<mx:ApplicationControlBar dock="true" width="100%" height="50" verticalAlign="middle">
 			<mx:Button label="Add Window" click="addWindow()" />
-			<mx:Button label="+" click="addWindowDialog()" />
+			<!-- <mx:Button label="+" click="addWindowDialog()" /> -->
 			
 			<mx:VRule height="35" />
 			
@@ -152,6 +187,7 @@
 			
 			<mx:Label text="Effects" />
 			<mx:ComboBox id="effectsListCb" change="changeEffects()" />
+			<mx:ComboBox id="stylesListCb" change="changeStyle(event)" />
 		</mx:ApplicationControlBar>
 		
 		<flexmdi:MDICanvas id="mdiCanvas" horizontalScrollPolicy="off" verticalScrollPolicy="off"

@@ -398,7 +398,17 @@ package flexmdi.containers
 		/**
 		 * @private store the backgroundAlpha when minimized.
 	     */
-		private var backgroundAlphaRestore : Number = 1;		
+		private var backgroundAlphaRestore : Number = 1;
+		
+		/**
+		 * Name of style to be applied when window has focus.
+		 */
+		public var focusStyleName:String;
+		
+		/**
+		 * Name of style to be applied when window does not have focus.
+		 */
+		public var noFocusStyleName:String;
 		
 		
 		/**
@@ -413,7 +423,10 @@ package flexmdi.containers
 			minHeight = 200;
 			windowState = MDIWindowState.NORMAL;
 			resizable = draggable = true;
-			styleName = "mdiWindowFocus";
+			
+			focusStyleName = "mdiWindowFocus";
+			noFocusStyleName = "mdiWindowNoFocus";
+			styleName = focusStyleName;
 			cursorStyleName = "mdiWindowCursorStyle";	
 			
 			addEventListener(FlexEvent.CREATION_COMPLETE, componentComplete);			

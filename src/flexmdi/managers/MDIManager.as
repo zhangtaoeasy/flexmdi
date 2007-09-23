@@ -483,12 +483,12 @@ package flexmdi.managers
 					break;
 					
 					case MDIManagerEvent.WINDOW_FOCUS_START:
-						mgrEvent.window.styleName = "mdiWindowFocus";
+						mgrEvent.window.styleName = mgrEvent.window.focusStyleName;
 						mgrEvent.effect.play();
 					break;
 					
 					case MDIManagerEvent.WINDOW_FOCUS_END:
-						mgrEvent.window.styleName = "mdiWindowNoFocus";
+						mgrEvent.window.styleName = mgrEvent.window.noFocusStyleName;
 						mgrEvent.effect.play();
 					break;
 		

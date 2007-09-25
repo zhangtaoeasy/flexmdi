@@ -870,6 +870,11 @@ package flexmdi.containers
 			if(!_dragging)
 			{
 				_dragging = true;
+				// clear styles (future versions may allow enforcing constraints on drag)
+				this.clearStyle("top");
+				this.clearStyle("right");
+				this.clearStyle("bottom");
+				this.clearStyle("left");
 				dispatchEvent(new MDIWindowEvent(MDIWindowEvent.DRAG_START, this));
 			}
 			dispatchEvent(new MDIWindowEvent(MDIWindowEvent.DRAG, this));

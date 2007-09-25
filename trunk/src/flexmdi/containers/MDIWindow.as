@@ -949,7 +949,7 @@ package flexmdi.containers
 				
 				if(currentResizeHandle == resizeHandleTop && parent.mouseY > 0)
 				{
-					this.y = Math.min(this.parent.mouseY, dragMaxY);
+					this.y = Math.min(savedWindowRect.y + dragAmountY, dragMaxY);
 					this.height = Math.max(savedWindowRect.height - dragAmountY, minHeight);
 				}
 				else if(currentResizeHandle == resizeHandleRight && parent.mouseX < parent.width)
@@ -962,32 +962,32 @@ package flexmdi.containers
 				}
 				else if(currentResizeHandle == resizeHandleLeft && parent.mouseX > 0)
 				{
-					this.x = Math.min(this.parent.mouseX, dragMaxX);
+					this.x = Math.min(savedWindowRect.x + dragAmountX, dragMaxX);
 					this.width = Math.max(savedWindowRect.width - dragAmountX, minWidth);
 				}
 				else if(currentResizeHandle == resizeHandleTL && parent.mouseX > 0 && parent.mouseY > 0)
 				{
-					this.x = Math.min(this.parent.mouseX, dragMaxX);
-					this.y = Math.min(this.parent.mouseY, dragMaxY);
+					this.x = Math.min(savedWindowRect.x + dragAmountX, dragMaxX);
+					this.y = Math.min(savedWindowRect.y + dragAmountY, dragMaxY);
 					this.width = Math.max(savedWindowRect.width - dragAmountX, minWidth);
 					this.height = Math.max(savedWindowRect.height - dragAmountY, minHeight);				
 				}
 				else if(currentResizeHandle == resizeHandleTR && parent.mouseX < parent.width && parent.mouseY > 0)
 				{
-					this.y = Math.min(this.parent.mouseY, dragMaxY);
-					this.width = Math.max(this.mouseX, minWidth);
+					this.y = Math.min(savedWindowRect.y + dragAmountY, dragMaxY);
+					this.width = Math.max(savedWindowRect.width + dragAmountX, minWidth);
 					this.height = Math.max(savedWindowRect.height - dragAmountY, minHeight);
 				}
 				else if(currentResizeHandle == resizeHandleBR && parent.mouseX < parent.width && parent.mouseY < parent.height)
 				{
-					this.width = Math.max(this.mouseX, minWidth);
-					this.height = Math.max(this.mouseY, minHeight);
+					this.width = Math.max(savedWindowRect.width + dragAmountX, minWidth);
+					this.height = Math.max(savedWindowRect.height + dragAmountY, minHeight);
 				}
 				else if(currentResizeHandle == resizeHandleBL && parent.mouseX > 0 && parent.mouseY < parent.height)
 				{
-					this.x = Math.min(this.parent.mouseX, dragMaxX);
+					this.x = Math.min(savedWindowRect.x + dragAmountX, dragMaxX);
 					this.width = Math.max(savedWindowRect.width - dragAmountX, minWidth);
-					this.height = Math.max(this.mouseY, minHeight);
+					this.height = Math.max(savedWindowRect.height + dragAmountY, minHeight);
 				}
 				dispatchEvent(new MDIWindowEvent(MDIWindowEvent.RESIZE, this));
 			}

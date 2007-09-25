@@ -212,12 +212,12 @@ package flexmdi.containers
 		/**
 	     * Size of edge handles. Can be adjusted to affect "sensitivity" of resize area.
 	     */
-	    public static var edgeHandleSize:Number = 4;
+	    public var edgeHandleSize:Number = 4;
 	    
 	    /**
 	     * Size of corner handles. Can be adjusted to affect "sensitivity" of resize area.
 	     */
-		public static var cornerHandleSize:Number = 10;
+		public var cornerHandleSize:Number = 10;
 	    
 	    /**
 	     * @private
@@ -452,9 +452,9 @@ package flexmdi.containers
 			if(!resizeHandleTop)
 			{
 				resizeHandleTop = new Button();
-				resizeHandleTop.x = MDIWindow.cornerHandleSize * .5;
-				resizeHandleTop.y = -(MDIWindow.edgeHandleSize * .5);
-				resizeHandleTop.height = MDIWindow.edgeHandleSize;
+				resizeHandleTop.x = cornerHandleSize * .5;
+				resizeHandleTop.y = -(edgeHandleSize * .5);
+				resizeHandleTop.height = edgeHandleSize;
 				resizeHandleTop.alpha = 0;
 				resizeHandleTop.focusEnabled = false;
 				rawChildren.addChild(resizeHandleTop);
@@ -463,8 +463,8 @@ package flexmdi.containers
 			if(!resizeHandleRight)
 			{
 				resizeHandleRight = new Button();
-				resizeHandleRight.y = MDIWindow.cornerHandleSize * .5;
-				resizeHandleRight.width = MDIWindow.edgeHandleSize;
+				resizeHandleRight.y = cornerHandleSize * .5;
+				resizeHandleRight.width = edgeHandleSize;
 				resizeHandleRight.alpha = 0;
 				resizeHandleRight.focusEnabled = false;
 				rawChildren.addChild(resizeHandleRight);
@@ -473,8 +473,8 @@ package flexmdi.containers
 			if(!resizeHandleBottom)
 			{
 				resizeHandleBottom = new Button();
-				resizeHandleBottom.x = MDIWindow.cornerHandleSize * .5;
-				resizeHandleBottom.height = MDIWindow.edgeHandleSize;
+				resizeHandleBottom.x = cornerHandleSize * .5;
+				resizeHandleBottom.height = edgeHandleSize;
 				resizeHandleBottom.alpha = 0;
 				resizeHandleBottom.focusEnabled = false;
 				rawChildren.addChild(resizeHandleBottom);
@@ -483,9 +483,9 @@ package flexmdi.containers
 			if(!resizeHandleLeft)
 			{
 				resizeHandleLeft = new Button();
-				resizeHandleLeft.x = -(MDIWindow.edgeHandleSize * .5);
-				resizeHandleLeft.y = MDIWindow.cornerHandleSize * .5;
-				resizeHandleLeft.width = MDIWindow.edgeHandleSize;
+				resizeHandleLeft.x = -(edgeHandleSize * .5);
+				resizeHandleLeft.y = cornerHandleSize * .5;
+				resizeHandleLeft.width = edgeHandleSize;
 				resizeHandleLeft.alpha = 0;
 				resizeHandleLeft.focusEnabled = false;
 				rawChildren.addChild(resizeHandleLeft);
@@ -495,8 +495,8 @@ package flexmdi.containers
 			if(!resizeHandleTL)
 			{
 				resizeHandleTL = new Button();
-				resizeHandleTL.x = resizeHandleTL.y = -(MDIWindow.cornerHandleSize * .3);
-				resizeHandleTL.width = resizeHandleTL.height = MDIWindow.cornerHandleSize;
+				resizeHandleTL.x = resizeHandleTL.y = -(cornerHandleSize * .3);
+				resizeHandleTL.width = resizeHandleTL.height = cornerHandleSize;
 				resizeHandleTL.alpha = 0;
 				resizeHandleTL.focusEnabled = false;
 				rawChildren.addChild(resizeHandleTL);
@@ -505,7 +505,7 @@ package flexmdi.containers
 			if(!resizeHandleTR)
 			{
 				resizeHandleTR = new Button();
-				resizeHandleTR.width = resizeHandleTR.height = MDIWindow.cornerHandleSize;
+				resizeHandleTR.width = resizeHandleTR.height = cornerHandleSize;
 				resizeHandleTR.alpha = 0;
 				resizeHandleTR.focusEnabled = false;
 				rawChildren.addChild(resizeHandleTR);
@@ -514,7 +514,7 @@ package flexmdi.containers
 			if(!resizeHandleBR)
 			{
 				resizeHandleBR = new Button();
-				resizeHandleBR.width = resizeHandleBR.height = MDIWindow.cornerHandleSize;
+				resizeHandleBR.width = resizeHandleBR.height = cornerHandleSize;
 				resizeHandleBR.alpha = 0;
 				resizeHandleBR.focusEnabled = false;
 				rawChildren.addChild(resizeHandleBR);
@@ -523,7 +523,7 @@ package flexmdi.containers
 			if(!resizeHandleBL)
 			{
 				resizeHandleBL = new Button();
-				resizeHandleBL.width = resizeHandleBL.height = MDIWindow.cornerHandleSize;
+				resizeHandleBL.width = resizeHandleBL.height = cornerHandleSize;
 				resizeHandleBL.alpha = 0;
 				resizeHandleBL.focusEnabled = false;
 				rawChildren.addChild(resizeHandleBL);
@@ -576,41 +576,41 @@ package flexmdi.containers
 			super.updateDisplayList(unscaledWidth, unscaledHeight);
 			
 			// edges
-			resizeHandleTop.x = MDIWindow.cornerHandleSize * .5;
-			resizeHandleTop.y = -(MDIWindow.edgeHandleSize * .5);
-			resizeHandleTop.width = this.width - MDIWindow.cornerHandleSize;
-			resizeHandleTop.height = MDIWindow.edgeHandleSize;
+			resizeHandleTop.x = cornerHandleSize * .5;
+			resizeHandleTop.y = -(edgeHandleSize * .5);
+			resizeHandleTop.width = this.width - cornerHandleSize;
+			resizeHandleTop.height = edgeHandleSize;
 			
-			resizeHandleRight.x = this.width - MDIWindow.edgeHandleSize * .5;
-			resizeHandleRight.y = MDIWindow.cornerHandleSize * .5;
-			resizeHandleRight.width = MDIWindow.edgeHandleSize;
-			resizeHandleRight.height = this.height - MDIWindow.cornerHandleSize;
+			resizeHandleRight.x = this.width - edgeHandleSize * .5;
+			resizeHandleRight.y = cornerHandleSize * .5;
+			resizeHandleRight.width = edgeHandleSize;
+			resizeHandleRight.height = this.height - cornerHandleSize;
 			
-			resizeHandleBottom.x = MDIWindow.cornerHandleSize * .5;
-			resizeHandleBottom.y = this.height - MDIWindow.edgeHandleSize * .5;
-			resizeHandleBottom.width = this.width - MDIWindow.cornerHandleSize;
-			resizeHandleBottom.height = MDIWindow.edgeHandleSize;
+			resizeHandleBottom.x = cornerHandleSize * .5;
+			resizeHandleBottom.y = this.height - edgeHandleSize * .5;
+			resizeHandleBottom.width = this.width - cornerHandleSize;
+			resizeHandleBottom.height = edgeHandleSize;
 			
-			resizeHandleLeft.x = -(MDIWindow.edgeHandleSize * .5);
-			resizeHandleLeft.y = MDIWindow.cornerHandleSize * .5;
-			resizeHandleLeft.width = MDIWindow.edgeHandleSize;
-			resizeHandleLeft.height = this.height - MDIWindow.cornerHandleSize;
+			resizeHandleLeft.x = -(edgeHandleSize * .5);
+			resizeHandleLeft.y = cornerHandleSize * .5;
+			resizeHandleLeft.width = edgeHandleSize;
+			resizeHandleLeft.height = this.height - cornerHandleSize;
 			
 			// corners
-			resizeHandleTL.x = resizeHandleTL.y = -(MDIWindow.cornerHandleSize * .5);
-			resizeHandleTL.width = resizeHandleTL.height = MDIWindow.cornerHandleSize;
+			resizeHandleTL.x = resizeHandleTL.y = -(cornerHandleSize * .5);
+			resizeHandleTL.width = resizeHandleTL.height = cornerHandleSize;
 			
-			resizeHandleTR.x = this.width - MDIWindow.cornerHandleSize * .5;
-			resizeHandleTR.y = -(MDIWindow.cornerHandleSize * .5);
-			resizeHandleTR.width = resizeHandleTR.height = MDIWindow.cornerHandleSize;
+			resizeHandleTR.x = this.width - cornerHandleSize * .5;
+			resizeHandleTR.y = -(cornerHandleSize * .5);
+			resizeHandleTR.width = resizeHandleTR.height = cornerHandleSize;
 			
-			resizeHandleBR.x = this.width - MDIWindow.cornerHandleSize * .5;
-			resizeHandleBR.y = this.height - MDIWindow.cornerHandleSize * .5;
-			resizeHandleBR.width = resizeHandleBR.height = MDIWindow.cornerHandleSize;
+			resizeHandleBR.x = this.width - cornerHandleSize * .5;
+			resizeHandleBR.y = this.height - cornerHandleSize * .5;
+			resizeHandleBR.width = resizeHandleBR.height = cornerHandleSize;
 			
-			resizeHandleBL.x = -(MDIWindow.cornerHandleSize * .5);
-			resizeHandleBL.y = this.height - MDIWindow.cornerHandleSize * .5;
-			resizeHandleBL.width = resizeHandleBL.height = MDIWindow.cornerHandleSize;
+			resizeHandleBL.x = -(cornerHandleSize * .5);
+			resizeHandleBL.y = this.height - cornerHandleSize * .5;
+			resizeHandleBL.width = resizeHandleBL.height = cornerHandleSize;
 			
 			// position window controls
 			var visibleControls:Array = new Array();
@@ -954,11 +954,11 @@ package flexmdi.containers
 				}
 				else if(currentResizeHandle == resizeHandleRight && parent.mouseX < parent.width)
 				{
-					this.width = Math.max(this.mouseX, minWidth);
+					this.width = Math.max(savedWindowRect.width + dragAmountX, minWidth);
 				}
 				else if(currentResizeHandle == resizeHandleBottom && parent.mouseY < parent.height)
 				{
-					this.height = Math.max(parent.mouseY - this.y, minHeight);
+					this.height = Math.max(savedWindowRect.height + dragAmountY, minHeight);
 				}
 				else if(currentResizeHandle == resizeHandleLeft && parent.mouseX > 0)
 				{

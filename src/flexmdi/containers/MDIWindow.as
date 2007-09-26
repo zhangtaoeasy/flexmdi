@@ -344,6 +344,12 @@ package flexmdi.containers
 		
 		/**
 		 * @private
+		 * Flag used to intelligently dispatch resize related events
+		 */
+		private var _resizing:Boolean;
+		
+		/**
+		 * @private
 		 * Flag used to intelligently dispatch drag related events
 		 */
 		private var _dragging:Boolean;
@@ -930,17 +936,27 @@ package flexmdi.containers
 				dragMaxX = savedWindowRect.x + (savedWindowRect.width - minWidth);
 				dragMaxY = savedWindowRect.y + (savedWindowRect.height - minHeight);
 				
-				systemManager.addEventListener(Event.ENTER_FRAME, onResizeButtonDrag, false, 0, true);
+				systemManager.addEventListener(Event.ENTER_FRAME, updateWindowSize, false, 0, true);
+				systemManager.addEventListener(MouseEvent.MOUSE_MOVE, onResizeButtonDrag, false, 0, true);
 				systemManager.addEventListener(MouseEvent.MOUSE_UP, onResizeButtonRelease, false, 0, true);
 				systemManager.stage.addEventListener(Event.MOUSE_LEAVE, onMouseLeaveStage, false, 0, true);
-				dispatchEvent(new MDIWindowEvent(MDIWindowEvent.RESIZE_START, this));
 			}
+		}
+		
+		private function onResizeButtonDrag(event:MouseEvent):void
+		{
+			if(!_resizing)
+			{
+				_resizing = true;
+				dispatchEvent(new MDIWindowEvent(MDIWindowEvent.RESIZE_START, this));
+			}			
+			dispatchEvent(new MDIWindowEvent(MDIWindowEvent.RESIZE, this));
 		}
 		
 		/**
 		 * Mouse move while mouse is down on a resize handle
 		 */
-		private function onResizeButtonDrag(event:Event):void
+		private function updateWindowSize(event:Event):void
 		{
 			if(windowState == MDIWindowState.NORMAL && resizable)
 			{
@@ -989,7 +1005,6 @@ package flexmdi.containers
 					this.width = Math.max(savedWindowRect.width - dragAmountX, minWidth);
 					this.height = Math.max(savedWindowRect.height + dragAmountY, minHeight);
 				}
-				dispatchEvent(new MDIWindowEvent(MDIWindowEvent.RESIZE, this));
 			}
 		}
 		
@@ -997,12 +1012,17 @@ package flexmdi.containers
 		{
 			if(windowState == MDIWindowState.NORMAL && resizable)
 			{
+				if(_resizing)
+				{
+					_resizing = false;
+					dispatchEvent(new MDIWindowEvent(MDIWindowEvent.RESIZE_END, this));
+				}
 				currentResizeHandle = null;
-				systemManager.removeEventListener(Event.ENTER_FRAME, onResizeButtonDrag);
+				systemManager.removeEventListener(Event.ENTER_FRAME, updateWindowSize);
+				systemManager.removeEventListener(MouseEvent.MOUSE_MOVE, onResizeButtonDrag);
 				systemManager.removeEventListener(MouseEvent.MOUSE_UP, onResizeButtonRelease);
 				systemManager.stage.removeEventListener(Event.MOUSE_LEAVE, onMouseLeaveStage);
 				CursorManager.removeCursor(CursorManager.currentCursorID);
-				dispatchEvent(new MDIWindowEvent(MDIWindowEvent.RESIZE_END, this));
 			}
 		}
 		

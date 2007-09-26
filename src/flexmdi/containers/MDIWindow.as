@@ -864,9 +864,9 @@ package flexmdi.containers
 			// only floating windows can be dragged
 			if(this.windowState == MDIWindowState.NORMAL && draggable)
 			{
-				this.startDrag(false, new Rectangle(0, 0, parent.width - this.width, parent.height - this.height - 5));
-				systemManager.addEventListener(MouseEvent.MOUSE_UP, onTitleBarRelease);
+				this.startDrag(false, new Rectangle(0, 0, parent.width - this.width, parent.height - this.height));
 				systemManager.addEventListener(MouseEvent.MOUSE_MOVE, onWindowMove);
+				systemManager.addEventListener(MouseEvent.MOUSE_UP, onTitleBarRelease);
 				systemManager.stage.addEventListener(Event.MOUSE_LEAVE, onTitleBarRelease);
 			}
 		}
@@ -894,30 +894,9 @@ package flexmdi.containers
 				_dragging = false;
 				dispatchEvent(new MDIWindowEvent(MDIWindowEvent.DRAG_END, this));
 			}
-			systemManager.removeEventListener(MouseEvent.MOUSE_UP, onTitleBarRelease);
 			systemManager.removeEventListener(MouseEvent.MOUSE_MOVE, onWindowMove);
+			systemManager.removeEventListener(MouseEvent.MOUSE_UP, onTitleBarRelease);
 			systemManager.stage.removeEventListener(Event.MOUSE_LEAVE, onTitleBarRelease);
-		}
-		
-		/**
-		 * Restore window to state it was in prior to being minimized.
-		 */
-		public function unMinimize(event:MouseEvent = null):void
-		{
-			if(minimized)
-			{
-				showControls = true;
-				
-				windowState = _prevWindowState;
-				if(windowState == MDIWindowState.NORMAL)
-				{
-					dispatchEvent(new MDIWindowEvent(MDIWindowEvent.RESTORE, this));
-				}
-				else
-				{
-					dispatchEvent(new MDIWindowEvent(MDIWindowEvent.MAXIMIZE, this));
-				}
-			}
 		}
 		
 		/**
@@ -1030,6 +1009,27 @@ package flexmdi.containers
 		{
 			onResizeButtonRelease();
 			systemManager.stage.removeEventListener(Event.MOUSE_LEAVE, onMouseLeaveStage);
+		}
+		
+		/**
+		 * Restore window to state it was in prior to being minimized.
+		 */
+		public function unMinimize(event:MouseEvent = null):void
+		{
+			if(minimized)
+			{
+				showControls = true;
+				
+				windowState = _prevWindowState;
+				if(windowState == MDIWindowState.NORMAL)
+				{
+					dispatchEvent(new MDIWindowEvent(MDIWindowEvent.RESTORE, this));
+				}
+				else
+				{
+					dispatchEvent(new MDIWindowEvent(MDIWindowEvent.MAXIMIZE, this));
+				}
+			}
 		}
 		
 		[Embed(source="/flexmdi/assets/img/resizeCursorH.gif")]

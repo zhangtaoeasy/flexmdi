@@ -42,6 +42,7 @@ package flexmdi.containers
 	import mx.managers.CursorManager;
 	import mx.styles.CSSStyleDeclaration;
 	import mx.styles.StyleManager;
+	import mx.containers.Canvas;
 	
 	
 	//--------------------------------------
@@ -350,6 +351,12 @@ package flexmdi.containers
 		
 		/**
 		 * @private
+		 * Invisible shape laid over titlebar to prevent funkiness from clicking in title textfield.
+		 */
+		private var titleOverlay:Canvas;
+		
+		/**
+		 * @private
 		 * Flag used to intelligently dispatch drag related events
 		 */
 		private var _dragging:Boolean;
@@ -404,7 +411,7 @@ package flexmdi.containers
 		/**
 		 * @private store the backgroundAlpha when minimized.
 	     */
-		private var backgroundAlphaRestore : Number = 1;
+		private var backgroundAlphaRestore:Number = 1;
 		
 		/**
 		 * Name of style to be applied when window has focus.
@@ -453,6 +460,16 @@ package flexmdi.containers
 		override protected function createChildren():void
 		{
 			super.createChildren();
+			
+			if(!titleOverlay)
+			{
+				titleOverlay = new Canvas();
+				titleOverlay.width = this.width;
+				titleOverlay.height = this.titleBar.height;
+				titleOverlay.alpha = 0;
+				titleOverlay.setStyle("backgroundColor", 0x000000);
+				rawChildren.addChild(titleOverlay);
+			}
 			
 			// edges
 			if(!resizeHandleTop)
@@ -580,6 +597,9 @@ package flexmdi.containers
 		override protected function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number):void
 		{
 			super.updateDisplayList(unscaledWidth, unscaledHeight);
+			
+			titleOverlay.width = this.width;
+			titleOverlay.height = this.titleBar.height;
 			
 			// edges
 			resizeHandleTop.x = cornerHandleSize * .5;
@@ -710,10 +730,10 @@ package flexmdi.containers
 			resizeHandleBL.addEventListener(MouseEvent.MOUSE_DOWN, onResizeButtonPress, false, 0, true);
 			
 			// titleBar
-			titleBar.addEventListener(MouseEvent.MOUSE_DOWN, onTitleBarPress, false, 0, true);
-			titleBar.addEventListener(MouseEvent.MOUSE_UP, onTitleBarRelease, false, 0, true);
-			titleBar.addEventListener(MouseEvent.DOUBLE_CLICK, maximizeRestore, false, 0, true);
-			titleBar.addEventListener(MouseEvent.CLICK, unMinimize, false, 0, true);
+			titleOverlay.addEventListener(MouseEvent.MOUSE_DOWN, onTitleBarPress, false, 0, true);
+			titleOverlay.addEventListener(MouseEvent.MOUSE_UP, onTitleBarRelease, false, 0, true);
+			titleOverlay.addEventListener(MouseEvent.DOUBLE_CLICK, maximizeRestore, false, 0, true);
+			titleOverlay.addEventListener(MouseEvent.CLICK, unMinimize, false, 0, true);
 			
 			// window controls
 			if(minimizeBtn)

@@ -40,9 +40,22 @@ package flexmdi.containers
 	{
 		public var windowManager:MDIManager;
 		
-		public function set effectsLib(classRef:Class):void
+		
+		/**
+		 * 
+		 * @depreciated use effects and class
+		 * 
+		 */ 
+		public function set effectsLib(classRef:Class):void 
 		{
-			windowManager.effects = new classRef();
+			this.windowManager.effects = new classRef();
+		}
+		
+		
+		public function set effects(effects:IMDIEffectsDescriptor):void 
+		{
+			this.windowManager.effects = effects;
+		
 		}
 		
 		public function MDICanvas()

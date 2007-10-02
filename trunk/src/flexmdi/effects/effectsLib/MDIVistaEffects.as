@@ -46,7 +46,17 @@ package flexmdi.effects.effectsLib
 	 * Collection of effects inspired by Windows Vista.
 	 */
 	public class MDIVistaEffects extends MDIEffectsDescriptorBase implements IMDIEffectsDescriptor
-	{
+	{	
+		
+		
+		public var duration : Number = 200;
+		
+		public function MDIVistaEffects(duration:Number=200):void
+		{
+				this.duration = duration;	
+		}
+		
+		
 		override public function getWindowAddEffect(window:MDIWindow, manager:MDIManager):Effect
 		{			
 			var parallel:Parallel = new Parallel(window);
@@ -74,7 +84,7 @@ package flexmdi.effects.effectsLib
 			parallel.addChild(blurSequence);
 	
 			
-			parallel.duration = 200;
+			parallel.duration = this.duration;
 			return parallel;
 		}
 		
@@ -87,7 +97,7 @@ package flexmdi.effects.effectsLib
 			var resize:Resize = new Resize(window);
 				resize.widthTo = window.minWidth;
 				resize.heightTo = window.minimizeHeight;
-				resize.duration = 150;
+				resize.duration = this.duration;
 			parallel.addChild(resize);
 			
 
@@ -141,7 +151,7 @@ package flexmdi.effects.effectsLib
 			var resize:Resize = new Resize(window);
 			resize.widthTo = restoreTo.width;
 			resize.heightTo = restoreTo.height;
-			resize.duration = 150;
+			resize.duration = this.duration;
 			parallel.addChild(resize);
 			
 			parallel.end();
@@ -161,7 +171,7 @@ package flexmdi.effects.effectsLib
 			var resize:Resize = new Resize(window);
 			resize.heightTo = manager.container.height - bottomOffset;
 			resize.widthTo = manager.container.width;
-			resize.duration = 300;
+			resize.duration = this.duration;
 			parallel.addChild(resize);
 			
 			parallel.end();
@@ -175,7 +185,7 @@ package flexmdi.effects.effectsLib
 				blur.blurYFrom = 0;
 				blur.blurXTo = 10;
 				blur.blurYTo = 10;
-				blur.duration = 200;
+				blur.duration = this.duration;
 				return blur;
 		}
 		
@@ -204,7 +214,7 @@ package flexmdi.effects.effectsLib
 				}
 			}
 			
-			effect.duration = 100;
+			effect.duration = this.duration;
 			
 			return effect;
 		}
@@ -226,13 +236,13 @@ package flexmdi.effects.effectsLib
 					move.xTo = item.moveTo.x;
 					move.yTo = item.moveTo.y;
 					//move.easingFunction = this.cascadeEasingFunction;
-					move.duration = 200;
+					move.duration = this.duration;
 					parallel.addChild(move);
 					
 				var resize:Resize = new Resize(item.window);
 					resize.widthTo = item.widthTo;
 					resize.heightTo = item.heightTo;
-					resize.duration = 150;
+					resize.duration = this.duration;
 					parallel.addChild(resize);
 			}
 			
@@ -244,7 +254,7 @@ package flexmdi.effects.effectsLib
 			var move:Move = new Move(window);
 			move.xTo = moveTo.x;
 			move.yTo = moveTo.y;
-			move.duration = 300;
+			move.duration = this.duration;
 			move.end();
 			return move;
 		}		

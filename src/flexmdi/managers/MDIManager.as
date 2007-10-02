@@ -543,7 +543,7 @@ package flexmdi.managers
 				targetWindow = Effect(compEffect.children[0]).target as MDIWindow;
 			}
 			
-			targetWindow.setStyle("backgroundAlpha",0);
+			//targetWindow.setStyle("backgroundAlpha",0);
 			
 			
 			tiledWindows.addItem(targetWindow);

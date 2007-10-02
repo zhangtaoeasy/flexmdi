@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute"
 	xmlns:flexmdi="http://flexmdi.googlecode.com/"
-	creationComplete="onCreationComplete()" xmlns:ns="sample_content.*" viewSourceURL="srcview/index.html">
-	<mx:Style source="/assets/css/style.css" />
+	creationComplete="onCreationComplete()" xmlns:ns="sample_content.*" 
+	viewSourceURL="srcview/index.html">
+	 <!--initialize="StyleManager.loadStyleDeclarations('assets/css/style.swf')" -->
+	<mx:Style source="assets/css/style3.css" />
+	
 	<mx:Script>
 		<![CDATA[
 			import mx.events.ListEvent;
@@ -150,13 +153,13 @@
 						StyleManager.loadStyleDeclarations('assets/css/style1.swf');
 						break;
 					case 'Style 2' :
-						StyleManager.loadStyleDeclarations('assets/css/style2.swf');
+						StyleManager.loadStyleDeclarations('assets/swf/style2.swf');
 						break;
 					case 'Style 3' :
-						StyleManager.loadStyleDeclarations('assets/css/style3.swf');
+						StyleManager.loadStyleDeclarations('assets/swf/style3.swf');
 						break;
 					case 'Noir' :
-						StyleManager.loadStyleDeclarations('assets/css/noir.swf');
+						StyleManager.loadStyleDeclarations('assets/swf/noir.swf');
 						break;
 					default:
 						break;
@@ -190,8 +193,8 @@
 			<mx:ComboBox id="stylesListCb" change="changeStyle(event)" />
 		</mx:ApplicationControlBar>
 		
-		<flexmdi:MDICanvas id="mdiCanvas" horizontalScrollPolicy="off" verticalScrollPolicy="off"
-			effectsLib="{flexmdi.effects.effectsLib.MDIVistaEffects}"
+		<flexmdi:MDICanvas id="mdiCanvas" horizontalScrollPolicy="off" verticalScrollPolicy="off" 
+			effects="{new MDIVistaEffects(100)}"
 			width="100%" height="100%">
 			<flexmdi:MDIWindow id="win1"
 				title="Window 1"

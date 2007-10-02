@@ -34,9 +34,9 @@ package flexmdi.containers
 	import flexmdi.events.MDIWindowEvent;
 	import flexmdi.managers.MDIManager;
 	
-	import mx.collections.ArrayCollection;
 	import mx.containers.Panel;
 	import mx.controls.Button;
+	import mx.controls.Image;
 	import mx.core.UIComponent;
 	import mx.events.FlexEvent;
 	import mx.managers.CursorManager;
@@ -204,6 +204,45 @@ package flexmdi.containers
 	 */
 	[Style(name="resizeCursorTopRightBottomLeftSkinYOffset", type="Number", inherit="no")]
 	
+	/**
+	 *  The source path to the image to be used for corner resize instance
+	 */
+	[Style(name="cornerResizeImg", type="Class", inherit="no")]
+	
+	/**
+	 *  The corner resize image width
+	 */
+	[Style(name="cornerResizeWidth", type="Number", inherit="no")]
+	
+	/**
+	 *  The corner resize image height
+	 */
+	[Style(name="cornerResizeHeight", type="Number", inherit="no")]
+	
+	/**
+	 *  The corner resize image padding on right
+	 */
+	[Style(name="cornerResizePaddingRight", type="Number", inherit="no")]
+	
+	/**
+	 *  The corner resize image padding on bottom
+	 */
+	[Style(name="cornerResizePaddingBottom", type="Number", inherit="no")]
+	
+	/**
+	 *  The width of the control buttons
+	 */
+	[Style(name="controlButtonWidth", type="Number", inherit="no")]
+	
+	/**
+	 *  The height of the control buttons
+	 */
+	[Style(name="controlButtonHeight", type="Number", inherit="no")]
+	
+	/**
+	 *  The width of gap between control buttons
+	 */
+	[Style(name="controlButtonGap", type="Number", inherit="no")]
 	
 	/**
 	 * Central window class used in flexmdi. Includes min/max/close buttons by default.
@@ -263,6 +302,11 @@ package flexmdi.containers
 		 * Close window button.
 		 */
 		public var closeBtn:Button;
+		
+		/**
+		 * Bottom right corner resize image
+		 */
+		 public var cornerResizeImg:Image;
 		
 		/**
 		 * Height of window when minimized.
@@ -441,7 +485,6 @@ package flexmdi.containers
 			noFocusStyleName = "mdiWindowNoFocus";
 			styleName = focusStyleName;
 			cursorStyleName = "mdiWindowCursorStyle";	
-			
 			addEventListener(FlexEvent.CREATION_COMPLETE, componentComplete);			
 		}
 		
@@ -552,28 +595,54 @@ package flexmdi.containers
 				rawChildren.addChild(resizeHandleBL);
 			}
 			
+			if(this.getStyle('cornerResizeImg') != null)
+			{
+				cornerResizeImg = new Image();
+				cornerResizeImg.source = this.getStyle('cornerResizeImg');
+				if(this.getStyle('cornerResizeWidth') != null)
+					cornerResizeImg.width = this.getStyle('cornerResizeWidth');
+					
+				if(this.getStyle('cornerResizeHeight') != null)
+					cornerResizeImg.height = this.getStyle('cornerResizeHeight');
+					
+				cornerResizeImg.x = this.width - cornerResizeImg.width;
+				cornerResizeImg.y = this.height - cornerResizeImg.height;
+				
+				if(this.getStyle('cornerResizePaddingRight') != null)
+					cornerResizeImg.x -= this.getStyle('cornerResizePaddingRight');
+				
+				if(this.getStyle('cornerResizePaddingBottom') != null)
+					cornerResizeImg.y -= this.getStyle('cornerResizePaddingBottom');
+					
+				rawChildren.addChild(cornerResizeImg);
+				
+			}
+			
 			// controls			
 			if(controls.length == 0)
 			{
-				minimizeBtn = new Button();
-				minimizeBtn.width = 10;
-				minimizeBtn.height = 10;
-				minimizeBtn.styleName = "minimizeBtn";
-				controls.push(minimizeBtn);
+				closeBtn = new Button();
+				closeBtn.width = this.getStyle('controlButtonWidth');
+				closeBtn.height = this.getStyle('controlButtonHeight');
+				closeBtn.styleName = "closeBtn";
+				closeBtn.visible = showCloseButton;
+				controls.push(closeBtn);		
 				
 				maximizeRestoreBtn = new Button();
-				maximizeRestoreBtn.width = 10;
-				maximizeRestoreBtn.height = 10;
+				maximizeRestoreBtn.width = this.getStyle('controlButtonWidth');
+				maximizeRestoreBtn.height = this.getStyle('controlButtonHeight');
 				maximizeRestoreBtn.styleName = "increaseBtn";
 				controls.push(maximizeRestoreBtn);
 				
-				closeBtn = new Button();
-				closeBtn.width = 10;
-				closeBtn.height = 10;
-				closeBtn.styleName = "closeBtn";
-				closeBtn.visible = showCloseButton;
-				controls.push(closeBtn);				
+				
+				minimizeBtn = new Button();
+				minimizeBtn.width = this.getStyle('controlButtonWidth');
+				minimizeBtn.height = this.getStyle('controlButtonHeight');
+				minimizeBtn.styleName = "minimizeBtn";
+				controls.push(minimizeBtn);
+						
 			}
+			
 			
 			controlsHolder = new UIComponent();
 			rawChildren.addChild(controlsHolder);
@@ -581,8 +650,7 @@ package flexmdi.containers
 			for(var i:int = 0; i < controls.length; i++)
 			{
 				var control:UIComponent = controls[i];
-				
-				control.x = this.width - ((controls.length - i) * 20);
+				control.x = this.width - ((control.width * (i+1)) + (this.getStyle('controlButtonGap') * (i+1)));
 				control.y = (titleBar.height - control.height) / 2;
 				control.buttonMode = true;
 				controlsHolder.addChild(control);
@@ -654,9 +722,22 @@ package flexmdi.containers
 			{
 				control = visibleControls[i] as UIComponent;
 				
-				control.x = this.width - ((visibleControls.length - i) * 20);
+				control.x = this.width - ((control.width * (i+1)) + (this.getStyle('controlButtonGap') * (i+1)));
 				control.y = (titleBar.height - control.height) / 2;
 			}
+			
+			if(this.getStyle('cornerResizeImg') != null)
+			{
+				cornerResizeImg.x = this.width - cornerResizeImg.width;
+				cornerResizeImg.y = this.height - cornerResizeImg.height;
+				if(this.getStyle('cornerResizePaddingRight') != null)
+					cornerResizeImg.x -= this.getStyle('cornerResizePaddingRight');
+				
+				if(this.getStyle('cornerResizePaddingBottom') != null)
+					cornerResizeImg.y -= this.getStyle('cornerResizePaddingBottom');
+			}
+			
+			
 		}
 		
 		public function get showCloseButton():Boolean
@@ -679,7 +760,7 @@ package flexmdi.containers
 	     */
 		public function saveStyle():void
 		{
-			this.backgroundAlphaRestore = this.getStyle("backgroundAlpha");
+			//this.backgroundAlphaRestore = this.getStyle("backgroundAlpha");
 		}
 		
 		/**
@@ -687,7 +768,7 @@ package flexmdi.containers
 	     */
 		public function restoreStyle():void
 		{
-			this.setStyle("backgroundAlpha", this.backgroundAlphaRestore);
+			//this.setStyle("backgroundAlpha", this.backgroundAlphaRestore);
 		}
 		
 		/**
@@ -1078,6 +1159,7 @@ package flexmdi.containers
 		{
 			if(!StyleManager.getStyleDeclaration(".mdiWindowCursorStyle"))
 			{
+				//scope of 'this' is the cursorStyle instance
 				var cursorStyle:CSSStyleDeclaration = new CSSStyleDeclaration();
 				cursorStyle.defaultFactory = function():void
 				{
@@ -1169,6 +1251,8 @@ package flexmdi.containers
 		public function set showControls(value:Boolean):void
 		{
 			controlsHolder.visible = value;
+			if(this.getStyle('cornerResizeImg') != null)
+				cornerResizeImg.visible = value;
 		}
 		
 		private function get windowState():int

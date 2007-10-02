@@ -1,0 +1,120 @@
+Application
+{
+	fontFamily: Arial;
+    paddingLeft:10; paddingRight:10; paddingTop:10; paddingBottom:10;
+}
+
+.mdiWindowFocus 
+{
+	borderColor: #3586FF;
+	borderAlpha: 1;
+	borderThicknessLeft: 3;
+	borderThicknessTop: 0;
+	borderThicknessBottom: 3;
+	borderThicknessRight: 2;
+	roundedBottomCorners: false;
+	cornerRadius: 5;
+	dropShadowEnabled: false;
+	headerHeight: 29;
+	backgroundAlpha: 1; 
+	backgroundColor: #FFFFFF;
+	titleStyleName: "mypanelTitle";
+	titleBackgroundSkin: Embed(source="/assets/swf/MSWindows.swf", symbol="Default_header");
+	
+	controlButtonWidth: 21;
+	controlButtonHeight: 21;
+	controlButtonGap: 4;
+}
+
+.mdiWindowNoFocus 
+{
+	borderColor: #7B97E0;
+	borderAlpha: 1;
+	borderThicknessLeft: 3;
+	borderThicknessTop: 0;
+	borderThicknessBottom: 3;
+	borderThicknessRight: 2;
+	roundedBottomCorners: false;
+	cornerRadius: 5;
+	dropShadowEnabled: false;
+	headerHeight: 29;
+	backgroundAlpha: 1; 
+	backgroundColor: #FFFFFF;
+	titleStyleName: "mypanelTitle";
+	titleBackgroundSkin: Embed(source="/assets/swf/MSWindows.swf", symbol="Default_unfocused_header");
+	
+	controlButtonWidth: 21;
+	controlButtonHeight: 21;
+	controlButtonGap: 4;
+}
+
+.mypanelTitle 
+{
+	fontSize: 12;
+	fontWeight: bold;
+	color: #FFFFFF;
+}
+
+.closeBtn 
+{
+	upSkin:        Embed(source="/assets/swf/MSWindows.swf", symbol="Default_close");
+	overSkin:      Embed(source="/assets/swf/MSWindows.swf", symbol="Default_close_over");
+	downSkin:      Embed(source="/assets/swf/MSWindows.swf", symbol="Default_close_down");
+	disabledSkin:  Embed(source="/assets/swf/MSWindows.swf", symbol="Default_unfocused_close");
+}
+
+.closeBtn_unfocus
+{
+	upSkin:        Embed(source="/assets/swf/MSWindows.swf", symbol="Default_close");
+	overSkin:      Embed(source="/assets/swf/MSWindows.swf", symbol="Default_close_over");
+	downSkin:      Embed(source="/assets/swf/MSWindows.swf", symbol="Default_close_down");
+	disabledSkin:  Embed(source="/assets/swf/MSWindows.swf", symbol="Default_unfocused_close");
+}
+
+.increaseBtn 
+{
+	upSkin:        Embed(source="/assets/swf/MSWindows.swf", symbol="Default_maximize");
+	overSkin:      Embed(source="/assets/swf/MSWindows.swf", symbol="Default_maximize_over");
+	downSkin:      Embed(source="/assets/swf/MSWindows.swf", symbol="Default_maximize_down");
+	disabledSkin:  Embed(source="/assets/swf/MSWindows.swf", symbol="Default_unfocused_maximize");
+}
+
+.increaseBtn_unfocus
+{
+	upSkin:        Embed(source="/assets/swf/MSWindows.swf", symbol="Default_maximize");
+	overSkin:      Embed(source="/assets/swf/MSWindows.swf", symbol="Default_maximize_over");
+	downSkin:      Embed(source="/assets/swf/MSWindows.swf", symbol="Default_maximize_down");
+	disabledSkin:  Embed(source="/assets/swf/MSWindows.swf", symbol="Default_unfocused_maximize");
+}
+
+.decreaseBtn 
+{
+	upSkin:        Embed(source="/assets/swf/MSWindows.swf", symbol="Default_restore");
+	overSkin:      Embed(source="/assets/swf/MSWindows.swf", symbol="Default_restore_over");
+	downSkin:      Embed(source="/assets/swf/MSWindows.swf", symbol="Default_restore_down");
+	disabledSkin:  Embed(source="/assets/swf/MSWindows.swf", symbol="Default_unfocused_restore");
+}
+
+.decreaseBtn
+{
+	upSkin:        Embed(source="/assets/swf/MSWindows.swf", symbol="Default_restore");
+	overSkin:      Embed(source="/assets/swf/MSWindows.swf", symbol="Default_restore_over");
+	downSkin:      Embed(source="/assets/swf/MSWindows.swf", symbol="Default_restore_down");
+	disabledSkin:  Embed(source="/assets/swf/MSWindows.swf", symbol="Default_unfocused_restore");
+}
+
+.minimizeBtn 
+{
+	upSkin:        Embed(source="/assets/swf/MSWindows.swf", symbol="Default_minimize");
+	overSkin:      Embed(source="/assets/swf/MSWindows.swf", symbol="Default_minimize_over");
+	downSkin:      Embed(source="/assets/swf/MSWindows.swf", symbol="Default_minimize_down");
+	disabledSkin:  Embed(source="/assets/swf/MSWindows.swf", symbol="Default_unfocused_minimize");
+}
+
+.minimizeBtn
+{
+	upSkin:        Embed(source="/assets/swf/MSWindows.swf", symbol="Default_minimize");
+	overSkin:      Embed(source="/assets/swf/MSWindows.swf", symbol="Default_minimize_over");
+	downSkin:      Embed(source="/assets/swf/MSWindows.swf", symbol="Default_minimize_down");
+	disabledSkin:  Embed(source="/assets/swf/MSWindows.swf", symbol="Default_unfocused_minimize");
+}

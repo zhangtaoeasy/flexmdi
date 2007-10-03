@@ -55,7 +55,7 @@ Application
 	color: #FFFFFF;
 }
 
-.closeBtn 
+.closeBtnFocus
 {
 	upSkin:        Embed(source="/assets/swf/MSWindows.swf", symbol="Default_close");
 	overSkin:      Embed(source="/assets/swf/MSWindows.swf", symbol="Default_close_over");
@@ -63,7 +63,7 @@ Application
 	disabledSkin:  Embed(source="/assets/swf/MSWindows.swf", symbol="Default_unfocused_close");
 }
 
-.closeBtn_unfocus
+.closeBtnNoFocus
 {
 	upSkin:        Embed(source="/assets/swf/MSWindows.swf", symbol="Default_close");
 	overSkin:      Embed(source="/assets/swf/MSWindows.swf", symbol="Default_close_over");
@@ -71,7 +71,7 @@ Application
 	disabledSkin:  Embed(source="/assets/swf/MSWindows.swf", symbol="Default_unfocused_close");
 }
 
-.increaseBtn 
+.increaseBtnFocus
 {
 	upSkin:        Embed(source="/assets/swf/MSWindows.swf", symbol="Default_maximize");
 	overSkin:      Embed(source="/assets/swf/MSWindows.swf", symbol="Default_maximize_over");
@@ -79,7 +79,7 @@ Application
 	disabledSkin:  Embed(source="/assets/swf/MSWindows.swf", symbol="Default_unfocused_maximize");
 }
 
-.increaseBtn_unfocus
+.increaseBtnNoFocus
 {
 	upSkin:        Embed(source="/assets/swf/MSWindows.swf", symbol="Default_maximize");
 	overSkin:      Embed(source="/assets/swf/MSWindows.swf", symbol="Default_maximize_over");
@@ -87,7 +87,7 @@ Application
 	disabledSkin:  Embed(source="/assets/swf/MSWindows.swf", symbol="Default_unfocused_maximize");
 }
 
-.decreaseBtn 
+.decreaseBtnFocus
 {
 	upSkin:        Embed(source="/assets/swf/MSWindows.swf", symbol="Default_restore");
 	overSkin:      Embed(source="/assets/swf/MSWindows.swf", symbol="Default_restore_over");
@@ -95,7 +95,7 @@ Application
 	disabledSkin:  Embed(source="/assets/swf/MSWindows.swf", symbol="Default_unfocused_restore");
 }
 
-.decreaseBtn
+.decreaseBtnNoFocus
 {
 	upSkin:        Embed(source="/assets/swf/MSWindows.swf", symbol="Default_restore");
 	overSkin:      Embed(source="/assets/swf/MSWindows.swf", symbol="Default_restore_over");
@@ -103,7 +103,7 @@ Application
 	disabledSkin:  Embed(source="/assets/swf/MSWindows.swf", symbol="Default_unfocused_restore");
 }
 
-.minimizeBtn 
+.minimizeBtnFocus
 {
 	upSkin:        Embed(source="/assets/swf/MSWindows.swf", symbol="Default_minimize");
 	overSkin:      Embed(source="/assets/swf/MSWindows.swf", symbol="Default_minimize_over");
@@ -111,7 +111,7 @@ Application
 	disabledSkin:  Embed(source="/assets/swf/MSWindows.swf", symbol="Default_unfocused_minimize");
 }
 
-.minimizeBtn
+.minimizeBtnNoFocus
 {
 	upSkin:        Embed(source="/assets/swf/MSWindows.swf", symbol="Default_minimize");
 	overSkin:      Embed(source="/assets/swf/MSWindows.swf", symbol="Default_minimize_over");

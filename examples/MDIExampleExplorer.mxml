@@ -3,8 +3,7 @@
 	xmlns:flexmdi="http://flexmdi.googlecode.com/"
 	creationComplete="onCreationComplete()" xmlns:ns="sample_content.*" 
 	viewSourceURL="srcview/index.html">
-	 <!--initialize="StyleManager.loadStyleDeclarations('assets/css/style.swf')" -->
-	<mx:Style source="assets/css/style3.css" />
+	 
 	
 	<mx:Script>
 		<![CDATA[
@@ -27,8 +26,12 @@
 			private var effectsList:Array;
 			private var stylesList:Array;
 			
+			private var currentSetStyle:String;
+			
 			private function onCreationComplete():void
 			{
+				currentSetStyle = '';
+				
 				// create textfield
 				eventMonitor = new TextArea();
 				eventMonitor.percentWidth = 100;
@@ -42,11 +45,10 @@
 				effectsListCb.selectedIndex = 1;
 				
 				stylesList = new Array();
-				stylesList.push({label: "Plain"});
-				stylesList.push({label: "Noir"});
-				stylesList.push({label: "Style 1"});
-				stylesList.push({label: "Style 2"});
-				stylesList.push({label: "Style 3"});
+				stylesList.push({label: "Default"});
+				stylesList.push({label: "Windows Default"});
+				stylesList.push({label: "Brushed Metal"});
+				stylesList.push({label: "Blue"});
 				stylesListCb.dataProvider = stylesList;
 				stylesListCb.selectedIndex = 0;
 				
@@ -146,20 +148,24 @@
 			{
 				switch(ComboBox(event.target).selectedLabel)
 				{
-					case 'Plain' :
-						StyleManager.loadStyleDeclarations('assets/css/style.swf');
+					case 'Default' :
+						if(currentSetStyle != '') StyleManager.unloadStyleDeclarations(currentSetStyle, false);
+						currentSetStyle = '';
 						break;
-					case 'Style 1' :
-						StyleManager.loadStyleDeclarations('assets/css/style1.swf');
+					case 'Windows Default' :
+						if(currentSetStyle != '') StyleManager.unloadStyleDeclarations(currentSetStyle, false);
+						StyleManager.loadStyleDeclarations('assets/css/MSWindows_default.swf');
+						currentSetStyle = 'assets/css/MSWindows_default.swf';
 						break;
-					case 'Style 2' :
-						StyleManager.loadStyleDeclarations('assets/swf/style2.swf');
+					case 'Brushed Metal' :
+						if(currentSetStyle != '') StyleManager.unloadStyleDeclarations(currentSetStyle, false);
+						StyleManager.loadStyleDeclarations('assets/css/BrushedMetal.swf');
+						currentSetStyle = 'assets/css/BrushedMetal.swf';
 						break;
-					case 'Style 3' :
-						StyleManager.loadStyleDeclarations('assets/swf/style3.swf');
-						break;
-					case 'Noir' :
-						StyleManager.loadStyleDeclarations('assets/swf/noir.swf');
+					case 'Blue' :
+						if(currentSetStyle != '') StyleManager.unloadStyleDeclarations(currentSetStyle, false);
+						StyleManager.loadStyleDeclarations('assets/css/Blue.swf');
+						currentSetStyle = 'assets/css/Blue.swf';
 						break;
 					default:
 						break;

@@ -4,7 +4,7 @@
 	xmlns:samples="sample_content.*"
 	creationComplete="init()" viewSourceURL="srcview/index.html" 
 	xmlns:flexmdi="http://flexmdi.googlecode.com/">
-	<mx:Style source="/assets/css/style.css" />
+	<mx:Style source="/assets/css/default.css" />
 	
 	
 	

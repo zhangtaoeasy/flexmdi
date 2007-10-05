@@ -619,7 +619,7 @@ package flexmdi.containers
 			}
 			else
 			{
-				this.cornerHandleSize = null;
+				this.cornerResizeImg = null;
 			}
 			
 			// controls			
@@ -1311,9 +1311,11 @@ package flexmdi.containers
 			}
 			
 		//MINIMIZE BUTTON
+			var minimizeBtnFocusStyle:CSSStyleDeclaration;
+				
 			if(!StyleManager.getStyleDeclaration(".minimizeBtnFocus"))
 			{
-				var minimizeBtnFocusStyle:CSSStyleDeclaration = new CSSStyleDeclaration();
+				minimizeBtnFocusStyle = new CSSStyleDeclaration();
 				minimizeBtnFocusStyle.defaultFactory = function():void
 				{
 					this.upSkin = defaultMinimizeButton;
@@ -1326,7 +1328,7 @@ package flexmdi.containers
 			
 			if(!StyleManager.getStyleDeclaration(".minimizeBtnNoFocus"))
 			{
-				var minimizeBtnFocusStyle:CSSStyleDeclaration = new CSSStyleDeclaration();
+				minimizeBtnFocusStyle = new CSSStyleDeclaration();
 				minimizeBtnFocusStyle.defaultFactory = function():void
 				{
 					this.upSkin = defaultMinimizeButton;

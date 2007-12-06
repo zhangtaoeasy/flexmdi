@@ -37,7 +37,6 @@ package flexmdi.containers
 	import mx.containers.Canvas;
 	import mx.containers.Panel;
 	import mx.controls.Button;
-	import mx.controls.Image;
 	import mx.core.UIComponent;
 	import mx.events.FlexEvent;
 	import mx.managers.CursorManager;
@@ -204,45 +203,6 @@ package flexmdi.containers
 	 */
 	[Style(name="resizeCursorTopRightBottomLeftSkinYOffset", type="Number", inherit="no")]
 	
-	/**
-	 *  The source path to the image to be used for corner resize instance
-	 */
-	[Style(name="cornerResizeImg", type="Class", inherit="no")]
-	
-	/**
-	 *  The corner resize image width
-	 */
-	[Style(name="cornerResizeWidth", type="Number", inherit="no")]
-	
-	/**
-	 *  The corner resize image height
-	 */
-	[Style(name="cornerResizeHeight", type="Number", inherit="no")]
-	
-	/**
-	 *  The corner resize image padding on right
-	 */
-	[Style(name="cornerResizePaddingRight", type="Number", inherit="no")]
-	
-	/**
-	 *  The corner resize image padding on bottom
-	 */
-	[Style(name="cornerResizePaddingBottom", type="Number", inherit="no")]
-	
-	/**
-	 *  The width of the control buttons
-	 */
-	[Style(name="controlButtonWidth", type="Number", inherit="no")]
-	
-	/**
-	 *  The height of the control buttons
-	 */
-	[Style(name="controlButtonHeight", type="Number", inherit="no")]
-	
-	/**
-	 *  The width of gap between control buttons
-	 */
-	[Style(name="controlButtonGap", type="Number", inherit="no")]
 	
 	/**
 	 * Central window class used in flexmdi. Includes min/max/close buttons by default.
@@ -302,11 +262,6 @@ package flexmdi.containers
 		 * Close window button.
 		 */
 		public var closeBtn:Button;
-		
-		/**
-		 * Bottom right corner resize image
-		 */
-		 public var cornerResizeImg:Image;
 		
 		/**
 		 * Height of window when minimized.
@@ -485,6 +440,7 @@ package flexmdi.containers
 			noFocusStyleName = "mdiWindowNoFocus";
 			styleName = focusStyleName;
 			cursorStyleName = "mdiWindowCursorStyle";	
+			
 			addEventListener(FlexEvent.CREATION_COMPLETE, componentComplete);			
 		}
 		
@@ -595,58 +551,28 @@ package flexmdi.containers
 				rawChildren.addChild(resizeHandleBL);
 			}
 			
-			if(StyleManager.getStyleDeclaration('.mdiWindowFocus').getStyle('cornerResizeImg') != null)
-			{
-				cornerResizeImg = new Image();
-				cornerResizeImg.source = StyleManager.getStyleDeclaration('.mdiWindowFocus').getStyle('cornerResizeImg');
-				if(StyleManager.getStyleDeclaration('.mdiWindowFocus').getStyle('cornerResizeWidth') != null)
-					cornerResizeImg.width = StyleManager.getStyleDeclaration('.mdiWindowFocus').getStyle('cornerResizeWidth');
-					
-				if(StyleManager.getStyleDeclaration('.mdiWindowFocus').getStyle('cornerResizeHeight') != null)
-					cornerResizeImg.height = StyleManager.getStyleDeclaration('.mdiWindowFocus').getStyle('cornerResizeHeight');
-					
-				cornerResizeImg.x = this.width - cornerResizeImg.width;
-				cornerResizeImg.y = this.height - cornerResizeImg.height;
-				
-				if(StyleManager.getStyleDeclaration('.mdiWindowFocus').getStyle('cornerResizePaddingRight') != null)
-					cornerResizeImg.x -= StyleManager.getStyleDeclaration('.mdiWindowFocus').getStyle('cornerResizePaddingRight');
-				
-				if(StyleManager.getStyleDeclaration('.mdiWindowFocus').getStyle('cornerResizePaddingBottom') != null)
-					cornerResizeImg.y -= StyleManager.getStyleDeclaration('.mdiWindowFocus').getStyle('cornerResizePaddingBottom');
-					
-				rawChildren.addChild(cornerResizeImg);
-				
-			}
-			else
-			{
-				this.cornerResizeImg = null;
-			}
-			
 			// controls			
 			if(controls.length == 0)
 			{
-				closeBtn = new Button();
-				closeBtn.width = this.getStyle('controlButtonWidth');
-				closeBtn.height = this.getStyle('controlButtonHeight');
-				(this.styleName == focusStyleName) ? closeBtn.styleName = "closeBtnFocus" : closeBtn.styleName = "closeBtnNoFocus";
-				closeBtn.visible = showCloseButton;
-				controls.push(closeBtn);		
+				minimizeBtn = new Button();
+				minimizeBtn.width = 10;
+				minimizeBtn.height = 10;
+				minimizeBtn.styleName = "minimizeBtn";
+				controls.push(minimizeBtn);
 				
 				maximizeRestoreBtn = new Button();
-				maximizeRestoreBtn.width = this.getStyle('controlButtonWidth');
-				maximizeRestoreBtn.height = this.getStyle('controlButtonHeight');
-				(this.styleName == focusStyleName) ? maximizeRestoreBtn.styleName = "increaseBtnFocus" : maximizeRestoreBtn.styleName = "increaseBtnNoFocus";
+				maximizeRestoreBtn.width = 10;
+				maximizeRestoreBtn.height = 10;
+				maximizeRestoreBtn.styleName = "increaseBtn";
 				controls.push(maximizeRestoreBtn);
 				
-				
-				minimizeBtn = new Button();
-				minimizeBtn.width = this.getStyle('controlButtonWidth');
-				minimizeBtn.height = this.getStyle('controlButtonHeight');
-				(this.styleName == focusStyleName) ? minimizeBtn.styleName = "minimizeBtnFocus" : minimizeBtn.styleName = "minimizeBtnNoFocus";
-				controls.push(minimizeBtn);
-						
+				closeBtn = new Button();
+				closeBtn.width = 10;
+				closeBtn.height = 10;
+				closeBtn.styleName = "closeBtn";
+				closeBtn.visible = showCloseButton;
+				controls.push(closeBtn);				
 			}
-			
 			
 			controlsHolder = new UIComponent();
 			rawChildren.addChild(controlsHolder);
@@ -654,7 +580,8 @@ package flexmdi.containers
 			for(var i:int = 0; i < controls.length; i++)
 			{
 				var control:UIComponent = controls[i];
-				control.x = this.width - ((control.width * (i+1)) + (StyleManager.getStyleDeclaration('.mdiWindowFocus').getStyle('controlButtonGap') * (i+1)));
+				
+				control.x = this.width - ((controls.length - i) * 20);
 				control.y = (titleBar.height - control.height) / 2;
 				control.buttonMode = true;
 				controlsHolder.addChild(control);
@@ -726,22 +653,9 @@ package flexmdi.containers
 			{
 				control = visibleControls[i] as UIComponent;
 				
-				control.x = this.width - ((control.width * (i+1)) + (StyleManager.getStyleDeclaration('.mdiWindowFocus').getStyle('controlButtonGap') * (i+1)));
+				control.x = this.width - ((visibleControls.length - i) * 20);
 				control.y = (titleBar.height - control.height) / 2;
 			}
-			
-			if(cornerResizeImg != null)
-			{
-				cornerResizeImg.x = this.width - cornerResizeImg.width;
-				cornerResizeImg.y = this.height - cornerResizeImg.height;
-				if(StyleManager.getStyleDeclaration('.mdiWindowFocus').getStyle('cornerResizePaddingRight') != null)
-					cornerResizeImg.x -= StyleManager.getStyleDeclaration('.mdiWindowFocus').getStyle('cornerResizePaddingRight');
-				
-				if(StyleManager.getStyleDeclaration('.mdiWindowFocus').getStyle('cornerResizePaddingBottom') != null)
-					cornerResizeImg.y -= StyleManager.getStyleDeclaration('.mdiWindowFocus').getStyle('cornerResizePaddingBottom');
-			}
-			
-			
 		}
 		
 		public function get showCloseButton():Boolean
@@ -764,7 +678,7 @@ package flexmdi.containers
 	     */
 		public function saveStyle():void
 		{
-			//this.backgroundAlphaRestore = this.getStyle("backgroundAlpha");
+			this.backgroundAlphaRestore = this.getStyle("backgroundAlpha");
 		}
 		
 		/**
@@ -772,7 +686,7 @@ package flexmdi.containers
 	     */
 		public function restoreStyle():void
 		{
-			//this.setStyle("backgroundAlpha", this.backgroundAlphaRestore);
+			this.setStyle("backgroundAlpha", this.backgroundAlphaRestore);
 		}
 		
 		/**
@@ -878,7 +792,6 @@ package flexmdi.containers
 			{
 				savePanel();
 			}
-			_prevWindowState = windowState;
 			dispatchEvent(new MDIWindowEvent(MDIWindowEvent.MINIMIZE, this));
 			windowState = MDIWindowState.MINIMIZED;
 			showControls = false;
@@ -892,7 +805,7 @@ package flexmdi.containers
 		 */
 		public function maximizeRestore(event:MouseEvent = null):void
 		{
-			if(maximizeRestoreBtn.styleName == "increaseBtnFocus" || maximizeRestoreBtn.styleName == "increaseBtnNoFocus")
+			if(maximizeRestoreBtn.styleName == "increaseBtn")
 			{
 				savePanel();
 				maximize();
@@ -908,7 +821,7 @@ package flexmdi.containers
 		 */
 		public function restore():void
 		{
-			maximizeRestoreBtn.styleName = "increaseBtnFocus";
+			maximizeRestoreBtn.styleName = "increaseBtn";
 			windowState = MDIWindowState.NORMAL;
 			dispatchEvent(new MDIWindowEvent(MDIWindowEvent.RESTORE, this));
 		}
@@ -918,9 +831,13 @@ package flexmdi.containers
 		 */
 		public function maximize():void
 		{
+			if(windowState == MDIWindowState.NORMAL)
+			{
+				savePanel();
+			}
 			showControls = true;
 			windowState = MDIWindowState.MAXIMIZED;
-			maximizeRestoreBtn.styleName = "decreaseBtnFocus";
+			maximizeRestoreBtn.styleName = "decreaseBtn";
 			dispatchEvent(new MDIWindowEvent(MDIWindowEvent.MAXIMIZE, this));
 		}
 		
@@ -1136,7 +1053,7 @@ package flexmdi.containers
 				}
 			}
 		}
-		//DEFAULT CURSORS
+		
 		[Embed(source="/flexmdi/assets/img/resizeCursorH.gif")]
 		private static var resizeCursorHorizontalSkin:Class;
 		private static var resizeCursorHorizontalSkinXOffset:Number = -10;
@@ -1157,29 +1074,12 @@ package flexmdi.containers
 		private static var resizeCursorTopRightBottomLeftSkinXOffset:Number = -10;
 		private static var resizeCursorTopRightBottomLeftSkinYOffset:Number = -10;
 		
-		//DEFAULT CONTROL BUTTONS
-		[Embed(source="/flexmdi/assets/img/closeButton.png")]
-		private static var defaultCloseButton:Class;
-		
-		[Embed(source="/flexmdi/assets/img/decreaseButton.png")]
-		private static var defaultDecreaseButton:Class;
-		
-		[Embed(source="/flexmdi/assets/img/increaseButton.png")]
-		private static var defaultIncreaseButton:Class;
-		
-		[Embed(source="/flexmdi/assets/img/minimizeButton.png")]
-		private static var defaultMinimizeButton:Class;
-		
-		
-		
 		private static var classConstructed:Boolean = classConstruct();
 		
 		private static function classConstruct():Boolean
 		{
-		//CURSOR STYLES
 			if(!StyleManager.getStyleDeclaration(".mdiWindowCursorStyle"))
 			{
-				//scope of 'this' is the cursorStyle instance
 				var cursorStyle:CSSStyleDeclaration = new CSSStyleDeclaration();
 				cursorStyle.defaultFactory = function():void
 				{
@@ -1200,143 +1100,6 @@ package flexmdi.containers
 					this.resizeCursorTopRightBottomLeftSkinYOffset = resizeCursorTopRightBottomLeftSkinYOffset;
 				}
 				StyleManager.setStyleDeclaration(".mdiWindowCursorStyle", cursorStyle, true);
-			}
-		//WINDOW STYLES
-			if(!StyleManager.getStyleDeclaration(".mdiWindowFocus"))
-			{
-				var focusStyle:CSSStyleDeclaration = new CSSStyleDeclaration();
-				StyleManager.setStyleDeclaration(".mdiWindowFocus", focusStyle, true);
-			}
-			
-			if(!StyleManager.getStyleDeclaration('.mdiWindowFocus').getStyle('controlButtonWidth'))
-				StyleManager.getStyleDeclaration('.mdiWindowFocus').setStyle('controlButtonWidth', 10);
-			if(!StyleManager.getStyleDeclaration('.mdiWindowFocus').getStyle('controlButtonHeight'))
-				StyleManager.getStyleDeclaration('.mdiWindowFocus').setStyle('controlButtonHeight', 10);
-			if(!StyleManager.getStyleDeclaration('.mdiWindowFocus').getStyle('controlButtonGap'))
-				StyleManager.getStyleDeclaration('.mdiWindowFocus').setStyle('controlButtonGap', 8);
-			
-			if(!StyleManager.getStyleDeclaration(".mdiWindowNoFocus"))
-			{
-				var noFocusStyle:CSSStyleDeclaration = new CSSStyleDeclaration();
-				StyleManager.setStyleDeclaration(".mdiWindowNoFocus", noFocusStyle, true);
-			}
-			
-			if(!StyleManager.getStyleDeclaration('.mdiWindowNoFocus').getStyle('controlButtonWidth'))
-				StyleManager.getStyleDeclaration('.mdiWindowNoFocus').setStyle('controlButtonWidth', 10);
-			if(!StyleManager.getStyleDeclaration('.mdiWindowNoFocus').getStyle('controlButtonHeight'))
-				StyleManager.getStyleDeclaration('.mdiWindowNoFocus').setStyle('controlButtonHeight', 10);
-			if(!StyleManager.getStyleDeclaration('.mdiWindowNoFocus').getStyle('controlButtonGap'))
-				StyleManager.getStyleDeclaration('.mdiWindowNoFocus').setStyle('controlButtonGap', 8);
-				
-				
-		//CLOSE BUTTON
-			if(!StyleManager.getStyleDeclaration(".closeBtnFocus"))
-			{
-				var closeBtnFocusStyle:CSSStyleDeclaration = new CSSStyleDeclaration();
-				closeBtnFocusStyle.defaultFactory = function():void
-				{
-					this.upSkin = defaultCloseButton;
-					this.overSkin = defaultCloseButton;
-					this.downSkin = defaultCloseButton;
-					this.disabledSkin = defaultCloseButton;
-				}
-				StyleManager.setStyleDeclaration(".closeBtnFocus", closeBtnFocusStyle, true);
-			}
-			
-			if(!StyleManager.getStyleDeclaration(".closeBtnNoFocus"))
-			{
-				var closeBtnNoFocusStyle:CSSStyleDeclaration = new CSSStyleDeclaration();
-				closeBtnNoFocusStyle.defaultFactory = function():void
-				{
-					this.upSkin = defaultCloseButton;
-					this.overSkin = defaultCloseButton;
-					this.downSkin = defaultCloseButton;
-					this.disabledSkin = defaultCloseButton;
-				}
-				StyleManager.setStyleDeclaration(".closeBtnNoFocus", closeBtnNoFocusStyle, true);
-			}
-			
-		//INCREASE BUTTON
-			if(!StyleManager.getStyleDeclaration(".increaseBtnFocus"))
-			{
-				var increaseBtnFocusStyle:CSSStyleDeclaration = new CSSStyleDeclaration();
-				increaseBtnFocusStyle.defaultFactory = function():void
-				{
-					this.upSkin = defaultIncreaseButton;
-					this.overSkin = defaultIncreaseButton;
-					this.downSkin = defaultIncreaseButton;
-					this.disabledSkin = defaultIncreaseButton;
-				}
-				StyleManager.setStyleDeclaration(".increaseBtnFocus", increaseBtnFocusStyle, true);
-			}
-			
-			if(!StyleManager.getStyleDeclaration(".increaseBtnNoFocus"))
-			{
-				var increaseBtnNoFocusStyle:CSSStyleDeclaration = new CSSStyleDeclaration();
-				increaseBtnNoFocusStyle.defaultFactory = function():void
-				{
-					this.upSkin = defaultIncreaseButton;
-					this.overSkin = defaultIncreaseButton;
-					this.downSkin = defaultIncreaseButton;
-					this.disabledSkin = defaultIncreaseButton;
-				}
-				StyleManager.setStyleDeclaration(".increaseBtnNoFocus", increaseBtnNoFocusStyle, true);
-			}
-			
-		//DECREASE BUTTON
-			if(!StyleManager.getStyleDeclaration(".decreaseBtnFocus"))
-			{
-				var decreaseBtnFocusStyle:CSSStyleDeclaration = new CSSStyleDeclaration();
-				decreaseBtnFocusStyle.defaultFactory = function():void
-				{
-					this.upSkin = defaultDecreaseButton;
-					this.overSkin = defaultDecreaseButton;
-					this.downSkin = defaultDecreaseButton;
-					this.disabledSkin = defaultDecreaseButton;
-				}
-				StyleManager.setStyleDeclaration(".decreaseBtnFocus", decreaseBtnFocusStyle, true);
-			}
-			
-			if(!StyleManager.getStyleDeclaration(".decreaseBtnNoFocus"))
-			{
-				var decreaseBtnNoFocusStyle:CSSStyleDeclaration = new CSSStyleDeclaration();
-				decreaseBtnNoFocusStyle.defaultFactory = function():void
-				{
-					this.upSkin = defaultDecreaseButton;
-					this.overSkin = defaultDecreaseButton;
-					this.downSkin = defaultDecreaseButton;
-					this.disabledSkin = defaultDecreaseButton;
-				}
-				StyleManager.setStyleDeclaration(".decreaseBtnNoFocus", decreaseBtnNoFocusStyle, true);
-			}
-			
-		//MINIMIZE BUTTON
-			var minimizeBtnFocusStyle:CSSStyleDeclaration;
-				
-			if(!StyleManager.getStyleDeclaration(".minimizeBtnFocus"))
-			{
-				minimizeBtnFocusStyle = new CSSStyleDeclaration();
-				minimizeBtnFocusStyle.defaultFactory = function():void
-				{
-					this.upSkin = defaultMinimizeButton;
-					this.overSkin = defaultMinimizeButton;
-					this.downSkin = defaultMinimizeButton;
-					this.disabledSkin = defaultMinimizeButton;
-				}
-				StyleManager.setStyleDeclaration(".minimizeBtnFocus", minimizeBtnFocusStyle, true);
-			}
-			
-			if(!StyleManager.getStyleDeclaration(".minimizeBtnNoFocus"))
-			{
-				minimizeBtnFocusStyle = new CSSStyleDeclaration();
-				minimizeBtnFocusStyle.defaultFactory = function():void
-				{
-					this.upSkin = defaultMinimizeButton;
-					this.overSkin = defaultMinimizeButton;
-					this.downSkin = defaultMinimizeButton;
-					this.disabledSkin = defaultMinimizeButton;
-				}
-				StyleManager.setStyleDeclaration(".minimizeBtnNoFocus", minimizeBtnFocusStyle, true);
 			}
 			
 			return true;
@@ -1408,8 +1171,6 @@ package flexmdi.containers
 		public function set showControls(value:Boolean):void
 		{
 			controlsHolder.visible = value;
-			if(cornerResizeImg != null)
-				cornerResizeImg.visible = value;
 		}
 		
 		private function get windowState():int

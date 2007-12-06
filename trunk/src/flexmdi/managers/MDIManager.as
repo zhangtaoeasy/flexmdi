@@ -23,8 +23,7 @@ SOFTWARE.
 
 
 package flexmdi.managers
-{	
-
+{
 	import flash.display.DisplayObject;
 	import flash.events.ContextMenuEvent;
 	import flash.events.Event;

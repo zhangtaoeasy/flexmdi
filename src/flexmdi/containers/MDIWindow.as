@@ -541,12 +541,7 @@ package flexmdi.containers
 				rawChildren.addChild(resizeHandleBL);
 			}
 			
-			if(!windowControls)
-			{
-				windowControls = new windowControlsClass();
-				windowControls.window = this;
-				rawChildren.addChild(UIComponent(windowControls));
-			}
+			rawChildren.setChildIndex(DisplayObject(windowControls), rawChildren.numChildren - 1);
 			
 			addListeners();
 		}

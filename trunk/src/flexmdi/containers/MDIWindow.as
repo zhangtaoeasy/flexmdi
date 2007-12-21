@@ -24,6 +24,7 @@ SOFTWARE.
 
 package flexmdi.containers
 {
+	import flash.display.DisplayObject;
 	import flash.events.ContextMenuEvent;
 	import flash.events.Event;
 	import flash.events.MouseEvent;
@@ -37,7 +38,10 @@ package flexmdi.containers
 	import mx.containers.Canvas;
 	import mx.containers.Panel;
 	import mx.controls.Button;
+	import mx.core.Container;
+	import mx.core.IUITextField;
 	import mx.core.UIComponent;
+	import mx.core.mx_internal;
 	import mx.events.FlexEvent;
 	import mx.managers.CursorManager;
 	import mx.styles.CSSStyleDeclaration;
@@ -232,36 +236,21 @@ package flexmdi.containers
 		private var _prevWindowState:int;
 		
 		/**
-	     * @private
 	     * Parent of window controls (min, restore/max and close buttons).
 	     */
-		private var controlsHolder:UIComponent;
+		public var windowControls:IMDIWindowControlsContainer;
+		
+		/**
+		 * @private
+		 * Class that will be instantiated to create windowControls property.
+		 */
+		private var _windowControlsClass:Class;
 		
 		/**
 		 * @private
 		 * Flag to determine whether or not close button is visible.
 		 */
 		private var _showCloseButton:Boolean = true;
-		
-		/**
-		 * Array of controlsHolder's child components.
-		 */
-		public var controls:Array;
-		
-		/**
-		 * Minimize window button.
-		 */
-		public var minimizeBtn:Button;
-		
-		/**
-		 * Maximize/restore window button.
-		 */
-		public var maximizeRestoreBtn:Button;
-		
-		/**
-		 * Close window button.
-		 */
-		public var closeBtn:Button;
 		
 		/**
 		 * Height of window when minimized.
@@ -349,10 +338,10 @@ package flexmdi.containers
 		private var _resizing:Boolean;
 		
 		/**
-		 * @private
 		 * Invisible shape laid over titlebar to prevent funkiness from clicking in title textfield.
+		 * Making it public gives child components like controls container access to size of titleBar.
 		 */
-		private var titleOverlay:Canvas;
+		public var titleBarOverlay:Canvas;
 		
 		/**
 		 * @private
@@ -429,28 +418,29 @@ package flexmdi.containers
 		public function MDIWindow()
 		{
 			super();
-			controls = new Array();
-			doubleClickEnabled = true;
 			minWidth = 200;
 			minHeight = 200;
 			windowState = MDIWindowState.NORMAL;
-			resizable = draggable = true;
+			doubleClickEnabled = resizable = draggable = true;
 			
 			focusStyleName = "mdiWindowFocus";
 			noFocusStyleName = "mdiWindowNoFocus";
 			styleName = focusStyleName;
 			cursorStyleName = "mdiWindowCursorStyle";	
 			
-			addEventListener(FlexEvent.CREATION_COMPLETE, componentComplete);			
+			windowControlsClass = MDIWindowControlsContainerBase;
+			
+			addEventListener(FlexEvent.CREATION_COMPLETE, onCreationComplete);			
 		}
 		
 		/**
 		 * @private
 		 */
-		private function componentComplete(event:FlexEvent):void
+		private function onCreationComplete(event:FlexEvent):void
 		{
 			minimizeHeight = this.titleBar.height;
 			invalidateDisplayList();
+			removeEventListener(FlexEvent.CREATION_COMPLETE, onCreationComplete);
 		}
 		
 		/**
@@ -460,14 +450,14 @@ package flexmdi.containers
 		{
 			super.createChildren();
 			
-			if(!titleOverlay)
+			if(!titleBarOverlay)
 			{
-				titleOverlay = new Canvas();
-				titleOverlay.width = this.width;
-				titleOverlay.height = this.titleBar.height;
-				titleOverlay.alpha = 0;
-				titleOverlay.setStyle("backgroundColor", 0x000000);
-				rawChildren.addChild(titleOverlay);
+				titleBarOverlay = new Canvas();
+				titleBarOverlay.width = this.width;
+				titleBarOverlay.height = this.titleBar.height;
+				titleBarOverlay.alpha = 0;
+				titleBarOverlay.setStyle("backgroundColor", 0x000000);
+				rawChildren.addChild(titleBarOverlay);
 			}
 			
 			// edges
@@ -551,54 +541,46 @@ package flexmdi.containers
 				rawChildren.addChild(resizeHandleBL);
 			}
 			
-			// controls			
-			if(controls.length == 0)
+			if(!windowControls)
 			{
-				minimizeBtn = new Button();
-				minimizeBtn.width = 10;
-				minimizeBtn.height = 10;
-				minimizeBtn.styleName = "minimizeBtn";
-				controls.push(minimizeBtn);
-				
-				maximizeRestoreBtn = new Button();
-				maximizeRestoreBtn.width = 10;
-				maximizeRestoreBtn.height = 10;
-				maximizeRestoreBtn.styleName = "increaseBtn";
-				controls.push(maximizeRestoreBtn);
-				
-				closeBtn = new Button();
-				closeBtn.width = 10;
-				closeBtn.height = 10;
-				closeBtn.styleName = "closeBtn";
-				closeBtn.visible = showCloseButton;
-				controls.push(closeBtn);				
-			}
-			
-			controlsHolder = new UIComponent();
-			rawChildren.addChild(controlsHolder);
-			
-			for(var i:int = 0; i < controls.length; i++)
-			{
-				var control:UIComponent = controls[i];
-				
-				control.x = this.width - ((controls.length - i) * 20);
-				control.y = (titleBar.height - control.height) / 2;
-				control.buttonMode = true;
-				controlsHolder.addChild(control);
+				windowControls = new windowControlsClass();
+				windowControls.window = this;
+				rawChildren.addChild(UIComponent(windowControls));
 			}
 			
 			addListeners();
-		}		
+		}
+		
+		public function get windowControlsClass():Class
+		{
+			return _windowControlsClass;
+		}
+		
+		public function set windowControlsClass(clazz:Class):void
+		{
+			if(windowControls)
+			{
+				Container(windowControls).removeAllChildren();
+				rawChildren.removeChild(DisplayObject(windowControls));
+				windowControls = null;
+			}
+			
+			_windowControlsClass = clazz;
+			
+			windowControls = new windowControlsClass();
+			windowControls.window = this;
+			rawChildren.addChild(UIComponent(windowControls));
+		}
 		
 		/**
 		 * Position resize handles and window controls.
 		 */
-		override protected function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number):void
+		override protected function updateDisplayList(w:Number, h:Number):void
 		{
-			super.updateDisplayList(unscaledWidth, unscaledHeight);
+			super.updateDisplayList(w, h);
 			
-			titleOverlay.width = this.width;
-			titleOverlay.height = this.titleBar.height;
+			titleBarOverlay.width = this.width;
+			titleBarOverlay.height = this.titleBar.height;
 			
 			// edges
 			resizeHandleTop.x = cornerHandleSize * .5;
@@ -637,25 +619,32 @@ package flexmdi.containers
 			resizeHandleBL.y = this.height - cornerHandleSize * .5;
 			resizeHandleBL.width = resizeHandleBL.height = cornerHandleSize;
 			
-			// position window controls
-			var visibleControls:Array = new Array();
-			
-			for(var i:int = 0; i < controlsHolder.numChildren; i++)
-			{
-				var control:UIComponent = controlsHolder.getChildAt(i) as UIComponent;
-				if(control.visible)
-				{
-					visibleControls.push(control);
-				}
-			}
-			
-			for(i = 0; i < visibleControls.length; i++)
-			{
-				control = visibleControls[i] as UIComponent;
-				
-				control.x = this.width - ((visibleControls.length - i) * 20);
-				control.y = (titleBar.height - control.height) / 2;
-			}
+			// render titleBar
+			UIComponent(windowControls).invalidateDisplayList();
+		}
+		
+		/**
+		 * Minimize window button.
+		 */
+		public function get minimizeBtn():Button
+		{
+			return windowControls.minimizeBtn;
+		}
+		
+		/**
+		 * Maximize/restore window button.
+		 */
+		public function get maximizeRestoreBtn():Button
+		{
+			return windowControls.maximizeRestoreBtn;
+		}
+		
+		/**
+		 * Close window button.
+		 */
+		public function get closeBtn():Button
+		{
+			return windowControls.closeBtn;
 		}
 		
 		public function get showCloseButton():Boolean
@@ -666,11 +655,22 @@ package flexmdi.containers
 		public function set showCloseButton(value:Boolean):void
 		{
 			_showCloseButton = value;
-			if(closeBtn)
+			if(closeBtn && closeBtn.visible != value)
 			{
 				closeBtn.visible = value;
 				invalidateDisplayList();
 			}
+		}
+		
+		public function getTitleTextField():IUITextField
+		{
+			return titleTextField;
+		}
+		
+		public function getTitleIconObject():DisplayObject
+		{
+			use namespace mx_internal;
+			return titleIconObject as DisplayObject;
 		}
 		
 		/**
@@ -729,27 +729,35 @@ package flexmdi.containers
 			resizeHandleBL.addEventListener(MouseEvent.MOUSE_DOWN, onResizeButtonPress, false, 0, true);
 			
 			// titleBar
-			titleOverlay.addEventListener(MouseEvent.MOUSE_DOWN, onTitleBarPress, false, 0, true);
-			titleOverlay.addEventListener(MouseEvent.MOUSE_UP, onTitleBarRelease, false, 0, true);
-			titleOverlay.addEventListener(MouseEvent.DOUBLE_CLICK, maximizeRestore, false, 0, true);
-			titleOverlay.addEventListener(MouseEvent.CLICK, unMinimize, false, 0, true);
+			titleBarOverlay.addEventListener(MouseEvent.MOUSE_DOWN, onTitleBarPress, false, 0, true);
+			titleBarOverlay.addEventListener(MouseEvent.MOUSE_UP, onTitleBarRelease, false, 0, true);
+			titleBarOverlay.addEventListener(MouseEvent.DOUBLE_CLICK, maximizeRestore, false, 0, true);
+			titleBarOverlay.addEventListener(MouseEvent.CLICK, unMinimize, false, 0, true);
 			
 			// window controls
-			if(minimizeBtn)
-			{
-				minimizeBtn.addEventListener(MouseEvent.CLICK, minimize, false, 0, true);
-			}
-			if(maximizeRestoreBtn)
-			{
-				maximizeRestoreBtn.addEventListener(MouseEvent.CLICK, maximizeRestore, false, 0, true);
-			}
-			if(closeBtn)
-			{
-				closeBtn.addEventListener(MouseEvent.CLICK, close, false, 0, true);
-			}
+			this.addEventListener(MouseEvent.CLICK, onClick, false, 0, true);
 			
 			// clicking anywhere brings window to front
 			this.addEventListener(MouseEvent.MOUSE_DOWN, bringToFront);
+		}
+		
+		private function onClick(event:MouseEvent):void
+		{
+			if(windowControls)
+			{
+				if(windowControls.minimizeBtn && event.target == windowControls.minimizeBtn)
+				{
+					minimize();
+				}
+				else if(windowControls.maximizeRestoreBtn && event.target == windowControls.maximizeRestoreBtn)
+				{
+					maximizeRestore();
+				}
+				else if(windowControls.closeBtn && event.target == windowControls.closeBtn)
+				{
+					close();
+				}
+			}
 		}
 		
 		/**
@@ -805,7 +813,7 @@ package flexmdi.containers
 		 */
 		public function maximizeRestore(event:MouseEvent = null):void
 		{
-			if(maximizeRestoreBtn.styleName == "increaseBtn")
+			if(windowState == MDIWindowState.NORMAL)
 			{
 				savePanel();
 				maximize();
@@ -857,23 +865,6 @@ package flexmdi.containers
 		private function savePanel():void
 		{
 			savedWindowRect = new Rectangle(this.x, this.y, this.width, this.height);
-		}
-		
-		/**
-		 * Not fully refined yet. Should be improved asap.
-		 */
-		public function addControl(uic:UIComponent, index:int = -1):void
-		{
-			uic.buttonMode = true;
-			if(index > -1)
-			{
-				controlsHolder.addChildAt(uic, index);
-			}
-			else
-			{
-				controlsHolder.addChild(uic);
-			}
-			invalidateDisplayList();
 		}
 		
 		/**
@@ -1170,7 +1161,7 @@ package flexmdi.containers
 		
 		public function set showControls(value:Boolean):void
 		{
-			controlsHolder.visible = value;
+			Container(windowControls).visible = value;
 		}
 		
 		private function get windowState():int

@@ -32,6 +32,8 @@ package flexmdi.containers
 	import flash.ui.ContextMenu;
 	import flash.ui.ContextMenuItem;
 	
+	import flexmdi.controls.IMDIFocusAwareStyleClient;
+	import flexmdi.controls.MDIMaximizeRestoreButton;
 	import flexmdi.events.MDIWindowEvent;
 	import flexmdi.managers.MDIManager;
 	
@@ -211,7 +213,7 @@ package flexmdi.containers
 	/**
 	 * Central window class used in flexmdi. Includes min/max/close buttons by default.
 	 */
-	public class MDIWindow extends Panel
+	public class MDIWindow extends Panel implements IMDIFocusAwareStyleClient
 	{		
 		/**
 	     * Size of edge handles. Can be adjusted to affect "sensitivity" of resize area.
@@ -236,9 +238,21 @@ package flexmdi.containers
 		private var _prevWindowState:int;
 		
 		/**
+		 * @private
+		 * Internal storage of style name to be applied when window is in focus.
+		 */
+		private var _focusStyleName:String;
+		
+		/**
+		 * @private
+		 * Internal storage of style name to be applied when window is out of focus.
+		 */
+		private var _noFocusStyleName:String;
+		
+		/**
 	     * Parent of window controls (min, restore/max and close buttons).
 	     */
-		public var windowControls:IMDIWindowControlsContainer;
+		public var windowControls:MDIWindowControlsContainer;
 		
 		/**
 		 * @private
@@ -395,21 +409,16 @@ package flexmdi.containers
 	     */
 		public var windowManager:MDIManager;
 		
+		/**
+		 * Is this window in focus?
+		 */
+		public var hasFocus:Boolean;
+		
 		
 		/**
 		 * @private store the backgroundAlpha when minimized.
 	     */
 		private var backgroundAlphaRestore:Number = 1;
-		
-		/**
-		 * Name of style to be applied when window has focus.
-		 */
-		public var focusStyleName:String;
-		
-		/**
-		 * Name of style to be applied when window does not have focus.
-		 */
-		public var noFocusStyleName:String;
 		
 		
 		/**
@@ -423,12 +432,12 @@ package flexmdi.containers
 			windowState = MDIWindowState.NORMAL;
 			doubleClickEnabled = resizable = draggable = true;
 			
-			focusStyleName = "mdiWindowFocus";
+			focusStyleName = "mdiWindow";
 			noFocusStyleName = "mdiWindowNoFocus";
 			styleName = focusStyleName;
 			cursorStyleName = "mdiWindowCursorStyle";	
 			
-			windowControlsClass = MDIWindowControlsContainerBase;
+			windowControlsClass = MDIWindowControlsContainer;
 			
 			addEventListener(FlexEvent.CREATION_COMPLETE, onCreationComplete);			
 		}
@@ -546,29 +555,8 @@ package flexmdi.containers
 			addListeners();
 		}
 		
-		public function get windowControlsClass():Class
-		{
-			return _windowControlsClass;
-		}
-		
-		public function set windowControlsClass(clazz:Class):void
-		{
-			if(windowControls)
-			{
-				Container(windowControls).removeAllChildren();
-				rawChildren.removeChild(DisplayObject(windowControls));
-				windowControls = null;
-			}
-			
-			_windowControlsClass = clazz;
-			
-			windowControls = new windowControlsClass();
-			windowControls.window = this;
-			rawChildren.addChild(UIComponent(windowControls));
-		}
-		
 		/**
-		 * Position resize handles and window controls.
+		 * Position and size resize handles and window controls.
 		 */
 		override protected function updateDisplayList(w:Number, h:Number):void
 		{
@@ -618,6 +606,56 @@ package flexmdi.containers
 			UIComponent(windowControls).invalidateDisplayList();
 		}
 		
+		override public function styleChanged(styleProp:String):void
+		{
+			super.styleChanged(styleProp);
+			
+			if(windowControls && styleProp == "styleName")
+			{
+				var cntnr:Container = Container(windowControls);
+				for each(var control:UIComponent in cntnr.getChildren())
+				{
+					if(control is IMDIFocusAwareStyleClient)
+					{
+						if(this.hasFocus)
+						{
+							control.styleName = IMDIFocusAwareStyleClient(control).focusStyleName;
+						}
+						else
+						{
+							control.styleName = IMDIFocusAwareStyleClient(control).noFocusStyleName;
+						}
+					}
+				}
+			}
+		}
+		
+		public function get windowControlsClass():Class
+		{
+			return _windowControlsClass;
+		}
+		
+		public function set windowControlsClass(clazz:Class):void
+		{
+			if(windowControls)
+			{
+				var cntnr:Container = Container(windowControls);
+				cntnr.removeAllChildren();
+				rawChildren.removeChild(cntnr);
+				windowControls = null;
+			}
+			
+			_windowControlsClass = clazz;
+			
+			windowControls = new windowControlsClass();
+			windowControls.window = this;
+			rawChildren.addChild(UIComponent(windowControls));
+			if(windowState == MDIWindowState.MINIMIZED)
+			{
+				showControls = false;
+			}
+		}
+		
 		/**
 		 * Minimize window button.
 		 */
@@ -629,7 +667,7 @@ package flexmdi.containers
 		/**
 		 * Maximize/restore window button.
 		 */
-		public function get maximizeRestoreBtn():Button
+		public function get maximizeRestoreBtn():MDIMaximizeRestoreButton
 		{
 			return windowControls.maximizeRestoreBtn;
 		}
@@ -673,7 +711,7 @@ package flexmdi.containers
 	     */
 		public function saveStyle():void
 		{
-			this.backgroundAlphaRestore = this.getStyle("backgroundAlpha");
+			//this.backgroundAlphaRestore = this.getStyle("backgroundAlpha");
 		}
 		
 		/**
@@ -681,7 +719,7 @@ package flexmdi.containers
 	     */
 		public function restoreStyle():void
 		{
-			this.setStyle("backgroundAlpha", this.backgroundAlphaRestore);
+			//this.setStyle("backgroundAlpha", this.backgroundAlphaRestore);
 		}
 		
 		/**
@@ -723,20 +761,20 @@ package flexmdi.containers
 			resizeHandleBL.addEventListener(MouseEvent.ROLL_OUT, onResizeButtonRollOut, false, 0, true);
 			resizeHandleBL.addEventListener(MouseEvent.MOUSE_DOWN, onResizeButtonPress, false, 0, true);
 			
-			// titleBar
+			// titleBar overlay
 			titleBarOverlay.addEventListener(MouseEvent.MOUSE_DOWN, onTitleBarPress, false, 0, true);
 			titleBarOverlay.addEventListener(MouseEvent.MOUSE_UP, onTitleBarRelease, false, 0, true);
 			titleBarOverlay.addEventListener(MouseEvent.DOUBLE_CLICK, maximizeRestore, false, 0, true);
 			titleBarOverlay.addEventListener(MouseEvent.CLICK, unMinimize, false, 0, true);
 			
 			// window controls
-			this.addEventListener(MouseEvent.CLICK, onClick, false, 0, true);
+			this.addEventListener(MouseEvent.CLICK, windowControlClickHandler, false, 0, true);
 			
 			// clicking anywhere brings window to front
 			this.addEventListener(MouseEvent.MOUSE_DOWN, bringToFront);
 		}
 		
-		private function onClick(event:MouseEvent):void
+		private function windowControlClickHandler(event:MouseEvent):void
 		{
 			if(windowControls)
 			{
@@ -824,10 +862,15 @@ package flexmdi.containers
 		 */
 		public function restore():void
 		{
-			maximizeRestoreBtn.styleName = "increaseBtn";
 			windowState = MDIWindowState.NORMAL;
+			if(maximizeRestoreBtn)
+			{
+				maximizeRestoreBtn.styleName = (this.hasFocus) 
+													? maximizeRestoreBtn.focusStyleName 
+													: maximizeRestoreBtn.noFocusStyleName;
+			}
 			dispatchEvent(new MDIWindowEvent(MDIWindowEvent.RESTORE, this));
-		}
+		}		
 		
 		/**
 		 * Maximize the window.
@@ -840,7 +883,12 @@ package flexmdi.containers
 			}
 			showControls = true;
 			windowState = MDIWindowState.MAXIMIZED;
-			maximizeRestoreBtn.styleName = "decreaseBtn";
+			if(maximizeRestoreBtn)
+			{
+				maximizeRestoreBtn.styleName = (this.hasFocus) 
+													? maximizeRestoreBtn.focusStyleName 
+													: maximizeRestoreBtn.noFocusStyleName;
+			}
 			dispatchEvent(new MDIWindowEvent(MDIWindowEvent.MAXIMIZE, this));
 		}
 		
@@ -1180,6 +1228,26 @@ package flexmdi.containers
 		public function get maximized():Boolean
 		{
 			return _windowState == MDIWindowState.MAXIMIZED;
+		}
+		
+		public function get focusStyleName():String
+		{
+			return _focusStyleName;
+		}
+		
+		public function set focusStyleName(styleName:String):void
+		{
+			_focusStyleName = styleName;
+		}
+		
+		public function get noFocusStyleName():String
+		{
+			return _noFocusStyleName;
+		}
+		
+		public function set noFocusStyleName(styleName:String):void
+		{
+			_noFocusStyleName = styleName;
 		}
 		
 		public function updateContextMenu(currentState:int):void

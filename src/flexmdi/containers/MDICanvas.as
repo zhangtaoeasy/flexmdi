@@ -40,24 +40,6 @@ package flexmdi.containers
 	{
 		public var windowManager:MDIManager;
 		
-		
-		/**
-		 * 
-		 * @depreciated use effects and class
-		 * 
-		 */ 
-		public function set effectsLib(classRef:Class):void 
-		{
-			this.windowManager.effects = new classRef();
-		}
-		
-		
-		public function set effects(effects:IMDIEffectsDescriptor):void 
-		{
-			this.windowManager.effects = effects;
-		
-		}
-		
 		public function MDICanvas()
 		{
 			super();
@@ -75,6 +57,23 @@ package flexmdi.containers
 				}
 			}
 			removeEventListener(FlexEvent.CREATION_COMPLETE, onCreationComplete);
+		}
+		
+		/**
+		 * 
+		 * @deprecated use effects and class
+		 * 
+		 */ 
+		public function set effectsLib(clazz:Class):void 
+		{
+			this.windowManager.effects = new clazz();
+		}
+		
+		
+		public function set effects(effects:IMDIEffectsDescriptor):void 
+		{
+			this.windowManager.effects = effects;
+		
 		}
 	}
 }

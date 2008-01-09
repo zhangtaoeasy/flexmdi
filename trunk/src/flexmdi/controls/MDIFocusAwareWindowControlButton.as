@@ -27,7 +27,7 @@ package flexmdi.controls
 	
 	/**
 	 * Convenience class developers can inherit from in order to easily implement focus-aware buttons
-	 * rather than having to define get/set pairs themselves.
+	 * rather than having to define the get/set pairs required by IMDIFocusAwareStyleClient themselves.
 	 */
 	public class MDIFocusAwareWindowControlButton extends Button implements IMDIFocusAwareStyleClient
 	{

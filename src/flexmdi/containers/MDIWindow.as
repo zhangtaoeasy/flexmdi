@@ -21,7 +21,6 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-
 package flexmdi.containers
 {
 	import flash.display.DisplayObject;
@@ -412,8 +411,7 @@ package flexmdi.containers
 		/**
 		 * Is this window in focus?
 		 */
-		public var hasFocus:Boolean;
-		
+		public var hasFocus:Boolean;		
 		
 		/**
 		 * @private store the backgroundAlpha when minimized.
@@ -550,6 +548,7 @@ package flexmdi.containers
 				rawChildren.addChild(resizeHandleBL);
 			}
 			
+			// bring windowControls to top as they are created in constructor
 			rawChildren.setChildIndex(DisplayObject(windowControls), rawChildren.numChildren - 1);
 			
 			addListeners();
@@ -602,10 +601,14 @@ package flexmdi.containers
 			resizeHandleBL.y = this.height - cornerHandleSize * .5;
 			resizeHandleBL.width = resizeHandleBL.height = cornerHandleSize;
 			
-			// render titleBar
+			// cause windowControls container to update
 			UIComponent(windowControls).invalidateDisplayList();
 		}
 		
+		/**
+		 * Detects change to styleName that is executed by MDIManager indicating a change in focus.
+		 * Iterates over window controls and adjusts their styles if they're focus-aware.
+		 */
 		override public function styleChanged(styleProp:String):void
 		{
 			super.styleChanged(styleProp);
@@ -630,11 +633,17 @@ package flexmdi.containers
 			}
 		}
 		
+		/**
+		 * Reference to class used to create windowControls property.
+		 */
 		public function get windowControlsClass():Class
 		{
 			return _windowControlsClass;
 		}
 		
+		/**
+		 * When reference is set windowControls will be reinstantiated, meaning runtime switching is supported.
+		 */
 		public function set windowControlsClass(clazz:Class):void
 		{
 			if(windowControls)
@@ -695,11 +704,19 @@ package flexmdi.containers
 			}
 		}
 		
+		/**
+		 * Returns reference to titleTextField which is protected by default.
+		 * Provided to allow MDIWindowControlsContainer subclasses as much freedom as possible.
+		 */
 		public function getTitleTextField():IUITextField
 		{
 			return titleTextField;
 		}
 		
+		/**
+		 * Returns reference to titleIconObject which is mx_internal by default.
+		 * Provided to allow MDIWindowControlsContainer subclasses as much freedom as possible.
+		 */
 		public function getTitleIconObject():DisplayObject
 		{
 			use namespace mx_internal;
@@ -774,6 +791,9 @@ package flexmdi.containers
 			this.addEventListener(MouseEvent.MOUSE_DOWN, bringToFront);
 		}
 		
+		/**
+		 * Click handler for default window controls (minimize, maximize/restore and close).
+		 */
 		private function windowControlClickHandler(event:MouseEvent):void
 		{
 			if(windowControls)

@@ -399,8 +399,7 @@ package flexmdi.managers
 						mgrEvent.effect = this.effects.getWindowRestoreEffect(winEvent.window, this, winEvent.window.savedWindowRect);
 					break;
 					
-					case MDIWindowEvent.MAXIMIZE:
-						
+					case MDIWindowEvent.MAXIMIZE:						
 						mgrEvent.window.restoreStyle();
 						mgrEvent.effect = this.effects.getWindowMaximizeEffect(winEvent.window, this);
 					break;
@@ -482,11 +481,13 @@ package flexmdi.managers
 					break;
 					
 					case MDIManagerEvent.WINDOW_FOCUS_START:
+						mgrEvent.window.hasFocus = true;
 						mgrEvent.window.styleName = mgrEvent.window.focusStyleName;
 						mgrEvent.effect.play();
 					break;
 					
 					case MDIManagerEvent.WINDOW_FOCUS_END:
+						mgrEvent.window.hasFocus = false;
 						mgrEvent.window.styleName = mgrEvent.window.noFocusStyleName;
 						mgrEvent.effect.play();
 					break;
@@ -536,14 +537,11 @@ package flexmdi.managers
 			// since that is optional, we look in its first child if we don't find one
 			var targetWindow:MDIWindow = event.effectInstance.target as MDIWindow;
 			
-				if(targetWindow == null && event.effectInstance is CompositeEffectInstance)
+			if(targetWindow == null && event.effectInstance is CompositeEffectInstance)
 			{
 				var compEffect:CompositeEffect = event.effectInstance.effect as CompositeEffect;
 				targetWindow = Effect(compEffect.children[0]).target as MDIWindow;
-			}
-			
-			//targetWindow.setStyle("backgroundAlpha",0);
-			
+			}			
 			
 			tiledWindows.addItem(targetWindow);
 			reTileWindows();

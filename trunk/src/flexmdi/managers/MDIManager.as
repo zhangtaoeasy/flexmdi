@@ -727,7 +727,7 @@ package flexmdi.managers
 					{
 						win.dispatchEvent(new MDIWindowEvent(MDIWindowEvent.FOCUS_END, win));
 					}
-					if(win == window)
+					if(win == window && !window.hasFocus)
 					{
 						win.dispatchEvent(new MDIWindowEvent(MDIWindowEvent.FOCUS_START, win));
 					}
@@ -842,7 +842,7 @@ package flexmdi.managers
 				container.removeChild(window);
 			}
 			
-			this.removeListeners(window);
+			removeListeners(window);
 			
 			// set focus to newly-highest depth window
 			for(var i:int = container.numChildren - 1; i > -1; i--)

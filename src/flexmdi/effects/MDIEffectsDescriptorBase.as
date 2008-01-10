@@ -24,17 +24,16 @@ SOFTWARE.
 package flexmdi.effects
 {
 	import flash.geom.Point;
+	import flash.geom.Rectangle;
 	
 	import flexmdi.containers.MDIWindow;
 	import flexmdi.effects.effectClasses.MDIGroupEffectItem;
 	import flexmdi.managers.MDIManager;
 	
-	import mx.containers.Panel;
 	import mx.effects.Effect;
 	import mx.effects.Move;
-	import mx.effects.Resize;
 	import mx.effects.Parallel;
-	import flash.geom.Rectangle;
+	import mx.effects.Resize;
 	
 	/**
 	 * Base effects implementation with no animation. Extending this class means the developer
@@ -42,6 +41,8 @@ package flexmdi.effects
 	 */
 	public class MDIEffectsDescriptorBase implements IMDIEffectsDescriptor
 	{
+		public var duration:Number = 1;
+		
 		public function getWindowAddEffect(window:MDIWindow, manager:MDIManager):Effect
 		{
 			return new Effect();
@@ -50,10 +51,11 @@ package flexmdi.effects
 		public function getWindowMinimizeEffect(window:MDIWindow, manager:MDIManager, moveTo:Point = null):Effect
 		{
 			var parallel:Parallel = new Parallel();
-			parallel.duration = 0;
+			parallel.duration = this.duration;
 			
 			var resize:Resize = new Resize(window);
 			resize.widthTo = window.minWidth;
+			resize.duration = this.duration;
 			resize.heightTo = window.minimizeHeight;
 			parallel.addChild(resize);
 			
@@ -71,7 +73,7 @@ package flexmdi.effects
 		public function getWindowRestoreEffect(window:MDIWindow, manager:MDIManager, restoreTo:Rectangle):Effect
 		{
 			var parallel:Parallel = new Parallel();
-			parallel.duration = 0;
+			parallel.duration = this.duration;
 			
 			var resize:Resize = new Resize(window);
 			resize.widthTo = restoreTo.width;
@@ -89,7 +91,7 @@ package flexmdi.effects
 		public function getWindowMaximizeEffect(window:MDIWindow, manager:MDIManager, bottomOffset:Number = 0):Effect
 		{
 			var parallel:Parallel = new Parallel();
-			parallel.duration = 0;
+			parallel.duration = this.duration;
 			
 			var resize:Resize = new Resize(window);
 			resize.widthTo = manager.container.width;
@@ -108,7 +110,7 @@ package flexmdi.effects
 		{
 			// have to return something so that EFFECT_END listener will fire
 			var resize:Resize = new Resize(window);
-			resize.duration = 0;
+			resize.duration = this.duration;
 			resize.widthTo = window.width;
 			resize.heightTo = window.height;
 			
@@ -158,7 +160,7 @@ package flexmdi.effects
 		public function getTileEffect(items:Array, manager:MDIManager):Effect
 		{
 			var parallel:Parallel = new Parallel();
-			parallel.duration = 0;
+			parallel.duration = this.duration;
 			
 			for each(var item:MDIGroupEffectItem  in items)
 			{	
@@ -177,7 +179,7 @@ package flexmdi.effects
 		public function getCascadeEffect(items:Array, manager:MDIManager):Effect
 		{
 			var parallel:Parallel = new Parallel();
-			parallel.duration = 0;
+			parallel.duration = this.duration;
 			
 			for each(var item:MDIGroupEffectItem in items)
 			{
@@ -210,7 +212,7 @@ package flexmdi.effects
 		public function reTileMinWindowsEffect(window:MDIWindow, manager:MDIManager, moveTo:Point):Effect
 		{
 			var move:Move = new Move(window);
-			move.duration = 0;
+			move.duration = this.duration;
 			move.xTo = moveTo.x;
 			move.yTo = moveTo.y;
 			return move

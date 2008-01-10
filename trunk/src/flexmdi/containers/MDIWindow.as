@@ -43,7 +43,6 @@ package flexmdi.containers
 	import mx.core.IUITextField;
 	import mx.core.UIComponent;
 	import mx.core.mx_internal;
-	import mx.events.FlexEvent;
 	import mx.managers.CursorManager;
 	import mx.styles.CSSStyleDeclaration;
 	import mx.styles.StyleManager;
@@ -425,8 +424,7 @@ package flexmdi.containers
 		public function MDIWindow()
 		{
 			super();
-			minWidth = 200;
-			minHeight = 200;
+			minWidth = minHeight = width = height = 200;
 			windowState = MDIWindowState.NORMAL;
 			doubleClickEnabled = resizable = draggable = true;
 			
@@ -1062,14 +1060,13 @@ package flexmdi.containers
 			{
 				showControls = true;
 				
-				windowState = _prevWindowState;
-				if(windowState == MDIWindowState.NORMAL)
+				if(_prevWindowState == MDIWindowState.NORMAL)
 				{
-					dispatchEvent(new MDIWindowEvent(MDIWindowEvent.RESTORE, this));
+					restore();
 				}
 				else
 				{
-					dispatchEvent(new MDIWindowEvent(MDIWindowEvent.MAXIMIZE, this));
+					maximize();
 				}
 			}
 		}

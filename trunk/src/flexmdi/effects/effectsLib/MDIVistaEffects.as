@@ -46,16 +46,11 @@ package flexmdi.effects.effectsLib
 	 * Collection of effects inspired by Windows Vista.
 	 */
 	public class MDIVistaEffects extends MDIEffectsDescriptorBase implements IMDIEffectsDescriptor
-	{	
-		
-		
-		public var duration : Number = 200;
-		
-		public function MDIVistaEffects(duration:Number=200):void
+	{		
+		public function MDIVistaEffects(duration:Number = 200):void
 		{
-				this.duration = duration;	
-		}
-		
+			this.duration = duration;	
+		}		
 		
 		override public function getWindowAddEffect(window:MDIWindow, manager:MDIManager):Effect
 		{			

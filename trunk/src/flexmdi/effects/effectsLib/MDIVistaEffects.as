@@ -117,7 +117,6 @@ package flexmdi.effects.effectsLib
 				//move.easingFunction = minEasingFunction;
 				move.duration = 150;
 			sequence.addChild(move);
-		
 				
 				var blurIn : Blur = new Blur();
 					blurOut.blurXFrom = .2;

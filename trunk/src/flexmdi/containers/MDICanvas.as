@@ -72,8 +72,7 @@ package flexmdi.containers
 		
 		public function set effects(effects:IMDIEffectsDescriptor):void 
 		{
-			this.windowManager.effects = effects;
-		
+			this.windowManager.effects = effects;		
 		}
 	}
 }

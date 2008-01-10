@@ -34,7 +34,6 @@ package flexmdi.managers
 	import flash.utils.Dictionary;
 	
 	import flexmdi.containers.MDIWindow;
-	import flexmdi.containers.MDIWindowState;
 	import flexmdi.effects.IMDIEffectsDescriptor;
 	import flexmdi.effects.MDIEffectsDescriptorBase;
 	import flexmdi.effects.effectClasses.MDIGroupEffectItem;
@@ -266,7 +265,6 @@ package flexmdi.managers
 
 		public function add(window:MDIWindow):void
 		{
-			var bringToFrontEvent:Event = new Event("foo");
 			window.windowManager = this;
 			
 			this.addListeners(window);
@@ -287,12 +285,11 @@ package flexmdi.managers
 				{
 					this.container.addChild(window);
 					this.position(window);
-					bringToFrontEvent = new Event("newWindow");
 				}
 			} 		
-			// send event to denote this window was just added (cleaner solution needed)
-			window.bringToFront(bringToFrontEvent);
+			
 			dispatchEvent(new MDIManagerEvent(MDIManagerEvent.WINDOW_ADD, window, this));
+			bringToFront(window);
 		}
 		
 		/**
@@ -483,12 +480,15 @@ package flexmdi.managers
 					case MDIManagerEvent.WINDOW_FOCUS_START:
 						mgrEvent.window.hasFocus = true;
 						mgrEvent.window.styleName = mgrEvent.window.focusStyleName;
+						mgrEvent.window.validateNow();
+						container.setChildIndex(mgrEvent.window, container.numChildren - 1);
 						mgrEvent.effect.play();
 					break;
 					
 					case MDIManagerEvent.WINDOW_FOCUS_END:
 						mgrEvent.window.hasFocus = false;
 						mgrEvent.window.styleName = mgrEvent.window.noFocusStyleName;
+						mgrEvent.window.validateNow();
 						mgrEvent.effect.play();
 					break;
 		
@@ -720,8 +720,18 @@ package flexmdi.managers
 				PopUpManager.bringToFront(window as IFlexDisplayObject);
 			}
 			else
-			{
-				this.container.setChildIndex(window, this.container.numChildren - 1);
+			{				
+				for each(var win:MDIWindow in windowList)
+				{
+					if(win != window && win.hasFocus)
+					{
+						win.dispatchEvent(new MDIWindowEvent(MDIWindowEvent.FOCUS_END, win));
+					}
+					if(win == window)
+					{
+						win.dispatchEvent(new MDIWindowEvent(MDIWindowEvent.FOCUS_START, win));
+					}
+				}
 			}
 			
 		}
@@ -833,10 +843,18 @@ package flexmdi.managers
 			}
 			
 			this.removeListeners(window);
-		}
-		
-		
-				
+			
+			// set focus to newly-highest depth window
+			for(var i:int = container.numChildren - 1; i > -1; i--)
+			{
+				var dObj:DisplayObject = container.getChildAt(i);
+				if(dObj is MDIWindow)
+				{
+					bringToFront(MDIWindow(dObj));
+					return;
+				}
+			}
+		}				
 		
 		/**
 		 * Pushes a window onto the managed window stack 

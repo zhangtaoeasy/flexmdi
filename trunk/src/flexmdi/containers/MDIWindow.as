@@ -268,7 +268,7 @@ package flexmdi.containers
 		/**
 		 * Height of window when minimized.
 		 */
-		public var minimizeHeight:Number;
+		private var _minimizeHeight:Number;
 		
 		/**
 		 * Flag determining whether or not this window is resizable.
@@ -435,19 +435,7 @@ package flexmdi.containers
 			styleName = focusStyleName;
 			cursorStyleName = "mdiWindowCursorStyle";	
 			
-			windowControlsClass = MDIWindowControlsContainer;
-			
-			addEventListener(FlexEvent.CREATION_COMPLETE, onCreationComplete);			
-		}
-		
-		/**
-		 * @private
-		 */
-		private function onCreationComplete(event:FlexEvent):void
-		{
-			minimizeHeight = this.titleBar.height;
-			invalidateDisplayList();
-			removeEventListener(FlexEvent.CREATION_COMPLETE, onCreationComplete);
+			windowControlsClass = MDIWindowControlsContainer;		
 		}
 		
 		/**
@@ -788,7 +776,7 @@ package flexmdi.containers
 			this.addEventListener(MouseEvent.CLICK, windowControlClickHandler, false, 0, true);
 			
 			// clicking anywhere brings window to front
-			this.addEventListener(MouseEvent.MOUSE_DOWN, bringToFront);
+			this.addEventListener(MouseEvent.MOUSE_DOWN, mouseDownHandler);
 		}
 		
 		/**
@@ -814,33 +802,11 @@ package flexmdi.containers
 		}
 		
 		/**
-		 * Bring this window to front of parent's child list. Called automatically by clicking on window.
-		 * Can be called manually by developer.
+		 * Called automatically by clicking on window this now delegates execution to the manager.
 		 */
-		public function bringToFront(event:Event = null):void
+		private function mouseDownHandler(event:MouseEvent):void
 		{
-			var indexToCheck:int;
-			if(event != null && event.type == "newWindow")
-			{
-				indexToCheck = parent.numChildren - 2;
-			}
-			else
-			{
-				indexToCheck = parent.numChildren - 1;
-			}
-			
-			for each(var win:MDIWindow in windowManager.windowList)
-			{
-				if(win != this && win.parent.getChildIndex(win) == indexToCheck)
-				{
-					win.dispatchEvent(new MDIWindowEvent(MDIWindowEvent.FOCUS_END, win));
-				}
-			}
-			if(parent.getChildIndex(this) != parent.numChildren - 1)
-			{
-				parent.setChildIndex(this, parent.numChildren - 1);
-				dispatchEvent(new MDIWindowEvent(MDIWindowEvent.FOCUS_START, this));
-			}
+			windowManager.bringToFront(this);
 		}
 		
 		/**
@@ -1248,6 +1214,11 @@ package flexmdi.containers
 		public function get maximized():Boolean
 		{
 			return _windowState == MDIWindowState.MAXIMIZED;
+		}
+		
+		public function get minimizeHeight():Number
+		{
+			return titleBar.height;
 		}
 		
 		public function get focusStyleName():String

@@ -40,8 +40,8 @@ package flexmdi.containers
 	import mx.containers.Panel;
 	import mx.controls.Button;
 	import mx.core.Container;
-	import mx.core.IUITextField;
 	import mx.core.UIComponent;
+	import mx.core.UITextField;
 	import mx.core.mx_internal;
 	import mx.managers.CursorManager;
 	import mx.styles.CSSStyleDeclaration;
@@ -694,9 +694,9 @@ package flexmdi.containers
 		 * Returns reference to titleTextField which is protected by default.
 		 * Provided to allow MDIWindowControlsContainer subclasses as much freedom as possible.
 		 */
-		public function getTitleTextField():IUITextField
+		public function getTitleTextField():UITextField
 		{
-			return titleTextField;
+			return titleTextField as UITextField;
 		}
 		
 		/**
@@ -771,10 +771,11 @@ package flexmdi.containers
 			titleBarOverlay.addEventListener(MouseEvent.CLICK, unMinimize, false, 0, true);
 			
 			// window controls
-			this.addEventListener(MouseEvent.CLICK, windowControlClickHandler, false, 0, true);
+			addEventListener(MouseEvent.CLICK, windowControlClickHandler, false, 0, true);
 			
 			// clicking anywhere brings window to front
-			this.addEventListener(MouseEvent.MOUSE_DOWN, mouseDownHandler);
+			addEventListener(MouseEvent.MOUSE_DOWN, bringToFrontProxy);
+			contextMenu.addEventListener(ContextMenuEvent.MENU_SELECT, bringToFrontProxy);
 		}
 		
 		/**
@@ -802,7 +803,7 @@ package flexmdi.containers
 		/**
 		 * Called automatically by clicking on window this now delegates execution to the manager.
 		 */
-		private function mouseDownHandler(event:MouseEvent):void
+		private function bringToFrontProxy(event:Event):void
 		{
 			windowManager.bringToFront(this);
 		}
@@ -1240,7 +1241,7 @@ package flexmdi.containers
 		
 		public function updateContextMenu(currentState:int):void
 		{
-			var defaultContextMenu : ContextMenu = new ContextMenu();
+			var defaultContextMenu:ContextMenu = new ContextMenu();
 				defaultContextMenu.hideBuiltInItems();
 			
 			var minimizeItem:ContextMenuItem = new ContextMenuItem("Minimize");

@@ -30,6 +30,7 @@ package flexmdi.containers
 	import mx.controls.Button;
 	import mx.core.ContainerLayout;
 	import mx.core.LayoutContainer;
+	import mx.core.UITextField;
 
 	public class MDIWindowControlsContainer extends LayoutContainer
 	{
@@ -94,6 +95,8 @@ package flexmdi.containers
 			
 			this.x = window.width - this.width - Number(window.getStyle("borderThicknessRight"));
 			this.y = (window.titleBarOverlay.height - this.height) / 2;
+			
+			window.getTitleTextField().width = this.x - window.getTitleTextField().x;
 		}
 	}
 }

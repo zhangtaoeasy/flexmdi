@@ -53,46 +53,40 @@ SOFTWARE.
 	fontSize: 10;
 	fontWeight: bold;
 }
-.menuBtn {
-	upSkin:        Embed('/flexmdi/assets/img/menuArrow.png');
-	overSkin:      Embed('/flexmdi/assets/img/menuArrow.png');
-	downSkin:      Embed('/flexmdi/assets/img/menuArrow.png');
-	disabledSkin:  Embed('/flexmdi/assets/img/menuArrow.png');
-}
 
 .mdiWindowMinimizeBtn
 {
-	upSkin:        Embed('/flexmdi/assets/img/minimizeButton.png');
-	overSkin:      Embed('/flexmdi/assets/img/minimizeButton.png');
-	downSkin:      Embed('/flexmdi/assets/img/minimizeButton.png');
-	disabledSkin:  Embed('/flexmdi/assets/img/minimizeButton.png');
+	upSkin:        Embed('flexmdi/assets/img/minimizeButton.png');
+	overSkin:      Embed('flexmdi/assets/img/minimizeButton.png');
+	downSkin:      Embed('flexmdi/assets/img/minimizeButton.png');
+	disabledSkin:  Embed('flexmdi/assets/img/minimizeButton.png');
 }
 .mdiWindowMaximizeBtn
 {
-	upSkin:        Embed('/flexmdi/assets/img/increaseButton.png');
-	overSkin:      Embed('/flexmdi/assets/img/increaseButton.png');
-	downSkin:      Embed('/flexmdi/assets/img/increaseButton.png');
-	disabledSkin:  Embed('/flexmdi/assets/img/increaseButton.png');
+	upSkin:        Embed('flexmdi/assets/img/increaseButton.png');
+	overSkin:      Embed('flexmdi/assets/img/increaseButton.png');
+	downSkin:      Embed('flexmdi/assets/img/increaseButton.png');
+	disabledSkin:  Embed('flexmdi/assets/img/increaseButton.png');
 }
 .mdiWindowRestoreBtn
 {
-	upSkin:        Embed('/flexmdi/assets/img/decreaseButton.png');
-	overSkin:      Embed('/flexmdi/assets/img/decreaseButton.png');
-	downSkin:      Embed('/flexmdi/assets/img/decreaseButton.png');
-	disabledSkin:  Embed('/flexmdi/assets/img/decreaseButton.png');
+	upSkin:        Embed('flexmdi/assets/img/decreaseButton.png');
+	overSkin:      Embed('flexmdi/assets/img/decreaseButton.png');
+	downSkin:      Embed('flexmdi/assets/img/decreaseButton.png');
+	disabledSkin:  Embed('flexmdi/assets/img/decreaseButton.png');
 }
 .mdiWindowCloseBtn
 {
-	upSkin:        Embed('/flexmdi/assets/img/closeButton.png');
-	overSkin:      Embed('/flexmdi/assets/img/closeButton.png');
-	downSkin:      Embed('/flexmdi/assets/img/closeButton.png');
-	disabledSkin:  Embed('/flexmdi/assets/img/closeButton.png');
+	upSkin:        Embed('flexmdi/assets/img/closeButton.png');
+	overSkin:      Embed('flexmdi/assets/img/closeButton.png');
+	downSkin:      Embed('flexmdi/assets/img/closeButton.png');
+	disabledSkin:  Embed('flexmdi/assets/img/closeButton.png');
 }
 
 
 .resizeHndlr {
-	upSkin:        Embed('/flexmdi/assets/img/resizeHandler.png');
-	overSkin:      Embed('/flexmdi/assets/img/resizeHandler.png');
-	downSkin:      Embed('/flexmdi/assets/img/resizeHandler.png');
-	disabledSkin:  Embed('/flexmdi/assets/img/resizeHandler.png');
+	upSkin:        Embed('flexmdi/assets/img/resizeHandler.png');
+	overSkin:      Embed('flexmdi/assets/img/resizeHandler.png');
+	downSkin:      Embed('flexmdi/assets/img/resizeHandler.png');
+	disabledSkin:  Embed('flexmdi/assets/img/resizeHandler.png');
 }

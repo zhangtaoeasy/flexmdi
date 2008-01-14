@@ -250,13 +250,7 @@ package flexmdi.containers
 		/**
 	     * Parent of window controls (min, restore/max and close buttons).
 	     */
-		public var windowControls:MDIWindowControlsContainer;
-		
-		/**
-		 * @private
-		 * Class that will be instantiated to create windowControls property.
-		 */
-		private var _windowControlsClass:Class;
+		private var _windowControls:MDIWindowControlsContainer;
 		
 		/**
 		 * @private
@@ -433,7 +427,7 @@ package flexmdi.containers
 			styleName = focusStyleName;
 			cursorStyleName = "mdiWindowCursorStyle";	
 			
-			windowControlsClass = MDIWindowControlsContainer;		
+			windowControls = new MDIWindowControlsContainer();		
 		}
 		
 		/**
@@ -622,29 +616,27 @@ package flexmdi.containers
 		/**
 		 * Reference to class used to create windowControls property.
 		 */
-		public function get windowControlsClass():Class
+		public function get windowControls():MDIWindowControlsContainer
 		{
-			return _windowControlsClass;
+			return _windowControls;
 		}
 		
 		/**
 		 * When reference is set windowControls will be reinstantiated, meaning runtime switching is supported.
 		 */
-		public function set windowControlsClass(clazz:Class):void
+		public function set windowControls(controlsContainer:MDIWindowControlsContainer):void
 		{
-			if(windowControls)
+			if(_windowControls)
 			{
 				var cntnr:Container = Container(windowControls);
 				cntnr.removeAllChildren();
 				rawChildren.removeChild(cntnr);
-				windowControls = null;
+				_windowControls = null;
 			}
 			
-			_windowControlsClass = clazz;
-			
-			windowControls = new windowControlsClass();
-			windowControls.window = this;
-			rawChildren.addChild(UIComponent(windowControls));
+			_windowControls = controlsContainer;
+			_windowControls.window = this;
+			rawChildren.addChild(UIComponent(_windowControls));
 			if(windowState == MDIWindowState.MINIMIZED)
 			{
 				showControls = false;
@@ -855,7 +847,7 @@ package flexmdi.containers
 													: maximizeRestoreBtn.noFocusStyleName;
 			}
 			dispatchEvent(new MDIWindowEvent(MDIWindowEvent.RESTORE, this));
-		}		
+		}
 		
 		/**
 		 * Maximize the window.

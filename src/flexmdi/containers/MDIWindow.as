@@ -897,7 +897,15 @@ package flexmdi.containers
 			// only floating windows can be dragged
 			if(this.windowState == MDIWindowState.NORMAL && draggable)
 			{
-				this.startDrag(false, new Rectangle(0, 0, parent.width - this.width, parent.height - this.height));
+				if(windowManager.enforceBoundaries)
+				{
+					this.startDrag(false, new Rectangle(0, 0, parent.width - this.width, parent.height - this.height));
+				}
+				else
+				{
+					this.startDrag();
+				}				
+				
 				systemManager.addEventListener(MouseEvent.MOUSE_MOVE, onWindowMove);
 				systemManager.addEventListener(MouseEvent.MOUSE_UP, onTitleBarRelease);
 				systemManager.stage.addEventListener(Event.MOUSE_LEAVE, onTitleBarRelease);

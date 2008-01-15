@@ -191,6 +191,7 @@ package flexmdi.managers
 		public var showMinimizedTiles:Boolean = false;
 		public var tilePadding:Number = 8;
 		public var minTilePadding:Number = 5;
+		public var enforceBoundaries:Boolean = true;
 		
 		public var effects:IMDIEffectsDescriptor = new MDIEffectsDescriptorBase();
 		
@@ -1060,12 +1061,15 @@ package flexmdi.managers
 		
 		public function showAllWindows():void
 		{
-			for(var i:int = 0; i < tiledWindows.length; i++)
+			// this prevents retiling of windows yet to be unMinimized()
+			tiledWindows.removeAll();			
+			
+			for each(var window:MDIWindow in windowList)
 			{
-				var currentWindow:MDIWindow = tiledWindows.getItemAt(i) as MDIWindow;
-				currentWindow.unMinimize();
-				tiledWindows.removeItemAt(i);
-				i--;
+				if(window.minimized)
+				{
+					window.unMinimize();
+				}
 			}
 		}
 		

@@ -2,7 +2,7 @@
 <mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute"
 	xmlns:flexmdi="http://flexmdi.googlecode.com/"
 	creationComplete="onCreationComplete()" xmlns:ns="sample_content.*" viewSourceURL="srcview/index.html">
-	<mx:Style source="assets/css/style.css" />
+	<mx:Style source="assets/css/default.css" />
 	<mx:Script>
 		<![CDATA[
 			import flash.debugger.enterDebugger;

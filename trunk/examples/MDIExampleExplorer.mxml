@@ -233,6 +233,5 @@
 				title="Window 2"
 				x="450" y="30" width="250" height="300" />
 		</flexmdi:MDICanvas>
-		
 	</mx:VBox>
 </mx:Application>

@@ -21,7 +21,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-.mdiWindow
+.mdiWindowFocus
 {
 	headerHeight: 26;
 	roundedBottomCorners: true;
@@ -31,7 +31,7 @@ SOFTWARE.
 	borderThicknessLeft: 3;
 	borderThicknessRight: 3;
 	borderAlpha: 1.0;
-	titleStyleName: "mypanelTitle";
+	titleStyleName: "mdiWindowTitleStyle";
 }
 
 .mdiWindowNoFocus
@@ -44,11 +44,12 @@ SOFTWARE.
 	borderThicknessLeft: 3;
 	borderThicknessRight: 3;
 	borderAlpha: .5;
-	titleStyleName: "mypanelTitle";
+	titleStyleName: "mdiWindowTitleStyle";
 	background-alpha: .5;
 }
 
-.mypanelTitle {
+.mdiWindowTitleStyle
+{
 	fontFamily: Arial;
 	fontSize: 10;
 	fontWeight: bold;
@@ -83,8 +84,8 @@ SOFTWARE.
 	disabledSkin:  Embed('flexmdi/assets/img/closeButton.png');
 }
 
-
-.resizeHndlr {
+.resizeHndlr
+{
 	upSkin:        Embed('flexmdi/assets/img/resizeHandler.png');
 	overSkin:      Embed('flexmdi/assets/img/resizeHandler.png');
 	downSkin:      Embed('flexmdi/assets/img/resizeHandler.png');

@@ -96,7 +96,20 @@ package flexmdi.containers
 			this.x = window.width - this.width - Number(window.getStyle("borderThicknessRight"));
 			this.y = (window.titleBarOverlay.height - this.height) / 2;
 			
-			window.getTitleTextField().width = this.x - window.getTitleTextField().x;
+			
+			var tf:UITextField = window.getTitleTextField();
+			var icon:DisplayObject = window.getTitleIconObject();
+			
+			tf.x = Number(window.getStyle("borderThicknessLeft"));
+			
+			if(icon)
+			{
+				icon.x = Number(window.getStyle("borderThicknessLeft"));
+				tf.x = icon.x + icon.width + 4;
+			}		
+			
+			// ghetto truncation
+			tf.width = this.x - tf.x;
 		}
 	}
 }

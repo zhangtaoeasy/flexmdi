@@ -422,12 +422,12 @@ package flexmdi.containers
 			windowState = MDIWindowState.NORMAL;
 			doubleClickEnabled = resizable = draggable = true;
 			
-			focusStyleName = "mdiWindow";
+			focusStyleName = "mdiWindowFocus";
 			noFocusStyleName = "mdiWindowNoFocus";
 			styleName = focusStyleName;
 			cursorStyleName = "mdiWindowCursorStyle";	
 			
-			windowControls = new MDIWindowControlsContainer();		
+			windowControls = new MDIWindowControlsContainer();
 		}
 		
 		/**

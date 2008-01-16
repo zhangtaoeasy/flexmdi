@@ -1,14 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute"
 	xmlns:flexmdi="http://flexmdi.googlecode.com/"
-	creationComplete="onCreationComplete()" xmlns:ns="sample_content.*" 
-	viewSourceURL="srcview/index.html">
-	 
-	
+	creationComplete="onCreationComplete()" xmlns:ns="sample_content.*" viewSourceURL="srcview/index.html">
+	<mx:Style source="assets/css/style.css" />
 	<mx:Script>
 		<![CDATA[
+			import flash.debugger.enterDebugger;
+			import mx.events.FlexEvent;
+			import mx.core.Container;
+			import mx.core.ContainerLayout;
+			import flexmdi.containers.MDIWindowControlsContainer;
+			import mx.controls.Button;
+			import flexmdi.managers.MDIManager;
 			import mx.events.ListEvent;
-			//import explorer.AddWinForm;
 			import mx.managers.PopUpManager;
 			import sample_content.SampleContent;
 			import flexmdi.effects.effectsLib.MDILinearEffects;
@@ -26,11 +30,11 @@
 			private var effectsList:Array;
 			private var stylesList:Array;
 			
-			private var currentSetStyle:String;
+			private var winCtrlCntnrClass:Class;
 			
 			private function onCreationComplete():void
 			{
-				currentSetStyle = '';
+				mdiCanvas.effects = new MDIVistaEffects();
 				
 				// create textfield
 				eventMonitor = new TextArea();
@@ -44,13 +48,15 @@
 				effectsListCb.dataProvider = effectsList;
 				effectsListCb.selectedIndex = 1;
 				
+				// these need refining, removing from explorer until then
 				stylesList = new Array();
-				stylesList.push({label: "Default"});
-				stylesList.push({label: "Windows Default"});
-				stylesList.push({label: "Brushed Metal"});
-				stylesList.push({label: "Blue"});
-				stylesListCb.dataProvider = stylesList;
-				stylesListCb.selectedIndex = 0;
+				stylesList.push({label: "Plain"});
+				stylesList.push({label: "Noir"});
+				stylesList.push({label: "Style 1"});
+				stylesList.push({label: "Style 2"});
+				stylesList.push({label: "Style 3"});
+				stylesList.push({label: "Windows XP"});
+				//stylesListCb.dataProvider = stylesList;
 				
 				// listen for window close
 				mdiCanvas.windowManager.addEventListener(MDIManagerEvent.WINDOW_CLOSE, confirmWindowClose);
@@ -71,6 +77,7 @@
 				mdiCanvas.windowManager.addEventListener(MDIManagerEvent.WINDOW_RESIZE_END, windowEventHandler);
 			}
 			
+			// default event handler
 			private function windowEventHandler(event:Event):void
 			{
 				if(event is MDIManagerEvent)
@@ -83,7 +90,7 @@
 						eventMonitor.validateNow();
 					}
 				}
-			}			
+			}
 			
 			// the flex framework dispatches all kinds of events
 			// in order to avoid catching one of those and throwing a coercion error
@@ -103,7 +110,8 @@
 			
 			// called when the Alert window is closed
 			// if the user said yes, we execute the default behavior of playing an effect
-			// and then removing the window by calling the appropriately named executeDefaultBehavior() method
+			// and then removing the window by sending the stored event to
+			// the appropriately named executeDefaultBehavior() method
 			private function handleAlertResponse(event:CloseEvent):void
 			{
 				if(event.detail == mx.controls.Alert.YES)
@@ -112,21 +120,36 @@
 				}
 			}
 			
+			[Embed(source="/assets/img/chat_16.png")]
+			private var chatIcon:Class;			
+			
 			private function addWindow():void
 			{
 				var win:MDIWindow = new MDIWindow();
 				win.width = 350;
+				
 				win.title = "Window " + String(mdiCanvas.windowManager.windowList.length + 1);
+				win.titleIcon = chatIcon;
 				mdiCanvas.windowManager.add(win);
 			}
-			/*
-			private function addWindowDialog():void
+			
+			private function winCtrlCntnrCb_changeHandler():void
 			{
-				var win:MDIWindow = new AddWinForm();
-				PopUpManager.addPopUp(win, this);
-				PopUpManager.centerPopUp(win);
+				if(winCtrlCntnrCb.selected)
+				{
+					winCtrlCntnrClass = MacOS9WindowControls;
+				}
+				else
+				{
+					winCtrlCntnrClass = MDIWindowControlsContainer;
+				}
+				
+				for each(var win:MDIWindow in mdiCanvas.windowManager.windowList)
+				{
+					win.windowControls = new winCtrlCntnrClass();
+				}
 			}
-			*/
+			
 			private function toggleEventMonitor():void
 			{
 				if(eventMonitorCb.selected)
@@ -144,28 +167,28 @@
 				mdiCanvas.effectsLib = effectsListCb.selectedItem.data as Class;
 			}
 			
+			// currently not used
 			private function changeStyle(event:ListEvent):void
 			{
 				switch(ComboBox(event.target).selectedLabel)
 				{
-					case 'Default' :
-						if(currentSetStyle != '') StyleManager.unloadStyleDeclarations(currentSetStyle, false);
-						currentSetStyle = '';
+					case 'Plain' :
+						StyleManager.loadStyleDeclarations('assets/css/style.swf');
 						break;
-					case 'Windows Default' :
-						if(currentSetStyle != '') StyleManager.unloadStyleDeclarations(currentSetStyle, false);
-						StyleManager.loadStyleDeclarations('assets/css/MSWindows_default.swf');
-						currentSetStyle = 'assets/css/MSWindows_default.swf';
+					case 'Style 1' :
+						StyleManager.loadStyleDeclarations('assets/css/style1.swf');
 						break;
-					case 'Brushed Metal' :
-						if(currentSetStyle != '') StyleManager.unloadStyleDeclarations(currentSetStyle, false);
-						StyleManager.loadStyleDeclarations('assets/css/BrushedMetal.swf');
-						currentSetStyle = 'assets/css/BrushedMetal.swf';
+					case 'Style 2' :
+						StyleManager.loadStyleDeclarations('assets/css/style2.swf');
 						break;
-					case 'Blue' :
-						if(currentSetStyle != '') StyleManager.unloadStyleDeclarations(currentSetStyle, false);
-						StyleManager.loadStyleDeclarations('assets/css/Blue.swf');
-						currentSetStyle = 'assets/css/Blue.swf';
+					case 'Style 3' :
+						StyleManager.loadStyleDeclarations('assets/css/style3.swf');
+						break;
+					case 'Noir' :
+						StyleManager.loadStyleDeclarations('assets/css/noir.swf');
+						break;
+					case 'Windows XP' :
+						StyleManager.loadStyleDeclarations('assets/css/windowsXP.swf');
 						break;
 					default:
 						break;
@@ -175,9 +198,8 @@
 	</mx:Script>
 	<mx:VBox id="vbox" width="100%" height="100%">
 	
-		<mx:ApplicationControlBar dock="true" width="100%" height="50" verticalAlign="middle" paddingTop="2">
+		<mx:ApplicationControlBar dock="true" width="100%" height="50" verticalAlign="middle">
 			<mx:Button label="Add Window" click="addWindow()" />
-			<!-- <mx:Button label="+" click="addWindowDialog()" /> -->
 			
 			<mx:VRule height="35" />
 			
@@ -189,25 +211,24 @@
 			
 			<mx:VRule height="35" />
 			
-			<mx:VBox verticalGap="1" paddingTop="1" paddingBottom="1">
-				<mx:CheckBox id="eventMonitorCb" label="Show Event Monitor" click="toggleEventMonitor()" />
-				<mx:CheckBox id="confirmCloseCb" label="Require Close Confirmation" />
-			</mx:VBox>
-			
+			<mx:CheckBox id="eventMonitorCb" label="Show Event Monitor" click="toggleEventMonitor()" />
+			<mx:CheckBox id="confirmCloseCb" label="Confirm window close" />
+			<mx:CheckBox id="winCtrlCntnrCb" label="Alternate window controls" click="winCtrlCntnrCb_changeHandler()" />
 			
 			<mx:VRule height="35" />
 			
 			<mx:Label text="Effects" />
 			<mx:ComboBox id="effectsListCb" change="changeEffects()" />
-			<mx:ComboBox id="stylesListCb" change="changeStyle(event)" />
 		</mx:ApplicationControlBar>
 		
-		<flexmdi:MDICanvas id="mdiCanvas" horizontalScrollPolicy="off" verticalScrollPolicy="off" 
-			effects="{new MDIVistaEffects(100)}"
-			width="100%" height="100%">
+		
+		<flexmdi:MDICanvas id="mdiCanvas" horizontalScrollPolicy="off" verticalScrollPolicy="off"
+			width="100%" height="100%" backgroundColor="#FFFFFF" backgroundAlpha="0">
 			<flexmdi:MDIWindow id="win1"
-				title="Window 1"
-				x="30" y="30" width="400" height="200" />
+				title="Window 1 has a really really long title to show support for truncation"
+				x="30" y="30" width="400" height="200">
+				<mx:ComboBox id="foo" />
+			</flexmdi:MDIWindow>
 			<flexmdi:MDIWindow id="win2"
 				title="Window 2"
 				x="450" y="30" width="250" height="300" />

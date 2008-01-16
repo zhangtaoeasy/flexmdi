@@ -104,7 +104,6 @@ package flexmdi.containers
 			
 			if(icon)
 			{
-				icon.x = Number(window.getStyle("borderThicknessLeft"));
 				tf.x = icon.x + icon.width + 4;
 			}		
 			

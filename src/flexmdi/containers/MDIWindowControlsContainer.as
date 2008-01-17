@@ -52,34 +52,45 @@ package flexmdi.containers
 		{
 			super.createChildren();
 			
-			minimizeBtn = new Button();
-			minimizeBtn.width = 10;
-			minimizeBtn.height = 10;
-			minimizeBtn.styleName = "mdiWindowMinimizeBtn";
-			minimizeBtn.buttonMode = true;
-			addChild(minimizeBtn);
+			if(!minimizeBtn)
+			{
+				minimizeBtn = new Button();
+				minimizeBtn.width = 10;
+				minimizeBtn.height = 10;
+				minimizeBtn.styleName = "mdiWindowMinimizeBtn";
+				minimizeBtn.buttonMode = true;
+				addChild(minimizeBtn);
+			}
 			
-			maximizeRestoreBtn = new MDIMaximizeRestoreButton(window);
-			maximizeRestoreBtn.width = 10;
-			maximizeRestoreBtn.height = 10;
-			maximizeRestoreBtn.maximizeBtnStyleName = "mdiWindowMaximizeBtn";
-			maximizeRestoreBtn.restoreBtnStyleName = "mdiWindowRestoreBtn";
-			maximizeRestoreBtn.styleName = maximizeRestoreBtn.maximizeBtnStyleName;
-			maximizeRestoreBtn.buttonMode = true;
-			addChild(maximizeRestoreBtn);
+			if(!maximizeRestoreBtn)
+			{
+				maximizeRestoreBtn = new MDIMaximizeRestoreButton(window);
+				maximizeRestoreBtn.width = 10;
+				maximizeRestoreBtn.height = 10;
+				maximizeRestoreBtn.maximizeBtnStyleName = "mdiWindowMaximizeBtn";
+				maximizeRestoreBtn.restoreBtnStyleName = "mdiWindowRestoreBtn";
+				maximizeRestoreBtn.styleName = maximizeRestoreBtn.maximizeBtnStyleName;
+				maximizeRestoreBtn.buttonMode = true;
+				addChild(maximizeRestoreBtn);
+			}
 			
-			closeBtn = new Button();
-			closeBtn.width = 10;
-			closeBtn.height = 10;
-			closeBtn.styleName = "mdiWindowCloseBtn";
-			closeBtn.buttonMode = true;
-			addChild(closeBtn);
+			if(!closeBtn)
+			{
+				closeBtn = new Button();
+				closeBtn.width = 10;
+				closeBtn.height = 10;
+				closeBtn.styleName = "mdiWindowCloseBtn";
+				closeBtn.buttonMode = true;
+				addChild(closeBtn);
+			}
 		}
 		
 		override protected function updateDisplayList(w:Number, h:Number):void
 		{
 			super.updateDisplayList(w, h);
 			
+			// since we're in rawChildren we don't get measured and laid out by our parent
+			// this routine finds the bounds of our children and sets our size accordingly
 			var minX:Number = 9999;
 			var minY:Number = 9999;
 			var maxX:Number = -9999;
@@ -93,10 +104,13 @@ package flexmdi.containers
 			}
 			this.setActualSize(maxX - minX, maxY - minY);
 			
+			// now that we're sized we set our position
+			// right aligned, respecting border width
 			this.x = window.width - this.width - Number(window.getStyle("borderThicknessRight"));
+			// vertically centered
 			this.y = (window.titleBarOverlay.height - this.height) / 2;
 			
-			
+			// lay out the title field and icon (if present)
 			var tf:UITextField = window.getTitleTextField();
 			var icon:DisplayObject = window.getTitleIconObject();
 			
@@ -105,10 +119,17 @@ package flexmdi.containers
 			if(icon)
 			{
 				tf.x = icon.x + icon.width + 4;
-			}		
+			}
 			
 			// ghetto truncation
-			tf.width = this.x - tf.x;
+			if(!window.minimized)
+			{
+				tf.width = this.x - tf.x;
+			}
+			else
+			{
+				tf.width = window.width - tf.x - 4;
+			}
 		}
 	}
 }

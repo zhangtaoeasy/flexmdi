@@ -2,9 +2,11 @@
 <mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute"
 	xmlns:flexmdi="http://flexmdi.googlecode.com/"
 	creationComplete="onCreationComplete()" xmlns:ns="sample_content.*" viewSourceURL="srcview/index.html">
-	<mx:Style source="assets/css/default.css" />
+	<mx:Style source="assets/css/MSWindows_default.css" />
 	<mx:Script>
 		<![CDATA[
+			import controls.WindowsXPControls;
+			import controls.MacOS9WindowControls;
 			import flash.debugger.enterDebugger;
 			import mx.events.FlexEvent;
 			import mx.core.Container;
@@ -51,12 +53,12 @@
 				// these need refining, removing from explorer until then
 				stylesList = new Array();
 				stylesList.push({label: "Plain"});
+				stylesList.push({label: "Windows XP"});
 				stylesList.push({label: "Noir"});
 				stylesList.push({label: "Style 1"});
 				stylesList.push({label: "Style 2"});
 				stylesList.push({label: "Style 3"});
-				stylesList.push({label: "Windows XP"});
-				//stylesListCb.dataProvider = stylesList;
+				stylesListCb.dataProvider = stylesList;
 				
 				// listen for window close
 				mdiCanvas.windowManager.addEventListener(MDIManagerEvent.WINDOW_CLOSE, confirmWindowClose);
@@ -127,7 +129,6 @@
 			{
 				var win:MDIWindow = new MDIWindow();
 				win.width = 350;
-				
 				win.title = "Window " + String(mdiCanvas.windowManager.windowList.length + 1);
 				win.titleIcon = chatIcon;
 				mdiCanvas.windowManager.add(win);
@@ -188,7 +189,7 @@
 						StyleManager.loadStyleDeclarations('assets/css/noir.swf');
 						break;
 					case 'Windows XP' :
-						StyleManager.loadStyleDeclarations('assets/css/windowsXP.swf');
+						StyleManager.loadStyleDeclarations('assets/css/MSWindows_default.swf');
 						break;
 					default:
 						break;
@@ -219,15 +220,18 @@
 			
 			<mx:Label text="Effects" />
 			<mx:ComboBox id="effectsListCb" change="changeEffects()" />
+			
+			<mx:ComboBox id="stylesListCb" change="changeStyle(event)" />
 		</mx:ApplicationControlBar>
 		
 		
 		<flexmdi:MDICanvas id="mdiCanvas" horizontalScrollPolicy="off" verticalScrollPolicy="off"
 			width="100%" height="100%" backgroundColor="#FFFFFF" backgroundAlpha="0">
 			<flexmdi:MDIWindow id="win1"
+				windowControls="{new WindowsXPControls()}"
+				focusStyleName="mdiWindowFocusXP" noFocusStyleName="mdiWindowNoFocusXP"
 				title="Window 1 has a really really long title to show support for truncation"
 				x="30" y="30" width="400" height="200">
-				<mx:ComboBox id="foo" />
 			</flexmdi:MDIWindow>
 			<flexmdi:MDIWindow id="win2"
 				title="Window 2"

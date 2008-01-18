@@ -30,6 +30,7 @@ package flexmdi.containers
 	import flash.geom.Rectangle;
 	import flash.ui.ContextMenu;
 	import flash.ui.ContextMenuItem;
+	import flash.utils.describeType;
 	
 	import flexmdi.controls.IMDIFocusAwareStyleClient;
 	import flexmdi.controls.MDIMaximizeRestoreButton;

@@ -66,7 +66,6 @@ package flexmdi.containers
 				maximizeRestoreBtn.maximizeBtnStyleName = "mdiWindowMaximizeBtn";
 				maximizeRestoreBtn.restoreBtnStyleName = "mdiWindowRestoreBtn";
 				maximizeRestoreBtn.styleName = maximizeRestoreBtn.maximizeBtnStyleName;
-				maximizeRestoreBtn.buttonMode = true;
 				addChild(maximizeRestoreBtn);
 			}
 			

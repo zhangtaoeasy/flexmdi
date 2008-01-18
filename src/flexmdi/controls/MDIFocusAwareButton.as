@@ -37,11 +37,12 @@ package flexmdi.controls
 		public function MDIFocusAwareButton()
 		{
 			super();
+			buttonMode = true;
 		}
 		
 		public function get focusStyleName():String
 		{
-			return _focusStyleName;
+			return (_focusStyleName) ? _focusStyleName : String(styleName);
 		}
 		
 		public function set focusStyleName(styleName:String):void
@@ -51,7 +52,7 @@ package flexmdi.controls
 		
 		public function get noFocusStyleName():String
 		{
-			return _noFocusStyleName;
+			return (_noFocusStyleName) ? _noFocusStyleName : focusStyleName;
 		}
 		
 		public function set noFocusStyleName(styleName:String):void

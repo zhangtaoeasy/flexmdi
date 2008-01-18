@@ -25,6 +25,7 @@ package flexmdi.containers
 {
 	import flash.display.DisplayObject;
 	
+	import flexmdi.controls.MDIFocusAwareButton;
 	import flexmdi.controls.MDIMaximizeRestoreButton;
 	
 	import mx.controls.Button;
@@ -35,9 +36,9 @@ package flexmdi.containers
 	public class MDIWindowControlsContainer extends LayoutContainer
 	{
 		public var window:MDIWindow;
-		public var minimizeBtn:Button;
+		public var minimizeBtn:MDIFocusAwareButton;
 		public var maximizeRestoreBtn:MDIMaximizeRestoreButton;
-		public var closeBtn:Button;
+		public var closeBtn:MDIFocusAwareButton;
 		
 		/**
 		 * Base class to hold window controls. Since it inherits from LayoutContainer, literally any layout
@@ -54,19 +55,14 @@ package flexmdi.containers
 			
 			if(!minimizeBtn)
 			{
-				minimizeBtn = new Button();
-				minimizeBtn.width = 10;
-				minimizeBtn.height = 10;
+				minimizeBtn = new MDIFocusAwareButton();
 				minimizeBtn.styleName = "mdiWindowMinimizeBtn";
-				minimizeBtn.buttonMode = true;
 				addChild(minimizeBtn);
 			}
 			
 			if(!maximizeRestoreBtn)
 			{
 				maximizeRestoreBtn = new MDIMaximizeRestoreButton(window);
-				maximizeRestoreBtn.width = 10;
-				maximizeRestoreBtn.height = 10;
 				maximizeRestoreBtn.maximizeBtnStyleName = "mdiWindowMaximizeBtn";
 				maximizeRestoreBtn.restoreBtnStyleName = "mdiWindowRestoreBtn";
 				maximizeRestoreBtn.styleName = maximizeRestoreBtn.maximizeBtnStyleName;
@@ -76,11 +72,8 @@ package flexmdi.containers
 			
 			if(!closeBtn)
 			{
-				closeBtn = new Button();
-				closeBtn.width = 10;
-				closeBtn.height = 10;
+				closeBtn = new MDIFocusAwareButton();
 				closeBtn.styleName = "mdiWindowCloseBtn";
-				closeBtn.buttonMode = true;
 				addChild(closeBtn);
 			}
 		}

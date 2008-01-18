@@ -71,6 +71,7 @@ package flexmdi.controls
 			
 			this.window = window;
 			styleName = maximizeBtnStyleName;
+			buttonMode = true;
 		}
 		
 		/**

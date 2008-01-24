@@ -30,10 +30,7 @@ package flexmdi.containers
 	import flash.geom.Rectangle;
 	import flash.ui.ContextMenu;
 	import flash.ui.ContextMenuItem;
-	import flash.utils.describeType;
 	
-	import flexmdi.controls.IMDIFocusAwareStyleClient;
-	import flexmdi.controls.MDIMaximizeRestoreButton;
 	import flexmdi.events.MDIWindowEvent;
 	import flexmdi.managers.MDIManager;
 	
@@ -212,7 +209,7 @@ package flexmdi.containers
 	/**
 	 * Central window class used in flexmdi. Includes min/max/close buttons by default.
 	 */
-	public class MDIWindow extends Panel implements IMDIFocusAwareStyleClient
+	public class MDIWindow extends Panel
 	{		
 		/**
 	     * Size of edge handles. Can be adjusted to affect "sensitivity" of resize area.
@@ -403,15 +400,215 @@ package flexmdi.containers
 		public var windowManager:MDIManager;
 		
 		/**
-		 * Is this window in focus?
+		 * @private
+		 * Storage var to hold value originally assigned to styleName since it gets toggled per focus change.
 		 */
-		public var hasFocus:Boolean;		
+		private var _windowStyleName:Object;
+		
+		/**
+		 * @private
+		 * Storage var for hasFocus property.
+		 */
+		private var _hasFocus:Boolean;
 		
 		/**
 		 * @private store the backgroundAlpha when minimized.
 	     */
 		private var backgroundAlphaRestore:Number = 1;
 		
+		// assets for default buttons
+		[Embed(source="/flexmdi/assets/img/minimizeButton.png")]
+		private static var DEFAULT_MINIMIZE_BUTTON:Class;
+		
+		[Embed(source="/flexmdi/assets/img/increaseButton.png")]
+		private static var DEFAULT_MAXIMIZE_BUTTON:Class;
+		
+		[Embed(source="/flexmdi/assets/img/decreaseButton.png")]
+		private static var DEFAULT_RESTORE_BUTTON:Class;
+		
+		[Embed(source="/flexmdi/assets/img/closeButton.png")]
+		private static var DEFAULT_CLOSE_BUTTON:Class;
+		
+		private static var classConstructed:Boolean = classConstruct();
+		
+		/**
+		 * Define and prepare default styles.
+		 */
+		private static function classConstruct():Boolean
+		{
+			//------------------------
+		    //  type selector
+		    //------------------------
+			var selector:CSSStyleDeclaration = StyleManager.getStyleDeclaration("MDIWindow");
+			if(!selector)
+			{
+				selector = new CSSStyleDeclaration();
+			}
+			// these are default names for secondary styles. these can be set in CSS and will affect
+			// all windows that don't have an override for these styles.
+			selector.defaultFactory = function():void
+			{
+				this.focusStyleName = "mdiWindowFocus";
+				this.noFocusStyleName = "mdiWindowNoFocus";
+				
+				this.minimizeBtnStyleName = "mdiWindowMinimizeBtn";
+				
+				this.maximizeBtnStyleName = "mdiWindowMaximizeBtn";
+				this.restoreBtnStyleName = "mdiWindowRestoreBtn";
+				
+				this.closeBtnStyleName = "mdiWindowCloseBtn";
+			}
+			
+			//------------------------
+		    //  focus style
+		    //------------------------
+			var focusStyleName:String = selector.getStyle("focusStyleName");
+			var winFocusSelector:CSSStyleDeclaration = StyleManager.getStyleDeclaration("." + focusStyleName);
+			if(!winFocusSelector)
+			{
+				winFocusSelector = new CSSStyleDeclaration();
+			}
+			winFocusSelector.defaultFactory = function():void
+			{
+				this.headerHeight = 26;
+				this.roundedBottomCorners = true;
+				this.borderColor = 0xCCCCCC;
+				this.borderThicknessTop = 0;
+				this.borderThicknessRight = 3;
+				this.borderThicknessBottom = 3;
+				this.borderThicknessLeft = 3;
+				this.borderAlpha = 1;
+				this.backgroundAlpha = 1;
+				this.titleStyleName = "mdiWindowTitleStyle";
+			}
+			StyleManager.setStyleDeclaration("." + focusStyleName, winFocusSelector, false);
+			
+			//------------------------
+		    //  no focus style
+		    //------------------------
+			var noFocusStyleName:String = selector.getStyle("noFocusStyleName");
+			var winNoFocusSelector:CSSStyleDeclaration = StyleManager.getStyleDeclaration("." + noFocusStyleName);
+			if(!winNoFocusSelector)
+			{
+				winNoFocusSelector = new CSSStyleDeclaration();
+			}
+			winNoFocusSelector.defaultFactory = function():void
+			{
+				this.headerHeight = 26;
+				this.roundedBottomCorners = true;
+				this.borderColor = 0xCCCCCC;
+				this.borderThicknessTop = 0;
+				this.borderThicknessRight = 3;
+				this.borderThicknessBottom = 3;
+				this.borderThicknessLeft = 3;
+				this.borderAlpha = .5;
+				this.backgroundAlpha = .5;
+				this.titleStyleName = "mdiWindowTitleStyle";
+			}					
+			StyleManager.setStyleDeclaration("." + noFocusStyleName, winNoFocusSelector, false);
+			
+			//------------------------
+		    //  minimize button
+		    //------------------------
+			var minimizeBtnStyleName:String = selector.getStyle("minimizeBtnStyleName");
+			var minimizeBtnSelector:CSSStyleDeclaration = StyleManager.getStyleDeclaration("." + minimizeBtnStyleName);
+			if(!minimizeBtnSelector)
+			{
+				minimizeBtnSelector = new CSSStyleDeclaration();
+			}
+			minimizeBtnSelector.defaultFactory = function():void
+			{
+				this.upSkin = DEFAULT_MINIMIZE_BUTTON;
+				this.overSkin = DEFAULT_MINIMIZE_BUTTON;
+				this.downSkin = DEFAULT_MINIMIZE_BUTTON;
+				this.disabledSkin = DEFAULT_MINIMIZE_BUTTON;
+			}					
+			StyleManager.setStyleDeclaration("." + minimizeBtnStyleName, minimizeBtnSelector, false);
+			
+			//------------------------
+		    //  maximize button
+		    //------------------------
+			var maximizeBtnStyleName:String = selector.getStyle("maximizeBtnStyleName");
+			var maximizeBtnSelector:CSSStyleDeclaration = StyleManager.getStyleDeclaration("." + maximizeBtnStyleName);
+			if(!maximizeBtnSelector)
+			{
+				maximizeBtnSelector = new CSSStyleDeclaration();
+			}
+			maximizeBtnSelector.defaultFactory = function():void
+			{
+				this.upSkin = DEFAULT_MAXIMIZE_BUTTON;
+				this.overSkin = DEFAULT_MAXIMIZE_BUTTON;
+				this.downSkin = DEFAULT_MAXIMIZE_BUTTON;
+				this.disabledSkin = DEFAULT_MAXIMIZE_BUTTON;
+			}					
+			StyleManager.setStyleDeclaration("." + maximizeBtnStyleName, maximizeBtnSelector, false);
+			
+			//------------------------
+		    //  restore button
+		    //------------------------
+			var restoreBtnStyleName:String = selector.getStyle("restoreBtnStyleName");
+			var restoreBtnSelector:CSSStyleDeclaration = StyleManager.getStyleDeclaration("." + restoreBtnStyleName);
+			if(!restoreBtnSelector)
+			{
+				restoreBtnSelector = new CSSStyleDeclaration();
+			}
+			restoreBtnSelector.defaultFactory = function():void
+			{
+				this.upSkin = DEFAULT_RESTORE_BUTTON;
+				this.overSkin = DEFAULT_RESTORE_BUTTON;
+				this.downSkin = DEFAULT_RESTORE_BUTTON;
+				this.disabledSkin = DEFAULT_RESTORE_BUTTON;
+			}					
+			StyleManager.setStyleDeclaration("." + restoreBtnStyleName, restoreBtnSelector, false);
+			
+			//------------------------
+		    //  close button
+		    //------------------------
+			var closeBtnStyleName:String = selector.getStyle("closeBtnStyleName");
+			var closeBtnSelector:CSSStyleDeclaration = StyleManager.getStyleDeclaration("." + closeBtnStyleName);
+			if(!closeBtnSelector)
+			{
+				closeBtnSelector = new CSSStyleDeclaration();
+			}
+			closeBtnSelector.defaultFactory = function():void
+			{
+				this.upSkin = DEFAULT_CLOSE_BUTTON;
+				this.overSkin = DEFAULT_CLOSE_BUTTON;
+				this.downSkin = DEFAULT_CLOSE_BUTTON;
+				this.disabledSkin = DEFAULT_CLOSE_BUTTON;
+			}					
+			StyleManager.setStyleDeclaration("." + closeBtnStyleName, closeBtnSelector, false);
+			
+			// apply it all
+			StyleManager.setStyleDeclaration("MDIWindow", selector, false);
+			
+			
+			if(!StyleManager.getStyleDeclaration(".mdiWindowCursorStyle"))
+			{
+				var cursorStyle:CSSStyleDeclaration = new CSSStyleDeclaration();
+				cursorStyle.defaultFactory = function():void
+				{
+					this.resizeCursorVerticalSkin = resizeCursorVerticalSkin;
+					this.resizeCursorVerticalSkinXOffset = resizeCursorVerticalSkinXOffset;
+					this.resizeCursorVerticalSkinYOffset = resizeCursorVerticalSkinYOffset;
+					
+					this.resizeCursorHorizontalSkin = resizeCursorHorizontalSkin;
+					this.resizeCursorHorizontalSkinXOffset = resizeCursorHorizontalSkinXOffset;
+					this.resizeCursorHorizontalSkinYOffset = resizeCursorHorizontalSkinYOffset;
+					
+					this.resizeCursorTopLeftBottomRightSkin = resizeCursorTopLeftBottomRightSkin;
+					this.resizeCursorTopLeftBottomRightSkinXOffset = resizeCursorTopLeftBottomRightSkinXOffset;
+					this.resizeCursorTopLeftBottomRightSkinYOffset = resizeCursorTopLeftBottomRightSkinYOffset;
+					
+					this.resizeCursorTopRightBottomLeftSkin = resizeCursorTopRightBottomLeftSkin;
+					this.resizeCursorTopRightBottomLeftSkinXOffset = resizeCursorTopRightBottomLeftSkinXOffset;
+					this.resizeCursorTopRightBottomLeftSkinYOffset = resizeCursorTopRightBottomLeftSkinYOffset;
+				}
+				StyleManager.setStyleDeclaration(".mdiWindowCursorStyle", cursorStyle, true);
+			}
+			
+			return true;
+		}
 		
 		/**
 		 * Constructor
@@ -423,12 +620,23 @@ package flexmdi.containers
 			windowState = MDIWindowState.NORMAL;
 			doubleClickEnabled = resizable = draggable = true;
 			
-			focusStyleName = "mdiWindowFocus";
-			noFocusStyleName = "mdiWindowNoFocus";
-			styleName = focusStyleName;
 			cursorStyleName = "mdiWindowCursorStyle";	
 			
 			windowControls = new MDIWindowControlsContainer();
+		}
+		
+		public function get windowStyleName():Object
+		{
+			return _windowStyleName;
+		}
+		
+		public function set windowStyleName(value:Object):void
+		{
+			if(_windowStyleName == value)
+				return;
+			
+			_windowStyleName = value;
+			updateStyles();
 		}
 		
 		/**
@@ -586,6 +794,169 @@ package flexmdi.containers
 			UIComponent(windowControls).invalidateDisplayList();
 		}
 		
+		
+		
+		public function get hasFocus():Boolean
+		{
+			return _hasFocus;
+		}
+		
+		/**
+		 * Property is set by MDIManager when a window's focus changes. Triggers an update to the window's styleName.
+		 */
+		public function set hasFocus(value:Boolean):void
+		{
+			// guard against unnecessary processing
+			if(_hasFocus == value)
+				return;
+			
+			// set new value
+			_hasFocus = value;
+			updateStyles();
+		}
+		
+		/**
+		 * Mother of all styling functions. All styles fall back to the defaults if necessary.
+		 */
+		private function updateStyles():void
+		{
+			var selector:CSSStyleDeclaration;
+			
+			// if windowStyleName was set by developer we'll use the associated styles
+			if(windowStyleName)
+			{
+				selector = StyleManager.getStyleDeclaration("." + windowStyleName);
+			}
+			// we also check their existence to make sure there is actually a corresponding style
+			// if there is not we'll use the type selector
+			if(!selector)
+			{
+				selector = StyleManager.getStyleDeclaration("MDIWindow");
+			}
+			
+			// if the style specifies a class to use for the controls container that is
+			// different from the current one we will update it here
+			if(selector.getStyle("windowControlsClass"))
+			{
+				var clazz:Class = selector.getStyle("windowControlsClass") as Class;
+				
+				if(!(windowControls is clazz))
+				{
+					windowControls = new clazz();
+				}
+			}
+			
+			// set window's styleName based on focus status
+			if(hasFocus)
+			{
+				if(selector.getStyle("focusStyleName"))
+				{
+					setStyle("styleName", selector.getStyle("focusStyleName"));
+				}
+				else
+				{
+					setStyle("styleName", getStyle("focusStyleName"));
+				}
+			}
+			else
+			{
+				if(selector.getStyle("noFocusStyleName"))
+				{
+					setStyle("styleName", selector.getStyle("noFocusStyleName"));
+				}
+				else
+				{
+					setStyle("styleName", getStyle("noFocusStyleName"));
+				}
+			}
+			
+			// style minimize button
+			if(minimizeBtn)
+			{
+				// use noFocus style if appropriate and one exists
+				if(!hasFocus && selector.getStyle("minimizeBtnStyleNameNoFocus"))
+				{
+					minimizeBtn.styleName = selector.getStyle("minimizeBtnStyleNameNoFocus");
+				}
+				else
+				{
+					if(selector.getStyle("minimizeBtnStyleName"))
+					{
+						minimizeBtn.styleName = selector.getStyle("minimizeBtnStyleName");
+					}
+					else
+					{
+						minimizeBtn.styleName = getStyle("minimizeBtnStyleName");
+					}
+				}
+			}
+			
+			// style maximize/restore button
+			if(maximizeRestoreBtn)
+			{
+				// fork on windowState
+				if(maximized)
+				{
+					// use noFocus style if appropriate and one exists
+					if(!hasFocus && selector.getStyle("restoreBtnStyleNameNoFocus"))
+					{
+						maximizeRestoreBtn.styleName = selector.getStyle("restoreBtnStyleNameNoFocus");
+					}
+					else
+					{
+						if(selector.getStyle("restoreBtnStyleName"))
+						{
+							maximizeRestoreBtn.styleName = selector.getStyle("restoreBtnStyleName");
+						}
+						else
+						{
+							maximizeRestoreBtn.styleName = getStyle("restoreBtnStyleName");
+						}
+					}
+				}
+				else
+				{
+					// use noFocus style if appropriate and one exists
+					if(!hasFocus && selector.getStyle("maximizeBtnStyleNameNoFocus"))
+					{
+						maximizeRestoreBtn.styleName = selector.getStyle("maximizeBtnStyleNameNoFocus");
+					}
+					else
+					{
+						if(selector.getStyle("maximizeBtnStyleName"))
+						{
+							maximizeRestoreBtn.styleName = selector.getStyle("maximizeBtnStyleName");
+						}
+						else
+						{
+							maximizeRestoreBtn.styleName = getStyle("maximizeBtnStyleName");
+						}
+					}
+				}
+			}
+			
+			// style close button
+			if(closeBtn)
+			{
+				// use noFocus style if appropriate and one exists
+				if(!hasFocus && selector.getStyle("closeBtnStyleNameNoFocus"))
+				{
+					closeBtn.styleName = selector.getStyle("closeBtnStyleNameNoFocus");
+				}
+				else
+				{
+					if(selector.getStyle("closeBtnStyleName"))
+					{
+						closeBtn.styleName = selector.getStyle("closeBtnStyleName");
+					}
+					else
+					{
+						closeBtn.styleName = getStyle("closeBtnStyleName");
+					}
+				}
+			}
+		}
+		
 		/**
 		 * Detects change to styleName that is executed by MDIManager indicating a change in focus.
 		 * Iterates over window controls and adjusts their styles if they're focus-aware.
@@ -594,24 +965,8 @@ package flexmdi.containers
 		{
 			super.styleChanged(styleProp);
 			
-			if(windowControls && styleProp == "styleName")
-			{
-				var cntnr:Container = Container(windowControls);
-				for each(var control:UIComponent in cntnr.getChildren())
-				{
-					if(control is IMDIFocusAwareStyleClient)
-					{
-						if(this.hasFocus)
-						{
-							control.styleName = IMDIFocusAwareStyleClient(control).focusStyleName;
-						}
-						else
-						{
-							control.styleName = IMDIFocusAwareStyleClient(control).noFocusStyleName;
-						}
-					}
-				}
-			}
+			if(!styleProp || styleProp == "styleName")
+				updateStyles(); 
 		}
 		
 		/**
@@ -655,7 +1010,7 @@ package flexmdi.containers
 		/**
 		 * Maximize/restore window button.
 		 */
-		public function get maximizeRestoreBtn():MDIMaximizeRestoreButton
+		public function get maximizeRestoreBtn():Button
 		{
 			return windowControls.maximizeRestoreBtn;
 		}
@@ -841,12 +1196,7 @@ package flexmdi.containers
 		public function restore():void
 		{
 			windowState = MDIWindowState.NORMAL;
-			if(maximizeRestoreBtn)
-			{
-				maximizeRestoreBtn.styleName = (this.hasFocus) 
-													? maximizeRestoreBtn.focusStyleName 
-													: maximizeRestoreBtn.noFocusStyleName;
-			}
+			updateStyles();
 			dispatchEvent(new MDIWindowEvent(MDIWindowEvent.RESTORE, this));
 		}
 		
@@ -861,12 +1211,7 @@ package flexmdi.containers
 			}
 			showControls = true;
 			windowState = MDIWindowState.MAXIMIZED;
-			if(maximizeRestoreBtn)
-			{
-				maximizeRestoreBtn.styleName = (this.hasFocus) 
-													? maximizeRestoreBtn.focusStyleName 
-													: maximizeRestoreBtn.noFocusStyleName;
-			}
+			updateStyles();
 			dispatchEvent(new MDIWindowEvent(MDIWindowEvent.MAXIMIZE, this));
 		}
 		
@@ -1093,37 +1438,6 @@ package flexmdi.containers
 		private static var resizeCursorTopRightBottomLeftSkinXOffset:Number = -10;
 		private static var resizeCursorTopRightBottomLeftSkinYOffset:Number = -10;
 		
-		private static var classConstructed:Boolean = classConstruct();
-		
-		private static function classConstruct():Boolean
-		{
-			if(!StyleManager.getStyleDeclaration(".mdiWindowCursorStyle"))
-			{
-				var cursorStyle:CSSStyleDeclaration = new CSSStyleDeclaration();
-				cursorStyle.defaultFactory = function():void
-				{
-					this.resizeCursorVerticalSkin = resizeCursorVerticalSkin;
-					this.resizeCursorVerticalSkinXOffset = resizeCursorVerticalSkinXOffset;
-					this.resizeCursorVerticalSkinYOffset = resizeCursorVerticalSkinYOffset;
-					
-					this.resizeCursorHorizontalSkin = resizeCursorHorizontalSkin;
-					this.resizeCursorHorizontalSkinXOffset = resizeCursorHorizontalSkinXOffset;
-					this.resizeCursorHorizontalSkinYOffset = resizeCursorHorizontalSkinYOffset;
-					
-					this.resizeCursorTopLeftBottomRightSkin = resizeCursorTopLeftBottomRightSkin;
-					this.resizeCursorTopLeftBottomRightSkinXOffset = resizeCursorTopLeftBottomRightSkinXOffset;
-					this.resizeCursorTopLeftBottomRightSkinYOffset = resizeCursorTopLeftBottomRightSkinYOffset;
-					
-					this.resizeCursorTopRightBottomLeftSkin = resizeCursorTopRightBottomLeftSkin;
-					this.resizeCursorTopRightBottomLeftSkinXOffset = resizeCursorTopRightBottomLeftSkinXOffset;
-					this.resizeCursorTopRightBottomLeftSkinYOffset = resizeCursorTopRightBottomLeftSkinYOffset;
-				}
-				StyleManager.setStyleDeclaration(".mdiWindowCursorStyle", cursorStyle, true);
-			}
-			
-			return true;
-		}
-		
 		private function getHighestPriorityStyle(styleName:String):Object
 		{
 			var hierarchy:Array = new Array(this, StyleManager.getStyleDeclaration("." + cursorStyleName), StyleManager.getStyleDeclaration(".mdiWindowCursorStyle"));
@@ -1218,26 +1532,6 @@ package flexmdi.containers
 		public function get minimizeHeight():Number
 		{
 			return titleBar.height;
-		}
-		
-		public function get focusStyleName():String
-		{
-			return _focusStyleName;
-		}
-		
-		public function set focusStyleName(styleName:String):void
-		{
-			_focusStyleName = styleName;
-		}
-		
-		public function get noFocusStyleName():String
-		{
-			return _noFocusStyleName;
-		}
-		
-		public function set noFocusStyleName(styleName:String):void
-		{
-			_noFocusStyleName = styleName;
 		}
 		
 		public function updateContextMenu(currentState:int):void

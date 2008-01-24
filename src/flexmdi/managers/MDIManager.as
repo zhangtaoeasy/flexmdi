@@ -480,7 +480,6 @@ package flexmdi.managers
 					
 					case MDIManagerEvent.WINDOW_FOCUS_START:
 						mgrEvent.window.hasFocus = true;
-						mgrEvent.window.styleName = mgrEvent.window.focusStyleName;
 						mgrEvent.window.validateNow();
 						container.setChildIndex(mgrEvent.window, container.numChildren - 1);
 						mgrEvent.effect.play();
@@ -488,7 +487,6 @@ package flexmdi.managers
 					
 					case MDIManagerEvent.WINDOW_FOCUS_END:
 						mgrEvent.window.hasFocus = false;
-						mgrEvent.window.styleName = mgrEvent.window.noFocusStyleName;
 						mgrEvent.window.validateNow();
 						mgrEvent.effect.play();
 					break;

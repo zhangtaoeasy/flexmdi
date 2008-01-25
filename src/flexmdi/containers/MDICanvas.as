@@ -24,7 +24,6 @@ SOFTWARE.
 package flexmdi.containers
 {
 	import flexmdi.effects.IMDIEffectsDescriptor;
-	import flexmdi.effects.MDIEffectsDescriptorBase;
 	import flexmdi.managers.MDIManager;
 	
 	import mx.containers.Canvas;
@@ -39,6 +38,8 @@ package flexmdi.containers
 	public class MDICanvas extends Canvas
 	{
 		public var windowManager:MDIManager;
+		
+		private var _enforceBoundaries:Boolean;
 		
 		public function MDICanvas()
 		{
@@ -73,6 +74,16 @@ package flexmdi.containers
 		public function set effects(effects:IMDIEffectsDescriptor):void 
 		{
 			this.windowManager.effects = effects;		
+		}
+		
+		public function get enforceBoundaries():Boolean
+		{
+			return windowManager.enforceBoundaries;
+		}
+		
+		public function set enforceBoundaries(value:Boolean):void
+		{
+			windowManager.enforceBoundaries = value;
 		}
 	}
 }

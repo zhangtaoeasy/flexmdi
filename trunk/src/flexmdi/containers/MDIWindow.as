@@ -420,10 +420,10 @@ package flexmdi.containers
 		[Embed(source="/flexmdi/assets/img/minimizeButton.png")]
 		private static var DEFAULT_MINIMIZE_BUTTON:Class;
 		
-		[Embed(source="/flexmdi/assets/img/increaseButton.png")]
+		[Embed(source="/flexmdi/assets/img/maximizeButton.png")]
 		private static var DEFAULT_MAXIMIZE_BUTTON:Class;
 		
-		[Embed(source="/flexmdi/assets/img/decreaseButton.png")]
+		[Embed(source="/flexmdi/assets/img/restoreButton.png")]
 		private static var DEFAULT_RESTORE_BUTTON:Class;
 		
 		[Embed(source="/flexmdi/assets/img/closeButton.png")]
@@ -451,11 +451,11 @@ package flexmdi.containers
 				this.focusStyleName = "mdiWindowFocus";
 				this.noFocusStyleName = "mdiWindowNoFocus";
 				
+				this.titleStyleNameFocus = "mdiWindowTitleStyle";
+				
 				this.minimizeBtnStyleName = "mdiWindowMinimizeBtn";
-				
 				this.maximizeBtnStyleName = "mdiWindowMaximizeBtn";
-				this.restoreBtnStyleName = "mdiWindowRestoreBtn";
-				
+				this.restoreBtnStyleName = "mdiWindowRestoreBtn";				
 				this.closeBtnStyleName = "mdiWindowCloseBtn";
 			}
 			
@@ -479,7 +479,6 @@ package flexmdi.containers
 				this.borderThicknessLeft = 3;
 				this.borderAlpha = 1;
 				this.backgroundAlpha = 1;
-				this.titleStyleName = "mdiWindowTitleStyle";
 			}
 			StyleManager.setStyleDeclaration("." + focusStyleName, winFocusSelector, false);
 			
@@ -503,9 +502,25 @@ package flexmdi.containers
 				this.borderThicknessLeft = 3;
 				this.borderAlpha = .5;
 				this.backgroundAlpha = .5;
-				this.titleStyleName = "mdiWindowTitleStyle";
 			}					
 			StyleManager.setStyleDeclaration("." + noFocusStyleName, winNoFocusSelector, false);
+			
+			//------------------------
+		    //  title style
+		    //------------------------
+			var titleStyleName:String = selector.getStyle("titleStyleNameFocus");
+			var winTitleSelector:CSSStyleDeclaration = StyleManager.getStyleDeclaration("." + titleStyleName);
+			if(!winTitleSelector)
+			{
+				winTitleSelector = new CSSStyleDeclaration();
+			}
+			winTitleSelector.defaultFactory = function():void
+			{
+				this.fontFamily = "Arial";
+				this.fontSize = 10;
+				this.fontWeight = "bold";
+			}
+			StyleManager.setStyleDeclaration("." + titleStyleName, winTitleSelector, false);
 			
 			//------------------------
 		    //  minimize button
@@ -632,7 +647,7 @@ package flexmdi.containers
 		
 		public function set windowStyleName(value:Object):void
 		{
-			if(_windowStyleName == value)
+			if(_windowStyleName === value)
 				return;
 			
 			_windowStyleName = value;
@@ -843,6 +858,8 @@ package flexmdi.containers
 				if(!(windowControls is clazz))
 				{
 					windowControls = new clazz();
+					// sometimes necessary to adjust windowControls subcomponents
+					callLater(windowControls.invalidateDisplayList);
 				}
 			}
 			
@@ -867,6 +884,48 @@ package flexmdi.containers
 				else
 				{
 					setStyle("styleName", getStyle("noFocusStyleName"));
+				}
+			}
+			
+			// style the window's title
+			// this code is probably not as efficient as it could be but i am sick of dealing with styling
+			// if titleStyleName (the style inherited from Panel) has been set we use that, regardless of focus
+			if(selector.getStyle("titleStyleName"))
+			{
+				setStyle("titleStyleName", selector.getStyle("titleStyleName"));
+			}
+			else
+			{
+				// if it has not, we look at focus specific styles
+				if(hasFocus)
+				{
+					if(selector.getStyle("titleStyleNameFocus"))
+					{
+						setStyle("titleStyleName", selector.getStyle("titleStyleNameFocus"));
+					}
+					else
+					{
+						setStyle("titleStyleName", getStyle("titleStyleNameFocus"));
+					}
+				}
+				else
+				{
+					// if our style has a no focus title style we use that
+					// failing that we look for a no focus title style on the type selector (MDIWindow)
+					// failing that we use the focus title style on the type selector
+					// which is defined in classConstruct() so its guaranteed to be there
+					if(selector.getStyle("titleStyleNameNoFocus"))
+					{
+						setStyle("titleStyleName", selector.getStyle("titleStyleNameNoFocus"));
+					}
+					else if(getStyle("titleStyleNameNoFocus"))
+					{
+						setStyle("titleStyleName", getStyle("titleStyleNameNoFocus"));
+					}
+					else
+					{
+						setStyle("titleStyleName", getStyle("titleStyleNameFocus"));
+					}
 				}
 			}
 			

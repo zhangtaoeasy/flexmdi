@@ -105,6 +105,7 @@ package flexmdi.containers
 			
 			if(icon)
 			{
+				icon.x = tf.x;
 				tf.x = icon.x + icon.width + 4;
 			}
 			

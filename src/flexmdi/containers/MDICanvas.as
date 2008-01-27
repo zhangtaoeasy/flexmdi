@@ -39,8 +39,6 @@ package flexmdi.containers
 	{
 		public var windowManager:MDIManager;
 		
-		private var _enforceBoundaries:Boolean;
-		
 		public function MDICanvas()
 		{
 			super();

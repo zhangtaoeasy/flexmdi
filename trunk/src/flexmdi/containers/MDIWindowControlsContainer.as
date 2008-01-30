@@ -29,7 +29,14 @@ package flexmdi.containers
 	import mx.core.ContainerLayout;
 	import mx.core.LayoutContainer;
 	import mx.core.UITextField;
-
+	
+	/**
+	 * Class that holds window control buttons and handles general titleBar layout.
+	 * Provides minimize, maximize/restore and close buttons by default.
+	 * Subclass this class to create custom layouts that rearrange, add to, or reduce
+	 * the default controls. Set layout property to switch between horizontal, vertical 
+	 * and absolute layouts.
+	 */
 	public class MDIWindowControlsContainer extends LayoutContainer
 	{
 		public var window:MDIWindow;
@@ -72,6 +79,12 @@ package flexmdi.containers
 			}
 		}
 		
+		/**
+		 * Traditional override of built-in lifecycle function used to control visual 
+		 * layout of the class. Minor difference is that size is set here as well because
+		 * automatic measurement and sizing is not handled by framework since we go into 
+		 * rawChildren (of MDIWindow).
+		 */
 		override protected function updateDisplayList(w:Number, h:Number):void
 		{
 			super.updateDisplayList(w, h);

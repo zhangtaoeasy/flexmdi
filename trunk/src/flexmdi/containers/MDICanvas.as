@@ -59,6 +59,7 @@ package flexmdi.containers
 		}
 		
 		/**
+		 * Proxy to MDIManager effects property.
 		 * 
 		 * @deprecated use effects and class
 		 * 
@@ -68,12 +69,17 @@ package flexmdi.containers
 			this.windowManager.effects = new clazz();
 		}
 		
-		
+		/**
+		 * Proxy to MDIManager property of same name.
+		 */
 		public function set effects(effects:IMDIEffectsDescriptor):void 
 		{
 			this.windowManager.effects = effects;		
 		}
 		
+		/**
+		 * Proxy to MDIManager property of same name.
+		 */
 		public function get enforceBoundaries():Boolean
 		{
 			return windowManager.enforceBoundaries;

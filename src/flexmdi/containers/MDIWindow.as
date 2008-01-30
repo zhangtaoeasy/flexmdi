@@ -144,7 +144,6 @@ package flexmdi.containers
 	
 	/**
 	 *  Style declaration name for the window when it has focus.
-	 *  The default value is <code>"mdiWindowFocus"</code>.
 	 *
 	 *  @default "mdiWindowFocus"
 	 */
@@ -152,7 +151,6 @@ package flexmdi.containers
 	
 	/**
 	 *  Style declaration name for the window when it does not have focus.
-	 *  The default value is <code>"mdiWindowNoFocus"</code>.
 	 *
 	 *  @default "mdiWindowNoFocus"
 	 */
@@ -162,7 +160,6 @@ package flexmdi.containers
 	 *  Style declaration name for the text in the title bar
 	 * 	when the window is in focus. If <code>titleStyleName</code> (inherited from Panel)
 	 *  is set, titleStyleNameFocus will be overridden by it.
-	 *  The default value is <code>"mdiWindowTitleStyle"</code>.
 	 *
 	 *  @default "mdiWindowTitleStyle"
 	 */
@@ -181,7 +178,6 @@ package flexmdi.containers
 	 *  Reference to class that will contain window control buttons like
 	 *  minimize, close, etc. Changes to this style will be detected and will
 	 *  initiate the instantiation and addition of a new class instance.
-	 *  The default value is <code>flexmdi.containers.MDIWindowControlsContainer</code>.
 	 *
 	 *  @default flexmdi.containers.MDIWindowControlsContainer
 	 */
@@ -192,7 +188,6 @@ package flexmdi.containers
 	 *  If <code>minimizeBtnStyleNameNoFocus</code> is not provided this style
 	 *  will be used regardless of the window's focus. If <code>minimizeBtnStyleNameNoFocus</code>
 	 *  is provided this style will be applied only when the window has focus.
-	 *  The default value is <code>"mdiWindowMinimizeBtn"</code>.
 	 *
 	 *  @default "mdiWindowMinimizeBtn"
 	 */
@@ -209,7 +204,6 @@ package flexmdi.containers
 	 *  If <code>maximizeBtnStyleNameNoFocus</code> is not provided this style
 	 *  will be used regardless of the window's focus. If <code>maximizeBtnStyleNameNoFocus</code>
 	 *  is provided this style will be applied only when the window has focus.
-	 *  The default value is <code>"mdiWindowMaximizeBtn"</code>.
 	 *
 	 *  @default "mdiWindowMaximizeBtn"
 	 */
@@ -226,7 +220,6 @@ package flexmdi.containers
 	 *  If <code>restoreBtnStyleNameNoFocus</code> is not provided this style
 	 *  will be used regardless of the window's focus. If <code>restoreBtnStyleNameNoFocus</code>
 	 *  is provided this style will be applied only when the window has focus.
-	 *  The default value is <code>"mdiWindowRestoreBtn"</code>.
 	 *
 	 *  @default "mdiWindowRestoreBtn"
 	 */
@@ -243,7 +236,6 @@ package flexmdi.containers
 	 *  If <code>closeBtnStyleNameNoFocus</code> is not provided this style
 	 *  will be used regardless of the window's focus. If <code>closeBtnStyleNameNoFocus</code>
 	 *  is provided this style will be applied only when the window has focus.
-	 *  The default value is <code>"mdiWindowCloseBtn"</code>.
 	 *
 	 *  @default "mdiWindowCloseBtn"
 	 */
@@ -378,12 +370,12 @@ package flexmdi.containers
 		/**
 		 * Flag determining whether or not this window is resizable.
 		 */
-		public var resizable:Boolean;
+		public var resizable:Boolean = true;
 		
 		/**
 		 * Flag determining whether or not this window is draggable.
 		 */
-		public var draggable:Boolean;
+		public var draggable:Boolean = true;
 		
 		/**
 	     * @private
@@ -753,7 +745,7 @@ package flexmdi.containers
 			super();
 			minWidth = minHeight = width = height = 200;
 			windowState = MDIWindowState.NORMAL;
-			doubleClickEnabled = resizable = draggable = true;
+			doubleClickEnabled = true;
 			
 			windowControls = new MDIWindowControlsContainer();
 		}

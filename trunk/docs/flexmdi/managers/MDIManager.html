@@ -4,7 +4,7 @@
 <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <link rel="stylesheet" href="../../style.css" type="text/css" media="screen">
 <link rel="stylesheet" href="../../print.css" type="text/css" media="print">
-<meta content="MDIManager,flexmdi.managers.MDIManager,tileMinimize,tileMinimizeWidth,showMinimizedTiles,tilePadding,minTilePadding,effects,global,container,add,position,addContextMenu,executeDefaultBehavior,addCenter,bringToFront,center,removeAll,remove,manage,absPos,getOpenWindowList,tile,resize,cascade,showAllWindows" name="keywords">
+<meta content="MDIManager,flexmdi.managers.MDIManager,effects,enforceBoundaries,minTilePadding,showMinimizedTiles,tileMinimize,tileMinimizeWidth,tilePadding,container,global,absPos,add,addCenter,addContextMenu,bringToFront,cascade,center,executeDefaultBehavior,getOpenWindowList,manage,position,remove,removeAll,resize,showAllWindows,tile" name="keywords">
 <title>flexmdi.managers.MDIManager</title>
 </head>
 <body>
@@ -62,6 +62,10 @@ if (!isEclipse() || window.name != ECLIPSE_FRAME_NAME) {titleBar_setSubTitle("Cl
 <tr class="">
 <td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#effects">effects</a> : <a href="../effects/IMDIEffectsDescriptor.html">IMDIEffectsDescriptor</a>
 <div class="summaryTableDescription"></div>
+</td><td class="summaryTableOwnerCol">MDIManager</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#enforceBoundaries">enforceBoundaries</a> : Boolean = true<div class="summaryTableDescription"></div>
 </td><td class="summaryTableOwnerCol">MDIManager</td>
 </tr>
 <tr class="">
@@ -406,6 +410,15 @@ showHideInherited();
 </table>
 <div class="detailBody">
 <code>public var effects:<a href="../effects/IMDIEffectsDescriptor.html">IMDIEffectsDescriptor</a></code>
+</div>
+<a name="enforceBoundaries"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">enforceBoundaries</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public var enforceBoundaries:Boolean = true</code>
 </div>
 <a name="global"></a>
 <table cellspacing="0" cellpadding="0" class="detailHeader">
@@ -778,7 +791,7 @@ showHideInherited();
 </tr>
 </table>
 <div class="detailBody">
-<span class="label">Event object type: </span><a href=""><code>mdi.events.MDIManagerEvent</code></a>
+<span class="label">Event object type: </span><a href="../events/MDIManagerEvent.html"><code>flexmdi.events.MDIManagerEvent</code></a>
 <br>
 <p></p><p>
    Dispatched when the windows are cascaded.
@@ -790,7 +803,7 @@ showHideInherited();
 </tr>
 </table>
 <div class="detailBody">
-<span class="label">Event object type: </span><a href=""><code>mdi.events.MDIManagerEvent</code></a>
+<span class="label">Event object type: </span><a href="../events/MDIManagerEvent.html"><code>flexmdi.events.MDIManagerEvent</code></a>
 <br>
 <p></p><p>
    Dispatched when the windows are tiled.
@@ -802,7 +815,7 @@ showHideInherited();
 </tr>
 </table>
 <div class="detailBody">
-<span class="label">Event object type: </span><a href=""><code>mdi.events.MDIManagerEvent</code></a>
+<span class="label">Event object type: </span><a href="../events/MDIManagerEvent.html"><code>flexmdi.events.MDIManagerEvent</code></a>
 <br>
 <p></p><p>
    Dispatched when a window is added to the manager.
@@ -814,7 +827,7 @@ showHideInherited();
 </tr>
 </table>
 <div class="detailBody">
-<span class="label">Event object type: </span><a href=""><code>mdi.events.MDIManagerEvent</code></a>
+<span class="label">Event object type: </span><a href="../events/MDIManagerEvent.html"><code>flexmdi.events.MDIManagerEvent</code></a>
 <br>
 <p></p><p>
    Dispatched when the minimize button is clicked.
@@ -826,7 +839,7 @@ showHideInherited();
 </tr>
 </table>
 <div class="detailBody">
-<span class="label">Event object type: </span><a href=""><code>mdi.events.MDIManagerEvent</code></a>
+<span class="label">Event object type: </span><a href="../events/MDIManagerEvent.html"><code>flexmdi.events.MDIManagerEvent</code></a>
 <br>
 <p></p><p>
    Dispatched while the window is being dragged.
@@ -838,7 +851,7 @@ showHideInherited();
 </tr>
 </table>
 <div class="detailBody">
-<span class="label">Event object type: </span><a href=""><code>mdi.events.MDIManagerEvent</code></a>
+<span class="label">Event object type: </span><a href="../events/MDIManagerEvent.html"><code>flexmdi.events.MDIManagerEvent</code></a>
 <br>
 <p></p><p>
    Dispatched when the window stops being dragged.
@@ -850,7 +863,7 @@ showHideInherited();
 </tr>
 </table>
 <div class="detailBody">
-<span class="label">Event object type: </span><a href=""><code>mdi.events.MDIManagerEvent</code></a>
+<span class="label">Event object type: </span><a href="../events/MDIManagerEvent.html"><code>flexmdi.events.MDIManagerEvent</code></a>
 <br>
 <p></p><p>
    Dispatched when the window begins being dragged.
@@ -862,7 +875,7 @@ showHideInherited();
 </tr>
 </table>
 <div class="detailBody">
-<span class="label">Event object type: </span><a href=""><code>mdi.events.MDIManagerEvent</code></a>
+<span class="label">Event object type: </span><a href="../events/MDIManagerEvent.html"><code>flexmdi.events.MDIManagerEvent</code></a>
 <br>
 <p></p><p>
    Dispatched when the window loses focus and no longer has topmost z-index of MDIManager's children.
@@ -874,7 +887,7 @@ showHideInherited();
 </tr>
 </table>
 <div class="detailBody">
-<span class="label">Event object type: </span><a href=""><code>mdi.events.MDIManagerEvent</code></a>
+<span class="label">Event object type: </span><a href="../events/MDIManagerEvent.html"><code>flexmdi.events.MDIManagerEvent</code></a>
 <br>
 <p></p><p>
    Dispatched when the window gains focus and is given topmost z-index of MDIManager's children.
@@ -886,7 +899,7 @@ showHideInherited();
 </tr>
 </table>
 <div class="detailBody">
-<span class="label">Event object type: </span><a href=""><code>mdi.events.MDIManagerEvent</code></a>
+<span class="label">Event object type: </span><a href="../events/MDIManagerEvent.html"><code>flexmdi.events.MDIManagerEvent</code></a>
 <br>
 <p></p><p>
    Dispatched when the maximize button is clicked or when the window is in a
@@ -899,7 +912,7 @@ showHideInherited();
 </tr>
 </table>
 <div class="detailBody">
-<span class="label">Event object type: </span><a href=""><code>mdi.events.MDIManagerEvent</code></a>
+<span class="label">Event object type: </span><a href="../events/MDIManagerEvent.html"><code>flexmdi.events.MDIManagerEvent</code></a>
 <br>
 <p></p><p>
    Dispatched when the minimize button is clicked.
@@ -911,7 +924,7 @@ showHideInherited();
 </tr>
 </table>
 <div class="detailBody">
-<span class="label">Event object type: </span><a href=""><code>mdi.events.MDIManagerEvent</code></a>
+<span class="label">Event object type: </span><a href="../events/MDIManagerEvent.html"><code>flexmdi.events.MDIManagerEvent</code></a>
 <br>
 <p></p><p>
    Dispatched while the mouse is down on a resize handle.
@@ -923,7 +936,7 @@ showHideInherited();
 </tr>
 </table>
 <div class="detailBody">
-<span class="label">Event object type: </span><a href=""><code>mdi.events.MDIManagerEvent</code></a>
+<span class="label">Event object type: </span><a href="../events/MDIManagerEvent.html"><code>flexmdi.events.MDIManagerEvent</code></a>
 <br>
 <p></p><p>
    Dispatched when the mouse is released from a resize handle.
@@ -935,7 +948,7 @@ showHideInherited();
 </tr>
 </table>
 <div class="detailBody">
-<span class="label">Event object type: </span><a href=""><code>mdi.events.MDIManagerEvent</code></a>
+<span class="label">Event object type: </span><a href="../events/MDIManagerEvent.html"><code>flexmdi.events.MDIManagerEvent</code></a>
 <br>
 <p></p><p>
    Dispatched when a resize handle is pressed.
@@ -947,7 +960,7 @@ showHideInherited();
 </tr>
 </table>
 <div class="detailBody">
-<span class="label">Event object type: </span><a href=""><code>mdi.events.MDIManagerEvent</code></a>
+<span class="label">Event object type: </span><a href="../events/MDIManagerEvent.html"><code>flexmdi.events.MDIManagerEvent</code></a>
 <br>
 <p></p><p>
    If the window is minimized, this event is dispatched when the titleBar is clicked. 

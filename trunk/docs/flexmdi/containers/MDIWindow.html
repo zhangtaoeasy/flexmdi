@@ -4,7 +4,7 @@
 <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <link rel="stylesheet" href="../../style.css" type="text/css" media="screen">
 <link rel="stylesheet" href="../../print.css" type="text/css" media="print">
-<meta content="MDIWindow,flexmdi.containers.MDIWindow,controls,minimizeBtn,maximizeRestoreBtn,closeBtn,minimizeHeight,resizable,savedWindowRect,winContextMenu,windowManager,showCloseButton,showControls,minimized,maximized,createChildren,updateDisplayList,bringToFront,minimize,maximizeRestore,maximize,close,unMinimize,updateContextMenu" name="keywords">
+<meta content="MDIWindow,flexmdi.containers.MDIWindow,cornerHandleSize,draggable,edgeHandleSize,resizable,savedWindowRect,titleBarOverlay,winContextMenu,windowManager,closeBtn,hasFocus,maximizeRestoreBtn,maximized,minimizeBtn,minimizeHeight,minimized,showCloseButton,windowControls,windowStyleName,showControls,close,createChildren,getSelectorList,getTitleIconObject,getTitleTextField,maximize,maximizeRestore,minimize,restore,restoreStyle,saveStyle,styleChanged,unMinimize,updateContextMenu,updateDisplayList" name="keywords">
 <title>flexmdi.containers.MDIWindow</title>
 </head>
 <body>
@@ -19,7 +19,7 @@
 <td align="left" class="titleTableTitle">API Documentation</td><td align="right" class="titleTableTopNav"><a onclick="loadClassListFrame('../../all-classes.html')" href="../../package-summary.html">All&nbsp;Packages</a>&nbsp;|&nbsp;<a onclick="loadClassListFrame('../../all-classes.html')" href="../../class-summary.html">All&nbsp;Classes</a>&nbsp;|&nbsp;<a onclick="loadClassListFrame('../../index-list.html')" href="../../all-index-A.html">Index</a>&nbsp;|&nbsp;<a href="../../index.html?flexmdi/containers/MDIWindow.html&amp;flexmdi/containers/class-list.html" id="framesLink1">Frames</a><a onclick="parent.location=document.location" href="" style="display:none" id="noFramesLink1">No&nbsp;Frames</a></td><td rowspan="3" align="right" class="titleTableLogo"><img alt="Adobe Logo" title="Adobe Logo" class="logoImage" src="../../images/logo.jpg"></td>
 </tr>
 <tr class="titleTableRow2">
-<td align="left" id="subTitle" class="titleTableSubTitle">Class&nbsp;MDIWindow</td><td align="right" id="subNav" class="titleTableSubNav"><a href="#propertySummary">Properties</a>&nbsp;| <a href="#methodSummary">Methods</a>&nbsp;| <a href="#eventSummary">Events</a></td>
+<td align="left" id="subTitle" class="titleTableSubTitle">Class&nbsp;MDIWindow</td><td align="right" id="subNav" class="titleTableSubNav"><a href="#propertySummary">Properties</a>&nbsp;| <a href="#methodSummary">Methods</a>&nbsp;| <a href="#eventSummary">Events</a>&nbsp;| <a href="#styleSummary">Styles</a></td>
 </tr>
 <tr class="titleTableRow3">
 <td colspan="2">&nbsp;</td>
@@ -27,7 +27,7 @@
 </table>
 <script type="text/javascript" language="javascript">
 <!--
-if (!isEclipse() || window.name != ECLIPSE_FRAME_NAME) {titleBar_setSubTitle("Class MDIWindow"); titleBar_setSubNav(false,true,false,false,true,false,true,false,false,false,false,false,false,false);}
+if (!isEclipse() || window.name != ECLIPSE_FRAME_NAME) {titleBar_setSubTitle("Class MDIWindow"); titleBar_setSubNav(false,true,true,false,true,false,true,false,false,false,false,false,false,false);}
 --></script>
 <div class="MainContent">
 <table cellspacing="0" cellpadding="0" class="classHeaderTable">
@@ -55,13 +55,27 @@ if (!isEclipse() || window.name != ECLIPSE_FRAME_NAME) {titleBar_setSubTitle("Cl
 <th>&nbsp;</th><th colspan="2">Property</th><th class="summaryTableOwnerCol">Defined&nbsp;by</th>
 </tr>
 <tr class="">
-<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#closeBtn">closeBtn</a> : Button<div class="summaryTableDescription">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#closeBtn">closeBtn</a> : Button<div class="summaryTableDescription">[read-only]
    Close window button.</div>
 </td><td class="summaryTableOwnerCol">MDIWindow</td>
 </tr>
 <tr class="">
-<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#controls">controls</a> : Array<div class="summaryTableDescription">
-   Array of controlsHolder's child components.</div>
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#cornerHandleSize">cornerHandleSize</a> : Number = 10<div class="summaryTableDescription">
+      Size of corner handles.</div>
+</td><td class="summaryTableOwnerCol">MDIWindow</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#draggable">draggable</a> : Boolean = true<div class="summaryTableDescription">
+   Flag determining whether or not this window is draggable.</div>
+</td><td class="summaryTableOwnerCol">MDIWindow</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#edgeHandleSize">edgeHandleSize</a> : Number = 4<div class="summaryTableDescription">
+      Size of edge handles.</div>
+</td><td class="summaryTableOwnerCol">MDIWindow</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#hasFocus">hasFocus</a> : Boolean<div class="summaryTableDescription"></div>
 </td><td class="summaryTableOwnerCol">MDIWindow</td>
 </tr>
 <tr class="">
@@ -69,12 +83,12 @@ if (!isEclipse() || window.name != ECLIPSE_FRAME_NAME) {titleBar_setSubTitle("Cl
 </td><td class="summaryTableOwnerCol">MDIWindow</td>
 </tr>
 <tr class="">
-<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#maximizeRestoreBtn">maximizeRestoreBtn</a> : Button<div class="summaryTableDescription">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#maximizeRestoreBtn">maximizeRestoreBtn</a> : Button<div class="summaryTableDescription">[read-only]
    Maximize/restore window button.</div>
 </td><td class="summaryTableOwnerCol">MDIWindow</td>
 </tr>
 <tr class="">
-<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#minimizeBtn">minimizeBtn</a> : Button<div class="summaryTableDescription">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#minimizeBtn">minimizeBtn</a> : Button<div class="summaryTableDescription">[read-only]
    Minimize window button.</div>
 </td><td class="summaryTableOwnerCol">MDIWindow</td>
 </tr>
@@ -83,12 +97,11 @@ if (!isEclipse() || window.name != ECLIPSE_FRAME_NAME) {titleBar_setSubTitle("Cl
 </td><td class="summaryTableOwnerCol">MDIWindow</td>
 </tr>
 <tr class="">
-<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#minimizeHeight">minimizeHeight</a> : Number<div class="summaryTableDescription">
-   Height of window when minimized.</div>
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#minimizeHeight">minimizeHeight</a> : Number<div class="summaryTableDescription">[read-only]</div>
 </td><td class="summaryTableOwnerCol">MDIWindow</td>
 </tr>
 <tr class="">
-<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#resizable">resizable</a> : Boolean<div class="summaryTableDescription">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#resizable">resizable</a> : Boolean = true<div class="summaryTableDescription">
    Flag determining whether or not this window is resizable.</div>
 </td><td class="summaryTableOwnerCol">MDIWindow</td>
 </tr>
@@ -107,14 +120,29 @@ if (!isEclipse() || window.name != ECLIPSE_FRAME_NAME) {titleBar_setSubTitle("Cl
 </td><td class="summaryTableOwnerCol">MDIWindow</td>
 </tr>
 <tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#titleBarOverlay">titleBarOverlay</a> : Canvas<div class="summaryTableDescription">
+   Invisible shape laid over titlebar to prevent funkiness from clicking in title textfield.</div>
+</td><td class="summaryTableOwnerCol">MDIWindow</td>
+</tr>
+<tr class="">
 <td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#winContextMenu">winContextMenu</a> : ContextMenu = null<div class="summaryTableDescription">
       Window's context menu.</div>
+</td><td class="summaryTableOwnerCol">MDIWindow</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#windowControls">windowControls</a> : <a href="../containers/MDIWindowControlsContainer.html">MDIWindowControlsContainer</a>
+<div class="summaryTableDescription">
+   Reference to class used to create windowControls property.</div>
 </td><td class="summaryTableOwnerCol">MDIWindow</td>
 </tr>
 <tr class="">
 <td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#windowManager">windowManager</a> : <a href="../managers/MDIManager.html">MDIManager</a>
 <div class="summaryTableDescription">
    Reference to MDIManager instance this window is managed by, if any.</div>
+</td><td class="summaryTableOwnerCol">MDIWindow</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#windowStyleName">windowStyleName</a> : Object<div class="summaryTableDescription"></div>
 </td><td class="summaryTableOwnerCol">MDIWindow</td>
 </tr>
 </table>
@@ -138,17 +166,25 @@ if (!isEclipse() || window.name != ECLIPSE_FRAME_NAME) {titleBar_setSubTitle("Cl
 <tr class="">
 <td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
 <div class="summarySignature">
-<a class="signatureLink" href="#bringToFront()">bringToFront</a>(event:Event = null):void</div>
+<a class="signatureLink" href="#close()">close</a>(event:MouseEvent = null):void</div>
 <div class="summaryTableDescription">
-   Bring this window to front of parent's child list.</div>
+   Close the window.</div>
 </td><td class="summaryTableOwnerCol">MDIWindow</td>
 </tr>
 <tr class="">
 <td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
 <div class="summarySignature">
-<a class="signatureLink" href="#close()">close</a>(event:MouseEvent = null):void</div>
+<a class="signatureLink" href="#getTitleIconObject()">getTitleIconObject</a>():DisplayObject</div>
 <div class="summaryTableDescription">
-   Close the window.</div>
+   Returns reference to titleIconObject which is mx_internal by default.</div>
+</td><td class="summaryTableOwnerCol">MDIWindow</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#getTitleTextField()">getTitleTextField</a>():UITextField</div>
+<div class="summaryTableDescription">
+   Returns reference to titleTextField which is protected by default.</div>
 </td><td class="summaryTableOwnerCol">MDIWindow</td>
 </tr>
 <tr class="">
@@ -175,6 +211,39 @@ if (!isEclipse() || window.name != ECLIPSE_FRAME_NAME) {titleBar_setSubTitle("Cl
 <a class="signatureLink" href="#minimize()">minimize</a>(event:MouseEvent = null):void</div>
 <div class="summaryTableDescription">
     Minimize the window.</div>
+</td><td class="summaryTableOwnerCol">MDIWindow</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#restore()">restore</a>():void</div>
+<div class="summaryTableDescription">
+   Restores the window to its last floating position.</div>
+</td><td class="summaryTableOwnerCol">MDIWindow</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#restoreStyle()">restoreStyle</a>():void</div>
+<div class="summaryTableDescription">
+   Restores style settings for restore and maximize
+      </div>
+</td><td class="summaryTableOwnerCol">MDIWindow</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#saveStyle()">saveStyle</a>():void</div>
+<div class="summaryTableDescription">
+   Save style settings for minimizing.</div>
+</td><td class="summaryTableOwnerCol">MDIWindow</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#styleChanged()">styleChanged</a>(styleProp:String):void</div>
+<div class="summaryTableDescription">
+   Detects change to styleName that is executed by MDIManager indicating a change in focus.</div>
 </td><td class="summaryTableOwnerCol">MDIWindow</td>
 </tr>
 <tr class="">
@@ -212,9 +281,16 @@ if (!isEclipse() || window.name != ECLIPSE_FRAME_NAME) {titleBar_setSubTitle("Cl
 <tr class="">
 <td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
 <div class="summarySignature">
-<a class="signatureLink" href="#updateDisplayList()">updateDisplayList</a>(unscaledWidth:Number, unscaledHeight:Number):void</div>
+<a class="signatureLink" href="#getSelectorList()">getSelectorList</a>():Array</div>
+<div class="summaryTableDescription"></div>
+</td><td class="summaryTableOwnerCol">MDIWindow</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#updateDisplayList()">updateDisplayList</a>(w:Number, h:Number):void</div>
 <div class="summaryTableDescription">
-   Position resize handles and window controls.</div>
+   Position and size resize handles and window controls.</div>
 </td><td class="summaryTableOwnerCol">MDIWindow</td>
 </tr>
 </table>
@@ -325,6 +401,264 @@ if (!isEclipse() || window.name != ECLIPSE_FRAME_NAME) {titleBar_setSubTitle("Cl
 </tr>
 </table>
 </div>
+<a name="styleSummary"></a>
+<div class="summarySection">
+<div class="summaryTableTitle">Styles</div>
+<table id="summaryTableStyle" class="summaryTable " cellpadding="3" cellspacing="0">
+<tr>
+<th>&nbsp;</th><th colspan="2">Style</th><th>Description</th><th class="summaryTableOwnerCol">Defined&nbsp;by</th>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol"><a name="style:closeBtnStyleName"></a>&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<span class="signatureLink">closeBtnStyleName</span>
+</div>
+</td><td class="summaryTableDescription"><span class="label">Type: </span>String &nbsp; <span class="label">CSS Inheritance: </span>no<br>
+   Style declaration name for the window's close button.
+   If <code>closeBtnStyleNameNoFocus</code> is not provided this style
+   will be used regardless of the window's focus. If <code>closeBtnStyleNameNoFocus</code>
+   is provided this style will be applied only when the window has focus.
+      The default value is <code>"mdiWindowCloseBtn"</code>.</td><td class="summaryTableOwnerCol">MDIWindow</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol"><a name="style:closeBtnStyleNameNoFocus"></a>&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<span class="signatureLink">closeBtnStyleNameNoFocus</span>
+</div>
+</td><td class="summaryTableDescription"><span class="label">Type: </span>String &nbsp; <span class="label">CSS Inheritance: </span>no<br>
+   Style declaration name for the window's close button when window does not have focus.
+   See <code>closeBtnStyleName</code> documentation for details.
+  </td><td class="summaryTableOwnerCol">MDIWindow</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol"><a name="style:maximizeBtnStyleName"></a>&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<span class="signatureLink">maximizeBtnStyleName</span>
+</div>
+</td><td class="summaryTableDescription"><span class="label">Type: </span>String &nbsp; <span class="label">CSS Inheritance: </span>no<br>
+   Style declaration name for the window's maximize button.
+   If <code>maximizeBtnStyleNameNoFocus</code> is not provided this style
+   will be used regardless of the window's focus. If <code>maximizeBtnStyleNameNoFocus</code>
+   is provided this style will be applied only when the window has focus.
+      The default value is <code>"mdiWindowMaximizeBtn"</code>.</td><td class="summaryTableOwnerCol">MDIWindow</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol"><a name="style:maximizeBtnStyleNameNoFocus"></a>&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<span class="signatureLink">maximizeBtnStyleNameNoFocus</span>
+</div>
+</td><td class="summaryTableDescription"><span class="label">Type: </span>String &nbsp; <span class="label">CSS Inheritance: </span>no<br>
+   Style declaration name for the window's maximize button when window does not have focus.
+   See <code>maximizeBtnStyleName</code> documentation for details.
+  </td><td class="summaryTableOwnerCol">MDIWindow</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol"><a name="style:minimizeBtnStyleName"></a>&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<span class="signatureLink">minimizeBtnStyleName</span>
+</div>
+</td><td class="summaryTableDescription"><span class="label">Type: </span>String &nbsp; <span class="label">CSS Inheritance: </span>no<br>
+   Style declaration name for the window's minimize button.
+   If <code>minimizeBtnStyleNameNoFocus</code> is not provided this style
+   will be used regardless of the window's focus. If <code>minimizeBtnStyleNameNoFocus</code>
+   is provided this style will be applied only when the window has focus.
+      The default value is <code>"mdiWindowMinimizeBtn"</code>.</td><td class="summaryTableOwnerCol">MDIWindow</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol"><a name="style:minimizeBtnStyleNameNoFocus"></a>&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<span class="signatureLink">minimizeBtnStyleNameNoFocus</span>
+</div>
+</td><td class="summaryTableDescription"><span class="label">Type: </span>String &nbsp; <span class="label">CSS Inheritance: </span>no<br>
+   Style declaration name for the window's minimize button when window does not have focus.
+   See <code>minimizeBtnStyleName</code> documentation for details.
+  </td><td class="summaryTableOwnerCol">MDIWindow</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol"><a name="style:resizeCursorHorizontalSkin"></a>&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<span class="signatureLink">resizeCursorHorizontalSkin</span>
+</div>
+</td><td class="summaryTableDescription"><span class="label">Type: </span>Class &nbsp; <span class="label">CSS Inheritance: </span>no<br>
+   Name of the class used as cursor when resizing the window horizontally.
+  </td><td class="summaryTableOwnerCol">MDIWindow</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol"><a name="style:resizeCursorHorizontalXOffset"></a>&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<span class="signatureLink">resizeCursorHorizontalXOffset</span>
+</div>
+</td><td class="summaryTableDescription"><span class="label">Type: </span>Number &nbsp; <span class="label">CSS Inheritance: </span>no<br>
+   Distance to horizontally offset resizeCursorHorizontalSkin.
+  </td><td class="summaryTableOwnerCol">MDIWindow</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol"><a name="style:resizeCursorHorizontalYOffset"></a>&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<span class="signatureLink">resizeCursorHorizontalYOffset</span>
+</div>
+</td><td class="summaryTableDescription"><span class="label">Type: </span>Number &nbsp; <span class="label">CSS Inheritance: </span>no<br>
+   Distance to vertically offset resizeCursorHorizontalSkin.
+  </td><td class="summaryTableOwnerCol">MDIWindow</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol"><a name="style:resizeCursorTopLeftBottomRightSkin"></a>&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<span class="signatureLink">resizeCursorTopLeftBottomRightSkin</span>
+</div>
+</td><td class="summaryTableDescription"><span class="label">Type: </span>Class &nbsp; <span class="label">CSS Inheritance: </span>no<br>
+   Name of the class used as cursor when resizing from top left or bottom right corner.
+  </td><td class="summaryTableOwnerCol">MDIWindow</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol"><a name="style:resizeCursorTopLeftBottomRightXOffset"></a>&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<span class="signatureLink">resizeCursorTopLeftBottomRightXOffset</span>
+</div>
+</td><td class="summaryTableDescription"><span class="label">Type: </span>Number &nbsp; <span class="label">CSS Inheritance: </span>no<br>
+   Distance to horizontally offset resizeCursorTopLeftBottomRightSkin.
+  </td><td class="summaryTableOwnerCol">MDIWindow</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol"><a name="style:resizeCursorTopLeftBottomRightYOffset"></a>&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<span class="signatureLink">resizeCursorTopLeftBottomRightYOffset</span>
+</div>
+</td><td class="summaryTableDescription"><span class="label">Type: </span>Number &nbsp; <span class="label">CSS Inheritance: </span>no<br>
+   Distance to vertically offset resizeCursorTopLeftBottomRightSkin.
+  </td><td class="summaryTableOwnerCol">MDIWindow</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol"><a name="style:resizeCursorTopRightBottomLeftSkin"></a>&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<span class="signatureLink">resizeCursorTopRightBottomLeftSkin</span>
+</div>
+</td><td class="summaryTableDescription"><span class="label">Type: </span>Class &nbsp; <span class="label">CSS Inheritance: </span>no<br>
+   Name of the class used as cursor when resizing from top right or bottom left corner.
+  </td><td class="summaryTableOwnerCol">MDIWindow</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol"><a name="style:resizeCursorTopRightBottomLeftXOffset"></a>&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<span class="signatureLink">resizeCursorTopRightBottomLeftXOffset</span>
+</div>
+</td><td class="summaryTableDescription"><span class="label">Type: </span>Number &nbsp; <span class="label">CSS Inheritance: </span>no<br>
+   Distance to horizontally offset resizeCursorTopRightBottomLeftSkin.
+  </td><td class="summaryTableOwnerCol">MDIWindow</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol"><a name="style:resizeCursorTopRightBottomLeftYOffset"></a>&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<span class="signatureLink">resizeCursorTopRightBottomLeftYOffset</span>
+</div>
+</td><td class="summaryTableDescription"><span class="label">Type: </span>Number &nbsp; <span class="label">CSS Inheritance: </span>no<br>
+   Distance to vertically offset resizeCursorTopRightBottomLeftSkin.
+  </td><td class="summaryTableOwnerCol">MDIWindow</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol"><a name="style:resizeCursorVerticalSkin"></a>&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<span class="signatureLink">resizeCursorVerticalSkin</span>
+</div>
+</td><td class="summaryTableDescription"><span class="label">Type: </span>Class &nbsp; <span class="label">CSS Inheritance: </span>no<br>
+   Name of the class used as cursor when resizing the window vertically.
+  </td><td class="summaryTableOwnerCol">MDIWindow</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol"><a name="style:resizeCursorVerticalXOffset"></a>&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<span class="signatureLink">resizeCursorVerticalXOffset</span>
+</div>
+</td><td class="summaryTableDescription"><span class="label">Type: </span>Number &nbsp; <span class="label">CSS Inheritance: </span>no<br>
+   Distance to horizontally offset resizeCursorVerticalSkin.
+  </td><td class="summaryTableOwnerCol">MDIWindow</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol"><a name="style:resizeCursorVerticalYOffset"></a>&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<span class="signatureLink">resizeCursorVerticalYOffset</span>
+</div>
+</td><td class="summaryTableDescription"><span class="label">Type: </span>Number &nbsp; <span class="label">CSS Inheritance: </span>no<br>
+   Distance to vertically offset resizeCursorVerticalSkin.
+  </td><td class="summaryTableOwnerCol">MDIWindow</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol"><a name="style:restoreBtnStyleName"></a>&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<span class="signatureLink">restoreBtnStyleName</span>
+</div>
+</td><td class="summaryTableDescription"><span class="label">Type: </span>String &nbsp; <span class="label">CSS Inheritance: </span>no<br>
+   Style declaration name for the window's restore button.
+   If <code>restoreBtnStyleNameNoFocus</code> is not provided this style
+   will be used regardless of the window's focus. If <code>restoreBtnStyleNameNoFocus</code>
+   is provided this style will be applied only when the window has focus.
+      The default value is <code>"mdiWindowRestoreBtn"</code>.</td><td class="summaryTableOwnerCol">MDIWindow</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol"><a name="style:restoreBtnStyleNameNoFocus"></a>&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<span class="signatureLink">restoreBtnStyleNameNoFocus</span>
+</div>
+</td><td class="summaryTableDescription"><span class="label">Type: </span>String &nbsp; <span class="label">CSS Inheritance: </span>no<br>
+   Style declaration name for the window's restore button when window does not have focus.
+   See <code>restoreBtnStyleName</code> documentation for details.
+  </td><td class="summaryTableOwnerCol">MDIWindow</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol"><a name="style:styleNameFocus"></a>&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<span class="signatureLink">styleNameFocus</span>
+</div>
+</td><td class="summaryTableDescription"><span class="label">Type: </span>String &nbsp; <span class="label">CSS Inheritance: </span>no<br>
+   Style declaration name for the window when it has focus.
+      The default value is <code>"mdiWindowFocus"</code>.</td><td class="summaryTableOwnerCol">MDIWindow</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol"><a name="style:styleNameNoFocus"></a>&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<span class="signatureLink">styleNameNoFocus</span>
+</div>
+</td><td class="summaryTableDescription"><span class="label">Type: </span>String &nbsp; <span class="label">CSS Inheritance: </span>no<br>
+   Style declaration name for the window when it does not have focus.
+      The default value is <code>"mdiWindowNoFocus"</code>.</td><td class="summaryTableOwnerCol">MDIWindow</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol"><a name="style:titleStyleNameFocus"></a>&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<span class="signatureLink">titleStyleNameFocus</span>
+</div>
+</td><td class="summaryTableDescription"><span class="label">Type: </span>String &nbsp; <span class="label">CSS Inheritance: </span>no<br>
+   Style declaration name for the text in the title bar
+   when the window is in focus. If <code>titleStyleName</code> (inherited from Panel)
+   is set, titleStyleNameFocus will be overridden by it.
+      The default value is <code>"mdiWindowTitleStyle"</code>.</td><td class="summaryTableOwnerCol">MDIWindow</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol"><a name="style:titleStyleNameNoFocus"></a>&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<span class="signatureLink">titleStyleNameNoFocus</span>
+</div>
+</td><td class="summaryTableDescription"><span class="label">Type: </span>String &nbsp; <span class="label">CSS Inheritance: </span>no<br>
+   Style declaration name for the text in the title bar
+   when the window is not in focus. If <code>titleStyleName</code> (inherited from Panel)
+   is set, <code>titleStyleNameNoFocus</code> will be overridden by it.
+   If <code>titleStyleNameNoFocus</code> is not set but <code>titleStyleNameFocus</code>
+   is, <code>titleStyleNameFocus</code> will be used, regardless of the window's focus state.
+  </td><td class="summaryTableOwnerCol">MDIWindow</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol"><a name="style:windowControlsClass"></a>&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<span class="signatureLink">windowControlsClass</span>
+</div>
+</td><td class="summaryTableDescription"><span class="label">Type: </span>Class &nbsp; <span class="label">CSS Inheritance: </span>no<br>
+   Reference to class that will contain window control buttons like
+   minimize, close, etc. Changes to this style will be detected and will
+   initiate the instantiation and addition of a new class instance.
+      The default value is <code>flexmdi.containers.MDIWindowControlsContainer</code>.</td><td class="summaryTableOwnerCol">MDIWindow</td>
+</tr>
+</table>
+</div>
 <script type="text/javascript" language="javascript">
 <!--
 showHideInherited();
@@ -339,19 +673,57 @@ showHideInherited();
 </tr>
 </table>
 <div class="detailBody">
-<code>public var closeBtn:Button</code><p>
+<code>closeBtn:Button</code>&nbsp;&nbsp;[read-only]<p>
    Close window button.
-   </p></div>
-<a name="controls"></a>
+   </p><span class="label">Implementation</span>
+<br>
+<code>&nbsp;&nbsp;&nbsp;&nbsp;public function get closeBtn():Button</code>
+<br>
+</div>
+<a name="cornerHandleSize"></a>
 <table cellspacing="0" cellpadding="0" class="detailHeader">
 <tr>
-<td class="detailHeaderName">controls</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td>
+<td class="detailHeaderName">cornerHandleSize</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td>
 </tr>
 </table>
 <div class="detailBody">
-<code>public var controls:Array</code><p>
-   Array of controlsHolder's child components.
+<code>public var cornerHandleSize:Number = 10</code><p>
+      Size of corner handles. Can be adjusted to affect "sensitivity" of resize area.
+      </p></div>
+<a name="draggable"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">draggable</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public var draggable:Boolean = true</code><p>
+   Flag determining whether or not this window is draggable.
    </p></div>
+<a name="edgeHandleSize"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">edgeHandleSize</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public var edgeHandleSize:Number = 4</code><p>
+      Size of edge handles. Can be adjusted to affect "sensitivity" of resize area.
+      </p></div>
+<a name="hasFocus"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">hasFocus</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>hasFocus:Boolean</code>&nbsp;&nbsp;[read-write]<span class="label">Implementation</span>
+<br>
+<code>&nbsp;&nbsp;&nbsp;&nbsp;public function get hasFocus():Boolean</code>
+<br>
+<code>&nbsp;&nbsp;&nbsp;&nbsp;public function set hasFocus(value:Boolean):void</code>
+<br>
+</div>
 <a name="maximized"></a>
 <table cellspacing="0" cellpadding="0" class="detailHeader">
 <tr>
@@ -371,9 +743,13 @@ showHideInherited();
 </tr>
 </table>
 <div class="detailBody">
-<code>public var maximizeRestoreBtn:Button</code><p>
+<code>maximizeRestoreBtn:Button</code>&nbsp;&nbsp;[read-only]<p>
    Maximize/restore window button.
-   </p></div>
+   </p><span class="label">Implementation</span>
+<br>
+<code>&nbsp;&nbsp;&nbsp;&nbsp;public function get maximizeRestoreBtn():Button</code>
+<br>
+</div>
 <a name="minimizeBtn"></a>
 <table cellspacing="0" cellpadding="0" class="detailHeader">
 <tr>
@@ -381,9 +757,13 @@ showHideInherited();
 </tr>
 </table>
 <div class="detailBody">
-<code>public var minimizeBtn:Button</code><p>
+<code>minimizeBtn:Button</code>&nbsp;&nbsp;[read-only]<p>
    Minimize window button.
-   </p></div>
+   </p><span class="label">Implementation</span>
+<br>
+<code>&nbsp;&nbsp;&nbsp;&nbsp;public function get minimizeBtn():Button</code>
+<br>
+</div>
 <a name="minimized"></a>
 <table cellspacing="0" cellpadding="0" class="detailHeader">
 <tr>
@@ -403,9 +783,11 @@ showHideInherited();
 </tr>
 </table>
 <div class="detailBody">
-<code>public var minimizeHeight:Number</code><p>
-   Height of window when minimized.
-   </p></div>
+<code>minimizeHeight:Number</code>&nbsp;&nbsp;[read-only]<span class="label">Implementation</span>
+<br>
+<code>&nbsp;&nbsp;&nbsp;&nbsp;public function get minimizeHeight():Number</code>
+<br>
+</div>
 <a name="resizable"></a>
 <table cellspacing="0" cellpadding="0" class="detailHeader">
 <tr>
@@ -413,7 +795,7 @@ showHideInherited();
 </tr>
 </table>
 <div class="detailBody">
-<code>public var resizable:Boolean</code><p>
+<code>public var resizable:Boolean = true</code><p>
    Flag determining whether or not this window is resizable.
    </p></div>
 <a name="savedWindowRect"></a>
@@ -453,6 +835,17 @@ showHideInherited();
 <code>&nbsp;&nbsp;&nbsp;&nbsp;public function set showControls(value:Boolean):void</code>
 <br>
 </div>
+<a name="titleBarOverlay"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">titleBarOverlay</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public var titleBarOverlay:Canvas</code><p>
+   Invisible shape laid over titlebar to prevent funkiness from clicking in title textfield.
+   Making it public gives child components like controls container access to size of titleBar.
+   </p></div>
 <a name="winContextMenu"></a>
 <table cellspacing="0" cellpadding="0" class="detailHeader">
 <tr>
@@ -463,6 +856,22 @@ showHideInherited();
 <code>public var winContextMenu:ContextMenu = null</code><p>
       Window's context menu.
       </p></div>
+<a name="windowControls"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">windowControls</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>windowControls:<a href="../containers/MDIWindowControlsContainer.html">MDIWindowControlsContainer</a></code>&nbsp;&nbsp;[read-write]<p>
+   Reference to class used to create windowControls property.
+   </p><span class="label">Implementation</span>
+<br>
+<code>&nbsp;&nbsp;&nbsp;&nbsp;public function get windowControls():<a href="../containers/MDIWindowControlsContainer.html">MDIWindowControlsContainer</a></code>
+<br>
+<code>&nbsp;&nbsp;&nbsp;&nbsp;public function set windowControls(value:<a href="../containers/MDIWindowControlsContainer.html">MDIWindowControlsContainer</a>):void</code>
+<br>
+</div>
 <a name="windowManager"></a>
 <table cellspacing="0" cellpadding="0" class="detailHeader">
 <tr>
@@ -473,6 +882,20 @@ showHideInherited();
 <code>public var windowManager:<a href="../managers/MDIManager.html">MDIManager</a></code><p>
    Reference to MDIManager instance this window is managed by, if any.
       </p></div>
+<a name="windowStyleName"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">windowStyleName</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>windowStyleName:Object</code>&nbsp;&nbsp;[read-write]<span class="label">Implementation</span>
+<br>
+<code>&nbsp;&nbsp;&nbsp;&nbsp;public function get windowStyleName():Object</code>
+<br>
+<code>&nbsp;&nbsp;&nbsp;&nbsp;public function set windowStyleName(value:Object):void</code>
+<br>
+</div>
 <a name="constructorDetail"></a>
 <div class="detailSectionHeader">Constructor detail</div>
 <a name="MDIWindow()"></a>
@@ -487,27 +910,10 @@ showHideInherited();
       </p></div>
 <a name="methodDetail"></a>
 <div class="detailSectionHeader">Method detail</div>
-<a name="bringToFront()"></a>
-<table cellspacing="0" cellpadding="0" class="detailHeader">
-<tr>
-<td class="detailHeaderName">bringToFront</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td>
-</tr>
-</table>
-<div class="detailBody">
-<code>public function bringToFront(event:Event = null):void</code><p>
-   Bring this window to front of parent's child list. Called automatically by clicking on window.
-   Can be called manually by developer.
-   </p><span class="label">Parameters</span>
-<table border="0" cellspacing="0" cellpadding="0">
-<tr>
-<td width="20px"></td><td><code><span class="label">event</span>:Event</code> (default = <code>null</code>)<code></code></td>
-</tr>
-</table>
-</div>
 <a name="close()"></a>
 <table cellspacing="0" cellpadding="0" class="detailHeader">
 <tr>
-<td class="detailHeaderName">close</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+<td class="detailHeaderName">close</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td>
 </tr>
 </table>
 <div class="detailBody">
@@ -530,6 +936,58 @@ showHideInherited();
 <code>protected override function createChildren():void</code><p>
    Create resize handles and window controls.
    </p></div>
+<a name="getSelectorList()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">getSelectorList</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>protected function getSelectorList():Array</code>
+<p></p>
+<span class="label">Returns</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20"></td><td><code>Array</code></td>
+</tr>
+</table>
+</div>
+<a name="getTitleIconObject()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">getTitleIconObject</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public function getTitleIconObject():DisplayObject</code><p>
+   Returns reference to titleIconObject which is mx_internal by default.
+   Provided to allow MDIWindowControlsContainer subclasses as much freedom as possible.
+   </p><p></p>
+<span class="label">Returns</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20"></td><td><code>DisplayObject</code></td>
+</tr>
+</table>
+</div>
+<a name="getTitleTextField()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">getTitleTextField</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public function getTitleTextField():UITextField</code><p>
+   Returns reference to titleTextField which is protected by default.
+   Provided to allow MDIWindowControlsContainer subclasses as much freedom as possible.
+   </p><p></p>
+<span class="label">Returns</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20"></td><td><code>UITextField</code></td>
+</tr>
+</table>
+</div>
 <a name="maximize()"></a>
 <table cellspacing="0" cellpadding="0" class="detailHeader">
 <tr>
@@ -580,6 +1038,53 @@ showHideInherited();
 </tr>
 </table>
 </div>
+<a name="restore()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">restore</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public function restore():void</code><p>
+   Restores the window to its last floating position.
+   </p></div>
+<a name="restoreStyle()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">restoreStyle</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public function restoreStyle():void</code><p>
+   Restores style settings for restore and maximize
+      </p></div>
+<a name="saveStyle()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">saveStyle</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public function saveStyle():void</code><p>
+   Save style settings for minimizing.
+      </p></div>
+<a name="styleChanged()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">styleChanged</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public override function styleChanged(styleProp:String):void</code><p>
+   Detects change to styleName that is executed by MDIManager indicating a change in focus.
+   Iterates over window controls and adjusts their styles if they're focus-aware.
+   </p><span class="label">Parameters</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20px"></td><td><code><span class="label">styleProp</span>:String</code></td>
+</tr>
+</table>
+</div>
 <a name="unMinimize()"></a>
 <table cellspacing="0" cellpadding="0" class="detailHeader">
 <tr>
@@ -617,18 +1122,18 @@ showHideInherited();
 </tr>
 </table>
 <div class="detailBody">
-<code>protected override function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number):void</code><p>
-   Position resize handles and window controls.
+<code>protected override function updateDisplayList(w:Number, h:Number):void</code><p>
+   Position and size resize handles and window controls.
    </p><span class="label">Parameters</span>
 <table border="0" cellspacing="0" cellpadding="0">
 <tr>
-<td width="20px"></td><td><code><span class="label">unscaledWidth</span>:Number</code></td>
+<td width="20px"></td><td><code><span class="label">w</span>:Number</code></td>
 </tr>
 <tr>
 <td class="paramSpacer">&nbsp;</td>
 </tr>
 <tr>
-<td width="20px"></td><td><code><span class="label">unscaledHeight</span>:Number</code></td>
+<td width="20px"></td><td><code><span class="label">h</span>:Number</code></td>
 </tr>
 </table>
 </div>
@@ -640,7 +1145,7 @@ showHideInherited();
 </tr>
 </table>
 <div class="detailBody">
-<span class="label">Event object type: </span><a href=""><code>mdi.events.MDIWindowEvent</code></a>
+<span class="label">Event object type: </span><a href="../events/MDIWindowEvent.html"><code>flexmdi.events.MDIWindowEvent</code></a>
 <br>
 <p></p><p>
    Dispatched when the close button is clicked.
@@ -652,7 +1157,7 @@ showHideInherited();
 </tr>
 </table>
 <div class="detailBody">
-<span class="label">Event object type: </span><a href=""><code>mdi.events.MDIWindowEvent</code></a>
+<span class="label">Event object type: </span><a href="../events/MDIWindowEvent.html"><code>flexmdi.events.MDIWindowEvent</code></a>
 <br>
 <p></p><p>
    Dispatched while the window is being dragged.
@@ -664,7 +1169,7 @@ showHideInherited();
 </tr>
 </table>
 <div class="detailBody">
-<span class="label">Event object type: </span><a href=""><code>mdi.events.MDIWindowEvent</code></a>
+<span class="label">Event object type: </span><a href="../events/MDIWindowEvent.html"><code>flexmdi.events.MDIWindowEvent</code></a>
 <br>
 <p></p><p>
    Dispatched when the window stops being dragged.
@@ -676,7 +1181,7 @@ showHideInherited();
 </tr>
 </table>
 <div class="detailBody">
-<span class="label">Event object type: </span><a href=""><code>mdi.events.MDIWindowEvent</code></a>
+<span class="label">Event object type: </span><a href="../events/MDIWindowEvent.html"><code>flexmdi.events.MDIWindowEvent</code></a>
 <br>
 <p></p><p>
    Dispatched when the window starts being dragged.
@@ -688,7 +1193,7 @@ showHideInherited();
 </tr>
 </table>
 <div class="detailBody">
-<span class="label">Event object type: </span><a href=""><code>mdi.events.MDIWindowEvent</code></a>
+<span class="label">Event object type: </span><a href="../events/MDIWindowEvent.html"><code>flexmdi.events.MDIWindowEvent</code></a>
 <br>
 <p></p><p>
    Dispatched when the window loses focus and no longer has topmost z-index of MDIManager's children.
@@ -700,7 +1205,7 @@ showHideInherited();
 </tr>
 </table>
 <div class="detailBody">
-<span class="label">Event object type: </span><a href=""><code>mdi.events.MDIWindowEvent</code></a>
+<span class="label">Event object type: </span><a href="../events/MDIWindowEvent.html"><code>flexmdi.events.MDIWindowEvent</code></a>
 <br>
 <p></p><p>
    Dispatched when the window gains focus and is given topmost z-index of MDIManager's children.
@@ -712,7 +1217,7 @@ showHideInherited();
 </tr>
 </table>
 <div class="detailBody">
-<span class="label">Event object type: </span><a href=""><code>mdi.events.MDIWindowEvent</code></a>
+<span class="label">Event object type: </span><a href="../events/MDIWindowEvent.html"><code>flexmdi.events.MDIWindowEvent</code></a>
 <br>
 <p></p><p>
    Dispatched when the maximize button is clicked or when the window is in a
@@ -725,7 +1230,7 @@ showHideInherited();
 </tr>
 </table>
 <div class="detailBody">
-<span class="label">Event object type: </span><a href=""><code>mdi.events.MDIWindowEvent</code></a>
+<span class="label">Event object type: </span><a href="../events/MDIWindowEvent.html"><code>flexmdi.events.MDIWindowEvent</code></a>
 <br>
 <p></p><p>
    Dispatched when the minimize button is clicked.
@@ -737,7 +1242,7 @@ showHideInherited();
 </tr>
 </table>
 <div class="detailBody">
-<span class="label">Event object type: </span><a href=""><code>mdi.events.MDIWindowEvent</code></a>
+<span class="label">Event object type: </span><a href="../events/MDIWindowEvent.html"><code>flexmdi.events.MDIWindowEvent</code></a>
 <br>
 <p></p><p>
    Dispatched while the mouse is down on a resize handle.
@@ -749,7 +1254,7 @@ showHideInherited();
 </tr>
 </table>
 <div class="detailBody">
-<span class="label">Event object type: </span><a href=""><code>mdi.events.MDIWindowEvent</code></a>
+<span class="label">Event object type: </span><a href="../events/MDIWindowEvent.html"><code>flexmdi.events.MDIWindowEvent</code></a>
 <br>
 <p></p><p>
    Dispatched when the mouse is released from a resize handle.
@@ -761,7 +1266,7 @@ showHideInherited();
 </tr>
 </table>
 <div class="detailBody">
-<span class="label">Event object type: </span><a href=""><code>mdi.events.MDIWindowEvent</code></a>
+<span class="label">Event object type: </span><a href="../events/MDIWindowEvent.html"><code>flexmdi.events.MDIWindowEvent</code></a>
 <br>
 <p></p><p>
    Dispatched when a resize handle is pressed.
@@ -773,7 +1278,7 @@ showHideInherited();
 </tr>
 </table>
 <div class="detailBody">
-<span class="label">Event object type: </span><a href=""><code>mdi.events.MDIWindowEvent</code></a>
+<span class="label">Event object type: </span><a href="../events/MDIWindowEvent.html"><code>flexmdi.events.MDIWindowEvent</code></a>
 <br>
 <p></p><p>
    If the window is minimized, this event is dispatched when the titleBar is clicked. 

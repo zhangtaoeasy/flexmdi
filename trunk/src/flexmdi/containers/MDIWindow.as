@@ -572,7 +572,7 @@ package flexmdi.containers
 				this.styleNameFocus = "mdiWindowFocus";
 				this.styleNameNoFocus = "mdiWindowNoFocus";
 				
-				this.titleStyleNameFocus = "mdiWindowTitleStyle";
+				this.titleStyleName = "mdiWindowTitleStyle";
 				
 				this.minimizeBtnStyleName = "mdiWindowMinimizeBtn";
 				this.maximizeBtnStyleName = "mdiWindowMaximizeBtn";
@@ -645,7 +645,7 @@ package flexmdi.containers
 			//------------------------
 		    //  title style
 		    //------------------------
-			var titleStyleName:String = selector.getStyle("titleStyleNameFocus");
+			var titleStyleName:String = selector.getStyle("titleStyleName");
 			var winTitleSelector:CSSStyleDeclaration = StyleManager.getStyleDeclaration("." + titleStyleName);
 			if(!winTitleSelector)
 			{

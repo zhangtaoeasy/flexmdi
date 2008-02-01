@@ -41,7 +41,7 @@ package flexmdi.effects
 	 */
 	public class MDIEffectsDescriptorBase implements IMDIEffectsDescriptor
 	{
-		public var duration:Number = 1;
+		public var duration:Number = 10;
 		
 		public function getWindowAddEffect(window:MDIWindow, manager:MDIManager):Effect
 		{
@@ -64,6 +64,7 @@ package flexmdi.effects
 				var move:Move = new Move(window);
 				move.xTo = moveTo.x;
 				move.yTo = moveTo.y;
+				move.duration = this.duration;
 				parallel.addChild(move);
 			}
 			
@@ -78,11 +79,13 @@ package flexmdi.effects
 			var resize:Resize = new Resize(window);
 			resize.widthTo = restoreTo.width;
 			resize.heightTo = restoreTo.height;
+			resize.duration = this.duration;
 			parallel.addChild(resize);
 			
 			var move:Move = new Move(window);
 			move.xTo = restoreTo.x;
 			move.yTo = restoreTo.y;
+			move.duration = this.duration;
 			parallel.addChild(move);
 			
 			return parallel;
@@ -96,11 +99,13 @@ package flexmdi.effects
 			var resize:Resize = new Resize(window);
 			resize.widthTo = manager.container.width;
 			resize.heightTo = manager.container.height - bottomOffset;
+			resize.duration = this.duration;
 			parallel.addChild(resize);
 			
 			var move:Move = new Move(window);
 			move.xTo = 0;
 			move.yTo = 0;
+			move.duration = this.duration;
 			parallel.addChild(move);
 			
 			return parallel;
@@ -168,6 +173,7 @@ package flexmdi.effects
 				var move:Move = new Move(item.window);
 					move.xTo = item.moveTo.x;
 					move.yTo = item.moveTo.y;
+					move.duration = this.duration;
 					parallel.addChild(move);
 					
 				item.setWindowSize();
@@ -189,7 +195,7 @@ package flexmdi.effects
 					var move:Move = new Move(item.window);
 						move.xTo = item.moveTo.x;
 						move.yTo = item.moveTo.y;
-					
+						move.duration = this.duration;
 					parallel.addChild(move);
 				
 				}
@@ -200,7 +206,7 @@ package flexmdi.effects
 					var resize:Resize = new Resize(item.window);
 						resize.widthTo = item.widthTo;
 						resize.heightTo = item.heightTo;
-					
+						resize.duration = this.duration;
 					parallel.addChild(resize);
 						
 				}

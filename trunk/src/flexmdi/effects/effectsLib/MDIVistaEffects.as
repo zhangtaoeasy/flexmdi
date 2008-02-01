@@ -47,7 +47,7 @@ package flexmdi.effects.effectsLib
 	 */
 	public class MDIVistaEffects extends MDIEffectsDescriptorBase implements IMDIEffectsDescriptor
 	{		
-		public function MDIVistaEffects(duration:Number = 200):void
+		public function MDIVistaEffects(duration:Number = 150):void
 		{
 			this.duration = duration;	
 		}		

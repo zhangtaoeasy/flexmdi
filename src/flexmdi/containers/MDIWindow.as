@@ -28,8 +28,10 @@ package flexmdi.containers
 	import flash.events.Event;
 	import flash.events.MouseEvent;
 	import flash.geom.Rectangle;
+	import flash.net.getClassByAlias;
 	import flash.ui.ContextMenu;
 	import flash.ui.ContextMenuItem;
+	import flash.utils.getQualifiedClassName;
 	
 	import flexmdi.events.MDIWindowEvent;
 	import flexmdi.managers.MDIManager;
@@ -728,7 +730,7 @@ package flexmdi.containers
 				this.overSkin = DEFAULT_CLOSE_BUTTON;
 				this.downSkin = DEFAULT_CLOSE_BUTTON;
 				this.disabledSkin = DEFAULT_CLOSE_BUTTON;
-			}					
+			}
 			StyleManager.setStyleDeclaration("." + closeBtnStyleName, closeBtnSelector, false);
 			
 			// apply it all
@@ -748,6 +750,7 @@ package flexmdi.containers
 			doubleClickEnabled = true;
 			
 			windowControls = new MDIWindowControlsContainer();
+			updateContextMenu();
 		}
 		
 		public function get windowStyleName():Object
@@ -952,6 +955,8 @@ package flexmdi.containers
 			if(getStyleByPriority(selectorList, "windowControlsClass"))
 			{
 				var clazz:Class = getStyleByPriority(selectorList, "windowControlsClass") as Class;
+				var cls:Class = getClassByAlias(getQualifiedClassName(windowControls).split("::").join("."));
+				trace(clazz == cls);
 				
 				if(!(windowControls is clazz))
 				{
@@ -1640,7 +1645,7 @@ package flexmdi.containers
 			_prevWindowState = _windowState;
 			_windowState = newState;
 			
-			updateContextMenu(_windowState);
+			updateContextMenu();
 		}
 		
 		public function get minimized():Boolean
@@ -1658,45 +1663,50 @@ package flexmdi.containers
 			return titleBar.height;
 		}
 		
-		public function updateContextMenu(currentState:int):void
+		public static const CONTEXT_MENU_LABEL_MINIMIZE:String = "Minimize";
+		public static const CONTEXT_MENU_LABEL_MAXIMIZE:String = "Maximize";
+		public static const CONTEXT_MENU_LABEL_RESTORE:String = "Restore";
+		public static const CONTEXT_MENU_LABEL_CLOSE:String = "Close";
+		
+		public function updateContextMenu():void
 		{
 			var defaultContextMenu:ContextMenu = new ContextMenu();
 				defaultContextMenu.hideBuiltInItems();
 			
-			var minimizeItem:ContextMenuItem = new ContextMenuItem("Minimize");
+			var minimizeItem:ContextMenuItem = new ContextMenuItem(MDIWindow.CONTEXT_MENU_LABEL_MINIMIZE);
 		  		minimizeItem.addEventListener(ContextMenuEvent.MENU_ITEM_SELECT, menuItemSelectHandler);
-		  		minimizeItem.enabled = currentState != MDIWindowState.MINIMIZED;
+		  		minimizeItem.enabled = windowState != MDIWindowState.MINIMIZED;
 		  		defaultContextMenu.customItems.push(minimizeItem);	
 			
-			var maximizeItem:ContextMenuItem = new ContextMenuItem("Maximize");
+			var maximizeItem:ContextMenuItem = new ContextMenuItem(MDIWindow.CONTEXT_MENU_LABEL_MAXIMIZE);
 		  		maximizeItem.addEventListener(ContextMenuEvent.MENU_ITEM_SELECT, menuItemSelectHandler);
-		  		maximizeItem.enabled = currentState != MDIWindowState.MAXIMIZED;
+		  		maximizeItem.enabled = windowState != MDIWindowState.MAXIMIZED;
 		  		defaultContextMenu.customItems.push(maximizeItem);	
 			
-			var restoreItem:ContextMenuItem = new ContextMenuItem("Restore");
+			var restoreItem:ContextMenuItem = new ContextMenuItem(MDIWindow.CONTEXT_MENU_LABEL_RESTORE);
 		  		restoreItem.addEventListener(ContextMenuEvent.MENU_ITEM_SELECT, menuItemSelectHandler);
-		  		restoreItem.enabled = currentState != MDIWindowState.NORMAL;
+		  		restoreItem.enabled = windowState != MDIWindowState.NORMAL;
 		  		defaultContextMenu.customItems.push(restoreItem);	
 			
-			var closeItem:ContextMenuItem = new ContextMenuItem("Close");
+			var closeItem:ContextMenuItem = new ContextMenuItem(MDIWindow.CONTEXT_MENU_LABEL_CLOSE);
 		  		closeItem.addEventListener(ContextMenuEvent.MENU_ITEM_SELECT, menuItemSelectHandler);
 		  		defaultContextMenu.customItems.push(closeItem);  
 	
 
-			var arrangeItem:ContextMenuItem = new ContextMenuItem("Auto Arrange");
+			var arrangeItem:ContextMenuItem = new ContextMenuItem(MDIManager.CONTEXT_MENU_LABEL_TILE);
 				arrangeItem.separatorBefore = true;
 		  		arrangeItem.addEventListener(ContextMenuEvent.MENU_ITEM_SELECT, menuItemSelectHandler);	
 		  		defaultContextMenu.customItems.push(arrangeItem);
 
-       	 	var arrangeFillItem:ContextMenuItem = new ContextMenuItem("Auto Arrange Fill");
+       	 	var arrangeFillItem:ContextMenuItem = new ContextMenuItem(MDIManager.CONTEXT_MENU_LABEL_TILE_FILL);
 		  		arrangeFillItem.addEventListener(ContextMenuEvent.MENU_ITEM_SELECT, menuItemSelectHandler);  	
 		  		defaultContextMenu.customItems.push(arrangeFillItem);   
                	
-            var cascadeItem:ContextMenuItem = new ContextMenuItem("Cascade");
+            var cascadeItem:ContextMenuItem = new ContextMenuItem(MDIManager.CONTEXT_MENU_LABEL_CASCADE);
 		  		cascadeItem.addEventListener(ContextMenuEvent.MENU_ITEM_SELECT, menuItemSelectHandler);
 		  		defaultContextMenu.customItems.push(cascadeItem);                     	
 			
-			var showAllItem:ContextMenuItem = new ContextMenuItem("Show All Windows");
+			var showAllItem:ContextMenuItem = new ContextMenuItem(MDIManager.CONTEXT_MENU_LABEL_SHOW_ALL);
 		  		showAllItem.addEventListener(ContextMenuEvent.MENU_ITEM_SELECT, menuItemSelectHandler);
 		  		defaultContextMenu.customItems.push(showAllItem);  
 			
@@ -1707,15 +1717,15 @@ package flexmdi.containers
 		{
 			switch(event.target.caption)
 			{
-				case("Minimize"):
+				case(MDIWindow.CONTEXT_MENU_LABEL_MINIMIZE):
 					minimize();
 				break;
 				
-				case("Maximize"):
+				case(MDIWindow.CONTEXT_MENU_LABEL_MAXIMIZE):
 					maximize();
 				break;
 				
-				case("Restore"):
+				case(MDIWindow.CONTEXT_MENU_LABEL_RESTORE):
 					if(this.windowState == MDIWindowState.MINIMIZED)
 					{
 						unMinimize();
@@ -1726,23 +1736,23 @@ package flexmdi.containers
 					}	
 				break;
 				
-				case("Close"):
+				case(MDIWindow.CONTEXT_MENU_LABEL_CLOSE):
 					close();
 				break;
 				
-				case("Auto Arrange"):
+				case(MDIManager.CONTEXT_MENU_LABEL_TILE):
 					this.windowManager.tile(false, this.windowManager.tilePadding);
 				break;
 				
-				case("Auto Arrange Fill"):
+				case(MDIManager.CONTEXT_MENU_LABEL_TILE_FILL):
 					this.windowManager.tile(true, this.windowManager.tilePadding);
 				break;
 				
-				case("Cascade"):
+				case(MDIManager.CONTEXT_MENU_LABEL_CASCADE):
 					this.windowManager.cascade();
 				break;
 				
-				case("Show All Windows"):
+				case(MDIManager.CONTEXT_MENU_LABEL_SHOW_ALL):
 					this.windowManager.showAllWindows();
 				break;
 

@@ -195,6 +195,11 @@ package flexmdi.managers
 		
 		public var effects:IMDIEffectsDescriptor = new MDIEffectsDescriptorBase();
 		
+		public static const CONTEXT_MENU_LABEL_TILE:String = "Tile";
+		public static const CONTEXT_MENU_LABEL_TILE_FILL:String = "Tile + Fill";
+		public static const CONTEXT_MENU_LABEL_CASCADE:String = "Cascade";
+		public static const CONTEXT_MENU_LABEL_SHOW_ALL:String = "Show All Windows";
+		
 		/**
      	*   Contstructor()
      	*/
@@ -266,31 +271,34 @@ package flexmdi.managers
 
 		public function add(window:MDIWindow):void
 		{
-			window.windowManager = this;
-			
-			this.addListeners(window);
-			
-			this.windowList.push(window);
-			
-			this.addContextMenu(window);
-			
-			if(this.isGlobal)
+			if(windowList.indexOf(window) < 0)
 			{
-				PopUpManager.addPopUp(window,Application.application as DisplayObject);
-				this.position(window);
-			}
-			else
-			{
-				// to accomodate mxml impl
-				if(window.parent == null)
+				window.windowManager = this;
+				
+				this.addListeners(window);
+				
+				this.windowList.push(window);
+				
+				this.addContextMenu(window);
+				
+				if(this.isGlobal)
 				{
-					this.container.addChild(window);
+					PopUpManager.addPopUp(window,Application.application as DisplayObject);
 					this.position(window);
 				}
-			} 		
-			
-			dispatchEvent(new MDIManagerEvent(MDIManagerEvent.WINDOW_ADD, window, this));
-			bringToFront(window);
+				else
+				{
+					// to accomodate mxml impl
+					if(window.parent == null)
+					{
+						this.container.addChild(window);
+						this.position(window);
+					}
+				} 		
+				
+				dispatchEvent(new MDIManagerEvent(MDIManagerEvent.WINDOW_ADD, window, this));
+				bringToFront(window);
+			}
 		}
 		
 		/**
@@ -317,23 +325,21 @@ package flexmdi.managers
 				var defaultContextMenu:ContextMenu = new ContextMenu();
 					defaultContextMenu.hideBuiltInItems();
 				
-				var arrangeItem:ContextMenuItem = new ContextMenuItem("Auto Arrange");
+				var arrangeItem:ContextMenuItem = new ContextMenuItem(CONTEXT_MENU_LABEL_TILE);
 			  		arrangeItem.addEventListener(ContextMenuEvent.MENU_ITEM_SELECT, menuItemSelectHandler);	
 			  		defaultContextMenu.customItems.push(arrangeItem);
 
-           	 	var arrangeFillItem:ContextMenuItem = new ContextMenuItem("Auto Arrange Fill");
+           	 	var arrangeFillItem:ContextMenuItem = new ContextMenuItem(CONTEXT_MENU_LABEL_TILE_FILL);
 			  		arrangeFillItem.addEventListener(ContextMenuEvent.MENU_ITEM_SELECT, menuItemSelectHandler);  	
-			  		defaultContextMenu.customItems.push(arrangeFillItem);   
+			  		defaultContextMenu.customItems.push(arrangeFillItem);
                 
-                var showAllItem:ContextMenuItem = new ContextMenuItem("Show All Windows");
-			  		showAllItem.addEventListener(ContextMenuEvent.MENU_ITEM_SELECT, menuItemSelectHandler);
-			  		defaultContextMenu.customItems.push(showAllItem);  
-                
-                var cascadeItem:ContextMenuItem = new ContextMenuItem("Cascade");
+                var cascadeItem:ContextMenuItem = new ContextMenuItem(CONTEXT_MENU_LABEL_CASCADE);
 			  		cascadeItem.addEventListener(ContextMenuEvent.MENU_ITEM_SELECT, menuItemSelectHandler);
-			  		defaultContextMenu.customItems.push(cascadeItem);  
-			  		
-			  	
+			  		defaultContextMenu.customItems.push(cascadeItem);
+                
+                var showAllItem:ContextMenuItem = new ContextMenuItem(CONTEXT_MENU_LABEL_SHOW_ALL);
+			  		showAllItem.addEventListener(ContextMenuEvent.MENU_ITEM_SELECT, menuItemSelectHandler);
+			  		defaultContextMenu.customItems.push(showAllItem);
                    	
             	this.container.contextMenu = defaultContextMenu;
 			}
@@ -342,30 +348,26 @@ package flexmdi.managers
 				// add passed in context menu
 				window.contextMenu = contextMenu;
 			}
-		}
-		
-		
-		
-	
+		}	
 		
 		private function menuItemSelectHandler(event:ContextMenuEvent):void
 		{
 			var win:MDIWindow = event.contextMenuOwner as MDIWindow;
 			switch(event.target.caption)
 			{	
-				case("Auto Arrange"):
+				case(CONTEXT_MENU_LABEL_TILE):
 					this.tile(false, this.tilePadding);
 				break;
 				
-				case("Auto Arrange Fill"):
+				case(CONTEXT_MENU_LABEL_TILE_FILL):
 					this.tile(true, this.tilePadding);
 				break;
 				
-				case("Cascade"):
+				case(CONTEXT_MENU_LABEL_CASCADE):
 					this.cascade();
 				break;
 				
-				case("Show All Windows"):
+				case(CONTEXT_MENU_LABEL_SHOW_ALL):
 					this.showAllWindows();
 				break;
 			}
@@ -397,7 +399,7 @@ package flexmdi.managers
 						mgrEvent.effect = this.effects.getWindowRestoreEffect(winEvent.window, this, winEvent.window.savedWindowRect);
 					break;
 					
-					case MDIWindowEvent.MAXIMIZE:						
+					case MDIWindowEvent.MAXIMIZE:
 						mgrEvent.window.restoreStyle();
 						mgrEvent.effect = this.effects.getWindowMaximizeEffect(winEvent.window, this);
 					break;
@@ -713,7 +715,7 @@ package flexmdi.managers
 		 *  @param win Window to bring to front
 		 * */
 		public function bringToFront(window:MDIWindow):void
-		{	
+		{
 			if(this.isGlobal)
 			{
 				PopUpManager.bringToFront(window as IFlexDisplayObject);
@@ -1069,8 +1071,6 @@ package flexmdi.managers
 					window.unMinimize();
 				}
 			}
-		}
-		
-			
+		}	
 	}
 }

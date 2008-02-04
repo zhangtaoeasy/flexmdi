@@ -28,7 +28,6 @@ package flexmdi.containers
 	import flash.events.Event;
 	import flash.events.MouseEvent;
 	import flash.geom.Rectangle;
-	import flash.net.getClassByAlias;
 	import flash.ui.ContextMenu;
 	import flash.ui.ContextMenuItem;
 	import flash.utils.getQualifiedClassName;
@@ -948,17 +947,17 @@ package flexmdi.containers
 		 */
 		private function updateStyles():void
 		{
-			var selectorList:Array = getSelectorList();						
+			var selectorList:Array = getSelectorList();
 			
 			// if the style specifies a class to use for the controls container that is
 			// different from the current one we will update it here
 			if(getStyleByPriority(selectorList, "windowControlsClass"))
 			{
 				var clazz:Class = getStyleByPriority(selectorList, "windowControlsClass") as Class;
-				var cls:Class = getClassByAlias(getQualifiedClassName(windowControls).split("::").join("."));
-				trace(clazz == cls);
+				var classNameExisting:String = getQualifiedClassName(windowControls);
+				var classNameNew:String = getQualifiedClassName(clazz);
 				
-				if(!(windowControls is clazz))
+				if(classNameExisting != classNameNew)
 				{
 					windowControls = new clazz();
 					// sometimes necessary to adjust windowControls subcomponents

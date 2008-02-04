@@ -37,7 +37,7 @@
 				</mx:DataGrid>
 			</mx:Canvas>
 			<mx:Canvas width="100%" height="100%">
-				<mx:ColumnChart id="tmpChart" width="100%" height="100%" dataProvider="{tmpDataCollection}">
+				<mx:ColumnChart id="tmpChart" width="100%" height="100%">
 					<mx:series>
 			        	<mx:ColumnSeries yField="high_temp" minField="low_temp" name="Temperature" displayName="Monthly High-Low Temperature (F)"
 			        					 fill="{new SolidColor(0x006699, 0.75)}"/>
@@ -46,18 +46,21 @@
 			        <mx:horizontalAxis>
 		                <mx:CategoryAxis categoryField="month" displayName="Month" title="Month" />
 		            </mx:horizontalAxis>
-		            <mx:horizontalAxisRenderer>
-			            <mx:AxisRenderer labelRotation="0" labelGap="10" horizontalCenter="0"
+		            <mx:CartesianChart>
+		            	<mx:horizontalAxisRenderers>
+		            		<mx:AxisRenderer labelRotation="0" labelGap="10" horizontalCenter="0"
 			            				 axisStroke="{new Stroke(0x666666, 5)}" tickStroke="{new Stroke(0xFFFFFF, 2)}" minorTickStroke="{new Stroke(0xFFFFFF, 1)}" />
-			        </mx:horizontalAxisRenderer>
+		            	</mx:horizontalAxisRenderers>
+		            	
+		            	<mx:verticalAxisRenderers>
+		            		<mx:AxisRenderer labelGap="10" horizontalCenter="0"
+			            				 axisStroke="{new Stroke(0x006699, 5, 0.75)}" tickStroke="{new Stroke(0xFFFFFF, 0, 0)}" minorTickStroke="{new Stroke(0xFFFFFF, 2)}" />
+		            	</mx:verticalAxisRenderers>
+		            </mx:CartesianChart>
 			        
 			        <mx:verticalAxis>
 			        	<mx:LinearAxis title="Average Temperatures (High/Low) Degrees Farenheit" displayName="Temp"  />
 			        </mx:verticalAxis>
-			        <mx:verticalAxisRenderer>
-						<mx:AxisRenderer labelGap="10" horizontalCenter="0"
-			            				 axisStroke="{new Stroke(0x006699, 5, 0.75)}" tickStroke="{new Stroke(0xFFFFFF, 0, 0)}" minorTickStroke="{new Stroke(0xFFFFFF, 2)}" />
-					</mx:verticalAxisRenderer>
 					
 					<mx:backgroundElements>
 			            <mx:Array>
@@ -78,8 +81,7 @@
 			</mx:Canvas>
 			
 			<mx:Canvas width="100%" height="100%">
-				<mx:LineChart id="rainfallChart" width="100%" height="100%" dataProvider="{tmpDataCollection}">
-					
+				<mx:LineChart id="rainfallChart" width="100%" height="100%">					
 					<mx:series>
 		            	 <mx:LineSeries name="Rainfall (cm)" yField="rainfall" displayName="Rainfall (cm)"
 		                			  lineStroke="{new Stroke(0xFF0000, 2)}" 
@@ -90,18 +92,20 @@
 					 <mx:horizontalAxis>
 		                <mx:CategoryAxis categoryField="month" displayName="Month" title="Month" />
 		            </mx:horizontalAxis>
-		            <mx:horizontalAxisRenderer>
-			            <mx:AxisRenderer labelRotation="0" labelGap="10" horizontalCenter="0"
+		            <mx:CartesianChart>
+		            	<mx:horizontalAxisRenderers>
+		            		<mx:AxisRenderer labelRotation="0" labelGap="10" horizontalCenter="0"
 			            				 axisStroke="{new Stroke(0x666666, 5)}" tickStroke="{new Stroke(0xFFFFFF, 2)}" minorTickStroke="{new Stroke(0xFFFFFF, 1)}" />
-			        </mx:horizontalAxisRenderer>
+		            	</mx:horizontalAxisRenderers>
+		            	<mx:verticalAxisRenderers>
+		            		<mx:AxisRenderer labelGap="10" horizontalCenter="0" 
+			            				 axisStroke="{new Stroke(0xFF0000, 5, 0.75)}" tickStroke="{new Stroke(0xFFFFFF, 0, 0)}" minorTickStroke="{new Stroke(0xFFFFFF, 2)}" />
+		            	</mx:verticalAxisRenderers>
+		            </mx:CartesianChart>
 			        
 					<mx:verticalAxis>
 						<mx:LinearAxis displayName="Rainfall" title="Rainfall (cm)"  />
 			        </mx:verticalAxis>
-			        <mx:verticalAxisRenderer>
-						<mx:AxisRenderer labelGap="10" horizontalCenter="0" 
-			            				 axisStroke="{new Stroke(0xFF0000, 5, 0.75)}" tickStroke="{new Stroke(0xFFFFFF, 0, 0)}" minorTickStroke="{new Stroke(0xFFFFFF, 2)}" />
-					</mx:verticalAxisRenderer>
 					
 				</mx:LineChart>
 			</mx:Canvas>

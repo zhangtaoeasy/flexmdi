@@ -1,4 +1,4 @@
-
+/*
 Application
 {
 	
@@ -26,20 +26,20 @@ Application
    backgroundAlpha: 1; 
    backgroundColor: #FFFFFF;
    
-	backgroundImage: Embed(source="/assets/swf/BrushedMetal.swf", symbol="Window_Background");
+	backgroundImage: Embed(source="assets/swf/BrushedMetal.swf", symbol="Window_Background");
 	backgroundSize: "100%";
 	
    dropShadowEnabled: true;
 	
 	
-	cornerResizeImg: Embed(source="/assets/swf/BrushedMetal.swf", symbol="Corner_Resize");
+	cornerResizeImg: Embed(source="assets/swf/BrushedMetal.swf", symbol="Corner_Resize");
 	cornerResizeWidth: 12;
 	cornerResizeHeight: 12;
 	cornerResizePaddingRight: 2;
 	cornerResizePaddingBottom: 2;
 	
 	titleStyleName: "mypanelTitle";
-	titleBackgroundSkin: Embed(source="/assets/swf/BrushedMetal.swf", symbol="header");
+	titleBackgroundSkin: Embed(source="assets/swf/BrushedMetal.swf", symbol="header");
 	
 	controlButtonWidth: 10;
 	controlButtonHeight: 10;
@@ -66,20 +66,20 @@ Application
    backgroundAlpha: 1; 
    backgroundColor: #FFFFFF;
    
-	backgroundImage: Embed(source="/assets/swf/BrushedMetal.swf", symbol="Window_Background");
+	backgroundImage: Embed(source="assets/swf/BrushedMetal.swf", symbol="Window_Background");
 	backgroundSize: "100%";
 	
    dropShadowEnabled: true;
 	
 	
-	cornerResizeImg: Embed(source="/assets/swf/BrushedMetal.swf", symbol="Corner_Resize");
+	cornerResizeImg: Embed(source="assets/swf/BrushedMetal.swf", symbol="Corner_Resize");
 	cornerResizeWidth: 12;
 	cornerResizeHeight: 12;
 	cornerResizePaddingRight: 2;
 	cornerResizePaddingBottom: 2;
 	
 	titleStyleName: "mypanelTitle";
-	titleBackgroundSkin: Embed(source="/assets/swf/BrushedMetal.swf", symbol="header");
+	titleBackgroundSkin: Embed(source="assets/swf/BrushedMetal.swf", symbol="header");
 	
 	controlButtonWidth: 10;
 	controlButtonHeight: 10;
@@ -100,3 +100,4 @@ Button {
    themeColor: #999999;
 }
 
+/**/

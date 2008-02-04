@@ -1,4 +1,4 @@
-package
+package windowControls
 {
 	import flash.display.DisplayObject;
 	
@@ -14,25 +14,6 @@ package
 			layout = ContainerLayout.ABSOLUTE;
 		}
 		
-		override protected function createChildren():void
-		{
-			super.createChildren();
-			
-			minimizeBtn.width = 13;
-			minimizeBtn.height = 13;
-			minimizeBtn.styleName = "minimizeBtnMac";
-			
-			maximizeRestoreBtn.width = 13;
-			maximizeRestoreBtn.height = 13;
-			maximizeRestoreBtn.maximizeBtnStyleName = "increaseBtnMac";
-			maximizeRestoreBtn.restoreBtnStyleName = "decreaseBtnMac";
-			maximizeRestoreBtn.styleName = maximizeRestoreBtn.maximizeBtnStyleName;
-			
-			closeBtn.width = 13;
-			closeBtn.height = 13;
-			closeBtn.styleName = "closeBtnMac";
-		}
-		
 		override protected function updateDisplayList(w:Number, h:Number):void
 		{
 			super.updateDisplayList(w, h);
@@ -40,10 +21,10 @@ package
 			this.setActualSize(window.width, window.titleBarOverlay.height);
 			this.x = this.y = 0;
 			
-			closeBtn.x = Number(window.getStyle("borderThicknessLeft"));
+			closeBtn.x = Number(window.getStyle("borderThicknessLeft")) + 2;
 			closeBtn.y = (window.titleBarOverlay.height - closeBtn.height) / 2;
 			
-			minimizeBtn.x = window.width - minimizeBtn.width - Number(window.getStyle("borderThicknessRight"));
+			minimizeBtn.x = window.width - minimizeBtn.width - Number(window.getStyle("borderThicknessRight")) - 2;
 			minimizeBtn.y = (window.titleBarOverlay.height - closeBtn.height) / 2;
 			
 			maximizeRestoreBtn.x = minimizeBtn.x - maximizeRestoreBtn.width - 5;
@@ -85,6 +66,8 @@ package
 				tf.x = icon.x + icon.width + 4;
 				tf.width = maximizeRestoreBtn.x - tf.x - 4;
 			}
+			
+			closeBtn.visible = minimizeBtn.visible = maximizeRestoreBtn.visible = window.hasFocus;
 		}
 	}
 }

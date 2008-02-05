@@ -2,7 +2,6 @@
 <mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute"
 	xmlns:flexmdi="http://flexmdi.googlecode.com/"
 	creationComplete="onCreationComplete()" xmlns:ns="sample_content.*" viewSourceURL="srcview/index.html">
-	<mx:Style source="Plain.css" />
 	<mx:Script>
 		<![CDATA[
 			import windowControls.WindowsXPControls;
@@ -50,7 +49,6 @@
 				effectsList.push({data: flexmdi.effects.effectsLib.MDIVistaEffects, label: "Vista"});
 				effectsList.push({data: flexmdi.effects.effectsLib.MDILinearEffects, label: "Linear"});
 				effectsListCb.dataProvider = effectsList;
-				effectsListCb.selectedIndex = 1;
 				
 				// these need refining, removing from explorer until then
 				stylesList = new Array();
@@ -139,23 +137,6 @@
 				mdiCanvas.windowManager.add(win);
 			}
 			
-			private function winCtrlCntnrCb_changeHandler():void
-			{
-				if(winCtrlCntnrCb.selected)
-				{
-					winCtrlCntnrClass = MacOS9WindowControls;
-				}
-				else
-				{
-					winCtrlCntnrClass = MDIWindowControlsContainer;
-				}
-				
-				for each(var win:MDIWindow in mdiCanvas.windowManager.windowList)
-				{
-					win.windowControls = new winCtrlCntnrClass();
-				}
-			}
-			
 			private function toggleEventMonitor():void
 			{
 				if(eventMonitorCb.selected)
@@ -225,14 +206,12 @@
 			
 			<mx:CheckBox id="eventMonitorCb" label="Show Event Monitor" click="toggleEventMonitor()" />
 			<mx:CheckBox id="confirmCloseCb" label="Confirm window close" />
-			<mx:CheckBox id="winCtrlCntnrCb" label="Alternate window controls" click="winCtrlCntnrCb_changeHandler()" />
 			
 			<mx:VRule height="35" />
 			
-			<mx:Label text="Effects" />
-			<mx:ComboBox id="effectsListCb" change="changeEffects()" />
+			<mx:ComboBox id="effectsListCb" prompt="- Effects -" change="changeEffects()" />
 			
-			<mx:ComboBox id="stylesListCb" change="changeStyle(event)" />
+			<mx:ComboBox id="stylesListCb" prompt="- Styles -" change="changeStyle(event)" />
 		</mx:ApplicationControlBar>
 		
 		

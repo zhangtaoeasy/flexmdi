@@ -1,7 +1,15 @@
 MDIWindow
 {
 	windowControlsClass: ClassReference("windowControls.WindowsXPControls");
-	titleStyleName: "mdiWindowTitleStyle";
+	titleStyleName: "winXPTitleStyle";
+}
+
+.winXPTitleStyle
+{
+	fontFamily: Verdana;
+	fontSize: 12;
+	fontWeight: normal;
+	color: #FFFFFF;
 }
 
 .mdiWindowFocus
@@ -36,14 +44,6 @@ MDIWindow
 	backgroundAlpha: 1; 
 	backgroundColor: #FFFFFF;
 	titleBackgroundSkin: Embed(source="assets/swf/WindowsAssets.swf", symbol="headerBgDefaultNoFocus");
-}
-
-.mdiWindowTitleStyle
-{
-	fontFamily: Verdana;
-	fontSize: 12;
-	fontWeight: normal;
-	color: #FFFFFF;
 }
 
 .mdiWindowMinimizeBtn

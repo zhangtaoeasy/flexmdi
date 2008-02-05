@@ -578,7 +578,9 @@ package flexmdi.containers
 				this.minimizeBtnStyleName = "mdiWindowMinimizeBtn";
 				this.maximizeBtnStyleName = "mdiWindowMaximizeBtn";
 				this.restoreBtnStyleName = "mdiWindowRestoreBtn";				
-				this.closeBtnStyleName = "mdiWindowCloseBtn";				
+				this.closeBtnStyleName = "mdiWindowCloseBtn";
+				
+				this.windowControlsClass = MDIWindowControlsContainer;
 				
 				this.resizeCursorHorizontalSkin = DEFAULT_RESIZE_CURSOR_HORIZONTAL;
 				this.resizeCursorHorizontalXOffset = DEFAULT_RESIZE_CURSOR_HORIZONTAL_X_OFFSET;
@@ -657,6 +659,7 @@ package flexmdi.containers
 				this.fontFamily = "Arial";
 				this.fontSize = 10;
 				this.fontWeight = "bold";
+				this.color = 0x000000;
 			}
 			StyleManager.setStyleDeclaration("." + titleStyleName, winTitleSelector, false);
 			

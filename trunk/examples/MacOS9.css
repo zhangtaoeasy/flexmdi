@@ -1,3 +1,8 @@
+Application
+{
+	background-image: Embed(source="assets/img/wallpaperOS9.gif");
+}
+
 MDIWindow
 {
 	windowControlsClass: ClassReference("windowControls.MacOS9WindowControls");
@@ -31,7 +36,7 @@ MDIWindow
 
 .mdiWindowNoFocus
 {
-	borderColor: #7B97E0;
+	borderColor: #CCCCCC;
 	borderAlpha: 1;
 	borderThicknessLeft: 2;
 	borderThicknessTop: 0;

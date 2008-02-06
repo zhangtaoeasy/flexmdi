@@ -1,3 +1,8 @@
+Application
+{
+	background-image: Embed(source="assets/img/wallpaperWin.jpg");
+}
+
 MDIWindow
 {
 	windowControlsClass: ClassReference("windowControls.WindowsXPControls");

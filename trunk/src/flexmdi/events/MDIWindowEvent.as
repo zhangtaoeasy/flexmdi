@@ -49,15 +49,15 @@ package flexmdi.events
 		
 		public var window:MDIWindow;
 		
-		public function MDIWindowEvent(type:String, window:MDIWindow, bubbles:Boolean = false, cancelable:Boolean = false)
+		public function MDIWindowEvent(type:String, window:MDIWindow, bubbles:Boolean = false)
 		{
-			super(type, bubbles, cancelable);
+			super(type, bubbles, true);
 			this.window = window;
 		}
 		
 		override public function clone():Event
 		{
-			return new MDIWindowEvent(type, window, bubbles, cancelable);
+			return new MDIWindowEvent(type, window, bubbles);
 		}
 	}
 }

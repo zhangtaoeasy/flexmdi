@@ -4,6 +4,8 @@
 	creationComplete="onCreationComplete()" xmlns:ns="sample_content.*" viewSourceURL="srcview/index.html">
 	<mx:Script>
 		<![CDATA[
+			import flash.utils.getTimer;
+			import flexmdi.events.MDIWindowEvent;
 			import flexmdi.effects.MDIEffectsDescriptorBase;
 			import flexmdi.effects.effectsLib.MDILinearEffects;
 			import flexmdi.effects.effectsLib.MDIVistaEffects;			
@@ -21,8 +23,7 @@
 			private var cssURL:String;
 			
 			private function onCreationComplete():void
-			{
-				
+			{				
 				// create textfield
 				eventMonitor = new TextArea();
 				eventMonitor.percentWidth = 100;
@@ -89,10 +90,13 @@
 			{
 				if(event is MDIManagerEvent && confirmCloseCb.selected)
 				{
+					// store a copy of the event in case we want to resume later (user confirms their intention)
+					queuedEvent = event.clone() as MDIManagerEvent;
+					
 					// this is the line that prevents the default behavior from executing as usual
-					event.stopImmediatePropagation();
-					// store the event in case we want to resume later (user confirms their intention)
-					queuedEvent = event as MDIManagerEvent;
+					// because the default handler checks event.isDefaultPrevented()
+					event.preventDefault();
+					
 					Alert.show("Seriously? Close it?", null, 3, null, handleAlertResponse);
 				}
 			}

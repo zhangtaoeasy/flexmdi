@@ -58,9 +58,9 @@ package flexmdi.events
 		public var effect:Effect;
 		public var effectItems:Array;
 		
-		public function MDIManagerEvent(type:String, window:MDIWindow, manager:MDIManager, effect:Effect = null, effectItems:Array = null, bubbles:Boolean = false, cancelable:Boolean = false)
+		public function MDIManagerEvent(type:String, window:MDIWindow, manager:MDIManager, effect:Effect = null, effectItems:Array = null, bubbles:Boolean = false)
 		{
-			super(type, bubbles, cancelable);
+			super(type, bubbles, true);
 			this.window = window;
 			this.manager = manager;
 			this.effect = effect;
@@ -69,7 +69,7 @@ package flexmdi.events
 		
 		override public function clone():Event
 		{
-			return new MDIManagerEvent(type, window, manager, effect, effectItems, bubbles, cancelable);
+			return new MDIManagerEvent(type, window, manager, effect, effectItems, bubbles);
 		}
 	}
 }

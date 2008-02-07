@@ -42,6 +42,7 @@ package flexmdi.managers
 	
 	import mx.collections.ArrayCollection;
 	import mx.core.Application;
+	import mx.core.EventPriority;
 	import mx.core.IFlexDisplayObject;
 	import mx.core.UIComponent;
 	import mx.effects.CompositeEffect;
@@ -232,23 +233,23 @@ package flexmdi.managers
 			windowToManagerEventMap[MDIWindowEvent.RESIZE_END] = MDIManagerEvent.WINDOW_RESIZE_END;
 			
 			// these handlers execute default behaviors, these events are dispatched by this class
-			addEventListener(MDIManagerEvent.WINDOW_ADD, executeDefaultBehavior, false, -1);
-			addEventListener(MDIManagerEvent.WINDOW_MINIMIZE, executeDefaultBehavior, false, -1);
-			addEventListener(MDIManagerEvent.WINDOW_RESTORE, executeDefaultBehavior, false, -1);
-			addEventListener(MDIManagerEvent.WINDOW_MAXIMIZE, executeDefaultBehavior, false, -1);
-			addEventListener(MDIManagerEvent.WINDOW_CLOSE, executeDefaultBehavior, false, -1);
+			addEventListener(MDIManagerEvent.WINDOW_ADD, executeDefaultBehavior, false, EventPriority.DEFAULT_HANDLER);
+			addEventListener(MDIManagerEvent.WINDOW_MINIMIZE, executeDefaultBehavior, false, EventPriority.DEFAULT_HANDLER);
+			addEventListener(MDIManagerEvent.WINDOW_RESTORE, executeDefaultBehavior, false, EventPriority.DEFAULT_HANDLER);
+			addEventListener(MDIManagerEvent.WINDOW_MAXIMIZE, executeDefaultBehavior, false, EventPriority.DEFAULT_HANDLER);
+			addEventListener(MDIManagerEvent.WINDOW_CLOSE, executeDefaultBehavior, false, EventPriority.DEFAULT_HANDLER);
 						
-			addEventListener(MDIManagerEvent.WINDOW_FOCUS_START, executeDefaultBehavior, false, -1);
-			addEventListener(MDIManagerEvent.WINDOW_FOCUS_END, executeDefaultBehavior, false, -1);
-			addEventListener(MDIManagerEvent.WINDOW_DRAG_START, executeDefaultBehavior, false, -1);
-			addEventListener(MDIManagerEvent.WINDOW_DRAG, executeDefaultBehavior, false, -1);
-			addEventListener(MDIManagerEvent.WINDOW_DRAG_END, executeDefaultBehavior, false, -1);
-			addEventListener(MDIManagerEvent.WINDOW_RESIZE_START, executeDefaultBehavior, false, -1);
-			addEventListener(MDIManagerEvent.WINDOW_RESIZE, executeDefaultBehavior, false, -1);
-			addEventListener(MDIManagerEvent.WINDOW_RESIZE_END, executeDefaultBehavior, false, -1);
+			addEventListener(MDIManagerEvent.WINDOW_FOCUS_START, executeDefaultBehavior, false, EventPriority.DEFAULT_HANDLER);
+			addEventListener(MDIManagerEvent.WINDOW_FOCUS_END, executeDefaultBehavior, false, EventPriority.DEFAULT_HANDLER);
+			addEventListener(MDIManagerEvent.WINDOW_DRAG_START, executeDefaultBehavior, false, EventPriority.DEFAULT_HANDLER);
+			addEventListener(MDIManagerEvent.WINDOW_DRAG, executeDefaultBehavior, false, EventPriority.DEFAULT_HANDLER);
+			addEventListener(MDIManagerEvent.WINDOW_DRAG_END, executeDefaultBehavior, false, EventPriority.DEFAULT_HANDLER);
+			addEventListener(MDIManagerEvent.WINDOW_RESIZE_START, executeDefaultBehavior, false, EventPriority.DEFAULT_HANDLER);
+			addEventListener(MDIManagerEvent.WINDOW_RESIZE, executeDefaultBehavior, false, EventPriority.DEFAULT_HANDLER);
+			addEventListener(MDIManagerEvent.WINDOW_RESIZE_END, executeDefaultBehavior, false, EventPriority.DEFAULT_HANDLER);
 			
-			addEventListener(MDIManagerEvent.CASCADE, executeDefaultBehavior, false, -1);
-			addEventListener(MDIManagerEvent.TILE, executeDefaultBehavior, false, -1);
+			addEventListener(MDIManagerEvent.CASCADE, executeDefaultBehavior, false, EventPriority.DEFAULT_HANDLER);
+			addEventListener(MDIManagerEvent.TILE, executeDefaultBehavior, false, EventPriority.DEFAULT_HANDLER);
 		}
 		
 		private var _container:UIComponent;
@@ -375,7 +376,7 @@ package flexmdi.managers
 		
 		private function windowEventProxy(event:Event):void
 		{
-			if(event is MDIWindowEvent)
+			if(event is MDIWindowEvent && !event.isDefaultPrevented())
 			{
 				var winEvent:MDIWindowEvent = event as MDIWindowEvent;
 				var mgrEvent:MDIManagerEvent = new MDIManagerEvent(windowToManagerEventMap[winEvent.type], winEvent.window, this);
@@ -447,7 +448,7 @@ package flexmdi.managers
 		
 		public function executeDefaultBehavior(event:Event):void
 		{
-			if(event is MDIManagerEvent)
+			if(event is MDIManagerEvent && !event.isDefaultPrevented())
 			{
 				var mgrEvent:MDIManagerEvent = event as MDIManagerEvent;
 				
@@ -781,19 +782,19 @@ package flexmdi.managers
 		
 		private function addListeners(window:MDIWindow):void
 		{
-			window.addEventListener(MDIWindowEvent.MINIMIZE, windowEventProxy, false, -1);
-			window.addEventListener(MDIWindowEvent.RESTORE, windowEventProxy, false, -1);
-			window.addEventListener(MDIWindowEvent.MAXIMIZE, windowEventProxy, false, -1);
-			window.addEventListener(MDIWindowEvent.CLOSE, windowEventProxy, false, -1);
+			window.addEventListener(MDIWindowEvent.MINIMIZE, windowEventProxy, false, EventPriority.DEFAULT_HANDLER);
+			window.addEventListener(MDIWindowEvent.RESTORE, windowEventProxy, false, EventPriority.DEFAULT_HANDLER);
+			window.addEventListener(MDIWindowEvent.MAXIMIZE, windowEventProxy, false, EventPriority.DEFAULT_HANDLER);
+			window.addEventListener(MDIWindowEvent.CLOSE, windowEventProxy, false, EventPriority.DEFAULT_HANDLER);
 			
-			window.addEventListener(MDIWindowEvent.FOCUS_START, windowEventProxy, false, -1);
-			window.addEventListener(MDIWindowEvent.FOCUS_END, windowEventProxy, false, -1);
-			window.addEventListener(MDIWindowEvent.DRAG_START, windowEventProxy, false, -1);
-			window.addEventListener(MDIWindowEvent.DRAG, windowEventProxy, false, -1);
-			window.addEventListener(MDIWindowEvent.DRAG_END, windowEventProxy, false, -1);
-			window.addEventListener(MDIWindowEvent.RESIZE_START, windowEventProxy, false, -1);
-			window.addEventListener(MDIWindowEvent.RESIZE, windowEventProxy, false, -1);
-			window.addEventListener(MDIWindowEvent.RESIZE_END, windowEventProxy, false, -1);
+			window.addEventListener(MDIWindowEvent.FOCUS_START, windowEventProxy, false, EventPriority.DEFAULT_HANDLER);
+			window.addEventListener(MDIWindowEvent.FOCUS_END, windowEventProxy, false, EventPriority.DEFAULT_HANDLER);
+			window.addEventListener(MDIWindowEvent.DRAG_START, windowEventProxy, false, EventPriority.DEFAULT_HANDLER);
+			window.addEventListener(MDIWindowEvent.DRAG, windowEventProxy, false, EventPriority.DEFAULT_HANDLER);
+			window.addEventListener(MDIWindowEvent.DRAG_END, windowEventProxy, false, EventPriority.DEFAULT_HANDLER);
+			window.addEventListener(MDIWindowEvent.RESIZE_START, windowEventProxy, false, EventPriority.DEFAULT_HANDLER);
+			window.addEventListener(MDIWindowEvent.RESIZE, windowEventProxy, false, EventPriority.DEFAULT_HANDLER);
+			window.addEventListener(MDIWindowEvent.RESIZE_END, windowEventProxy, false, EventPriority.DEFAULT_HANDLER);
 		}
 
 

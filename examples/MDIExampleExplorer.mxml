@@ -189,10 +189,9 @@
 		
 		<flexmdi:MDICanvas id="mdiCanvas" horizontalScrollPolicy="off" verticalScrollPolicy="off"
 			width="100%" height="100%" backgroundColor="#FFFFFF" backgroundAlpha="0">
-			<flexmdi:MDIWindow id="win1" windowStyleName="windowsXP"
+			<flexmdi:MDIWindow id="win1"
 				title="Window 1 has a really really long title to show support for truncation"
-				x="30" y="30" width="400" height="200">
-			</flexmdi:MDIWindow>
+				x="30" y="30" width="400" height="200" />
 			<flexmdi:MDIWindow id="win2"
 				title="Window 2"
 				x="450" y="30" width="250" height="300" />

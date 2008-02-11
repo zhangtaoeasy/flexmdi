@@ -32,6 +32,10 @@ MDIWindow
 	backgroundAlpha: 1; 
 	backgroundColor: #FFFFFF;
 	titleBackgroundSkin: Embed(source="assets/swf/WindowsAssets.swf", symbol="headerBgDefault");
+	resizeBorderStyle: 'dashed';
+	resizeBorderThickness: 1;
+	resizeBorderColor: #0053E1;
+	resizeBorderAlpha: 0.5;
 }
 
 .mdiWindowNoFocus
@@ -49,6 +53,7 @@ MDIWindow
 	backgroundAlpha: 1; 
 	backgroundColor: #FFFFFF;
 	titleBackgroundSkin: Embed(source="assets/swf/WindowsAssets.swf", symbol="headerBgDefaultNoFocus");
+	
 }
 
 .mdiWindowMinimizeBtn

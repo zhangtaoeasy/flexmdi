@@ -7,6 +7,11 @@ MDIWindow
 {
 	windowControlsClass: ClassReference("windowControls.WindowsXPControls");
 	titleStyleName: "winXPTitleStyle";
+	
+	minimizeBtnStyleNameNoFocus: "mdiWindowMinimizeBtnNoFocus";
+	maximizeBtnStyleNameNoFocus: "mdiWindowMaximizeBtnNoFocus";
+	restoreBtnStyleNameNoFocus: "mdiWindowRestoreBtnNoFocus";
+	closeBtnStyleNameNoFocus: "mdiWindowCloseBtnNoFocus";
 }
 
 .winXPTitleStyle
@@ -67,7 +72,6 @@ MDIWindow
 	downSkin:      Embed(source="assets/swf/WindowsAssets.swf", symbol="minimizeBtnDefaultNoFocus");
 	disabledSkin:  Embed(source="assets/swf/WindowsAssets.swf", symbol="minimizeBtnDefaultNoFocus");
 }
-/**/
 
 .mdiWindowMaximizeBtn
 {
@@ -84,7 +88,6 @@ MDIWindow
 	downSkin:      Embed(source="assets/swf/WindowsAssets.swf", symbol="maximizeBtnDefaultNoFocus");
 	disabledSkin:  Embed(source="assets/swf/WindowsAssets.swf", symbol="maximizeBtnDefaultNoFocus");
 }
-/**/
 
 .mdiWindowRestoreBtn
 {
@@ -101,7 +104,6 @@ MDIWindow
 	downSkin:      Embed(source="assets/swf/WindowsAssets.swf", symbol="restoreBtnDefaultNoFocus");
 	disabledSkin:  Embed(source="assets/swf/WindowsAssets.swf", symbol="restoreBtnDefaultNoFocus");
 }
-/**/
 
 .mdiWindowCloseBtn
 {
@@ -118,4 +120,3 @@ MDIWindow
 	downSkin:      Embed(source="assets/swf/WindowsAssets.swf", symbol="closeBtnDefaultNoFocus");
 	disabledSkin:  Embed(source="assets/swf/WindowsAssets.swf", symbol="closeBtnDefaultNoFocus");
 }
-/**/

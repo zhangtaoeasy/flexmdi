@@ -32,10 +32,6 @@ MDIWindow
 	backgroundAlpha: 1; 
 	backgroundColor: #FFFFFF;	
 	titleBackgroundSkin: Embed(source="assets/swf/WindowsAssets.swf", symbol="macHeaderFocus");
-	resizeBorderStyle: 'dashed';
-	resizeBorderThickness: 1;
-	resizeBorderColor: #CCCCCC;
-	resizeBorderAlpha: 1;
 }
 
 .mdiWindowNoFocus

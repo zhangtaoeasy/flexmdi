@@ -34,6 +34,7 @@ package flexmdi.containers
 	
 	import flexmdi.events.MDIWindowEvent;
 	import flexmdi.managers.MDIManager;
+	import flexmdi.utils.GraphicsUtil;
 	
 	import mx.containers.Canvas;
 	import mx.containers.Panel;
@@ -42,9 +43,13 @@ package flexmdi.containers
 	import mx.core.UIComponent;
 	import mx.core.UITextField;
 	import mx.core.mx_internal;
+	import mx.graphics.Stroke;
 	import mx.managers.CursorManager;
 	import mx.styles.CSSStyleDeclaration;
 	import mx.styles.StyleManager;
+	
+	
+	
 	
 	
 	//--------------------------------------
@@ -312,6 +317,25 @@ package flexmdi.containers
 	 */
 	[Style(name="resizeCursorTopRightBottomLeftYOffset", type="Number", inherit="no")]
 	
+	/**
+	 *  Defines style for outline dragging
+	 */
+	[Style(name="resizeBorderStyle", type="String", inherit="no")]
+	
+	/**
+	 *  Defines thickness of outline drag border
+	 */
+	[Style(name="resizeBorderThickness", type="uint", inherit="no")]
+	
+	/**
+	 *  Defines color of outline drag border
+	 */
+	[Style(name="resizeBorderColor", type="uint", inherit="no")]
+	
+	/**
+	 *  Defines color of outline drag border
+	 */
+	[Style(name="resizeBorderAlpha", type="Number", inherit="no")]
 	
 	/**
 	 * Central window class used in flexmdi. Includes min/max/close buttons by default.
@@ -327,6 +351,11 @@ package flexmdi.containers
 	     * Size of corner handles. Can be adjusted to affect "sensitivity" of resize area.
 	     */
 		public var cornerHandleSize:Number = 10;
+	    
+	    /**
+	     * Flag to determine drag resize type.  True dynamically resizes window and content on drag, False draws outline of intended window size, and resize occurs on drag release.
+	     */
+		public var liveResize:Boolean = false;
 	    
 	    /**
 	     * @private
@@ -514,6 +543,25 @@ package flexmdi.containers
 		private var _hasFocus:Boolean;
 		
 		/**
+		 * @private
+		 * Created for boundary draw resizing.
+		 */
+		private var _outlineCanvas:UIComponent;
+		
+		/**
+		 * @private
+		 * Holder object for measurements updated during boundary draw resizing and eventual window resize on resize drag release.
+		 */
+		private var _outlineShape:Rectangle;
+		
+		/**
+		 * @private
+		 * Flag to allow/disallow boundary resize measurement from occuring.  Toggled during leave and enter of stage.
+		 */
+		private var _dontCalculateOutline:Boolean = false;
+		
+		
+		/**
 		 * @private store the backgroundAlpha when minimized.
 	     */
 		private var backgroundAlphaRestore:Number = 1;
@@ -597,6 +645,8 @@ package flexmdi.containers
 				this.resizeCursorTopRightBottomLeftSkin = DEFAULT_RESIZE_CURSOR_TR_BL;
 				this.resizeCursorTopRightBottomLeftXOffset = DEFAULT_RESIZE_CURSOR_TR_BL_X_OFFSET;
 				this.resizeCursorTopRightBottomLeftYOffset = DEFAULT_RESIZE_CURSOR_TR_BL_Y_OFFSET;
+				
+				
 			}
 			
 			//------------------------
@@ -619,6 +669,10 @@ package flexmdi.containers
 				this.borderThicknessLeft = 3;
 				this.borderAlpha = 1;
 				this.backgroundAlpha = 1;
+				this.resizeBorderColor = this.borderColor;
+				this.resizeBorderStyle = 'solid';
+				this.resizeBorderThickness = 2;
+				this.resizeBorderAlpha = 1;
 			}
 			StyleManager.setStyleDeclaration("." + styleNameFocus, winFocusSelector, false);
 			
@@ -1466,17 +1520,24 @@ package flexmdi.containers
 				systemManager.addEventListener(MouseEvent.MOUSE_MOVE, onResizeButtonDrag, false, 0, true);
 				systemManager.addEventListener(MouseEvent.MOUSE_UP, onResizeButtonRelease, false, 0, true);
 				systemManager.stage.addEventListener(Event.MOUSE_LEAVE, onMouseLeaveStage, false, 0, true);
+				
+				if(!liveResize)
+					systemManager.stage.addEventListener(MouseEvent.MOUSE_OVER, function():void { _dontCalculateOutline = false; });
+				
 			}
 		}
 		
 		private function onResizeButtonDrag(event:MouseEvent):void
 		{
-			if(!_resizing)
+			if(liveResize)
 			{
-				_resizing = true;
-				dispatchEvent(new MDIWindowEvent(MDIWindowEvent.RESIZE_START, this));
-			}			
-			dispatchEvent(new MDIWindowEvent(MDIWindowEvent.RESIZE, this));
+				if(!_resizing)
+				{
+					_resizing = true;
+					dispatchEvent(new MDIWindowEvent(MDIWindowEvent.RESIZE_START, this));
+				}			
+				dispatchEvent(new MDIWindowEvent(MDIWindowEvent.RESIZE, this));
+			}
 		}
 		
 		/**
@@ -1484,55 +1545,162 @@ package flexmdi.containers
 		 */
 		private function updateWindowSize(event:Event):void
 		{
-			if(windowState == MDIWindowState.NORMAL && resizable)
+			if(liveResize)
 			{
-				dragAmountX = parent.mouseX - dragStartMouseX;
-				dragAmountY = parent.mouseY - dragStartMouseY;
-				
-				if(currentResizeHandle == resizeHandleTop && parent.mouseY > 0)
+				if(windowState == MDIWindowState.NORMAL && resizable)
 				{
-					this.y = Math.min(savedWindowRect.y + dragAmountY, dragMaxY);
-					this.height = Math.max(savedWindowRect.height - dragAmountY, minHeight);
+					dragAmountX = parent.mouseX - dragStartMouseX;
+					dragAmountY = parent.mouseY - dragStartMouseY;
+					
+					if(currentResizeHandle == resizeHandleTop && parent.mouseY > 0)
+					{
+						this.y = Math.min(savedWindowRect.y + dragAmountY, dragMaxY);
+						this.height = Math.max(savedWindowRect.height - dragAmountY, minHeight);
+					}
+					else if(currentResizeHandle == resizeHandleRight && parent.mouseX < parent.width)
+					{
+						this.width = Math.max(savedWindowRect.width + dragAmountX, minWidth);
+					}
+					else if(currentResizeHandle == resizeHandleBottom && parent.mouseY < parent.height)
+					{
+						this.height = Math.max(savedWindowRect.height + dragAmountY, minHeight);
+					}
+					else if(currentResizeHandle == resizeHandleLeft && parent.mouseX > 0)
+					{
+						this.x = Math.min(savedWindowRect.x + dragAmountX, dragMaxX);
+						this.width = Math.max(savedWindowRect.width - dragAmountX, minWidth);
+					}
+					else if(currentResizeHandle == resizeHandleTL && parent.mouseX > 0 && parent.mouseY > 0)
+					{
+						this.x = Math.min(savedWindowRect.x + dragAmountX, dragMaxX);
+						this.y = Math.min(savedWindowRect.y + dragAmountY, dragMaxY);
+						this.width = Math.max(savedWindowRect.width - dragAmountX, minWidth);
+						this.height = Math.max(savedWindowRect.height - dragAmountY, minHeight);				
+					}
+					else if(currentResizeHandle == resizeHandleTR && parent.mouseX < parent.width && parent.mouseY > 0)
+					{
+						this.y = Math.min(savedWindowRect.y + dragAmountY, dragMaxY);
+						this.width = Math.max(savedWindowRect.width + dragAmountX, minWidth);
+						this.height = Math.max(savedWindowRect.height - dragAmountY, minHeight);
+					}
+					else if(currentResizeHandle == resizeHandleBR && parent.mouseX < parent.width && parent.mouseY < parent.height)
+					{
+						this.width = Math.max(savedWindowRect.width + dragAmountX, minWidth);
+						this.height = Math.max(savedWindowRect.height + dragAmountY, minHeight);
+					}
+					else if(currentResizeHandle == resizeHandleBL && parent.mouseX > 0 && parent.mouseY < parent.height)
+					{
+						this.x = Math.min(savedWindowRect.x + dragAmountX, dragMaxX);
+						this.width = Math.max(savedWindowRect.width - dragAmountX, minWidth);
+						this.height = Math.max(savedWindowRect.height + dragAmountY, minHeight);
+					}
 				}
-				else if(currentResizeHandle == resizeHandleRight && parent.mouseX < parent.width)
+			}
+			else
+			{
+				if(!_dontCalculateOutline)
 				{
-					this.width = Math.max(savedWindowRect.width + dragAmountX, minWidth);
-				}
-				else if(currentResizeHandle == resizeHandleBottom && parent.mouseY < parent.height)
-				{
-					this.height = Math.max(savedWindowRect.height + dragAmountY, minHeight);
-				}
-				else if(currentResizeHandle == resizeHandleLeft && parent.mouseX > 0)
-				{
-					this.x = Math.min(savedWindowRect.x + dragAmountX, dragMaxX);
-					this.width = Math.max(savedWindowRect.width - dragAmountX, minWidth);
-				}
-				else if(currentResizeHandle == resizeHandleTL && parent.mouseX > 0 && parent.mouseY > 0)
-				{
-					this.x = Math.min(savedWindowRect.x + dragAmountX, dragMaxX);
-					this.y = Math.min(savedWindowRect.y + dragAmountY, dragMaxY);
-					this.width = Math.max(savedWindowRect.width - dragAmountX, minWidth);
-					this.height = Math.max(savedWindowRect.height - dragAmountY, minHeight);				
-				}
-				else if(currentResizeHandle == resizeHandleTR && parent.mouseX < parent.width && parent.mouseY > 0)
-				{
-					this.y = Math.min(savedWindowRect.y + dragAmountY, dragMaxY);
-					this.width = Math.max(savedWindowRect.width + dragAmountX, minWidth);
-					this.height = Math.max(savedWindowRect.height - dragAmountY, minHeight);
-				}
-				else if(currentResizeHandle == resizeHandleBR && parent.mouseX < parent.width && parent.mouseY < parent.height)
-				{
-					this.width = Math.max(savedWindowRect.width + dragAmountX, minWidth);
-					this.height = Math.max(savedWindowRect.height + dragAmountY, minHeight);
-				}
-				else if(currentResizeHandle == resizeHandleBL && parent.mouseX > 0 && parent.mouseY < parent.height)
-				{
-					this.x = Math.min(savedWindowRect.x + dragAmountX, dragMaxX);
-					this.width = Math.max(savedWindowRect.width - dragAmountX, minWidth);
-					this.height = Math.max(savedWindowRect.height + dragAmountY, minHeight);
+					if(!this._outlineCanvas)
+					{
+						var windowParent:UIComponent = this.parent as UIComponent;
+						var childInstance:DisplayObject = windowParent.addChildAt(new UIComponent(), windowParent.numChildren);
+						_outlineCanvas = UIComponent(childInstance);
+					}
+					
+					_outlineShape = new Rectangle();
+					
+					if(windowState == MDIWindowState.NORMAL && resizable)
+					{
+						dragAmountX = parent.mouseX - dragStartMouseX;
+						dragAmountY = parent.mouseY - dragStartMouseY;
+						
+						
+						if(currentResizeHandle == resizeHandleTop && parent.mouseY > 0)
+						{
+							_outlineShape.x = this.x;
+							_outlineShape.y = Math.min(savedWindowRect.y + dragAmountY, dragMaxY);
+							_outlineShape.width = this.width;
+							_outlineShape.height = Math.max(savedWindowRect.height - dragAmountY, minHeight);
+						}
+						else if(currentResizeHandle == resizeHandleRight && parent.mouseX < parent.width)
+						{
+							_outlineShape.x = this.x;
+							_outlineShape.y = this.y;
+							_outlineShape.width = Math.max(savedWindowRect.width + dragAmountX, minWidth);
+							_outlineShape.height = this.height;
+						}
+						else if(currentResizeHandle == resizeHandleBottom && parent.mouseY < parent.height)
+						{
+							_outlineShape.x = this.x;
+							_outlineShape.y = this.y;
+							_outlineShape.width = this.width;
+							_outlineShape.height = Math.max(savedWindowRect.height + dragAmountY, minHeight);
+						}
+						else if(currentResizeHandle == resizeHandleLeft && parent.mouseX > 0)
+						{
+							_outlineShape.x = Math.min(savedWindowRect.x + dragAmountX, dragMaxX);
+							_outlineShape.y = this.y;
+							_outlineShape.width = Math.max(savedWindowRect.width - dragAmountX, minWidth);
+							_outlineShape.height = this.height
+						}
+						else if(currentResizeHandle == resizeHandleTL && parent.mouseX > 0 && parent.mouseY > 0)
+						{
+							_outlineShape.x = Math.min(savedWindowRect.x + dragAmountX, dragMaxX);
+							_outlineShape.y = Math.min(savedWindowRect.y + dragAmountY, dragMaxY);
+							_outlineShape.width = Math.max(savedWindowRect.width - dragAmountX, minWidth);
+							_outlineShape.height = Math.max(savedWindowRect.height - dragAmountY, minHeight);			
+						}
+						else if(currentResizeHandle == resizeHandleTR && parent.mouseX < parent.width && parent.mouseY > 0)
+						{
+							_outlineShape.x = this.x;
+							_outlineShape.y = Math.min(savedWindowRect.y + dragAmountY, dragMaxY);
+							_outlineShape.width = Math.max(savedWindowRect.width + dragAmountX, minWidth);
+							_outlineShape.height = Math.max(savedWindowRect.height - dragAmountY, minHeight);	
+						}
+						else if(currentResizeHandle == resizeHandleBR && parent.mouseX < parent.width && parent.mouseY < parent.height)
+						{
+							_outlineShape.x = this.x;
+							_outlineShape.y = this.y;
+							_outlineShape.width = Math.max(savedWindowRect.width + dragAmountX, minWidth);
+							_outlineShape.height = Math.max(savedWindowRect.height + dragAmountY, minHeight);
+						}
+						else if(currentResizeHandle == resizeHandleBL && parent.mouseX > 0 && parent.mouseY < parent.height)
+						{
+							_outlineShape.x = Math.min(savedWindowRect.x + dragAmountX, dragMaxX);
+							_outlineShape.y = this.y;
+							_outlineShape.width = Math.max(savedWindowRect.width - dragAmountX, minWidth);
+							_outlineShape.height = Math.max(savedWindowRect.height + dragAmountY, minHeight);			
+						}
+						
+						_outlineCanvas.graphics.clear();
+						
+						_outlineShape.x += 1;
+						_outlineShape.y += 1;
+							
+						if(this.getStyle("resizeBorderStyle") == 'solid')
+						{
+							_outlineCanvas.graphics.lineStyle(this.getStyle("resizeBorderThickness"), this.getStyle("resizeBorderColor"), this.getStyle("resizeBorderAlpha"));
+							_outlineCanvas.graphics.moveTo(_outlineShape.x, _outlineShape.y);
+							_outlineCanvas.graphics.lineTo(_outlineShape.x + _outlineShape.width, _outlineShape.y);
+							_outlineCanvas.graphics.lineTo(_outlineShape.x + _outlineShape.width, _outlineShape.y + _outlineShape.height);
+							_outlineCanvas.graphics.lineTo(_outlineShape.x, _outlineShape.y + _outlineShape.height);
+							_outlineCanvas.graphics.lineTo(_outlineShape.x, _outlineShape.y);
+						}
+						else if(this.getStyle("resizeBorderStyle") == 'dashed')
+						{
+							var dashArray:Array = [this.getStyle("resizeBorderThickness"), 0, this.getStyle("resizeBorderThickness"), this.getStyle("resizeBorderThickness")];
+							GraphicsUtil.drawDashedLine(_outlineCanvas.graphics, new Stroke(this.getStyle("resizeBorderColor"), this.getStyle("resizeBorderThickness"), this.getStyle("resizeBorderAlpha")), dashArray, _outlineShape.x, _outlineShape.y, _outlineShape.x + _outlineShape.width, _outlineShape.y);
+							GraphicsUtil.drawDashedLine(_outlineCanvas.graphics, new Stroke(this.getStyle("resizeBorderColor"), this.getStyle("resizeBorderThickness"), this.getStyle("resizeBorderAlpha")), dashArray, _outlineShape.x + _outlineShape.width, _outlineShape.y, _outlineShape.x + _outlineShape.width, _outlineShape.y + _outlineShape.height);
+							GraphicsUtil.drawDashedLine(_outlineCanvas.graphics, new Stroke(this.getStyle("resizeBorderColor"), this.getStyle("resizeBorderThickness"), this.getStyle("resizeBorderAlpha")), dashArray, _outlineShape.x + _outlineShape.width, _outlineShape.y + _outlineShape.height, _outlineShape.x, _outlineShape.y + _outlineShape.height);
+							GraphicsUtil.drawDashedLine(_outlineCanvas.graphics, new Stroke(this.getStyle("resizeBorderColor"), this.getStyle("resizeBorderThickness"), this.getStyle("resizeBorderAlpha")), dashArray, _outlineShape.x, _outlineShape.y + _outlineShape.height, _outlineShape.x, _outlineShape.y);
+						}
+					}
 				}
 			}
 		}
+		
+		
+
 		
 		private function onResizeButtonRelease(event:MouseEvent = null):void
 		{
@@ -1549,13 +1717,39 @@ package flexmdi.containers
 				systemManager.removeEventListener(MouseEvent.MOUSE_UP, onResizeButtonRelease);
 				systemManager.stage.removeEventListener(Event.MOUSE_LEAVE, onMouseLeaveStage);
 				CursorManager.removeCursor(CursorManager.currentCursorID);
+				
+				
+				if(!liveResize)
+				{
+					//checks for existince of _outlineShape because it's needed for resize properties
+					if(this._outlineShape != null)
+					{
+						//piggybacking off of restore effect for now for resize of window on release
+						savedWindowRect = new Rectangle(_outlineShape.x, _outlineShape.y, _outlineShape.width, _outlineShape.height);
+						restore();
+						
+						//removing resizing artifacts
+						var windowParent:UIComponent = this.parent as UIComponent;
+						windowParent.removeChild(_outlineCanvas);
+						this._outlineCanvas = null;
+						this._outlineShape = null;
+					}
+				}
 			}
 		}
+
 		
 		private function onMouseLeaveStage(event:Event):void
 		{
-			onResizeButtonRelease();
-			systemManager.stage.removeEventListener(Event.MOUSE_LEAVE, onMouseLeaveStage);
+			if(liveResize)
+			{
+				onResizeButtonRelease();
+				systemManager.stage.removeEventListener(Event.MOUSE_LEAVE, onMouseLeaveStage);
+			}
+			else
+			{
+				_dontCalculateOutline = true;
+			}
 		}
 		
 		/**
@@ -1711,6 +1905,10 @@ package flexmdi.containers
 			var showAllItem:ContextMenuItem = new ContextMenuItem(MDIManager.CONTEXT_MENU_LABEL_SHOW_ALL);
 		  		showAllItem.addEventListener(ContextMenuEvent.MENU_ITEM_SELECT, menuItemSelectHandler);
 		  		defaultContextMenu.customItems.push(showAllItem);  
+		  	
+		  	var hideAllItem:ContextMenuItem = new ContextMenuItem(MDIManager.CONTEXT_MENU_LABEL_HIDE_ALL);
+		  		hideAllItem.addEventListener(ContextMenuEvent.MENU_ITEM_SELECT, menuItemSelectHandler);
+		  		defaultContextMenu.customItems.push(hideAllItem);  
 			
         	this.contextMenu = defaultContextMenu;
 		}
@@ -1756,6 +1954,10 @@ package flexmdi.containers
 				
 				case(MDIManager.CONTEXT_MENU_LABEL_SHOW_ALL):
 					this.windowManager.showAllWindows();
+				break;
+				
+				case(MDIManager.CONTEXT_MENU_LABEL_HIDE_ALL):
+					this.windowManager.hideAllWindows();
 				break;
 
 			}

@@ -333,7 +333,7 @@ package flexmdi.containers
 	[Style(name="resizeBorderColor", type="uint", inherit="no")]
 	
 	/**
-	 *  Defines color of outline drag border
+	 *  Defines alpha of the outline drag border
 	 */
 	[Style(name="resizeBorderAlpha", type="Number", inherit="no")]
 	

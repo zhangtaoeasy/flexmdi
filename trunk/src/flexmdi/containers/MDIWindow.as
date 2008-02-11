@@ -546,13 +546,13 @@ package flexmdi.containers
 		 * @private
 		 * Created for boundary draw resizing.
 		 */
-		private var _outlineCanvas:UIComponent;
+		private var _resizeBorderCanvas:UIComponent;
 		
 		/**
 		 * @private
 		 * Holder object for measurements updated during boundary draw resizing and eventual window resize on resize drag release.
 		 */
-		private var _outlineShape:Rectangle;
+		private var _resizeBorderShape:Rectangle;
 		
 		/**
 		 * @private
@@ -1600,14 +1600,14 @@ package flexmdi.containers
 			{
 				if(!_dontCalculateOutline)
 				{
-					if(!this._outlineCanvas)
+					if(!this._resizeBorderCanvas)
 					{
 						var windowParent:UIComponent = this.parent as UIComponent;
 						var childInstance:DisplayObject = windowParent.addChildAt(new UIComponent(), windowParent.numChildren);
-						_outlineCanvas = UIComponent(childInstance);
+						_resizeBorderCanvas = UIComponent(childInstance);
 					}
 					
-					_outlineShape = new Rectangle();
+					_resizeBorderShape = new Rectangle();
 					
 					if(windowState == MDIWindowState.NORMAL && resizable)
 					{
@@ -1617,82 +1617,82 @@ package flexmdi.containers
 						
 						if(currentResizeHandle == resizeHandleTop && parent.mouseY > 0)
 						{
-							_outlineShape.x = this.x;
-							_outlineShape.y = Math.min(savedWindowRect.y + dragAmountY, dragMaxY);
-							_outlineShape.width = this.width;
-							_outlineShape.height = Math.max(savedWindowRect.height - dragAmountY, minHeight);
+							_resizeBorderShape.x = this.x;
+							_resizeBorderShape.y = Math.min(savedWindowRect.y + dragAmountY, dragMaxY);
+							_resizeBorderShape.width = this.width;
+							_resizeBorderShape.height = Math.max(savedWindowRect.height - dragAmountY, minHeight);
 						}
 						else if(currentResizeHandle == resizeHandleRight && parent.mouseX < parent.width)
 						{
-							_outlineShape.x = this.x;
-							_outlineShape.y = this.y;
-							_outlineShape.width = Math.max(savedWindowRect.width + dragAmountX, minWidth);
-							_outlineShape.height = this.height;
+							_resizeBorderShape.x = this.x;
+							_resizeBorderShape.y = this.y;
+							_resizeBorderShape.width = Math.max(savedWindowRect.width + dragAmountX, minWidth);
+							_resizeBorderShape.height = this.height;
 						}
 						else if(currentResizeHandle == resizeHandleBottom && parent.mouseY < parent.height)
 						{
-							_outlineShape.x = this.x;
-							_outlineShape.y = this.y;
-							_outlineShape.width = this.width;
-							_outlineShape.height = Math.max(savedWindowRect.height + dragAmountY, minHeight);
+							_resizeBorderShape.x = this.x;
+							_resizeBorderShape.y = this.y;
+							_resizeBorderShape.width = this.width;
+							_resizeBorderShape.height = Math.max(savedWindowRect.height + dragAmountY, minHeight);
 						}
 						else if(currentResizeHandle == resizeHandleLeft && parent.mouseX > 0)
 						{
-							_outlineShape.x = Math.min(savedWindowRect.x + dragAmountX, dragMaxX);
-							_outlineShape.y = this.y;
-							_outlineShape.width = Math.max(savedWindowRect.width - dragAmountX, minWidth);
-							_outlineShape.height = this.height
+							_resizeBorderShape.x = Math.min(savedWindowRect.x + dragAmountX, dragMaxX);
+							_resizeBorderShape.y = this.y;
+							_resizeBorderShape.width = Math.max(savedWindowRect.width - dragAmountX, minWidth);
+							_resizeBorderShape.height = this.height
 						}
 						else if(currentResizeHandle == resizeHandleTL && parent.mouseX > 0 && parent.mouseY > 0)
 						{
-							_outlineShape.x = Math.min(savedWindowRect.x + dragAmountX, dragMaxX);
-							_outlineShape.y = Math.min(savedWindowRect.y + dragAmountY, dragMaxY);
-							_outlineShape.width = Math.max(savedWindowRect.width - dragAmountX, minWidth);
-							_outlineShape.height = Math.max(savedWindowRect.height - dragAmountY, minHeight);			
+							_resizeBorderShape.x = Math.min(savedWindowRect.x + dragAmountX, dragMaxX);
+							_resizeBorderShape.y = Math.min(savedWindowRect.y + dragAmountY, dragMaxY);
+							_resizeBorderShape.width = Math.max(savedWindowRect.width - dragAmountX, minWidth);
+							_resizeBorderShape.height = Math.max(savedWindowRect.height - dragAmountY, minHeight);			
 						}
 						else if(currentResizeHandle == resizeHandleTR && parent.mouseX < parent.width && parent.mouseY > 0)
 						{
-							_outlineShape.x = this.x;
-							_outlineShape.y = Math.min(savedWindowRect.y + dragAmountY, dragMaxY);
-							_outlineShape.width = Math.max(savedWindowRect.width + dragAmountX, minWidth);
-							_outlineShape.height = Math.max(savedWindowRect.height - dragAmountY, minHeight);	
+							_resizeBorderShape.x = this.x;
+							_resizeBorderShape.y = Math.min(savedWindowRect.y + dragAmountY, dragMaxY);
+							_resizeBorderShape.width = Math.max(savedWindowRect.width + dragAmountX, minWidth);
+							_resizeBorderShape.height = Math.max(savedWindowRect.height - dragAmountY, minHeight);	
 						}
 						else if(currentResizeHandle == resizeHandleBR && parent.mouseX < parent.width && parent.mouseY < parent.height)
 						{
-							_outlineShape.x = this.x;
-							_outlineShape.y = this.y;
-							_outlineShape.width = Math.max(savedWindowRect.width + dragAmountX, minWidth);
-							_outlineShape.height = Math.max(savedWindowRect.height + dragAmountY, minHeight);
+							_resizeBorderShape.x = this.x;
+							_resizeBorderShape.y = this.y;
+							_resizeBorderShape.width = Math.max(savedWindowRect.width + dragAmountX, minWidth);
+							_resizeBorderShape.height = Math.max(savedWindowRect.height + dragAmountY, minHeight);
 						}
 						else if(currentResizeHandle == resizeHandleBL && parent.mouseX > 0 && parent.mouseY < parent.height)
 						{
-							_outlineShape.x = Math.min(savedWindowRect.x + dragAmountX, dragMaxX);
-							_outlineShape.y = this.y;
-							_outlineShape.width = Math.max(savedWindowRect.width - dragAmountX, minWidth);
-							_outlineShape.height = Math.max(savedWindowRect.height + dragAmountY, minHeight);			
+							_resizeBorderShape.x = Math.min(savedWindowRect.x + dragAmountX, dragMaxX);
+							_resizeBorderShape.y = this.y;
+							_resizeBorderShape.width = Math.max(savedWindowRect.width - dragAmountX, minWidth);
+							_resizeBorderShape.height = Math.max(savedWindowRect.height + dragAmountY, minHeight);			
 						}
 						
-						_outlineCanvas.graphics.clear();
+						_resizeBorderCanvas.graphics.clear();
 						
-						_outlineShape.x += 1;
-						_outlineShape.y += 1;
+						_resizeBorderShape.x += 1;
+						_resizeBorderShape.y += 1;
 							
 						if(this.getStyle("resizeBorderStyle") == 'solid')
 						{
-							_outlineCanvas.graphics.lineStyle(this.getStyle("resizeBorderThickness"), this.getStyle("resizeBorderColor"), this.getStyle("resizeBorderAlpha"));
-							_outlineCanvas.graphics.moveTo(_outlineShape.x, _outlineShape.y);
-							_outlineCanvas.graphics.lineTo(_outlineShape.x + _outlineShape.width, _outlineShape.y);
-							_outlineCanvas.graphics.lineTo(_outlineShape.x + _outlineShape.width, _outlineShape.y + _outlineShape.height);
-							_outlineCanvas.graphics.lineTo(_outlineShape.x, _outlineShape.y + _outlineShape.height);
-							_outlineCanvas.graphics.lineTo(_outlineShape.x, _outlineShape.y);
+							_resizeBorderCanvas.graphics.lineStyle(this.getStyle("resizeBorderThickness"), this.getStyle("resizeBorderColor"), this.getStyle("resizeBorderAlpha"));
+							_resizeBorderCanvas.graphics.moveTo(_resizeBorderShape.x, _resizeBorderShape.y);
+							_resizeBorderCanvas.graphics.lineTo(_resizeBorderShape.x + _resizeBorderShape.width, _resizeBorderShape.y);
+							_resizeBorderCanvas.graphics.lineTo(_resizeBorderShape.x + _resizeBorderShape.width, _resizeBorderShape.y + _resizeBorderShape.height);
+							_resizeBorderCanvas.graphics.lineTo(_resizeBorderShape.x, _resizeBorderShape.y + _resizeBorderShape.height);
+							_resizeBorderCanvas.graphics.lineTo(_resizeBorderShape.x, _resizeBorderShape.y);
 						}
 						else if(this.getStyle("resizeBorderStyle") == 'dashed')
 						{
 							var dashArray:Array = [this.getStyle("resizeBorderThickness"), 0, this.getStyle("resizeBorderThickness"), this.getStyle("resizeBorderThickness")];
-							GraphicsUtil.drawDashedLine(_outlineCanvas.graphics, new Stroke(this.getStyle("resizeBorderColor"), this.getStyle("resizeBorderThickness"), this.getStyle("resizeBorderAlpha")), dashArray, _outlineShape.x, _outlineShape.y, _outlineShape.x + _outlineShape.width, _outlineShape.y);
-							GraphicsUtil.drawDashedLine(_outlineCanvas.graphics, new Stroke(this.getStyle("resizeBorderColor"), this.getStyle("resizeBorderThickness"), this.getStyle("resizeBorderAlpha")), dashArray, _outlineShape.x + _outlineShape.width, _outlineShape.y, _outlineShape.x + _outlineShape.width, _outlineShape.y + _outlineShape.height);
-							GraphicsUtil.drawDashedLine(_outlineCanvas.graphics, new Stroke(this.getStyle("resizeBorderColor"), this.getStyle("resizeBorderThickness"), this.getStyle("resizeBorderAlpha")), dashArray, _outlineShape.x + _outlineShape.width, _outlineShape.y + _outlineShape.height, _outlineShape.x, _outlineShape.y + _outlineShape.height);
-							GraphicsUtil.drawDashedLine(_outlineCanvas.graphics, new Stroke(this.getStyle("resizeBorderColor"), this.getStyle("resizeBorderThickness"), this.getStyle("resizeBorderAlpha")), dashArray, _outlineShape.x, _outlineShape.y + _outlineShape.height, _outlineShape.x, _outlineShape.y);
+							GraphicsUtil.drawDashedLine(_resizeBorderCanvas.graphics, new Stroke(this.getStyle("resizeBorderColor"), this.getStyle("resizeBorderThickness"), this.getStyle("resizeBorderAlpha")), dashArray, _resizeBorderShape.x, _resizeBorderShape.y, _resizeBorderShape.x + _resizeBorderShape.width, _resizeBorderShape.y);
+							GraphicsUtil.drawDashedLine(_resizeBorderCanvas.graphics, new Stroke(this.getStyle("resizeBorderColor"), this.getStyle("resizeBorderThickness"), this.getStyle("resizeBorderAlpha")), dashArray, _resizeBorderShape.x + _resizeBorderShape.width, _resizeBorderShape.y, _resizeBorderShape.x + _resizeBorderShape.width, _resizeBorderShape.y + _resizeBorderShape.height);
+							GraphicsUtil.drawDashedLine(_resizeBorderCanvas.graphics, new Stroke(this.getStyle("resizeBorderColor"), this.getStyle("resizeBorderThickness"), this.getStyle("resizeBorderAlpha")), dashArray, _resizeBorderShape.x + _resizeBorderShape.width, _resizeBorderShape.y + _resizeBorderShape.height, _resizeBorderShape.x, _resizeBorderShape.y + _resizeBorderShape.height);
+							GraphicsUtil.drawDashedLine(_resizeBorderCanvas.graphics, new Stroke(this.getStyle("resizeBorderColor"), this.getStyle("resizeBorderThickness"), this.getStyle("resizeBorderAlpha")), dashArray, _resizeBorderShape.x, _resizeBorderShape.y + _resizeBorderShape.height, _resizeBorderShape.x, _resizeBorderShape.y);
 						}
 					}
 				}
@@ -1721,18 +1721,18 @@ package flexmdi.containers
 				
 				if(!liveResize)
 				{
-					//checks for existince of _outlineShape because it's needed for resize properties
-					if(this._outlineShape != null)
+					//checks for existince of _resizeBorderShape because it's needed for resize properties
+					if(this._resizeBorderShape != null)
 					{
 						//piggybacking off of restore effect for now for resize of window on release
-						savedWindowRect = new Rectangle(_outlineShape.x, _outlineShape.y, _outlineShape.width, _outlineShape.height);
+						savedWindowRect = new Rectangle(_resizeBorderShape.x, _resizeBorderShape.y, _resizeBorderShape.width, _resizeBorderShape.height);
 						restore();
 						
 						//removing resizing artifacts
 						var windowParent:UIComponent = this.parent as UIComponent;
-						windowParent.removeChild(_outlineCanvas);
-						this._outlineCanvas = null;
-						this._outlineShape = null;
+						windowParent.removeChild(_resizeBorderCanvas);
+						this._resizeBorderCanvas = null;
+						this._resizeBorderShape = null;
 					}
 				}
 			}

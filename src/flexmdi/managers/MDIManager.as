@@ -193,7 +193,6 @@ package flexmdi.managers
 		public var tilePadding:Number = 8;
 		public var minTilePadding:Number = 5;
 		public var enforceBoundaries:Boolean = true;
-		public var liveResize:Boolean;
 		
 		public var effects:IMDIEffectsDescriptor = new MDIEffectsDescriptorBase();
 		
@@ -201,7 +200,6 @@ package flexmdi.managers
 		public static const CONTEXT_MENU_LABEL_TILE_FILL:String = "Tile + Fill";
 		public static const CONTEXT_MENU_LABEL_CASCADE:String = "Cascade";
 		public static const CONTEXT_MENU_LABEL_SHOW_ALL:String = "Show All Windows";
-		public static const CONTEXT_MENU_LABEL_HIDE_ALL:String = "Hide All Windows";
 		
 		/**
      	*   Contstructor()
@@ -278,8 +276,6 @@ package flexmdi.managers
 			{
 				window.windowManager = this;
 				
-				window.liveResize = this.liveResize;
-				
 				this.addListeners(window);
 				
 				this.windowList.push(window);
@@ -345,10 +341,6 @@ package flexmdi.managers
                 var showAllItem:ContextMenuItem = new ContextMenuItem(CONTEXT_MENU_LABEL_SHOW_ALL);
 			  		showAllItem.addEventListener(ContextMenuEvent.MENU_ITEM_SELECT, menuItemSelectHandler);
 			  		defaultContextMenu.customItems.push(showAllItem);
-			  	
-			  	var hideAllItem:ContextMenuItem = new ContextMenuItem(CONTEXT_MENU_LABEL_HIDE_ALL);
-			  		hideAllItem.addEventListener(ContextMenuEvent.MENU_ITEM_SELECT, menuItemSelectHandler);
-			  		defaultContextMenu.customItems.push(hideAllItem);
                    	
             	this.container.contextMenu = defaultContextMenu;
 			}
@@ -378,10 +370,6 @@ package flexmdi.managers
 				
 				case(CONTEXT_MENU_LABEL_SHOW_ALL):
 					this.showAllWindows();
-				break;
-				
-				case(CONTEXT_MENU_LABEL_HIDE_ALL):
-					this.hideAllWindows();
 				break;
 			}
 		}
@@ -1085,16 +1073,5 @@ package flexmdi.managers
 				}
 			}
 		}	
-		
-		public function hideAllWindows():void
-		{
-			for each(var window:MDIWindow in windowList)
-			{
-				if(!window.minimized)
-				{
-					window.minimize();
-				}
-			}
-		}
 	}
 }
